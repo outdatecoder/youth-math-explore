@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="GzBx4ca9IhjJp3FfVzSpOw">
+<head data-page-node-id="blRvj3F3sxiKvZO9HSk3q3">
+<meta charset="UTF-8" data-page-node-id="vLhub0ksJochCx39mjGHEj">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="dfaq6nWHLBY4MgomQ9x3dZ">
+<title>统计学：不完美的目击证人</title>
+<style>
+  :root {
+    --bg: #f8f9fc; --card-bg: #ffffff; --text: #1a1a2e; --text-light: #555;
+    --border: #e2e8f0;
+    --accent-blue: #3b82f6; --accent-green: #10b981; --accent-orange: #f59e0b;
+    --accent-red: #ef4444; --accent-purple: #8b5cf6; --accent-pink: #ec4899;
+    --shadow: 0 4px 24px rgba(0,0,0,.08); --radius: 16px;
+    --font: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; animation: fadeIn .4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* ===== 首页 ===== */
+  .home-header { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 55%, #8b5cf6 100%); color: #fff; padding: 48px 24px 36px; text-align: center; }
+  .home-header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .home-header p { font-size: 14px; opacity: .92; max-width: 640px; margin: 0 auto; }
+  .legend-bar { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-top: 16px; font-size: 13px; }
+  .legend-bar .lg { display: flex; align-items: center; gap: 6px; }
+  .legend-bar .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .lg-a { background: var(--accent-purple); } .lg-b { background: var(--accent-blue); }
+  .map-wrap { max-width: 880px; margin: 22px auto 8px; padding: 0 16px; }
+  .map-wrap svg { width: 100%; height: auto; display: block; }
+  .map-node { cursor: pointer; }
+  .map-node:hover rect { filter: brightness(1.06); }
+  .cards { max-width: 980px; margin: 8px auto 36px; padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; }
+  .sec-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; border-top: 4px solid var(--accent-blue); cursor: pointer; transition: transform .15s ease; }
+  .sec-card:hover { transform: translateY(-3px); }
+  .sec-card .no { font-size: 13px; font-weight: 700; color: var(--text-light); }
+  .sec-card h3 { font-size: 18px; margin: 4px 0 8px; }
+  .sec-card .kw { font-size: 13px; color: var(--text-light); margin-bottom: 12px; }
+  .sec-card .src { font-size: 12px; display: flex; gap: 8px; }
+  .tag { padding: 2px 8px; border-radius: 999px; font-size: 11px; color: #fff; }
+  .tag-a { background: var(--accent-purple); } .tag-b { background: var(--accent-blue); }
+  .footer-note { text-align: center; color: var(--text-light); font-size: 13px; margin: 8px 0 30px; }
+
+  /* ===== 详情页 ===== */
+  .detail { max-width: 960px; margin: 0 auto; padding: 20px 16px 48px; }
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--accent-blue); font-size: 15px; font-weight: 500; margin-bottom: 14px; background: none; border: none; }
+  .d-head { border-left: 5px solid var(--accent-blue); padding: 6px 0 6px 14px; margin-bottom: 18px; }
+  .d-head h2 { font-size: 22px; }
+  .d-head .sub { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+  .block { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; margin-bottom: 18px; }
+  .block h4 { font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .block h4 .ic { width: 26px; height: 26px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; }
+  .ic-demo { background: var(--accent-orange); } .ic-play { background: var(--accent-green); } .ic-quiz { background: var(--accent-purple); }
+  .ab-box { border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-bottom: 12px; }
+  .ab-a { background: #f5f3ff; border-left: 4px solid var(--accent-purple); }
+  .ab-b { background: #eff6ff; border-left: 4px solid var(--accent-blue); }
+  .ab-box .who { font-weight: 700; font-size: 12px; display: inline-block; margin-bottom: 4px; }
+  .who-a { color: var(--accent-purple); } .who-b { color: var(--accent-blue); }
+  canvas { width: 100%; height: auto; display: block; background: #fff; border-radius: 12px; border: 1px solid var(--border); }
+  .canvas-caption { font-size: 13px; color: var(--text-light); text-align: center; margin-top: 6px; }
+  .play-btn { padding: 8px 18px; border: none; border-radius: 10px; background: var(--accent-orange); color: #fff; font-size: 14px; cursor: pointer; }
+  .play-btn.playing { background: var(--accent-red); }
+  .step-btn { padding: 8px 16px; border: 1.5px solid var(--accent-pink); border-radius: 10px; background: #fff; color: var(--accent-pink); font-size: 14px; font-weight: 600; cursor: pointer; }
+  .step-btn:hover { background: #fdf2f8; }
+  .step-line { margin-top: 10px; padding: 10px 12px; border-left: 3px solid var(--accent-pink); background: #fdf2f8; border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.7; color: var(--text); }
+  .step-line .step-no { display: inline-block; min-width: 20px; padding: 1px 6px; margin-right: 6px; border-radius: 6px; background: var(--accent-pink); color: #fff; font-size: 12px; font-weight: 700; }
+  .ctrl-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+  .ctrl-row label { font-size: 14px; min-width: 120px; }
+  .ctrl-row input[type=range] { flex: 1; min-width: 160px; accent-color: var(--accent-blue); cursor: pointer; }
+  .ctrl-row select { padding: 7px 10px; border-radius: 10px; border: 1px solid var(--border); font-size: 14px; }
+  /* T4 三滑块：标签色条 + 当前值 pill + 滑块（一一对应） */
+  .slider-label { font-size: 14px; min-width: 150px; padding: 6px 10px; border-radius: 8px; font-weight: 600; }
+  .slider-prior { background: #f3e8ff; color: #6d28d9; border-left: 4px solid #8b5cf6; }
+  .slider-truth { background: #dbeafe; color: #1d4ed8; border-left: 4px solid #3b82f6; }
+  .slider-false { background: #fce7f3; color: #be185d; border-left: 4px solid #ec4899; }
+  .val-pill { font-family: ui-monospace, monospace; font-size: 17px; font-weight: 700; padding: 5px 12px; border-radius: 8px; min-width: 64px; text-align: center; border: 1px solid transparent; }
+  .val-purple { background: #f3e8ff; color: #6d28d9; border-color: #c4b5fd; }
+  .val-blue   { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+  .val-pink   { background: #fce7f3; color: #be185d; border-color: #f9a8d4; }
+  /* T4 先验 → 后验步骤条 */
+  .bayes-arrow { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .bayes-step { flex: 1; min-width: 130px; background: #f8fafc; border-radius: 10px; padding: 8px 12px; text-align: center; border: 1px solid var(--border); }
+  .bayes-arrow-mid { align-self: center; color: var(--text-light); font-size: 13px; padding: 0 4px; }
+  .bayes-tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-bottom: 4px; }
+  .tag-prior { background: #ede9fe; color: #5b21b6; }
+  .tag-test  { background: #fef3c7; color: #92400e; }
+  .tag-post  { background: #d1fae5; color: #065f46; }
+  .bayes-num { font-size: 20px; font-weight: 700; color: var(--text); margin: 2px 0; }
+  .bayes-cap { font-size: 12px; color: var(--text-light); }
+  .btn-ghost { padding: 7px 16px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; cursor: pointer; background: #fff; color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+  .btn-primary { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+  .status-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent-blue); flex-shrink: 0; display: inline-block; }
+  .status-dot.gold { background: var(--accent-orange); }
+  .status-line { margin-top: 12px; font-size: 14px; color: var(--text); display: flex; gap: 8px; align-items: flex-start; }
+  .explain { margin-top: 14px; border-left: 4px solid var(--accent-blue); background: #f8fafc; border-radius: 0 10px 10px 0; padding: 12px 14px; font-size: 14px; color: var(--text-light); }
+  .explain b { color: var(--text); }
+  /* 自测 */
+  .quiz-q { font-size: 15px; color: var(--text); margin-bottom: 10px; }
+  .quiz-item { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .quiz-ans { display: none; margin-top: 10px; font-size: 14px; color: var(--text-light); background: #f8fafc; border-radius: 10px; padding: 10px 12px; }
+  .quiz-ans.show { display: block; }
+  .quiz-ans b { color: var(--accent-green); }
+  /* 家长拓展 */
+  .parent-toggle { cursor: pointer; color: var(--accent-orange); font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+  .parent-panel { display: none; margin-top: 12px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 14px 16px; font-size: 14px; color: #7c5e10; }
+  .parent-panel.show { display: block; }
+  .parent-panel h5 { color: #b45309; margin-bottom: 8px; }
+  .parent-panel code { background: #fef3c7; padding: 1px 5px; border-radius: 5px; }
+  /* 详情页双栏：正文(左) + 家长拓展(右 sticky) */
+  .story-box{
+  background:#fff7ed;
+  border-left:4px solid #f59e0b;
+  border-radius:8px;
+  padding:14px 18px;
+  margin:8px 0 14px;
+  font-size:14px;
+  line-height:1.85;
+  color:#78350f;
+}
+.story-box b{color:#92400e}
+.dl-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; }
+  .dl-main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .dl-main > .block { margin-bottom: 0; }
+  .dl-side { min-width: 0; }
+  .dl-side > .block { position: sticky; top: 16px; margin-bottom: 0; background: #fffdf8; border: 1px solid #fde68a; box-shadow: none; }
+  .dl-side .parent-toggle { display: block; }
+  @media (max-width: 900px) { .dl-wrap { grid-template-columns: 1fr; } .dl-side > .block { position: static; } }
+  .summary-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  .summary-table th, .summary-table td { border: 1px solid var(--border); padding: 6px 8px; text-align: center; }
+  .summary-table th { background: #f1f5f9; }
+  .timeline { display: flex; gap: 0; overflow-x: auto; padding: 10px 0; }
+  .tl-node { min-width: 130px; text-align: center; position: relative; padding-top: 22px; }
+  .tl-node::before { content: ''; position: absolute; top: 8px; left: 50%; width: 12px; height: 12px; border-radius: 50%; background: var(--accent-red); transform: translateX(-50%); }
+  .tl-node .yr { font-weight: 700; color: var(--accent-red); font-size: 14px; }
+  .tl-node .ev { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+</style>
+</head>
+<body data-page-node-id="y6bG0PSf2uINt2VrlYIPEg">
+
+<!-- ========== 首页 ========== -->
+<section id="home" class="page active" data-page-node-id="WJDFXmfKYbtPZZCDGmFsKU">
+  <div class="home-header" data-page-node-id="Lp4sRosJXjlCjVGZtURTf5">
+    <h1 data-page-node-id="bqNJyekHGvKL2BeSjojD4k">统计学：不完美的目击证人</h1>
+    <p data-page-node-id="YUslt8sIhAYoHHdFjdcjx6">平均数会骗人、相关不是因果、摘要删掉真相、检测常报错、p 值被滥用、样本也会说谎——两本书合讲，帮你握住不确定性的透镜。</p>
+    <div class="legend-bar" data-page-node-id="gKbdl4Ys2U98QD4ILDTxkd">
+      <span class="lg" data-page-node-id="X9us1e74HbDTzKaw2ozwup"><span class="dot lg-a" data-page-node-id="gOKEZFCmoeHJGMqBWjP6cZ"></span> A《欢乐数学》· 比喻 / 直觉 / 自嘲</span>
+      <span class="lg" data-page-node-id="pT1Qta5pmlInn3s4b3G1UW"><span class="dot lg-b" data-page-node-id="FyPs5rHSgVpjcPHdMo89Qj"></span> B《数学有什么用》· 史实 / 演算 / 史笔</span>
+    </div>
+  </div>
+
+  <div class="map-wrap" data-page-node-id="SlXChhGGu2EF6ITOtwHgnC">
+    <svg viewBox="0 0 880 360" role="img" aria-label="统计学知识地图" data-page-node-id="fXMST3oTFf3Z9zXuDm5tUG">
+      <!-- 根→三分支 连线 -->
+      <line x1="440" y1="72" x2="188" y2="128" stroke="#cbd5e1" stroke-width="2" data-page-node-id="2rJM5hA4VnneNWj2EaIzsE"/>
+      <line x1="440" y1="72" x2="440" y2="128" stroke="#cbd5e1" stroke-width="2" data-page-node-id="EZHxTrtivGSov3rYFSupDa"/>
+      <line x1="440" y1="72" x2="690" y2="128" stroke="#cbd5e1" stroke-width="2" data-page-node-id="zl3nzeTFLGYlb6UL54lIKG"/>
+      <!-- 分支→叶子 连线 -->
+      <line x1="188" y1="168" x2="85" y2="282" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4" data-page-node-id="k0wqh5BAnazcVVcuhth4E6"/>
+      <line x1="188" y1="168" x2="230" y2="282" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4" data-page-node-id="JBQuZCdQURPCFbJ5SR9mzr"/>
+      <line x1="188" y1="168" x2="375" y2="282" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4" data-page-node-id="xoJ6hpl7cLQhBTgJh0VKHK"/>
+      <line x1="440" y1="168" x2="520" y2="282" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4" data-page-node-id="tjAvkJs5wjLjk4En4xwEin"/>
+      <line x1="440" y1="168" x2="665" y2="282" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4" data-page-node-id="tiG3pSSlCp7x5Fz69PIhSy"/>
+      <line x1="690" y1="168" x2="810" y2="282" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4" data-page-node-id="nxRfKlWPFRYrNsIKUEKfXG"/>
+      <!-- 根节点 -->
+      <g class="map-node" onclick="goTo('t1')" data-page-node-id="cB9bb1TJ3i4eOXJDeehJ1T">
+        <rect x="350" y="40" width="180" height="44" rx="12" fill="#1e293b" data-page-node-id="ode1K7AL0SExnsKwsvyY6I"/>
+        <text x="440" y="67" text-anchor="middle" fill="#fff" font-size="15" font-weight="700" data-page-node-id="0l47bKjpauGOxACWCoMx03">统计学：不完美的目击证人</text>
+      </g>
+      <!-- 三分支 -->
+      <g class="map-node" onclick="goTo('t1')" data-page-node-id="CaBgaQlc3JhdYR0k3dCJ5C"><rect x="108" y="128" width="160" height="40" rx="10" fill="#3b82f6" data-page-node-id="mnpuJMkAQ5JfBAblamyvT8"/><text x="188" y="153" text-anchor="middle" fill="#fff" font-size="14" font-weight="600" data-page-node-id="b1Nm73kGwuCwpd9U4EFOa7">① 描述真相（A直觉）</text></g>
+      <g class="map-node" onclick="goTo('t4')" data-page-node-id="zk3HdHPFqppD0raaJWMAzQ"><rect x="360" y="128" width="160" height="40" rx="10" fill="#10b981" data-page-node-id="gpbelqdhVlDzltA7koKwpD"/><text x="440" y="153" text-anchor="middle" fill="#fff" font-size="14" font-weight="600" data-page-node-id="Iu1NwIbfFwTM693buSDcjU">② 严谨推断（B演算）</text></g>
+      <g class="map-node" onclick="goTo('t6')" data-page-node-id="YICjPajEHNn6AfAq9DmRlh"><rect x="610" y="128" width="160" height="40" rx="10" fill="#f59e0b" data-page-node-id="hdA4gaHTMkhWQeSHkerYg6"/><text x="690" y="153" text-anchor="middle" fill="#fff" font-size="14" font-weight="600" data-page-node-id="15K2QDgtQq2iucfpvHdxOr">③ 数据来源</text></g>
+      <!-- 6 叶子（一行） -->
+      <g class="map-node" onclick="goTo('t1')" data-page-node-id="3TVIwvAWgXLW3iKm0zjG74"><rect x="18" y="282" width="135" height="40" rx="10" fill="#eff6ff" stroke="#3b82f6" data-page-node-id="BGtCm9ELfth0ikdj9Ray8D"/><text x="85" y="307" text-anchor="middle" fill="#1e3a8a" font-size="13" data-page-node-id="BErGKRDyGHm8v5ej4BHFT1">01 平均数会骗人</text></g>
+      <g class="map-node" onclick="goTo('t2')" data-page-node-id="aGNHz8zYEshYSubkRqzYZw"><rect x="163" y="282" width="135" height="40" rx="10" fill="#f5f3ff" stroke="#8b5cf6" data-page-node-id="z1T44DkUiJLnbp563rv1VA"/><text x="230" y="307" text-anchor="middle" fill="#5b21b6" font-size="13" data-page-node-id="olGM7DFPIR0GenHpyfC5QC">02 相关≠因果</text></g>
+      <g class="map-node" onclick="goTo('t3')" data-page-node-id="RQ4YbIFNRUOVBVoRTrOFDM"><rect x="308" y="282" width="135" height="40" rx="10" fill="#fdf2f8" stroke="#ec4899" data-page-node-id="SnsrNEG7wryJiOire9DjWZ"/><text x="375" y="307" text-anchor="middle" fill="#9d174d" font-size="13" data-page-node-id="KKxlPuWJeQrNumqHcF0KtI">03 摘要删真信息</text></g>
+      <g class="map-node" onclick="goTo('t4')" data-page-node-id="CSHFLqHjMuNphBA09iloKv"><rect x="453" y="282" width="135" height="40" rx="10" fill="#ecfdf5" stroke="#10b981" data-page-node-id="2Bccx1Bxa1WTwMpeoCEnZ7"/><text x="520" y="307" text-anchor="middle" fill="#065f46" font-size="13" data-page-node-id="Cc8toQrtOEkgRoR2S3RwLm">04 检测常报错</text></g>
+      <g class="map-node" onclick="goTo('t5')" data-page-node-id="J6qnFWaLyTCKUxqKkPJmnL"><rect x="598" y="282" width="135" height="40" rx="10" fill="#fef2f2" stroke="#ef4444" data-page-node-id="8RqBHFjPokGDy48LCrEYTL"/><text x="665" y="307" text-anchor="middle" fill="#991b1b" font-size="13" data-page-node-id="DhVu66rxExmQLfuwvFB3Oz">05 巧合过滤器</text></g>
+      <g class="map-node" onclick="goTo('t6')" data-page-node-id="TVAj0lWpCeuSCmf8jrE9PX"><rect x="743" y="282" width="135" height="40" rx="10" fill="#fffbeb" stroke="#f59e0b" data-page-node-id="SgldbcIe75mpbFPapzHLd2"/><text x="810" y="307" text-anchor="middle" fill="#92400e" font-size="13" data-page-node-id="3a6JxqyrncC6NYDY1YTREE">06 抽样民调</text></g>
+    </svg>
+  </div>
+
+  <div class="cards" id="homeCards" data-page-node-id="KPt7B7E0LJKBsgEZZzpXhQ"></div>
+  <div class="footer-note" data-page-node-id="Ifj97b1nUhcNpF2EP5jiBt">提示：点击知识地图任意节点，或下面任一章节卡片，进入学习。</div>
+</section>
+
+<!-- ========== 主题01 平均数会骗人 ========== -->
+<section id="t1" class="page" data-page-node-id="fyLGHYlSfOkQ9Gya8cC3Yp">
+  <div class="detail" data-page-node-id="KX8ywxqY7Jj0bggQBphNGg">
+    <div class="dl-wrap" data-page-node-id="JlRgxPsbz95d7A7u37qANl">
+      <main class="dl-main" data-page-node-id="4XgCvGqrk2Ok06Esh1mqav">
+    <button class="back-btn" onclick="goHome()" data-page-node-id="rApypPT4cvwCJjAF5S8oTp">← 返回知识地图</button>
+    <div class="d-head" style="border-color:var(--accent-blue)" data-page-node-id="pSA3QOkHQOmfvYKDplMR8I">
+      <h2 data-page-node-id="Qg63cAcf53EquJRgurNFeJ">01 · 平均数会骗人</h2>
+      <div class="sub" data-page-node-id="BGzuSn1vM5ZKJZzF3jBWr3">A 用「不完美的目击者」比喻开场；B 用真实骗局（基数/口径/组成）做骨架——教你看分布，别只看一个数。</div>
+    </div>
+
+    <div class="block" data-page-node-id="cYFxjdjCU0QYWgwDR39F0r">
+      <div class="ab-box ab-a" data-page-node-id="Ti4DtxJLK5d1ST31WKR3TX"><span class="who who-a" data-page-node-id="XZRAYzCVMYrj3YBDB6FSoE">A《欢乐数学》开场</span><br data-page-node-id="87uw0vFHDIJEVmt02uwi9d">统计数字像一个<b data-page-node-id="zUh97LwpfGpA5oVfsFdGhe">带偏差的目击证人</b>：它看见了些什么，但一定漏掉、或扭曲了另一些。平均数、中位数、众数这三个「集中趋势三兄弟」，每个人都只看真相的一角。</div>
+      <div class="ab-box ab-b" data-page-node-id="x5ci1wQHEfcTuMDxwmlNkK"><span class="who who-b" data-page-node-id="CxNhxuCAImC24MISpuY7cw">B《数学有什么用》骨架</span><br data-page-node-id="p9WORd5Up4SECPX9ATZnrf">新闻里那些吓人的百分比，常常靠三种「话术」变魔术：<b data-page-node-id="Pcy97Naae4mGJU8CmVprEF">基数</b>（分母极小）、<b data-page-node-id="1Np3rLiWzvpy5MQXzsPruh">口径</b>（分子分母随意换）、<b data-page-node-id="ByDptVVTEcd4ikVNrU9xSk">组成</b>（分母偷偷换了一拨人）。</div>
+    </div>
+
+    <div class="block" data-page-node-id="IQyFxIayJZ6um1AM4ZcOzj">
+      <h4 data-page-node-id="CkHoKqGOLQemyUVQcrRtLT"><span class="ic ic-demo" data-page-node-id="YhuXG0Z1XLMh6SOOJ1rRSg">▶</span> 演示 · 海盗分宝：一个富豪怎样掀翻平均数</h4>
+      <canvas id="t1c1" width="600" height="300" data-page-node-id="9t5l95FPOyUkFYl8owW2FP"></canvas>
+      <div class="ctrl-row" data-page-node-id="oWYp0plc7hlbm3qJqhFHru"><button class="play-btn" id="t1b1" onclick="t1Play()" data-page-node-id="0Gnwc7ms00Pks9W8477MCx">▶ 播放演示</button>
+        <button class="btn-ghost" onclick="t1Reset()" data-page-node-id="Xbfm9aoyv6Yh3tg37J3WAd">↺ 重来</button>
+        <label data-page-node-id="p8qGOSKJpeSCRzYLYoyaJ3">富豪收入（万元）</label><input type="range" id="t1rich" min="10" max="220" value="20" oninput="t1Update()" data-page-node-id="b616JoA0uSbnKoWr3FkTnf"></div>
+      <div class="status-line" data-page-node-id="X9Ie8xGeTDUFGVT34jffJU"><span class="status-dot" id="t1d1" data-page-node-id="eZ1mALupdfuWlZ76SPfVMu"></span><span id="t1s1" data-page-node-id="RWSXZBMzA3KqLgQaVRas8I">拖动滑块，看均值（红线）如何被一个富豪顶飞，而中位数（绿线）纹丝不动。</span></div>
+      <div class="explain" data-page-node-id="AkCxW7XzbW9gjVNCPXRSRB">均值把所有人的钱「匀一匀」再分——所以一个极端值就能把它拉跑；中位数只管「排在中间那个人」，对极端值免疫。<b data-page-node-id="5pEQ85pzBEkDdADWaQoois">结论：看平均数之前，先问「分布长什么样」。</b></div>
+    </div>
+
+    <div class="block" data-page-node-id="PLeXsripHA5uqZyWdACS1N">
+      <h4 data-page-node-id="3daBw0zB8FjqlRNHJ0ab6o"><span class="ic ic-play" data-page-node-id="D5pWBYWucHgRDu1u0yZRTO">★</span> 动手操作 · 众数长什么样（点「换一种」看 3 种）</h4>
+      <canvas id="t1c2" width="600" height="240" data-page-node-id="yg4oXIHUHkG98HqcHoJOft"></canvas>
+      <div class="ctrl-row" data-page-node-id="brH2De2derCktX77bUyQgm"><button class="btn-ghost" onclick="t1Mode()" data-page-node-id="4SrBByfBqCXDzZNe0BkN5j">⏭ 换一种众数</button></div>
+      <div class="status-line" data-page-node-id="zM3Rb5ttZALhbyTArokhpC"><span class="status-dot gold" data-page-node-id="TrRGfZU6PwTRLJO1phfbCx"></span><span id="t1s2" data-page-node-id="l178NqdlKtOmyk8CDwgNmW">美国工资分布的众数恒为 0——不是人人破产，而是所有「没工资的人」都记同一个数 0，这一大堆 0 轻松当选「最多」。</span></div>
+    </div>
+
+    <div class="block" data-page-node-id="5ZEzrGf0FOrQUEPS6zWPBG">
+      <h4 data-page-node-id="EXP5HQNs5ur3jYlRr8mnRS"><span class="ic ic-play" data-page-node-id="gk8MOY4Nmpz4NddTSYpu9b">⚑</span> 动手操作 · 三陷阱切换器</h4>
+      <div class="ctrl-row" data-page-node-id="nDN183gWF66mfwcE8CrqvH"><label data-page-node-id="QIkHy1ATt8DBVxlzy6fAJz">选择话术</label>
+        <select id="t1trap" onchange="t1Trap()" data-page-node-id="owkV0zhZijoZdFthbTbBC6">
+          <option value="base" data-page-node-id="5o84OZTMVaxHpYPQIUy6CO">基数陷阱</option>
+          <option value="cal" data-page-node-id="8af4gkXaRwW5BT0Rm5FNdr">口径陷阱</option>
+          <option value="comp" data-page-node-id="vrjUNWadrN6NHCrBo9vF9p">组成陷阱</option>
+        </select></div>
+      <canvas id="t1tc" width="600" height="210" style="margin-top:8px" data-page-node-id="eaaphAFys7EbXQVgE9syhC"></canvas>
+      <div class="explain" id="t1trapTxt" data-page-node-id="CT8u2lhk5IqFKVzk4hn82k"></div>
+    </div>
+
+    <div class="block" data-page-node-id="ekPqn87aMJvD43boCEYzeB">
+      <h4 data-page-node-id="9Fhg1jYrmJX2RA6onThf4v"><span class="ic ic-quiz" data-page-node-id="Ipq0y1DtiOAMV6pArgcmOR">?</span> 自测 · 为什么会被骗</h4>
+      <div class="quiz-item" data-page-node-id="hRcwY6yQdATyF221taDtTR"><div class="quiz-q" data-page-node-id="xH0vczLsq4W49rgplC2hLc">1. 「工资的众数是 0」听起来很惨，为什么说它反而最真实？</div><button class="btn-ghost" onclick="toggleAns('t1a1',this)" data-page-node-id="6c0gC8NiY52CnDH3VyVrWw">显示答案</button><div class="quiz-ans" id="t1a1" data-page-node-id="lP1ntDHMRRelHy4zEp8kRh"><b data-page-node-id="ix8bFq1XYI2eLXgj18dGJF">答案：</b>收入分布左偏，大量「无收入者」都被记成 0，使 0 成为出现次数最多的值。它真实反映了「有很多人的收入就是 0」这个事实，只是容易让人误读成「人人破产」。</div></div>
+      <div class="quiz-item" data-page-node-id="WILWtbHzGFEPvPOlpyFmhC"><div class="quiz-q" data-page-node-id="xaeiPBs7CEeD9xJaDDz9Hk">2. 新闻说「本市谋杀案比去年暴涨 10%」，什么情况下其实只多了 1 起？</div><button class="btn-ghost" onclick="toggleAns('t1a2',this)" data-page-node-id="bDZsOZf92ch0fjG8oC8XUz">显示答案</button><div class="quiz-ans" id="t1a2" data-page-node-id="vXPpB8VlfRh6C8egyrsz1S"><b data-page-node-id="LHZlhjHLUVSqxG3nHcx2bS">答案：</b>基数极小的时候。比如去年只有 10 起，涨 10% 就是多 1 起——绝对数微不足道，百分比却很吓人。这就是<b data-page-node-id="9LDCEIlkAwS3Q2b2sIAAc3">基数陷阱</b>。</div></div>
+    </div>
+      </main>
+      <aside class="dl-side" data-page-node-id="WN0Z1lFpBICPLv6EjNlvXL">
+      <div class="block" data-page-node-id="slWqSROKjQSzyaqCiDzkiY">
+        <span class="parent-toggle" onclick="toggleParent('t1p')" data-page-node-id="NJVWqn4KVx3vLx4Uhuzwxs">📖 家长拓展（原书深度） ▾</span>
+        <div class="parent-panel show" id="t1p" data-page-node-id="i8Qmpp5cO2BDFb3eaICBYA">
+          <h5 data-page-node-id="3zcrTWElZWReIwYqmSWAav">《欢乐数学》的「三兄弟盲区」</h5>
+          <p data-page-node-id="Y3X65qUEB3QiU2XUE4IrD8">平均数忽略分配（被极端值带偏）；中位数忽略距离（只看排序不关心差多少）；众数忽略一切、还怕「分类框」——同样一组收入，划成 1–2 万、2–4 万、3.8–9.2 万，会得出完全不同的「众数组」。展示数据的人掌握着分类的刀，结论就可被裁剪。</p>
+        </div>
+      </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 主题02 相关≠因果 ========== -->
+<section id="t2" class="page" data-page-node-id="AruQV4ztPcwLIUHVhBmXtH">
+  <div class="detail" data-page-node-id="d7OmPgDttirucRUovTWHov">
+    <div class="dl-wrap" data-page-node-id="1KYMb8N6vEcQkErExZMVvw">
+      <main class="dl-main" data-page-node-id="ta27JFS52SEFYK9ljzfXlO">
+    <button class="back-btn" onclick="goHome()" data-page-node-id="9xgpr9hJfGhBHZuekjvoGd">← 返回知识地图</button>
+    <div class="d-head" style="border-color:var(--accent-purple)" data-page-node-id="SLUGwScSpJ4Xr01fq6jFhE">
+      <h2 data-page-node-id="QMjJoWjA2oDxsFdJPHTeUr">02 · 相关 ≠ 因果</h2>
+      <div class="sub" data-page-node-id="vO4BJjibNJGJoUHnCs1aqf">A 给「相关会骗你」的直觉；B 给「为什么荒唐相关随手可得」的机制（凯奇 r=0.6666 + 三问法）。</div>
+    </div>
+    <div class="block" data-page-node-id="2aJKjFmg2uJTglEdHohaCk">
+      <div class="ab-box ab-a" data-page-node-id="5dSryHBlribDRJdnJ3P6sL"><span class="who who-a" data-page-node-id="vmM5jcFD9KjrVpi1wbSAiB">A《欢乐数学》开场</span><br data-page-node-id="PUaLKHRcT62VLYIceWsKBT">相关系数 r 量的是「两件事<b data-page-node-id="oa90RmuZlis85YXrBM964z">一起动</b>」，不是「因为 A 所以 B」。红酒喝得多的人活得长？可能是因为他们有钱、注重养生——第三变量在捣鬼。</div>
+      <div class="ab-box ab-b" data-page-node-id="wHg8zyzpA1HEME0oIpByIo"><span class="who who-b" data-page-node-id="XEF6luGFBBUo4sGVZJ5JAh">B《数学有什么用》骨架</span><br data-page-node-id="HvqEt1Dy2xnwDj2qyCyDut">尼古拉斯·凯奇每年出演电影数，与「游泳池溺亡人数」的相关系数高达 <b data-page-node-id="5Z4grRERl92ZQiQb1sMNcn">r = 0.6666</b>。凯奇导致人溺亡？当然不。只要花够久，你总能找到两条「都不怎么变」的线凑成强相关。</div>
+    </div>
+
+    <div class="block" data-page-node-id="QYInqYNlilAMBLnyHQwGSG">
+      <h4 data-page-node-id="fRrV4lrCxEIBW1WTXbauRO"><span class="ic ic-demo" data-page-node-id="m26u8j7Wqaqt37wNgxzjFv">▶</span> 演示 · 一键找出「凯奇式伪相关」</h4>
+      <div class="story-box" data-page-node-id="LcSkwyxzDMWSiZ4eZdxuTA">
+        <b data-page-node-id="ZPTPY0Z1nAb6mU9IGBIRFN">🎬 它是什么？</b>数据博主 Tyler Vigen 收集了一堆奇闻：尼古拉斯·凯奇每年出演电影数，和当年美国泳池溺亡人数，相关系数 <b data-page-node-id="8Rkm4FLtWOuDyfvvYhAJen">r = 0.6666</b>。凯奇演电影不会让人去泳池，也不会劝退——这两条线<b data-page-node-id="PRswNrAByBiWask3pvI5hl">毫无因果</b>，却<b data-page-node-id="xbLv0pgnTvjWv2Xt5Emvjy">恰好一起动</b>。<br data-page-node-id="Sk7TNsCv2RiaNeuLLh2lrG">
+        <b data-page-node-id="nL2jKBGPuQ3dt2EphugHW2">为什么必然出现？</b>只要观察的"年份"够多、变量够杂，<b data-page-node-id="VcLE2tQWoHUSEqcLXzyb8g">纯靠瞎凑</b>也能凑出强相关。下面按钮就是证明：让程序在几百对完全随机数据里，钓一对 r≈0.6666 出来给你看。
+      </div>
+      <canvas id="t2c1" width="600" height="320" data-page-node-id="g3OafQzryQgnhnWRNv2oiR"></canvas>
+      <div class="ctrl-row" data-page-node-id="PQXJ8ECWFGjvF130CVeyFq"><button class="play-btn" id="t2b1" onclick="t2Play()" data-page-node-id="SVGlXejiGqfX6I5HYNvS2N">▶ 连续播</button>
+        <button class="step-btn" id="t2b2" onclick="t2Step()">⏭ 逐步走</button>
+        <button class="btn-ghost" onclick="t2Reset()" data-page-node-id="CpbiwmS0ggGWw5Be2dHV48">↺ 重来</button>
+        <button class="btn-ghost" onclick="t2Gen()" title="重新抽 200 对随机数据（新的一批，结果不同）" data-page-node-id="QpBWtweuIWpV2npDMziBJh">🎲 换一批随机数据</button></div>
+      <div class="step-line" id="t2step"><span class="step-no">镜 1</span><span id="t2steptxt"></span></div>
+      <div class="status-line" data-page-node-id="D45bvLbLIKZ549zAJBY2zE"><span class="status-dot" id="t2d1" data-page-node-id="OZjyC2XBbPJIFqiDgjTiKP"></span><span id="t2s1" data-page-node-id="FMUAH87EsaT711rxxBQ1AS">点「▶ 连续播」看完整过程（4 镜自动走），或「⏭ 逐步走」一镜一镜停着讲：程序在 200 对完全随机数据里翻找，挑出 r 最接近 0.6666 的那一对——证明荒诞强相关随手可凑。</span></div>
+      <div class="explain" data-page-node-id="GFCDlkibJ0F8eBjBPNNDV3">当前 r = <b id="t2r" data-page-node-id="UTTO1O88FhjfpaD2io37To">0.00</b>。👉 <b data-page-node-id="Rs2IuMMXV5l7MXBu9qkCFQ">解读 r 三步</b>：① 看符号（+ 同向 / − 反向）；② 看绝对值（越大越像一条线，1=完美线，0=乱七八糟）；③ <b data-page-node-id="BmAsS3eqbS2PlS9fPXCt5L">不管 r 多大，只代表"一起动"，不等于"因为所以"</b>——红酒喝得多 vs 长寿，可能共同因为"有钱"</div>
+    </div>
+
+    <div class="block" data-page-node-id="Zb4WEDdFrzPEem3O4f9UvJ">
+      <h4 data-page-node-id="RWKRQPDAX6qExhLEboCGIY"><span class="ic ic-quiz" data-page-node-id="Yo5E2iTfl9HvgAA65IczQl">?</span> r 到底是什么？（拖滑块看图怎么变）</h4>
+      <div class="ctrl-row" style="flex-wrap:wrap;gap:14px;align-items:center" data-page-node-id="OI6qEvwSaFqlyC9iknJGOR">
+        <label style="font-weight:600" data-page-node-id="sbZNGSPAmXD4EU1MpBOBoq">r 值：</label>
+        <input type="range" id="t2rslider" min="-1" max="1" step="0.05" value="0.7" style="flex:1;min-width:220px" oninput="t2ShowR(+this.value)" data-page-node-id="JdIiC8ejhBr81b5GRf5gIh">
+        <span id="t2rval" style="font-family:monospace;font-size:20px;color:#8b5cf6;font-weight:700" data-page-node-id="m4sMsMvLlKfR0rZoLWnCm7">+0.70</span>
+      </div>
+      <canvas id="t2c3" width="600" height="280" data-page-node-id="8WZsGjFYAccESVD9BssusB"></canvas>
+      <div class="status-line" data-page-node-id="WcfUUtNxEt3S3UfgnKnFhG"><span class="status-dot" data-page-node-id="T3VNlf9hz0eG0tXkhpcE4k"></span><span id="t2s3" data-page-node-id="9xl5Tmhy8zzhfQhiQgAFb8">拖滑块看 24 个点怎么跟着 r 一起摆：r 越接近 ±1，点越像一根线；r=0 时点东一个西一个——凯奇案例就是这种"凑巧摆成一条线"。</span></div>
+      <div class="explain" data-page-node-id="ncEsS4Kz51Tn3t5R2Vxv98">🟢 <b data-page-node-id="u3MuES9X1JiKXxHqY903Ek">r = +1</b> 完全正相关（A↑B必↑，一条直线） ｜ <b data-page-node-id="jWM8FugSn9BBgbhI3gT0pe">r = +0.7</b> 基本一条线 ｜ <b data-page-node-id="tBaSXNUWGoYl9shZkus65K">r = 0</b> 完全看不出方向 ｜ <b data-page-node-id="pv9WhiwcJCySIH06rAkst1">r = −0.7</b> 反方向一条线 ｜ <b data-page-node-id="wALrem0ZKyZGJ9gpICyrFP">r = −1</b> 完全反相关（A↑B必↓）</div>
+
+      <h4 data-page-node-id="FNpekCbgFw4vawRynQsmal"><span class="ic ic-play" data-page-node-id="PUaSocLMBNrs2Fib2pFeH0">★</span> 动手操作 · 第三变量开关</h4>
+      <canvas id="t2c2" width="600" height="300" data-page-node-id="qAFb6PWRTpQrJj92bWrlIu"></canvas>
+      <div class="ctrl-row" data-page-node-id="DAn4aUsOCni97Yu4dmAFuP"><label data-page-node-id="eMGDc5wlxge7M8LN68wZnm">显示第三变量（分组）</label><input type="checkbox" id="t2third" onchange="t2Draw2()" data-page-node-id="hJWUQp7W4P1f6C95HCS5zG"></div>
+      <div class="status-line" data-page-node-id="rNbbMoRSR5qiKW2KfL9o4r"><span class="status-dot gold" data-page-node-id="PCnfa0L17GqcKVN1SZzlwb"></span><span id="t2s2" data-page-node-id="A6Fvu6MQaNV0Dt5aefSw83">勾选后，点会按「隐藏的第三变量」分成两组，每组各自几乎没趋势——所谓强相关，只是两组位置不同造成的假象。</span></div>
+    </div>
+
+    <div class="block" data-page-node-id="WZ0J4Rg77ECtpOutpdrebg">
+      <h4 data-page-node-id="JHZqSFQ9BNH7qFWRH7sDEs"><span class="ic ic-quiz" data-page-node-id="eFaKgvBcBYqsCjzesw2eSi">?</span> 自测 · 三问法</h4>
+      <div class="quiz-item" data-page-node-id="LrRRa2MMFOjOAAq2TeLuxN"><div class="quiz-q" data-page-node-id="pNOnpOpbiTED5KYjPAuksP">1. 凯奇 r=0.6666 是真因果吗？为什么这种相关必然出现？</div><button class="btn-ghost" onclick="toggleAns('t2a1',this)" data-page-node-id="v1JUwBsEKiQRV3UrF7TaTU">显示答案</button><div class="quiz-ans" id="t2a1" data-page-node-id="FeGs54ShI7fhtfT5WAKwzt"><b data-page-node-id="uyDh00Xn6EJmsFIyoDyRAn">答案：</b>否，纯属巧合/共同时间趋势。因为凯奇不可能一年演 20 部、溺亡也几乎都是意外不会突然翻 10 倍——<b data-page-node-id="5rfBaB2qVeFEtTJQe0CDpZ">两条「变化都不大」的线，只要样本够长，总能凑出强相关</b>。</div></div>
+      <div class="quiz-item" data-page-node-id="31ydpVEtiDvO4nZRadS9kU"><div class="quiz-q" data-page-node-id="c9M9iSiJVrcI3FUAP5WHBM">2. 红酒延寿的「第三变量」可能是什么？</div><button class="btn-ghost" onclick="toggleAns('t2a2',this)" data-page-node-id="boURNTeKK7OuBCRdbYmtZV">显示答案</button><div class="quiz-ans" id="t2a2" data-page-node-id="1C7uawfc6YjVrrFQZVqHfn"><b data-page-node-id="Clb1Fu86y1wm8R1mJ7fVZG">答案：</b>收入 / 生活方式 / 医疗条件。有钱人更可能喝红酒，也更可能长寿——是「有钱」同时导致了两者，而非红酒导致长寿。</div></div>
+      <div class="quiz-item" data-page-node-id="w7Uo3lBfTfslKOHDy4AD3B"><div class="quiz-q" data-page-node-id="BLMC6GGRwtvElSx8AqEtuT">3. 拿到一个相关，用哪三问判断它是否可疑？</div><button class="btn-ghost" onclick="toggleAns('t2a3',this)" data-page-node-id="cenIYKWYeiDlUDRJPHnGBE">显示答案</button><div class="quiz-ans" id="t2a3" data-page-node-id="Ex01Oj5XeLOqcNMBFM9xqQ"><b data-page-node-id="jbVwzHSS0HqwDIviqq1AJ9">答案：</b>① 两条线真的都在明显变化吗？② 有没有<b data-page-node-id="DylUH62kPWef2JipHE28bL">第三变量</b>同时影响两者？③ 会不会是<b data-page-node-id="euBHOm5Mcrnm1xizNYxmi4">因果反向</b>（不是 A 导致 B，而是 B 导致 A）？</div></div>
+    </div>
+      </main>
+      <aside class="dl-side" data-page-node-id="DrF9M6VatCcjF7lP0I3TfN">
+      <div class="block" data-page-node-id="e7xLpZyWRfBAZp9094LtKz">
+        <span class="parent-toggle" onclick="toggleParent('t2p')" data-page-node-id="NRXuZcAV82aJ8u9zVAQSXc">📖 家长拓展（原书深度） ▾</span>
+        <div class="parent-panel show" id="t2p" data-page-node-id="2UhYdAQimMYrafAqlHnfJa">
+          <h5 data-page-node-id="vVVS1UkvQ8ETK6J5sIf4xN">《数学有什么用》· 伪相关的算法本质</h5>
+          <p data-page-node-id="xMMzEvWkNuEHRsMVywiSg2">把每一年画成坐标 (凯奇电影数, 溺亡人数) 一个点，衡量这些点是否沿一条直线排列、方向如何。点越贴直线，r 越接近 ±1。关键不在于「算错了」，而在于<b data-page-node-id="6uYSM7D0ylWTjpzFLZjVv2">变量多、年份长时，凑出高 r 的概率本就很高</b>——这是搜索的产物，不是规律的产物。Tyler Vigen 的伪相关网站收录了上百个此类「名场面」。</p>
+        </div>
+      </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 主题03 安斯库姆四重奏 ========== -->
+<section id="t3" class="page" data-page-node-id="mBDzQsPOY0FpUQc11gsuWC">
+  <div class="detail" data-page-node-id="0UXDYQucIlBuS4fVFeDDRG">
+    <div class="dl-wrap" data-page-node-id="YZA4BpmIZ0fbkRd2qXBjbR">
+      <main class="dl-main" data-page-node-id="FGT3LZrXiStGMdyKXc7LQX">
+    <button class="back-btn" onclick="goHome()" data-page-node-id="yqVio3JFwwBYjVerIAXIXD">← 返回知识地图</button>
+    <div class="d-head" style="border-color:var(--accent-pink)" data-page-node-id="yHDpkfPPBpvdB54xCGVGgb">
+      <h2 data-page-node-id="n8Tgaq74YvFFc2Y4qV8mTk">03 · 摘要会删掉真信息</h2>
+      <div class="sub" data-page-node-id="7GBW1oHhGMkTq8bBrF39jc">A 讲「相关会骗人」；B 讲「连你刚学的回归都会骗人」——安斯库姆四重奏：四组形态天差地别，摘要数字却完全相同。</div>
+    </div>
+    <div class="block" data-page-node-id="jdTsgG9VnoQtwNO4JIax74">
+      <div class="ab-box ab-a" data-page-node-id="bGL122EqsFOgHhcXf7HSDE"><span class="who who-a" data-page-node-id="k8Esl3rj9Je83AsdWfsXHJ">A《欢乐数学》· 魔法学院四门课</span><br data-page-node-id="3RlHXoYg1Ph2FHG3f4NlIk">四个班级，每班 11 个学生。横轴「学习时间」、纵轴「考试分数」。老师告诉你：四班的<b data-page-node-id="IjPrklQp7WoppgLWAQ9IHh">平均、相关系数、最佳直线</b>全一样。你敢说四个班一样吗？</div>
+      <div class="ab-box ab-b" data-page-node-id="KRwUGwKMZltJqeNQvR4mPy"><span class="who who-b" data-page-node-id="i93mRDaODUVCJK0ExQRI2C">B《数学有什么用》· 最小二乘 5 步</span><br data-page-node-id="2pC4ZjyQK1O3IbyGlGOSIr">「最佳直线」用<b data-page-node-id="lF7KK7aisDz6CTmboqubhc">最小二乘</b>求：让所有点到直线的「竖直距离平方」之和最小。算法只看数字，<b data-page-node-id="6U6Cw21M9uyjKkKAUJSzcO">看不见形状</b>——于是四组截然不同的数据，被同一条直线概括了。</div>
+    </div>
+
+    <div class="block" data-page-node-id="hPPjedZ7Hf9hwTNZxqb6mM">
+      <h4 data-page-node-id="himPstVH9goZ5pGc2j6LVr"><span class="ic ic-demo" data-page-node-id="Y4Lb4nFfhclf8xcuvdHPDO">▶</span> 演示 · 四组轮播，直线却永远是同一条</h4>
+      <canvas id="t3c1" width="600" height="340" data-page-node-id="hl1K96Cijs5eEvjkKuD54A"></canvas>
+      <div class="ctrl-row" data-page-node-id="zGbvvzAuHAeV7sOVWuX09j"><button class="play-btn" id="t3b1" onclick="t3Play()" data-page-node-id="kl3Wl8fJGjRyHdFx3sMWHO">▶ 连续播</button>
+        <button class="step-btn" id="t3b2" onclick="t3Step()" data-page-node-id="FAA3aFIL88WOpUTFA8U7a5">⏭ 逐步走</button>
+        <button class="btn-ghost" onclick="t3Reset()" data-page-node-id="7jstXbdokbDC4AEKZnGH1G">↺ 重来</button>
+        <span id="t3label" style="font-size:14px;color:var(--text-light)" data-page-node-id="VZIkGdPikn9AugiPEtS8GD">当前：第 1 组</span></div>
+      <div class="step-line" id="t3step" data-page-node-id="ut53QMneGpTNPXLoiFGUHT"><span class="step-no" data-page-node-id="H2PuT8OC9obYGUOa9Kohww">镜 1</span><span id="t3steptxt" data-page-node-id="eh2FDau2sjTS9hFIGSD4NQ"></span></div>
+      <div class="status-line" data-page-node-id="NaIH0pa6f1zLUToFfiMv3Z"><span class="status-dot" id="t3d1" data-page-node-id="M8RI7HAsttXWf2Mtj7Ydgo"></span><span id="t3s1" data-page-node-id="riyi9z4UF9HaEi9fmf10BH">四组数据的 r 全都 ≈ 0.816，直线都是 y = 3 + 0.5x。但形状：①正常散布 ②曲线 ③离群点 ④x 恒定+异常点——天差地别。</span></div>
+      <div class="explain" data-page-node-id="S55Y9b8W4l3Xkb9GCCrRv1">上面这四张并排的图，保留的是散点的<b data-page-node-id="H70TjSvgWNFdyoM5Kn5t05">全部长相</b>（弯/直/聚/散）。点「抹掉形状」按钮把四张图压成下方的摘要表，r、直线、均值这些数字看着完全一样——但被压扁的形状差异，仍在上面的图里。<b data-page-node-id="yKrv5ZjPFx7ZZcqpRPsaWD">经验法则</b>：先看图再看摘要；摘要告诉你"是不是直线关系"，图告诉你"还有什么被摘要漏掉了"。</div>
+    </div>
+
+    <div class="block" data-page-node-id="KiPdT1x5ZiZcxGqC1iJT2y">
+      <h4 data-page-node-id="4hR727UCNRgoUYyC6lWCou"><span class="ic ic-play" data-page-node-id="EezJiWn5RsM5DBzlrygRte">★</span> 动手操作 · 抹掉形状（看摘要丢了什么）</h4>
+      <div class="explain" style="background:#fff7ed;border-left-color:var(--accent-pink)" data-page-node-id="VzukZ5xXYBKRCqpZbpK2Kc"><b data-page-node-id="ViSK6HnbQWIIe8LRe264wW">什么叫「抹掉形状」</b>：上面并排的四张图能看清散点的"长相"——弯、直、聚、散、有没有离群点。摘要表只留 r、直线、均值这些<b data-page-node-id="8vai73RTuUNYB87KL1GqgK">压扁后的数字</b>，散点的长相被抹平了。按下面按钮把四张图压成摘要表，再回一眼上面的图——对比一下"数字一样，长相全不一样"。</div>
+      <button class="btn-ghost" onclick="t3Collapse()" data-page-node-id="0acLAeaPo9hDrATVdgKLID">把上面四组形状压成一张摘要表 ↓</button>
+      <div id="t3summary" data-page-node-id="1uWDQkNme5mW0JkAbejawT"></div>
+    </div>
+
+    <div class="block" data-page-node-id="tHNamMjip4Xd4Ih4pu3TQW">
+      <h4 data-page-node-id="mA5OzoQFmYFO55h8EkM9zu"><span class="ic ic-play" data-page-node-id="Y9r4O2on8hvyNk6J9HnmjD">✎</span> 动手操作 · 自己画点看拟合线</h4>
+      <canvas id="t3c2" width="600" height="260" style="cursor:crosshair" data-page-node-id="ouKl7AVRv5hApKgEngDQWn"></canvas>
+      <div class="ctrl-row" data-page-node-id="Oki1kroerOpRcojOJFYX3G"><button class="btn-ghost" onclick="t3Clear()" data-page-node-id="6PNOO3QHfVcidBM3dvKb4N">清空重画</button><span style="font-size:13px;color:var(--text-light)" data-page-node-id="dXpcbwKDMRYwFpHtKpMGD2">在画布上点几下添加点，自动画出最小二乘拟合线。</span></div>
+      <div class="status-line" data-page-node-id="JyFkmw0kzcRFSUP3wRe6ng"><span class="status-dot gold" data-page-node-id="34JfBVbCUIyKqyWNUcQwBb"></span><span id="t3s2" data-page-node-id="fBp1MWoGkUOdNfGKKpdL5y">你画的点，拟合线会「追」上去。试着画一个离群点，看直线被它拽偏多少。</span></div>
+    </div>
+
+    <div class="block" data-page-node-id="uujENUsfdljN1Q8GBPhWLR">
+      <h4 data-page-node-id="BBFK3hyeojiGy2EwJHCbRA"><span class="ic ic-quiz" data-page-node-id="vNZsl6As9xDlEOYuIfrnkN">?</span> 自测</h4>
+      <div class="quiz-item" data-page-node-id="thDjvvOFtPqj4WesK96o8f"><div class="quiz-q" data-page-node-id="TRXbvekmZAg5eGEzQstwRh">1. 四组图 r 都一样（0.816），说明什么？</div><button class="btn-ghost" onclick="toggleAns('t3a1',this)" data-page-node-id="6hY7nrj5a5nGBgnA0JGeQB">显示答案</button><div class="quiz-ans" id="t3a1" data-page-node-id="5nGCaPXRfGfvVhlzb66PLE"><b data-page-node-id="2E7xrhr9sayWISwequjmqJ">答案：</b>r 只量「线性同步程度」，看不见形状、离群点和恒定 x。四个组线性相关一样强，但数据长相完全不同。</div></div>
+      <div class="quiz-item" data-page-node-id="954ZON4sCJvVa4ZdCAfNQb"><div class="quiz-q" data-page-node-id="ChZ5L1K7R3jAQqv23tqes9">2. 哪一组最危险、最该先看图？</div><button class="btn-ghost" onclick="toggleAns('t3a2',this)" data-page-node-id="up0De8wf48vbCoOGqpUScv">显示答案</button><div class="quiz-ans" id="t3a2" data-page-node-id="r6It5Cx13Aohq1eMdtNgeH"><b data-page-node-id="r20CpSju1iyPZJyH8ICF23">答案：</b>第 3 组（一个离群点主导了整条直线）和第 4 组（x 几乎不变、只有一个异常点，r 全靠它撑着）。只看摘要会得出完全错误的结论。</div></div>
+    </div>
+      </main>
+      <aside class="dl-side" data-page-node-id="8oeBTuUr3UHMnHUqH7sstk">
+      <div class="block" data-page-node-id="FqBkOhE5ArVjpewJhvqPTZ">
+        <span class="parent-toggle" onclick="toggleParent('t3p')" data-page-node-id="2w8pS8HRzU1GHkqpQeXfel">📖 家长拓展（原书深度） ▾</span>
+        <div class="parent-panel show" id="t3p" data-page-node-id="lDdSdNpBz5WJCNPFGInKD3">
+          <h5 data-page-node-id="p86d55ZpyXKZCfCgVqa6Hx">《数学有什么用》· 最小二乘 5 步</h5>
+          <p data-page-node-id="nvTpa6PySt8d9qYFroi8kt">① 算 x、y 的平均；② 算每点偏差 (x−x̄)、(y−ȳ)；③ 斜率 b = Σ(x−x̄)(y−ȳ) / Σ(x−x̄)²；④ 截距 a = ȳ − b·x̄；⑤ 直线 y = a + b·x。安斯库姆 1973 年构造这四组数据，就是为了证明：<b data-page-node-id="nqtX7ievbPfhxFAt6J0nrM">在相信任何统计摘要之前，先看图</b>。</p>
+        </div>
+      </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 主题04 贝叶斯 ========== -->
+<section id="t4" class="page" data-page-node-id="jJHDJtUXoOeCGRwBPJHhLE">
+  <div class="detail" data-page-node-id="QFGbjSHZUbd4F0AFATKHdh">
+    <div class="dl-wrap" data-page-node-id="KZQL0fJsiRhoONBK02NbIV">
+      <main class="dl-main" data-page-node-id="HhB8ZFEoSKBRM4FC6TmJB9">
+    <button class="back-btn" onclick="goHome()" data-page-node-id="R7GhiG2y4mZIcUGBBYUrUI">← 返回知识地图</button>
+    <div class="d-head" style="border-color:var(--accent-green)" data-page-node-id="VJS0TIGvrs3izXnUCGDyqx">
+      <h2 data-page-node-id="qg1lDyTrbXOiAzViknqZ9Z">04 · 检测为什么常报错</h2>
+      <div class="sub" data-page-node-id="WyyMC1R8dHqTAAIJ8YDt2h">复用概率网页的 1000 人网格；B 给「怎么算」（癌症 18.75%），A 给「为什么争」（频率派 vs 贝叶斯先验）。</div>
+    </div>
+    <div class="block" data-page-node-id="1M5zCFxYuxe2L8KpL1nBLO">
+      <div class="ab-box ab-b" data-page-node-id="yqcfRNNyMfHgU8Wi5Gb7Cy"><span class="who who-b" data-page-node-id="s1QsiA7biLCCn2zRaW5kBn">B《数学有什么用》· 完整演算</span><br data-page-node-id="OtM4hF9A17PxeTq1R4QHHH">一种癌症：患病率 <b data-page-node-id="XgSAcTTA8HHEg2wrNnJjnQ">2%</b>，检测灵敏度 <b data-page-node-id="WsCF6swjMvPS7oUuY8QDXR">90%</b>（真病人 90% 测出阳性），假阳性率 <b data-page-node-id="C9luQspUcMNXMqpFeZvphk">8%</b>（健康人 8% 误报）。把 1000 人摆成频数表：真阳 18 + 假阳 78 = 96 个阳性，其中真病人仅 <b data-page-node-id="WuHU4I6uWDoRSAaFduVFqK">18/96 = 18.75%</b>。</div>
+      <div class="ab-box ab-a" data-page-node-id="VFNFAbtOrORALBxA4niTFi"><span class="who who-a" data-page-node-id="Tkv2Eb0xocPXu255VWX0VL">A《欢乐数学》· 学派之争</span><br data-page-node-id="zzytG5UAF0p9sGQuZWT9NR">频率派只看「这次实验过不过关」；贝叶斯派先有一个<b data-page-node-id="gMEU4cECRJb2vWjwJfmHX3">先验</b>（这件事本来有多可能），再拿新数据更新它。争议焦点：先验从哪来、该不该带入？</div>
+    </div>
+
+    <div class="block" data-page-node-id="vqdkUFOEWlNCkDa9UgmTDb">
+      <h4 data-page-node-id="fvUWPBGOvsUiePNCQ1QbdA"><span class="ic ic-demo" data-page-node-id="rVcsFIQsY8NZQs6rGs4QM2">▶</span> 演示 · 1000 人网格逐格点亮（先验 → 后验）</h4>
+      <canvas id="t4c1" width="600" height="320" data-page-node-id="uHHLYMy5nOc0rdtZxJADIz"></canvas>
+      <div class="ctrl-row" data-page-node-id="Baxu130VBBKwTSZZCUYMei">
+        <label class="slider-label slider-prior" data-page-node-id="1HpiUaXoXv5wGFTEU22EFY">患病率（先验）</label>
+        <span class="val-pill val-purple" id="t4p_val" data-page-node-id="bEFpcinAhAFrbZPbBiCgxo">2%</span>
+        <input type="range" id="t4p" min="1" max="20" value="2" oninput="t4Calc()" data-page-node-id="BQAAij8mvzJzA0SEpCdHrW">
+      </div>
+      <div class="ctrl-row" data-page-node-id="h4oR0PqBYT5UJcrdnUqFgs">
+        <label class="slider-label slider-truth" data-page-node-id="aGztAV3ZeDDzogpPgvfMvq">灵敏度（真阳率）</label>
+        <span class="val-pill val-blue" id="t4s_val" data-page-node-id="CmSDKz4i9jF9xdIg92mpCI">90%</span>
+        <input type="range" id="t4s" min="50" max="100" value="90" oninput="t4Calc()" data-page-node-id="NYdmNtBtTxIE3o2qWGzgCh">
+      </div>
+      <div class="ctrl-row" data-page-node-id="3vWW5eQNrA4cMrT6Ohrft0">
+        <label class="slider-label slider-false" data-page-node-id="aITDyBCOrs1ODNU1S0Pfri">假阳率（误报率）</label>
+        <span class="val-pill val-pink" id="t4f_val" data-page-node-id="cyd5ygsUNcq6Hi9nvDomd3">8%</span>
+        <input type="range" id="t4f" min="1" max="30" value="8" oninput="t4Calc()" data-page-node-id="4B2X80Z1W3180qExgWxLCe">
+      </div>
+      <div class="ctrl-row" data-page-node-id="FdJyYpHdswtZBuhAewBZDK"><button class="play-btn" id="t4b1" onclick="t4Play()" data-page-node-id="wYh2VvR5QpBZqaOMEjFEWQ">▶ 连续播</button>
+        <button class="step-btn" id="t4b2" onclick="t4Step()" data-page-node-id="Df3es1QoLIGyO7TLQA2ja1">⏭ 逐步走</button>
+        <button class="btn-ghost" onclick="t4Reset()" data-page-node-id="ODTjw9g3DUM3t8g3ufMHDk">↺ 重来</button></div>
+      <div class="step-line" id="t4step" data-page-node-id="F9Z1YWeaHuwq8EoE2SkPIz"><span class="step-no" data-page-node-id="RwSIWhqQcAdx5w8mb0lT58">镜 1</span><span id="t4steptxt" data-page-node-id="cyxhnKMHipG1EBEMDXT8d9"></span></div>
+      <div class="status-line" data-page-node-id="CR8Vw8F2xVSV5t9MQUTCa2"><span class="status-dot" id="t4d1" data-page-node-id="Xa35RwEJatqYEBVsziEkDm"></span><span id="t4s1" data-page-node-id="39knh4mMiRA7nSy6wBeJrW">红=真有病且阳性；蓝=真有病但漏诊；绿=无病却假阳；灰=无病且阴性。</span></div>
+      <div class="explain" id="t4out" data-page-node-id="8Aend95v50eaeIna8hlabv"></div>
+      <div style="margin-top:14px" data-page-node-id="3Mii9hYlJdGoQt5V1Gaq9G">
+        <div class="bayes-arrow" data-page-node-id="g3LiImSLctBKs9kqJd3UDE">
+          <div class="bayes-step" data-page-node-id="N0eCGDlo8RJ0MHFypPJDy8"><span class="bayes-tag tag-prior" data-page-node-id="cLOpG7ZPuJEK1j4nxSN41x">先验</span><div class="bayes-num" data-page-node-id="rx5Ew4kAdzwQ566dodmy0H"><b id="t4p_prior" data-page-node-id="iqInp9TQWiudYnemLisKjJ">2%</b></div><div class="bayes-cap" data-page-node-id="vFDjtXEJdmTmf5TcpvaeBJ">人群里本就这么多</div></div>
+          <div class="bayes-arrow-mid" data-page-node-id="6x1mKBFJ3F5yITGNZFm42B">→ 检测 →</div>
+          <div class="bayes-step" data-page-node-id="JaVbVD4mqa4oHVCsbk9ZoT"><span class="bayes-tag tag-test" data-page-node-id="tIdKfzVTU5ifJdrme1EIuM">检测</span><div class="bayes-num" data-page-node-id="Yn4aDSoBCzYFtIz8jbnbfJ"><span id="t4p_test" style="font-size:14px" data-page-node-id="XXZboJc4WFND0W6FtxF1Rv">灵 90% · 假 8%</span></div><div class="bayes-cap" data-page-node-id="k2JeE4Ui5czKxYdbxD9ySv">用灵敏度和假阳率更新</div></div>
+          <div class="bayes-arrow-mid" data-page-node-id="TFNuPW4RgGeAgySPEkf9TE">→</div>
+          <div class="bayes-step" data-page-node-id="kHm0AOQjvnUGZOPbnUsbtt"><span class="bayes-tag tag-post" data-page-node-id="r4XSlzlXIzYj9Kd8hDfJPD">后验</span><div class="bayes-num" data-page-node-id="X5ogoyZzGUOCBT0vvJ9a80"><b id="t4p_post_val" style="color:var(--accent-green)" data-page-node-id="9OzsxbxNNRp1oKchbchPnz">18.75%</b></div><div class="bayes-cap" data-page-node-id="sfsBcPRC9t4dhsEnSI7r81">阳性里真患病的比例</div></div>
+        </div>
+        <div style="height:22px;background:#f1f5f9;border-radius:11px;overflow:hidden;margin-top:8px" data-page-node-id="WHBSOOFkGVQuxeBa6ZzfnO"><div id="t4bar" style="height:100%;background:linear-gradient(90deg,#10b981,#34d399);width:18.75%;transition:width .25s" data-page-node-id="pYpouaXZcvVRPmYpEEioBA"></div></div>
+        <div style="font-size:13px;margin-top:4px" data-page-node-id="Iomp5nsFmENA1oc1sJQKJj"><b id="t4pct" data-page-node-id="T2LPJHvx45BU99fscYWw1q">18.75%</b>　（红：<span id="t4tp" data-page-node-id="LNpTbAhNEgus0TdwH9nc50">18</span> ／ 绿：<span id="t4fp" data-page-node-id="wfZda4EMjZGfNpbVlFdnBl">78</span>）— 拖三个滑块，看先验→后验怎么变化</div>
+      </div>
+    </div>
+
+    <div class="block" data-page-node-id="6HkPNH8z9M4DQzKZzAFajY">
+      <h4 data-page-node-id="qTHdWsoSmmv6G2ofJUKQnJ"><span class="ic ic-play" data-page-node-id="UYPFzMWnibBXKN9D4qEkhd">⚑</span> 动手操作 · 辛普森掉头（分组看 vs 合计看）</h4>
+      <div class="ctrl-row" data-page-node-id="GQn425tVQB4MEIoHGbsn71"><label data-page-node-id="bu5RQksRO7RI7YVFmwBEiG">查看</label>
+        <select id="t4simp" onchange="t4Simp()" data-page-node-id="7Ra0GnIirv349ZH4Er04aS">
+          <option value="grp" data-page-node-id="k4CXnQReSoVAdE4rWd8vL1">分组看（A 药每组都优）</option>
+          <option value="all" data-page-node-id="TLtZgf7OiCxGFr4zAy15SH">合计看（B 药反超）</option>
+        </select></div>
+      <canvas id="t4simpc1" width="600" height="260" data-page-node-id="uY0TmiLcx5xhnHTRWVhLtw"></canvas>
+      <div class="explain" id="t4simptxt" data-page-node-id="TFppGzhn4HZ1ijQ0ZBkm82"></div>
+    </div>
+
+    <div class="block" data-page-node-id="0GLxsC0eVlr36RSQdysiYx">
+      <h4 data-page-node-id="L2cMJ5RMZ5w8MQl9iCzpoC"><span class="ic ic-quiz" data-page-node-id="SZkM8oywtuswgABKljeN40">?</span> 自测</h4>
+      <div class="quiz-item" data-page-node-id="Pvba2cjf219IbW58uNCEbL"><div class="quiz-q" data-page-node-id="fExIfhqQFdnLP3BL8A6ycc">1. 检测阳性，你真正患病的概率有多少？</div><button class="btn-ghost" onclick="toggleAns('t4a1',this)" data-page-node-id="FgvXui3DwROOPBjqOcGNhX">显示答案</button><div class="quiz-ans" id="t4a1" data-page-node-id="msmu0K5MgfM22hMFTypyxU"><b data-page-node-id="q8gSqnbeg4Pz36k8hPUUPX">答案：</b>取决于患病率。稀有病时阳性大多来自假阳，真患病可能只有约 18.75%（本案）。直觉以为「阳性≈患病」，贝叶斯纠正了这个错觉。</div></div>
+      <div class="quiz-item" data-page-node-id="acodcy28523nFNEmgrSYx9"><div class="quiz-q" data-page-node-id="hxN1z8HOobH5HuHeTTy35A">2. 为什么假阳性在稀有病里这么多？</div><button class="btn-ghost" onclick="toggleAns('t4a2',this)" data-page-node-id="FyoCBRlv5H19aQd9LjmZM0">显示答案</button><div class="quiz-ans" id="t4a2" data-page-node-id="7Uy5XK2xeyImLEArxTZYM4"><b data-page-node-id="zRWWGWBB6cva5B62vU7KN6">答案：</b>无病者基数太大，哪怕假阳率只有 8%，绝对数也会超过真病人。基数优势让假阳「以量取胜」。</div></div>
+    </div>
+      </main>
+      <aside class="dl-side" data-page-node-id="kuxeP5J2RmcO7gYC5QbTXy">
+      <div class="block" data-page-node-id="c4kiR8elM1XTYSltw6hFcp">
+        <span class="parent-toggle" onclick="toggleParent('t4p')" data-page-node-id="x3KR8saRBSQPZRuIeqFMd1">📖 家长拓展（原书深度） ▾</span>
+        <div class="parent-panel show" id="t4p" data-page-node-id="KHJmi3thO0kLc3YBhmby2A">
+          <h5 data-page-node-id="m6PRB2CJIqe2Qxt4PlxlCJ">频率派 vs 贝叶斯派</h5>
+          <p data-page-node-id="X5YuIdtXxpRgHoxUkyDKEv">贝叶斯公式：P(癌|阳) = P(阳|癌)·P(癌) / P(阳)。它用三个<b data-page-node-id="MCo10rNPF3igF4Hrq2j5u8">可数的概率</b>（先验、似然、证据）反推「不可直接知道的概率」。同样逻辑用于垃圾邮件过滤、机场安检、HIV 初筛。争议在于：先验带主观，但完全抛开先验又会掉进「阳性≈患病」的直觉陷阱。</p>
+        </div>
+      </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 主题05 p值危机 ========== -->
+<section id="t5" class="page" data-page-node-id="YcRYSZQLEEVebM8jGtlZYr">
+  <div class="detail" data-page-node-id="yAw03Lv5ieujxw8wZ60Vn5">
+    <div class="dl-wrap" data-page-node-id="ZcrV3lXKGqRK3vCZAbDl6f">
+      <main class="dl-main" data-page-node-id="8RhgkyCRQ9FkKniMD3SL7H">
+    <button class="back-btn" onclick="goHome()" data-page-node-id="OhUhesODsKSlZnFm7E7uk5">← 返回知识地图</button>
+    <div class="d-head" style="border-color:var(--accent-red)" data-page-node-id="rdwk6qCqgamTy9GSivIDqB">
+      <h2 data-page-node-id="cGDg29EGFnPnHL7yIgDq3I">05 · 巧合过滤器（p 值危机）</h2>
+      <div class="sub" data-page-node-id="ayh6P0D28m8c8z71ze6AYj">A 讲「危机与滥用」；B 讲「诞生与缺位」——一条 250 年弧线：城堡守卫者 → 费希尔 0.05 → 希格斯 → 斯诺遗憾。</div>
+    </div>
+    <div class="block" data-page-node-id="KjSdE3N8ZhEMkyrbSPalqE">
+      <div class="ab-box ab-a" data-page-node-id="5qiiDdY3t23hLHn0W4vMpw"><span class="who who-a" data-page-node-id="OErAnrx5RGQHBs44WZFMDR">A《欢乐数学》· 2×2 与城堡守卫者</span><br data-page-node-id="1HxBb2M5gStvCHTfzlRN27">p 值是个<b data-page-node-id="r8YRR59Sy6gDHFkrtP0Ddc">巧合过滤器</b>：p 越接近 0，越「离谱到不可能是巧合」。城堡守卫者隐喻：若敌军是守卫的 20 倍，敌军 5% 的漏网之鱼就等于全部守卫——假阳性淹没真阳性。</div>
+      <div class="ab-box ab-b" data-page-node-id="9jXrbxmDOdaSzi52vL3pZ4"><span class="who who-b" data-page-node-id="kn8COzAiMh2DYYKD0hPpzt">B《数学有什么用》· 诞生与缺位</span><br data-page-node-id="LDzsPBIMtGPimLRHyBc32M">1925 年费希尔定 0.05 为过滤孔径；2012 年希格斯粒子靠「350 万分之一」的严苛阈值才被认下；而 1854 年斯诺用数据揪出霍乱水源，却因「显著性」概念尚未诞生，迟到了 40 年才被承认。</div>
+      <div class="explain" style="margin-top:8px" data-page-node-id="bZIUuKYvlnfCMLg4m4bXvj"><b data-page-node-id="9HTWcCbuQ7VWUTs63Qp7n3">📐 数字从哪儿来？</b><br data-page-node-id="Ca2YZecZ9ga8Z0lYptFVh8">
+        <b data-page-node-id="5CzcFl90QIOYMg2Lm71q3p">0.05 不是自然规律</b>，是费希尔 1925 年《研究工作者的统计方法》里的<b data-page-node-id="4zreBI5NrWvAtLrcVBJB6o">「便利选择」</b>——原文大意：5% 是「用起来方便的工作值」，因为它能整除列联表（2×2 卡方刚好对应），配合当时的数学用表最好算。先于他的医生/生物学家也常用 1/20，只是没人给它「签字」。<br data-page-node-id="Ek2JvDhURT9UhhxVJ33pJ9">
+        <b data-page-node-id="NFzAJcXZdwKbBxAA7VnYBw">350 万分之一 = 5σ 标准</b>：正态分布里偏离均值 5 个标准差的概率 = 5.73×10⁻⁷ ≈ <b data-page-node-id="H5u10W6MFK6EtAi8GOx8tX">1/175 万（单侧）/ 1/350 万（双侧）</b>。希格斯 2012 宣布发现达到 5.0σ（p≈2.87×10⁻⁷），正落在这量级。粒子物理因为<b data-page-node-id="5OAaRuubkRY7znsbII3ukx">测量精度极高+假阳性代价高</b>（错说「新粒子存在」会让全球实验资源扑空数年），所以门槛要从 0.05 收紧到 0.0000005——约<b data-page-node-id="brHEcOesbzrNhUIC2gZDLv">严苛 100 万倍</b>。<br data-page-node-id="sNXwsnP2f8VUae99rzRcGd">
+        <b data-page-node-id="TDAsobPpfjWzNWX39KD2uA">一句话</b>：0.05 = 历史的「凑合好算」；350万分之一 = 现代物理的「不可错」。
+      </div>
+    </div>
+
+    <div class="block" data-page-node-id="uvosHBhg2apfl1mtEiJutN">
+      <h4 data-page-node-id="abSkZzuEthgpXC9RQlQ0CA"><span class="ic ic-demo" data-page-node-id="jJckcyQiWBHtsUUe3jdC5c">▶</span> 演示 · 城堡守卫者：敌军多少倍才危险</h4>
+      <canvas id="t5c1" width="600" height="240" data-page-node-id="etcD07AjdhJENO4y6c4qvO"></canvas>
+      <div class="ctrl-row" data-page-node-id="WjHrCdESoVO8bSA6It64T7"><label data-page-node-id="keMVNtjNyd7Jib7mVTbOGK">敌我兵力比</label><input type="range" id="t5ratio" min="1" max="100" value="20" oninput="t5Guard()" data-page-node-id="DK4uk1nxMZP6r2d7D6HjM2"></div>
+      <div class="ctrl-row" data-page-node-id="xJzQWLq9TngCzCSLyChwSc"><button class="btn-ghost" onclick="t5Reset()" data-page-node-id="AKAGrOWEeV6erfABisUBnK">↺ 重来</button></div>
+      <div class="status-line" data-page-node-id="IAstVMQoahW5q2Ot9y51rY"><span class="status-dot" id="t5d1" data-page-node-id="KNUgbir5MN7D6AHoOsDhbH"></span><span id="t5s1" data-page-node-id="cFC5mKDKSUlHsvPRzuQD1G">守卫固定 100，敌军 = 比值×100，漏入假阳性 = 5%×敌军。</span></div>
+    </div>
+
+    <div class="block" data-page-node-id="ZGzjY7bt3hXPxjJFpzdzoS">
+      <h4 data-page-node-id="CbTPhJclaAYfzNj3DfuwYk"><span class="ic ic-play" data-page-node-id="JzX1wNUa5ujlsyB7WWRQIb">⚠</span> 动手操作 · p-hacking 模拟器</h4>
+      <div class="ctrl-row" data-page-node-id="Ztmnde43U9jPRkoiiEqKXO"><button class="btn-ghost btn-primary" onclick="t5Hack1()" data-page-node-id="1JzZCpir4ewnMlqMHYlCPk">模拟1：切数据（50次）</button>
+        <button class="btn-ghost btn-primary" onclick="t5Hack2()" data-page-node-id="2IJBuN8KcFkMRQgmJBepq2">模拟2：加数据（20次）</button></div>
+      <div class="explain" id="t5hack" data-page-node-id="Fi1FGPOA1wA659VXksfL87"></div>
+      <canvas id="t5hackc1" width="600" height="160" style="margin-top:10px" data-page-node-id="pllbhv2rQ12mXGAuUvd9Sp"></canvas>
+    </div>
+
+    <div class="block" data-page-node-id="xk7y4SXdpHihgJYAOEpTEU">
+      <h4 data-page-node-id="HjT007WeaBg60yRQozoRGi"><span class="ic ic-demo" data-page-node-id="DV8D4VK4HnF4onsuF1zF1A">🕰</span> 时间轴 · 250 年弧线</h4>
+      <div class="timeline" data-page-node-id="2LX9entlewkCJIhoYuEDaA">
+        <div class="tl-node" data-page-node-id="em8R5yM1WYIfXaypJiyFsw"><div class="yr" data-page-node-id="tlfCsVbkqv4Yvk2oH3QfwL">1760s</div><div class="ev" data-page-node-id="yVJ02OenDjHyUwFNOnemxA">城堡守卫者直觉：宁可错报</div></div>
+        <div class="tl-node" data-page-node-id="oGyBmcy6x3G7YV7SEj9rgK"><div class="yr" data-page-node-id="KvRbB3qWzOmdj5pnyWYwg8">1854</div><div class="ev" data-page-node-id="E6ZfO3MJfmIhUnQhdobF6D">斯诺霍乱图（缺位，迟到40年）</div></div>
+        <div class="tl-node" data-page-node-id="uKwtBgPGXLDHdwEIRMEYTP"><div class="yr" data-page-node-id="LtCawp2aUGHX5flkxm9NcL">1925</div><div class="ev" data-page-node-id="qygGELkWFCt8u6HdUOAhky">费希尔定 0.05</div></div>
+        <div class="tl-node" data-page-node-id="Xj1WM4z1tzseOgZPPGQsgs"><div class="yr" data-page-node-id="qfCQGuDIfI4wany5Tcdh4l">2012</div><div class="ev" data-page-node-id="ftyPvgzYI39TTEilfbLG5z">希格斯 350万分之一</div></div>
+      </div>
+      <canvas id="t5tlc1" width="600" height="130" style="margin-top:8px" data-page-node-id="mOBLBJejXhCpkJ0BhvL1WL"></canvas>
+      <div class="explain" data-page-node-id="5opj9KHTAjWUz1DE1IuYOS">守卫者（1760）的直觉 → 费希尔（1925）把它变成数字门槛 → 希格斯（2012）示范门槛多重要；而斯诺（1854）明明用数据救了人，却因「显著性」尚未诞生被忽视 40 年。<b data-page-node-id="uGyhdt2OwhaxFR1cppdCN4">诞生与缺位，拼成完整一课。</b></div>
+    </div>
+
+    <div class="block" data-page-node-id="XRAugMVhlwWeD1yT4MI4Y2">
+      <h4 data-page-node-id="5pBMsvlCe5SeuGFtkg7Trh"><span class="ic ic-quiz" data-page-node-id="GjL7NBDIvBdRdaqr5DZDru">?</span> 自测</h4>
+      <div class="quiz-item" data-page-node-id="sM9KjxZaA93tV6mjdknW3T"><div class="quiz-q" data-page-node-id="QNi1QRBMoPVStIA3vO5OQ3">1. 城堡守卫者：敌军是守卫 20 倍，意味着什么策略？</div><button class="btn-ghost" onclick="toggleAns('t5a1',this)" data-page-node-id="BURVkBFJZuSfhGZVCFXYSn">显示答案</button><div class="quiz-ans" id="t5a1" data-page-node-id="FMVOUFH45XjhHtGVabjNb6"><b data-page-node-id="bn8xapIrLCt6OevDoybK0U">答案：</b>虚惊（假阳性）成本低，漏警（放走真敌军）成本极高。应「宁可错报」——因为敌军的 5% 就抵得上全部守卫，必须放宽过滤孔径。</div></div>
+      <div class="quiz-item" data-page-node-id="B5fbdoOxLK0vQDtsyQ2USG"><div class="quiz-q" data-page-node-id="qID9R0OZGLxvmmkhLfRKfz">2. p=0.05 做 20 次独立垃圾实验，期望几个假阳？</div><button class="btn-ghost" onclick="toggleAns('t5a2',this)" data-page-node-id="4BIGvLkyTDwn2Qr94YGGmP">显示答案</button><div class="quiz-ans" id="t5a2" data-page-node-id="9f7vQhpefYnbgYZFz4WXxs"><b data-page-node-id="jShuErGqXjGiecyRo9m4mE">什么叫「独立垃圾实验」？</b>指<b data-page-node-id="bL1VI8K4e03jjb0bfqGHFF">没预先假设、为发表而做、可重复性低</b>的研究（俗称「钓鱼」「HARKing」）。每个单独看 p=0.05 没问题——但<b data-page-node-id="HasDSgoSuNwQpxOYjTpBF3">大量聚合</b>起来假阳性就会堆积。<br data-page-node-id="6tIpcsXQzBkDS6kmYE4UaO"><br data-page-node-id="02pZZPrSaKIoDrChNju8vU"><b data-page-node-id="blXc8816PmTKRdSvunijuY">答案：</b>约 1 个（20×5%）。但现实中科学家做了海量「答案显然为否」的研究，<b data-page-node-id="0gUJXndn8X4At9jUCrdLGP">100 万×5% = 5 万假结论</b>涌入期刊。垃圾研究基数越大，假阳性越泛滥——这就是「p-hacking 的真实代价」。</div></div>
+    </div>
+      </main>
+      <aside class="dl-side" data-page-node-id="40D8EDJJH51ONH2uscr7FZ">
+      <div class="block" data-page-node-id="4ekrABcbI3imFv5cN045GV">
+        <span class="parent-toggle" onclick="toggleParent('t5p')" data-page-node-id="ndvt6bdNBo4tgsXZ83hcj2">📖 家长拓展（原书深度） ▾</span>
+        <div class="parent-panel show" id="t5p" data-page-node-id="NKHQHib7KHMfDSLAEIxZ19">
+          <h5 data-page-node-id="UFRSQGKBCqIN5YEFFWAvQz">《数学有什么用》· 两个模拟实验</h5>
+          <p data-page-node-id="FitsxtbgSIE2B3TzDu7U1r">模拟1（切数据）：90 人分三组、测 4 个变量，本是无差异的随机数，作者「跑了」50 次切分，得到 <b data-page-node-id="WDHAPqNlUEX7BjLtKKhyNA">18 个显著</b>（≈1/3，远超 5%）。模拟2（加数据）：抛硬币固定 10 次时 20 次仅 1 次显著；允许「抛到显著为止」（最多 1000 次），20 次里 <b data-page-node-id="ofvpWrD7Y6o1XxhWnAjtGy">12 次</b>钓出显著。解药：透明预注册 + 重复实验。</p>
+        </div>
+      </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 主题06 抽样民调 ========== -->
+<section id="t6" class="page" data-page-node-id="gBfP1KlCJan7LGUm0oevyB">
+  <div class="detail" data-page-node-id="DOcD2vomwNqFYzgBJ4AvgR">
+    <div class="dl-wrap" data-page-node-id="hhkjtZsdFOGFaadLE4YFmP">
+      <main class="dl-main" data-page-node-id="sne7CvPAbkIldUMJ90k6P8">
+    <button class="back-btn" onclick="goHome()" data-page-node-id="oFDHGvZ0n2pLBcsrZCAi5I">← 返回知识地图</button>
+    <div class="d-head" style="border-color:var(--accent-orange)" data-page-node-id="p7HgYH4Fu7JQpigoxRFPW2">
+      <h2 data-page-node-id="ZwiJOAtkAR78OnZUFOCxmQ">06 · 不用挨个问每个人</h2>
+      <div class="sub" data-page-node-id="S9CopA0g8dUDtPJYyfSgSw">B 的独门硬功夫（抽样方法论）；A 用「样本也是另一种不完美目击者」收束全站。</div>
+    </div>
+    <div class="block" data-page-node-id="Nrft40bQsdRG5KU5nFLrh9">
+      <div class="ab-box ab-b" data-page-node-id="TGeLr4BRRilCfnC2OvFrOw"><span class="who who-b" data-page-node-id="2tDtgXVSkscOxiY4YbmB1X">B《数学有什么用》· 抽样方法论</span><br data-page-node-id="AVjAUay2mmbHouHpMYV66e">大数定律：随机样本足够大，样本比例就≈总体比例。但 1936 年《文学文摘》寄出千万问卷、收回 <b data-page-node-id="D6Tk9VKjaPahMg5gQ87f3f">240 万</b>份，却因抽样框偏向有电话/订户而惨败；2016 年民调方法论修正后，反而是 1936 以来最准之一。</div>
+      <div class="ab-box ab-a" data-page-node-id="jaG9pxhMgGTMzqySHnFMR4"><span class="who who-a" data-page-node-id="BUrtCfCvjq2oN64gLBJT3D">A《欢乐数学》· 收束全站</span><br data-page-node-id="BuZATAoBe6XfNdm6tq9nDS">样本是<b data-page-node-id="yYlSx2FyTFe3LwGWmjbbaN">另一种不完美的目击证人</b>。随机抽样的目击者靠谱；有偏差的抽样框，等于让一个瞎子作证——样本再大也救不回。</div>
+    </div>
+
+    <div class="block" data-page-node-id="fHAitRYhlXKchKJaUZv1CO">
+      <h4 data-page-node-id="AWMCIZ7LCAwDN8GI29RuNr"><span class="ic ic-demo" data-page-node-id="HdH5qMtcZQ3EvBI2bhdBas">▶</span> 演示 · 从总体抽球，样本越大越准？</h4>
+      <canvas id="t6c1" width="600" height="300" data-page-node-id="CsgHSGaTz5iyCw8MzsEO6N"></canvas>
+      <div class="ctrl-row" data-page-node-id="WPanL3KoQtZ7MxZASeugEa">
+        <label data-page-node-id="vL6HM8V27ermyeKkZTWLrv">样本量</label><input type="range" id="t6n" min="20" max="500" value="200" oninput="t6Draw()" data-page-node-id="OltPqMqRh86GsJTOEsxcpa">
+        <label data-page-node-id="bzCFy3nxwrej7UbsEyML0P">只抽富人（偏差）</label><input type="checkbox" id="t6bias" onchange="t6Draw()" data-page-node-id="2n6tTbeDDiCjEDxUgffeqS">
+        <button class="play-btn" id="t6b1" onclick="t6Play()" data-page-node-id="ojtOQGHdCDQYVRsSharK8n">▶ 播放演示</button>
+        <button class="btn-ghost" onclick="t6Reset()" data-page-node-id="xXXtTcuQelCESDMbYm9NnN">↺ 重来</button>
+      </div>
+      <div class="status-line" data-page-node-id="dmV1gUZAsl2lBMvauXKiQg"><span class="status-dot" id="t6d1" data-page-node-id="YtCn66FlJlP4RVED4Y4Ch4"></span><span id="t6s1" data-page-node-id="bkDAKa24ls51RihSi7l2EZ">蓝线=样本比例随样本量变化，虚线=总体真值。随机时收敛到真值；有偏时稳定偏离，且越大越偏。</span></div>
+      <div class="explain" id="t6out" data-page-node-id="YeVH8AsiyB13adpMmOnT1s"></div>
+      <div class="explain" style="margin-top:8px" data-page-node-id="Yy59gFYdMAbpiyGKgmDW0X"><b data-page-node-id="Iqb5epzi6X5axFDxH0R8CK">💡 抽的是什么球？</b>这是个<b data-page-node-id="DJHTS0V9bCRJ6NNz6gS2T5">隐喻</b>——想象一个超大的袋子里装满两种颜色的球：<b data-page-node-id="DhC7XRzKiMbofxCZsDm15T">🔴 红球 = 投 A 党的选民</b>，<b data-page-node-id="fmdoSUTAeqx8fdJA4nYnOn">⚫ 灰球 = 投 B 党的选民</b>。袋子里两种球各占一半（总体真值 50%）。你闭眼随机摸 N 个球出来，数红球比例——这就是<b data-page-node-id="gFChUCp8o3zqryQzr6kl8L">民调</b>。蓝线 = 你估计的 A 党支持率，虚线 = 真实支持率 50%。<b data-page-node-id="yEcW7Cj7Mea5DMWdLTAGpZ">摸的球越多，估计越准</b>——但前提是「闭眼」（=随机）。勾选「只抽富人」时，袋子里悄悄被换成了 80% 红球——你摸再多也只能估到 80%，永远摸不到真值 50%。</div>
+    </div>
+
+    <div class="block" data-page-node-id="7OWTwjQujxH0PNccHtd6dC">
+      <h4 data-page-node-id="HEj12WdKcwp3DtgpwesHih"><span class="ic ic-play" data-page-node-id="avIhweOeQjoL5WbHf1Hpjv">⚑</span> 动手操作 · 1936 vs 2016</h4>
+      <div class="explain" data-page-node-id="1baSkGO0FEMhTBCkEqOYg7">
+        <b data-page-node-id="jUDZ2NEjHlrLLYJETRI0Kn">1936《文学文摘》</b>：在 1000 万订户中抽样，240 万人回卷——史无前例的规模，却错判罗斯福会输。病根：抽样框偏向「有电话、订杂志」的富裕阶层，他们更可能投兰登；穷人、低学历者难被纳入。<br data-page-node-id="QlwuT9KuG21BtQDlEEzTxe"><br data-page-node-id="igund01Kw8DWrXG3MndSRE">
+        <b data-page-node-id="PpxMRwM5kyzMFoEZOLaKQT">2016 大选民调</b>：表面又「翻车」（预测希拉里胜、特朗普赢），但作者指出：2016 其实是 1936 以来<b data-page-node-id="yDdzFoeVVSAgl6adUoKF5p">最准的几次之一</b>。误差主要来自受教育程度造成的样本偏差——与 1936 同病，但量级小得多。<br data-page-node-id="DcETQiu5fNAs7LFvL0DGHH"><br data-page-node-id="zdlqkYCY9dGp9LuKBdJSiC">
+        <b data-page-node-id="FGk6f0QgFP0Ck6NzsFHswl">金句：样本偏差 &gt; 样本数量。</b>240 万份错误样本，不如 1000 份随机样本。
+      </div>
+      <div class="ctrl-row" style="margin-top:10px" data-page-node-id="IHyjpgvwBOGgaK5QQSbslV">
+        <button class="btn-ghost btn-primary" id="t6btn1936" onclick="t6Compare('1936')" data-page-node-id="1FRqBGtIiUhHlOv2Syca1o">▶ 模拟 1936 抽样框（偏差大）</button>
+        <button class="btn-ghost btn-primary" id="t6btn2016" onclick="t6Compare('2016')" data-page-node-id="gQY98FyDnMzUZK7hisEuhe">▶ 模拟 2016 民调（轻偏差）</button>
+        <button class="btn-ghost btn-primary" id="t6btnRand" onclick="t6Compare('random')" data-page-node-id="ReT1OPLggXxw4aNqxrZPUF">▶ 模拟真随机（无偏差）</button>
+      </div>
+      <div class="ctrl-row" data-page-node-id="xcMCBdiyM9bDe8jlIEIswV"><label data-page-node-id="KWplBKsIFLVPitAvUPyrdG">样本量</label><input type="range" id="t6cn" min="50" max="2000" value="500" oninput="t6CompareRefresh()" data-page-node-id="t1xDm1RCFL34FDF3YxgG3u"></div>
+      <canvas id="t6c2" width="600" height="240" style="margin-top:6px" data-page-node-id="iHG7SlsgL6dLNbNRG5OtHr"></canvas>
+      <div class="explain" id="t6c2out" style="margin-top:6px" data-page-node-id="obTbRNu7nHRT2Z8luAcxuz">选一种抽样框，看「同样本量 N=500」下，3 条样本比例曲线各自怎么收敛。点按钮重画可换次随机种子。</div>
+    </div>
+
+    <div class="block" data-page-node-id="hw5PDHR7pkcGAMjgoNu0HF">
+      <h4 data-page-node-id="FLJkR5fX5BQhvUVVKnmN9p"><span class="ic ic-quiz" data-page-node-id="jmNEdU0FN6zYhhTUOfFYQO">?</span> 自测</h4>
+      <div class="quiz-item" data-page-node-id="cexS4IK5NzRHw6BitECszE"><div class="quiz-q" data-page-node-id="qBkoWO01sMSvfuzXsBXZIU">1. 1936 年为何 240 万人还错？</div><button class="btn-ghost" onclick="toggleAns('t6a1',this)" data-page-node-id="x45fkxGFiSCtMAGikmGIB6">显示答案</button><div class="quiz-ans" id="t6a1" data-page-node-id="XnTxcsCvxGDdsECYl6NGhb"><b data-page-node-id="zaezPs80DnsijMzigw7C8g">答案：</b>抽样框偏差——问卷发给了订户/有电话者，这群人不能代表全体选民（偏向富裕、偏向兰登）。样本数量再大，只要不随机，结论就歪。</div></div>
+      <div class="quiz-item" data-page-node-id="1NKO8OUgh6FC8hM0oQsU5W"><div class="quiz-q" data-page-node-id="i1ngW2o6FO7RtiHdganYED">2. 「样本越大越准」永远成立吗？</div><button class="btn-ghost" onclick="toggleAns('t6a2',this)" data-page-node-id="jDB1HQsT0XZMqHcXFJ6O4H">显示答案</button><div class="quiz-ans" id="t6a2" data-page-node-id="ElgWARA3eR0kazkAsgLYCX"><b data-page-node-id="xDB1tEJbQ5JXpUGb18hDUh">答案：</b>仅当随机成立。一旦有系统偏差（如只抽富人），样本越大，反而把偏差「焊死」得越牢——离真值越远。</div></div>
+    </div>
+      </main>
+      <aside class="dl-side" data-page-node-id="TItkV9ZqZrEJvPFpU54GRd">
+      <div class="block" data-page-node-id="iGiJ8OyFwl4hlhVO2bsrCD">
+        <span class="parent-toggle" onclick="toggleParent('t6p')" data-page-node-id="79iLO5CBNrOb1exkDaG9i5">📖 家长拓展（原书深度） ▾</span>
+        <div class="parent-panel show" id="t6p" data-page-node-id="HzaIyZhRd6THQCPwukj4ZA">
+          <h5 data-page-node-id="LACKWr0CRZJXPkr1L5ddy9">《数学有什么用》· 大数定律与随机样本</h5>
+          <p data-page-node-id="9kLZAn7LESCqmBdLJsJKyP">随机样本之所以能代替全体，靠的是大数定律：独立重复试验中，样本均值依概率收敛到期望值。前提是「随机」——即每个人都有同等被抽中的机会。抽样框一旦系统性漏掉某群人，再大的样本也只是把偏见放大。</p>
+        </div>
+      </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ============ 通用 ============ */
+var PAGES = ['home','t1','t2','t3','t4','t5','t6'];
+function hideAll(){ for(var i=0;i<PAGES.length;i++){ var el=document.getElementById(PAGES[i]); if(el) el.classList.remove('active'); } }
+function goTo(id){ hideAll(); var el=document.getElementById(id); if(el) el.classList.add('active'); window.scrollTo(0,0); }
+function goHome(){ goTo('home'); }
+function toggleAns(aid,btn){ var a=document.getElementById(aid); if(a.classList.contains('show')){ a.classList.remove('show'); btn.textContent='显示答案'; } else { a.classList.add('show'); btn.textContent='隐藏答案'; } }
+function toggleParent(pid){ var p=document.getElementById(pid); if(p.classList.contains('show')) p.classList.remove('show'); else p.classList.add('show'); }
+
+/* 首页卡片 */
+var CARDS = [
+  {id:'t1',no:'01',title:'平均数会骗人',kw:'均值被富豪顶飞；众数恒为0；基数/口径/组成三陷阱',a:1,b:1,c:'var(--accent-blue)'},
+  {id:'t2',no:'02',title:'相关 ≠ 因果',kw:'凯奇 r=0.6666；红酒第三变量；三问法',a:1,b:1,c:'var(--accent-purple)'},
+  {id:'t3',no:'03',title:'摘要删真信息',kw:'安斯库姆四重奏：四组 r 全=0.816，直线却同一条',a:1,b:1,c:'var(--accent-pink)'},
+  {id:'t4',no:'04',title:'检测常报错',kw:'贝叶斯 1000 人网格；阳性真患病仅 18.75%',a:1,b:1,c:'var(--accent-green)'},
+  {id:'t5',no:'05',title:'巧合过滤器(p值)',kw:'城堡守卫者；p-hacking；希格斯/斯诺时间轴',a:1,b:1,c:'var(--accent-red)'},
+  {id:'t6',no:'06',title:'抽样民调',kw:'1936《文学文摘》240万惨败；2016 其实很准',a:1,b:1,c:'var(--accent-orange)'}
+];
+(function(){
+  var box=document.getElementById('homeCards'); var h='';
+  for(var i=0;i<CARDS.length;i++){ var c=CARDS[i];
+    h+='<div class="sec-card" style="border-top-color:'+c.c+'" onclick="goTo(\''+c.id+'\')">'
+      +'<div class="no">'+c.no+'</div><h3>'+c.title+'</h3><div class="kw">'+c.kw+'</div>'
+      +'<div class="src"><span class="tag tag-a">A</span><span class="tag tag-b">B</span></div></div>';
+  }
+  box.innerHTML=h;
+})();
+
+/* 工具：Pearson r */
+function pearson(pts){ var n=pts.length; if(n<2) return 0;
+  var sx=0,sy=0; for(var i=0;i<n;i++){sx+=pts[i][0];sy+=pts[i][1];}
+  var mx=sx/n,my=sy/n,num=0,dx=0,dy=0;
+  for(var i=0;i<n;i++){ var a=pts[i][0]-mx,b=pts[i][1]-my; num+=a*b; dx+=a*a; dy+=b*b; }
+  var d=Math.sqrt(dx*dy); return d===0?0:num/d;
+}
+/* 工具：最小二乘 */
+function linreg(pts){ var n=pts.length; if(n<2) return {s:0,i:0};
+  var sx=0,sy=0; for(var i=0;i<n;i++){sx+=pts[i][0];sy+=pts[i][1];}
+  var mx=sx/n,my=sy/n,num=0,den=0;
+  for(var i=0;i<n;i++){ var a=pts[i][0]-mx; num+=a*(pts[i][1]-my); den+=a*a; }
+  var s=den===0?0:num/den; return {s:s,i:my-s*mx};
+}
+
+/* ============ 主题01 ============ */
+var T1BASE=[4,5,5,6,6,7,8,9,10];
+function t1Compute(){
+  var rich=parseFloat(document.getElementById('t1rich').value);
+  var arr=T1BASE.concat([rich]);
+  var sum=0; for(var i=0;i<arr.length;i++) sum+=arr[i];
+  var mean=sum/arr.length;
+  var srt=arr.slice().sort(function(a,b){return a-b;});
+  var med = arr.length%2 ? srt[(arr.length-1)/2] : (srt[arr.length/2-1]+srt[arr.length/2])/2;
+  return {arr:arr,mean:mean,med:med,rich:rich};
+}
+function t1Draw(){
+  var c=document.getElementById('t1c1'),x=c.getContext('2d'),W=c.width,H=c.height;
+  x.clearRect(0,0,W,H); var d=t1Compute();
+  var maxv=Math.max.apply(null,d.arr), padL=40,padB=34,padT=20;
+  var plotW=W-padL-16, plotH=H-padT-padB;
+  var n=d.arr.length, bw=plotW/n*0.7, gap=plotW/n;
+  // 轴
+  x.strokeStyle='#e2e8f0'; x.beginPath(); x.moveTo(padL,padT); x.lineTo(padL,padT+plotH); x.lineTo(padL+plotW,padT+plotH); x.stroke();
+  for(var i=0;i<n;i++){
+    var v=d.arr[i], bh=v/maxv*plotH, bx=padL+i*gap+gap*0.15, by=padT+plotH-bh;
+    x.fillStyle = (i===n-1)?'#f59e0b':'#3b82f6';
+    x.fillRect(bx,by,bw,bh);
+    x.fillStyle='#94a3b8'; x.font='10px sans-serif'; x.textAlign='center';
+    x.fillText(v, bx+bw/2, by-4);
+  }
+  // 均值线
+  var ym=padT+plotH-d.mean/maxv*plotH;
+  x.strokeStyle='#ef4444'; x.setLineDash([5,4]); x.lineWidth=2; x.beginPath(); x.moveTo(padL,ym); x.lineTo(padL+plotW,ym); x.stroke();
+  x.setLineDash([]); x.fillStyle='#ef4444'; x.font='12px sans-serif'; x.textAlign='left'; x.fillText('均值 '+d.mean.toFixed(1), padL+4, ym-6);
+  // 中位数线
+  var ymd=padT+plotH-d.med/maxv*plotH;
+  x.strokeStyle='#10b981'; x.setLineDash([5,4]); x.beginPath(); x.moveTo(padL,ymd); x.lineTo(padL+plotW,ymd); x.stroke();
+  x.setLineDash([]); x.fillStyle='#10b981'; x.fillText('中位数 '+d.med.toFixed(1), padL+4, ymd+14);
+  x.lineWidth=1;
+  document.getElementById('t1s1').innerHTML='富豪收入 '+d.rich+' 万时：<b>均值 '+d.mean.toFixed(1)+' 万</b>（红，被顶飞），<b>中位数 '+d.med.toFixed(1)+' 万</b>（绿，不动）。';
+}
+var t1playing=false,t1timer=null;
+function t1Play(){ if(t1playing){ t1Stop(); return; } t1playing=true;
+  var b=document.getElementById('t1b1'); b.textContent='⏸ 停止'; b.classList.add('playing');
+  var r=document.getElementById('t1rich'); var v=10;
+  t1timer=setInterval(function(){ v+=10; if(v>220){v=220;} r.value=v; t1Draw();
+    if(v>=220){ t1Stop(); }
+  },60);
+}
+function t1Stop(){ if(t1timer) clearInterval(t1timer); t1timer=null; t1playing=false;
+  var b=document.getElementById('t1b1'); b.textContent='▶ 播放演示'; b.classList.remove('playing'); }
+function t1Update(){ t1Draw(); }
+function t1DrawBase(x){
+  x.font='bold 20px sans-serif'; x.textAlign='center';
+  x.fillStyle='#ef4444'; x.fillText('+10%', 300, 46);
+  x.font='12px sans-serif'; x.fillStyle='#64748b';
+  x.fillText('去年 10 起 → 今年 11 起', 300, 66);
+  var bot=168, maxh=112, cw=110, cx1=190, cx2=410;
+  var h1=10/11*maxh, h2=maxh;
+  x.fillStyle='#cbd5e1'; x.fillRect(cx1-cw/2, bot-h1, cw, h1);
+  x.fillStyle='#ef4444'; x.fillRect(cx2-cw/2, bot-h2, cw, h2);
+  x.fillStyle='#94a3b8'; x.font='13px sans-serif';
+  x.fillText('10 起', cx1, bot-h1-8); x.fillText('11 起', cx2, bot-h2-8);
+  x.font='12px sans-serif'; x.fillStyle='#64748b';
+  x.fillText('去年', cx1, bot+20); x.fillText('今年', cx2, bot+20);
+  x.fillStyle='#475569'; x.font='13px sans-serif';
+  x.fillText('两根柱子几乎一样高 —— 可「+10%」喊得比谁都响', 300, 200);
+}
+function t1DrawCal(x){
+  var bot=150, bw=52, h3=60, h6=120, g=8;
+  x.font='bold 13px sans-serif'; x.textAlign='center';
+  x.fillStyle='#ef4444'; x.fillText('「涨」的讲法：涨 100%（翻倍）',150,34);
+  x.fillStyle='#10b981'; x.fillText('「跌」的讲法：跌 50%（回到从前）',450,34);
+  x.fillStyle='#cbd5e1'; x.fillRect(150-g-bw, bot-h3, bw, h3);
+  x.fillStyle='#ef4444'; x.fillRect(150+g, bot-h6, bw, h6);
+  x.fillStyle='#94a3b8'; x.font='12px sans-serif';
+  x.fillText('3',150-g-bw/2, bot-h3-6); x.fillText('6',150+g+bw/2, bot-h6-6);
+  x.font='11px sans-serif'; x.fillStyle='#64748b';
+  x.fillText('去年 3 万',150-g-bw/2, bot+16); x.fillText('今年 6 万',150+g+bw/2, bot+16);
+  x.fillStyle='#10b981'; x.fillRect(450-g-bw, bot-h6, bw, h6);
+  x.fillStyle='#cbd5e1'; x.fillRect(450+g, bot-h3, bw, h3);
+  x.fillStyle='#94a3b8'; x.font='12px sans-serif';
+  x.fillText('6',450-g-bw/2, bot-h6-6); x.fillText('3',450+g+bw/2, bot-h3-6);
+  x.font='11px sans-serif'; x.fillStyle='#64748b';
+  x.fillText('今年 6 万',450-g-bw/2, bot+16); x.fillText('去年 3 万',450+g+bw/2, bot+16);
+  x.fillStyle='#475569'; x.font='13px sans-serif';
+  x.fillText('同一笔 3→6 万：先讲是「翻倍」，倒过来讲是「回到从前」',300,196);
+}
+function t1DrawComp(x){
+  var x0=210, W=350, y1=54, y2=140, h=34;
+  var g1=17/20*W, g2=196/200*W;
+  x.fillStyle='#10b981'; x.fillRect(x0,y1,g1,h);
+  x.fillStyle='#ef4444'; x.fillRect(x0+g1,y1,W-g1,h);
+  x.fillStyle='#10b981'; x.fillRect(x0,y2,g2,h);
+  x.fillStyle='#ef4444'; x.fillRect(x0+g2,y2,W-g2,h);
+  x.strokeStyle='#94a3b8'; x.setLineDash([4,4]); x.lineWidth=1;
+  x.beginPath(); x.moveTo(x0+g1, y1+h+2); x.lineTo(x0+g2, y1+h+2); x.lineTo(x0+g2, y2); x.stroke();
+  x.setLineDash([]);
+  x.font='11px sans-serif'; x.fillStyle='#64748b'; x.textAlign='center';
+  x.fillText('还是这 3 个差生', (x0+g1+x0+g2)/2, y1+h+16);
+  x.font='13px sans-serif'; x.fillStyle='#475569'; x.textAlign='left';
+  x.fillText('班里 17/20 及格 = 85%', 16, y1+h/2+5);
+  x.fillText('全校 196/200 及格 = 98%', 16, y2+h/2+5);
+  x.fillStyle='#fff'; x.font='11px sans-serif';
+  x.fillText('及格 17', x0+60, y1+h/2+4);
+  x.fillText('及格 196', x0+70, y2+h/2+4);
+  x.fillText('3 人', x0+g1+(W-g1)/2, y1+h/2+4);
+}
+/* 众数三场景（动手操作区） */
+var t1scn=0;
+var t1Scenes=[
+ {n:'0',
+  vals:[0,0,0,0,0,0,0,3,4,5,6,7,8,9,10],
+  txt:'收入「0」出现 <b>7</b> 次、最多 → <b>众数=0</b>。不是人人破产——所有「没工资的人」（退休/主妇/失业）都被记成同一个 0，一堆 0 轻松当选最多。众数把「很多人其实是 0」这句真话说出来了。'},
+ {n:'6',
+  vals:[0,2,3,4,5,5,6,6,6,6,6,6,6,6,7,7,8,9,10],
+  txt:'中间「6」出现 <b>8</b> 次、最多 → <b>众数=6</b>。这是多数人的典型收入；可只要队里混进一位千万富翁，<b>平均数立刻被顶飞</b>——均值站到大多数人对面，众数还站在大家这边。'},
+ {n:'0 或 10（两个！）',
+  vals:[0,0,0,0,3,4,5,6,7,8,10,10,10,10],
+  txt:'「0」与「10」并列最多（各 <b>4</b> 次）→ <b>众数有两个</b>。这是贫富两极的分布：问「最多的人拿多少」，穷人堆答 0、富人堆答 10。<b>众数不唯一时，单靠它下结论就会骗人。</b>'}
+];
+function t1DrawMode(k){
+  t1scn=k;
+  var c=document.getElementById('t1c2'),x=c.getContext('2d'),W=c.width,H=c.height; x.clearRect(0,0,W,H);
+  var sc=t1Scenes[k], vals=sc.vals, counts={};
+  for(var i=0;i<vals.length;i++){ counts[vals[i]]=(counts[vals[i]]||0)+1; }
+  var keys=Object.keys(counts); var maxc=Math.max.apply(null,keys.map(function(kk){return counts[kk];}));
+  var mkeys=[]; for(var mi=0;mi<keys.length;mi++){ if(counts[keys[mi]]===maxc) mkeys.push(keys[mi]); }
+  var padL=56,padB=30,padT=36,plotW=W-padL-10,plotH=H-padT-padB;
+  var bw=plotW/keys.length*0.6,gap=plotW/keys.length;
+  x.fillStyle='#64748b'; x.font='12px sans-serif'; x.textAlign='left';
+  x.fillText('场景 '+(k+1)+'/'+t1Scenes.length+' · 众数 = '+sc.n+'（紫柱）', 10, 18);
+  x.strokeStyle='#e2e8f0'; x.beginPath(); x.moveTo(padL,padT); x.lineTo(padL,padT+plotH); x.lineTo(padL+plotW,padT+plotH); x.stroke();
+  for(var j=0;j<keys.length;j++){ var kk=keys[j], bh=counts[kk]/maxc*plotH, bx=padL+j*gap+gap*0.2, by=padT+plotH-bh;
+    x.fillStyle=(mkeys.indexOf(kk)>=0)?'#8b5cf6':'#cbd5e1'; x.fillRect(bx,by,bw,bh);
+    x.fillStyle='#94a3b8'; x.font='10px sans-serif'; x.textAlign='center'; x.fillText(counts[kk], bx+bw/2, by-4);
+    x.fillText(kk, bx+bw/2, padT+plotH+14);
+  }
+  document.getElementById('t1s2').innerHTML=sc.txt;
+}
+function t1Mode(){ t1DrawMode((t1scn+1)%t1Scenes.length); }
+function t1Trap(){
+  var v=document.getElementById('t1trap').value, t=document.getElementById('t1trapTxt');
+  var c=document.getElementById('t1tc');
+  if(c){ var x=c.getContext('2d'); x.clearRect(0,0,600,210);
+    if(v==='base') t1DrawBase(x);
+    else if(v==='cal') t1DrawCal(x);
+    else t1DrawComp(x);
+  }
+  if(v==='base') t.innerHTML='<b>基数陷阱</b>：谋杀率「+10%」听着吓人，但若去年只有 10 起、今年 11 起——绝对值只多了 1 起。百分比放大了微不足道的绝对变化。（上图两根柱子几乎一样高）';
+  else if(v==='cal') t.innerHTML='<b>口径陷阱</b>：同一笔收入，「去年 3 万、今年 6 万」=翻倍（涨 100%）；换个口径「今年 6 万、去年 3 万」=「没涨，只是回到从前」。分子分母怎么摆，结论就怎么变。';
+  else t.innerHTML='<b>组成陷阱</b>：班里及格率 85%、全校 98%——不是数字骗你，是<b>分母不同</b>：班里 3 个差生占 20 人里的 15%，放进全校 200 人里只占 2%。看比例先问「分母是谁」。';
+}
+t1DrawMode(0);
+t1Trap();
+
+/* ============ 主题02 ============ */
+/* P0-1 步进模式：4 镜 */
+var t2Stage=0, t2playing=false, t2timer=null;
+var t2rand=[], t2pool=[], t2best=null;
+var T2_STEP=[
+  '<b>镜 1 · 先看「真随机」长什么样</b>：22 个点，每个点的 x 和 y 各掷各的骰子、互不相干。点在图上东一个西一个，相关系数 r 只有 ',
+  '<b>镜 2 · 程序在幕后试了 200 对</b>：横轴是 r（−1 到 +1），每根柱子代表一批随机数据的 r 落在哪个区间。绝大多数挤在 0 附近，但两头的尾巴上总有几根小柱——<b>纯靠运气</b>就把 |r| 顶到 0.4 以上。',
+  '<b>镜 3 · 挑出最接近 0.6666 的那一对</b>：刚才还「东一个西一个」的点，这一对已经<b>像一条斜线</b>了（橙虚线是它自己的趋势线）。凯奇与泳池溺亡，就是这对数据的现实版。',
+  '<b>镜 4 · 结论</b>：这两组数据<b>完全独立、零因果</b>，却凑出 r='
+];
+function t2RandomPts(n,corr){ var pts=[],mx=8,my=8;
+  for(var i=0;i<n;i++){ var u=Math.random()*16-8, e=(Math.random()*2-1)*4;
+    var px=8+u; var py=8+corr*u+e; pts.push([px,py]); }
+  return pts;
+}
+/* 准备数据：镜1 的一组真随机点 + 200 对随机数据的 r 分布 + 其中最接近 0.6666 的一对 */
+function t2Prepare(){
+  t2rand = t2RandomPts(22,0);
+  t2pool=[]; t2best=null; var bestd=99;
+  for(var k=0;k<200;k++){
+    var a=t2RandomPts(22,0); var r=pearson(a);
+    t2pool.push(r);
+    var d=Math.abs(Math.abs(r)-0.6666);
+    if(d<bestd){ bestd=d; t2best=a.slice(); }
+  }
+}
+function t2Gen(){
+  t2StopAnim(); t2Prepare(); t2Stage=0; t2Draw1();
+  document.getElementById('t2d1').className='status-dot';
+  document.getElementById('t2s1').innerHTML='换了一批<b>新的</b>随机数据：重新抽 200 对、重新钓一次。每次钓上来的 r 都不一样，但总有几对能凑到 0.4 以上——这就是「随机也能相关」。';
+}
+/* 散点图（镜1 真随机 / 镜3 镜4 钓到的那对）；showLine=true 时叠一条趋势虚线 */
+function t2DrawScatter(x,ox,oy,pw,ph,pts,showLine){
+  x.setLineDash([]); x.lineWidth=1; x.strokeStyle='#e2e8f0';
+  x.beginPath(); x.moveTo(ox,oy); x.lineTo(ox,oy+ph); x.lineTo(ox+pw,oy+ph); x.lineTo(ox+pw,oy); x.stroke();
+  if(showLine && pts.length>1){
+    var lr=linreg(pts);
+    x.strokeStyle='#f59e0b'; x.setLineDash([6,5]); x.lineWidth=2;
+    x.beginPath();
+    x.moveTo(ox, oy+ph-((lr.i)/16)*ph);
+    x.lineTo(ox+pw, oy+ph-((lr.i+lr.s*16)/16)*ph);
+    x.stroke(); x.setLineDash([]);
+  }
+  for(var i=0;i<pts.length;i++){
+    var px=ox+(pts[i][0]/16)*pw, py=oy+ph-(pts[i][1]/16)*ph;
+    x.fillStyle='#8b5cf6'; x.beginPath(); x.arc(px,py,4,0,7); x.fill();
+  }
+}
+/* 镜2：200 对随机数据的 r 直方图（20 桶，r∈[-1,1]），|r|>0.4 的尾巴柱高亮橙色 */
+function t2DrawPool(x,ox,oy,pw,ph){
+  var N=20, bins=[], i;
+  for(i=0;i<N;i++) bins.push(0);
+  for(i=0;i<t2pool.length;i++){
+    var b=Math.floor((t2pool[i]+1)/2*N); if(b<0)b=0; if(b>=N)b=N-1; bins[b]++;
+  }
+  var maxB=1; for(i=0;i<N;i++) if(bins[i]>maxB) maxB=bins[i];
+  var bw=pw/N;
+  x.setLineDash([]); x.lineWidth=1; x.strokeStyle='#cbd5e1';
+  x.beginPath(); x.moveTo(ox,oy); x.lineTo(ox,oy+ph); x.lineTo(ox+pw,oy+ph); x.stroke();
+  for(i=0;i<N;i++){
+    var bh=(bins[i]/maxB)*ph*0.9, bx=ox+i*bw, by=oy+ph-bh;
+    var rC=-1+(i+0.5)/N*2;
+    x.fillStyle = (Math.abs(rC)>0.4) ? '#f97316' : '#c4b5fd';
+    if(bh>0.5) x.fillRect(bx+1, by, bw-2, bh);
+  }
+  // 目标线：±0.6666（凯奇值）
+  x.setLineDash([5,4]); x.lineWidth=2;
+  x.strokeStyle='#dc2626';
+  x.beginPath(); x.moveTo(ox+(0.6666+1)/2*pw,oy); x.lineTo(ox+(0.6666+1)/2*pw,oy+ph); x.stroke();
+  x.strokeStyle='#f59e0b';
+  x.beginPath(); x.moveTo(ox+(-0.6666+1)/2*pw,oy); x.lineTo(ox+(-0.6666+1)/2*pw,oy+ph); x.stroke();
+  x.setLineDash([]);
+  x.fillStyle='#94a3b8'; x.font='11px sans-serif'; x.textAlign='center';
+  x.fillText('−1', ox+4, oy+ph+15);
+  x.fillText('0', ox+pw/2, oy+ph+15);
+  x.fillText('+1', ox+pw-4, oy+ph+15);
+  x.fillText('r（相关系数）', ox+pw/2, oy+ph+29);
+}
+function t2Draw1(){
+  var c=document.getElementById('t2c1'),x=c.getContext('2d'),W=c.width,H=c.height; x.clearRect(0,0,W,H);
+  if(!t2pool.length || !t2best) t2Prepare();
+  var pad=34, padTop=40, plotW=W-2*pad, plotH=H-padTop-pad;
+  if(t2Stage===1){ t2DrawPool(x, pad, padTop, plotW, plotH); }
+  else { t2DrawScatter(x, pad, padTop, plotW, plotH, (t2Stage===0?t2rand:t2best), t2Stage!==0); }
+  // 顶部标题带（与图形区物理分离）
+  var tag=['镜1 · 真随机的样子：r='+pearson(t2rand).toFixed(3),
+           '镜2 · 200 对随机数据的 r 分布',
+           '镜3 · 钓上来的那一对：r='+pearson(t2best).toFixed(3),
+           '镜4 · 零因果，也能凑出 r='+pearson(t2best).toFixed(3)][t2Stage];
+  x.fillStyle = (t2Stage===1)?'#f8fafc':'#f5f3ff';
+  x.fillRect(pad-4, 6, W-2*pad+8, 26);
+  x.fillStyle='#7c3aed'; x.font='bold 13px sans-serif'; x.textAlign='left';
+  var maxW=W-2*pad-6, sz=13;
+  while(sz>10 && x.measureText(tag).width>maxW){ sz--; x.font='bold '+sz+'px sans-serif'; }
+  x.fillText(tag, pad, 24);
+  document.getElementById('t2r').textContent=pearson(t2Stage===0?t2rand:t2best).toFixed(2);
+  t2UpdateStep();   // 图与解说同步（与 t4 一致：重绘即刷新解说，避免解说漂移）
+}
+function t2UpdateStep(){
+  var el=document.getElementById('t2steptxt');
+  var no=document.querySelector('#t2step .step-no');
+  if(no) no.textContent='镜 '+(t2Stage+1);
+  if(!el) return;
+  if(t2Stage===0){
+    el.innerHTML=T2_STEP[0]+'<b>'+pearson(t2rand).toFixed(3)+'</b>——这才叫「没关系」。记住这张脸。';
+  } else if(t2Stage===1){
+    var tail=0; for(var i=0;i<t2pool.length;i++){ if(Math.abs(t2pool[i])>0.4) tail++; }
+    el.innerHTML=T2_STEP[1]+'（这 200 对里，|r|&gt;0.4 的有 <b>'+tail+'</b> 对）';
+  } else if(t2Stage===2){
+    el.innerHTML=T2_STEP[2];
+  } else {
+    el.innerHTML=T2_STEP[3]+'<b>'+pearson(t2best).toFixed(3)+'</b>。所以「r 很大」<b>本身不能当证据</b>——要接着问：这是真关系，还是 200 次里的一次凑巧？';
+  }
+}
+function t2Step(){
+  // 逐步走：单击前进一镜（0→1→2→3→0 循环），不自动播放
+  t2StopAnim();
+  t2Stage=(t2Stage+1)%4;
+  t2Draw1();
+  var b=document.getElementById('t2b2');
+  if(b){ b.style.background='var(--accent-pink)'; b.style.color='#fff';
+    setTimeout(function(){ b.style.background='#fff'; b.style.color='var(--accent-pink)'; },180); }
+}
+function t2Play(){
+  if(t2playing){ t2StopAnim(); return; }
+  t2playing=true; t2Stage=0;
+  var b=document.getElementById('t2b1'); b.textContent='⏸ 停止'; b.classList.add('playing');
+  t2Draw1();
+  t2timer=setInterval(function(){
+    t2Stage++;
+    if(t2Stage>3){ t2Stage=3; t2Draw1(); t2StopAnim(); return; }
+    t2Draw1();
+  },1600);
+}
+function t2StopAnim(){
+  if(t2timer) clearInterval(t2timer); t2timer=null; t2playing=false;
+  var b=document.getElementById('t2b1'); if(b){ b.textContent='▶ 连续播'; b.classList.remove('playing'); }
+}
+function t2Draw2(){
+  var c=document.getElementById('t2c2'),x=c.getContext('2d'),W=c.width,H=c.height; x.clearRect(0,0,W,H);
+  var third=document.getElementById('t2third').checked;
+  var pad=30,plotW=W-2*pad,plotH=H-2*pad;
+  x.strokeStyle='#e2e8f0'; x.beginPath(); x.moveTo(pad,pad); x.lineTo(pad,pad+plotH); x.lineTo(pad+plotW,pad+plotH); x.lineTo(pad+plotW,pad); x.stroke();
+  // 两组，各自弱相关，但整体强相关（因为组中心不同）
+  var g1=[],g2=[];
+  for(var i=0;i<14;i++){ g1.push([3+Math.random()*2, 4+Math.random()*2]); }
+  for(var i=0;i<14;i++){ g2.push([11+Math.random()*2, 12+Math.random()*2]); }
+  function plot(g,col){ for(var i=0;i<g.length;i++){ var px=pad+(g[i][0]/16)*plotW, py=pad+plotH-(g[i][1]/16)*plotH;
+    x.fillStyle=col; x.beginPath(); x.arc(px,py,4,0,7); x.fill(); } }
+  if(third){ plot(g1,'#3b82f6'); plot(g2,'#10b981');
+    document.getElementById('t2s2').innerHTML='勾选后：蓝组、绿组各自几乎没趋势（r≈0），但<b>两组位置差很远</b>——整体算出的高相关，纯是分组造成的假象。这就是红酒案例的「第三变量」本质。';
+  } else { var all=g1.concat(g2); plot(all,'#8b5cf6');
+    document.getElementById('t2s2').innerHTML='未分组时，所有点看起来沿一条强相关直线排列（r 很高）。但点「▶ 第三变量」就会发现，这相关性是假的。';
+  }
+}
+t2Prepare(); t2Draw1(); t2Draw2();
+t2ShowR(0.7);
+
+/* === r 滑块联动：根据目标 r 生成"看起来像那个相关"的 24 个点 === */
+function t2ShowR(target){
+  document.getElementById('t2rval').textContent=(target>=0?'+':'')+target.toFixed(2);
+  var c=document.getElementById('t2c3'),x=c.getContext('2d'),W=c.width,H=c.height;
+  x.clearRect(0,0,W,H);
+  var pad=30,plotW=W-2*pad,plotH=H-2*pad;
+  x.strokeStyle='#e2e8f0'; x.beginPath();
+  x.moveTo(pad,pad); x.lineTo(pad,pad+plotH); x.lineTo(pad+plotW,pad+plotH); x.lineTo(pad+plotW,pad); x.stroke();
+  // 24 个点：固定 X 在 [0,12] 均匀，Y 由 r 决定方向 + 噪声
+  var N=24;
+  var slope=target;                              // 斜率感知 r 大小
+  var noiseScale=(1-Math.abs(target))*3.5+0.4;   // |r|→0 噪声大；|r|→1 噪声趋近 0
+  var base=pad+plotH/2;
+  var pts=[];
+  for(var i=0;i<N;i++){
+    var t=i/(N-1);
+    var xv=pad+t*plotW;
+    var yLine=base - slope*t*plotH*0.85 + (Math.random()-0.5)*noiseScale*30;
+    yLine=Math.max(pad, Math.min(pad+plotH, yLine));
+    pts.push([xv,yLine]);
+  }
+  // 画点
+  for(var i=0;i<pts.length;i++){
+    x.fillStyle='#8b5cf6'; x.beginPath(); x.arc(pts[i][0],pts[i][1],4,0,7); x.fill();
+  }
+  // 画回归参考线（虚线）
+  x.strokeStyle='#94a3b8'; x.setLineDash([6,5]); x.lineWidth=2;
+  x.beginPath();
+  x.moveTo(pad, base + slope*plotH*0.85);
+  x.lineTo(pad+plotW, base - slope*plotH*0.85);
+  x.stroke();
+  x.setLineDash([]); x.lineWidth=1;
+  // 顶部标签
+  x.fillStyle='#1e293b'; x.font='bold 14px sans-serif'; x.textAlign='left';
+  x.fillText('当前 r = '+(target>=0?'+':'')+target.toFixed(2), pad+8, pad+18);
+  x.fillStyle='#64748b'; x.font='12px sans-serif';
+  var hint = Math.abs(target)>=0.85 ? '完美一条线（A↑B一定↑或一定↓）'
+            : Math.abs(target)>=0.5  ? '基本一条线（A↑大部分时候B也↑）'
+            : Math.abs(target)>=0.2  ? '看不太出方向（数据有点散）'
+            :                          '完全看不出方向（数据乱糟糟）';
+  x.fillText(hint, pad+8, pad+36);
+  // 同步更新 s3 文字解说
+  var s3=document.getElementById('t2s3');
+  if(s3){
+    var desc=Math.abs(target)>=0.85 ? '接近 ±1——所有点几乎都贴在一条直线上，一眼就能看出方向。'
+              : Math.abs(target)>=0.5  ? '中等相关——多数点大致沿着一个方向走，但有点散开。'
+              : Math.abs(target)>=0.2  ? '弱相关——隐约有点方向，但乱得足以让人怀疑。'
+              :                          '接近 0——点东一个西一个，完全看不出方向。凯奇案例就是这种"凑巧摆成强相关"！';
+    s3.innerHTML='当前 r=<b>'+(target>=0?'+':'')+target.toFixed(2)+'</b>。'+desc+' 滑块任意拖动都能即时看到图怎么变。';
+  }
+}
+
+/* ============ 主题03 安斯库姆 ============ */
+var A1=[[10,8.04],[8,6.95],[13,7.58],[9,8.81],[11,8.33],[14,9.96],[6,7.24],[4,4.26],[12,10.84],[7,4.82],[5,5.68]];
+var A2=[[10,9.14],[8,8.14],[13,8.74],[9,8.77],[11,9.26],[14,8.10],[6,6.13],[4,3.10],[12,9.13],[7,7.26],[5,4.74]];
+var A3=[[10,7.46],[8,6.77],[13,12.74],[9,7.11],[11,7.81],[14,8.84],[6,6.08],[4,5.39],[12,8.15],[7,6.42],[5,5.73]];
+var A4=[[8,6.58],[8,5.76],[8,7.71],[8,8.84],[8,8.47],[8,7.04],[8,5.25],[19,12.50],[8,5.56],[8,7.91],[8,6.89]];
+var QUART=[A1,A2,A3,A4];
+var t3cur=0,t3playing=false,t3timer=null;
+function t3Panel(pts,ox,oy,pw,ph){
+  var x=t3ctx; x.strokeStyle='#e2e8f0'; x.lineWidth=1;
+  x.beginPath(); x.moveTo(ox,oy); x.lineTo(ox,oy+ph); x.lineTo(ox+pw,oy+ph); x.lineTo(ox+pw,oy); x.stroke();
+  var xs=pts.map(function(p){return p[0];}), ys=pts.map(function(p){return p[1];});
+  var xmin=Math.min.apply(null,xs)-1, xmax=Math.max.apply(null,xs)+1, ymin=Math.min.apply(null,ys)-1, ymax=Math.max.apply(null,ys)+1;
+  for(var i=0;i<pts.length;i++){ var px=ox+(pts[i][0]-xmin)/(xmax-xmin)*pw, py=oy+ph-(pts[i][1]-ymin)/(ymax-ymin)*ph;
+    x.fillStyle='#ec4899'; x.beginPath(); x.arc(px,py,3.5,0,7); x.fill(); }
+  // 回归线 y=3+0.5x
+  var lx1=xmin, lx2=xmax, ly1=3+0.5*lx1, ly2=3+0.5*lx2;
+  x.strokeStyle='#1e293b'; x.lineWidth=2; x.beginPath();
+  x.moveTo(ox+(lx1-xmin)/(xmax-xmin)*pw, oy+ph-(ly1-ymin)/(ymax-ymin)*ph);
+  x.lineTo(ox+(lx2-xmin)/(xmax-xmin)*pw, oy+ph-(ly2-ymin)/(ymax-ymin)*ph); x.stroke();
+  x.lineWidth=1;
+}
+var t3c1=document.getElementById('t3c1'), t3ctx=t3c1.getContext('2d');
+var T3_SHAPE=['①正常散布','②抛物线（非线性）','③一个离群点拽着直线','④x 几乎恒定+一个异常点'];
+var T3_STEP=[
+  '<b>第 1 组（正常散布）</b>：点大致沿直线上下抖动，没有明显弯、没有离群点。<b>直线 y=3+0.5x 是真的在描述它</b>——这组里 r=0.816 名实相符。记住这张脸，下面三张会骗你。',
+  '<b>第 2 组（抛物线）</b>：点其实弯成一条弧（U 形/拱形），根本不是直线关系。但 r 照样算出 0.816——<b>r 只量「线性」的同步程度</b>，把弯曲当成「不够直」记了一笔，却不会告诉你它在弯。',
+  '<b>第 3 组（一个离群点）</b>：10 个点老实地竖成一排，只有第 8 个点远远跑到右上角。<b>整条直线被这一个点拽歪了</b>——如果删掉它，剩下 10 个点几乎没斜率。这是"一颗老鼠屎"的典型。',
+  '<b>第 4 组（x 几乎恒定 + 异常点）</b>：所有点的 x 都挤在 8 附近，只有 1 个点 x=19。<b>x 几乎没有变化时，"x 越大 y 越大"根本没有意义</b>——但 r 依然算出 0.816，纯属那一个点撑起来的假象。',
+  '<b>四镜走完</b>：四组数据的 r、均值、直线<b>完全一样</b>，形状却天差地别。这就是安斯库姆 1973 年造这四组数据的用意——<b>先看图，再看摘要</b>。'
+];
+function t3DrawAll(){
+  var W=t3c1.width,H=t3c1.height; t3ctx.clearRect(0,0,W,H);
+  var pw=(W-60)/2-10, ph=(H-50)/2-10;
+  var pos=[[20,20],[30+pw,20],[20,30+ph],[30+pw,30+ph]];
+  for(var k=0;k<4;k++){
+    var ox=pos[k][0], oy=pos[k][1];
+    var isCur = (k===t3cur);
+    if(isCur){
+      // 当前组：淡暖白底（先铺）
+      t3ctx.fillStyle='#fff7ed'; t3ctx.fillRect(ox-2, oy-2, pw+4, ph+4);
+    }
+    t3Panel(QUART[k],ox,oy,pw,ph);
+    if(!isCur){
+      // 非当前组：白色半透蒙层，制造淡化效果
+      t3ctx.fillStyle='rgba(255,255,255,0.55)'; t3ctx.fillRect(ox, oy, pw, ph);
+    }
+    // 描边
+    if(isCur){
+      t3ctx.strokeStyle='#ec4899'; t3ctx.lineWidth=2.5;
+      t3ctx.strokeRect(ox-2, oy-2, pw+4, ph+4);
+      // 右上角角标
+      t3ctx.fillStyle='#ec4899'; t3ctx.font='bold 11px sans-serif'; t3ctx.textAlign='right';
+      t3ctx.fillText('▶ 当前', ox+pw, oy-5);
+    } else {
+      t3ctx.strokeStyle='#cbd5e1'; t3ctx.lineWidth=1;
+      t3ctx.strokeRect(ox-2, oy-2, pw+4, ph+4);
+    }
+    // 标签
+    t3ctx.fillStyle = isCur ? '#be185d' : '#64748b';
+    t3ctx.font = (isCur ? 'bold ' : '') + '12px sans-serif';
+    t3ctx.textAlign='left';
+    t3ctx.fillText('第'+(k+1)+'组  r='+pearson(QUART[k]).toFixed(3), ox, oy+ph+14);
+  }
+  // label + s1：与高亮联动，描述「当前组」 vs 「其余三组形状不同」
+  var lbl=document.getElementById('t3label');
+  if(lbl) lbl.textContent='当前：第 '+(t3cur+1)+' 组（看粉色描边那张）';
+  var s1=document.getElementById('t3s1');
+  if(s1){
+    var r=pearson(QUART[t3cur]).toFixed(3);
+    s1.innerHTML='粉色描边的是当前第 <b>'+(t3cur+1)+'</b> 组，r='+r+'，直线 y=3+0.5x；形状：'+T3_SHAPE[t3cur]+'。<b>其余三组的 r 也都 ≈ 0.816，但形状完全不一样</b>——这就是「摘要看着一样，分布天差地别」。';
+  }
+}
+function t3UpdateStep(){
+  var el=document.getElementById('t3steptxt');
+  var no=document.querySelector('#t3step .step-no');
+  if(el) el.innerHTML=T3_STEP[t3cur];
+  if(no) no.textContent='镜 '+(t3cur+1);
+}
+function t3Show(k){ t3cur=k; t3DrawAll(); t3UpdateStep(); }
+t3UpdateStep();  // 首屏初始化镜解说（t3Show(0) 未在加载时调用）
+function t3Play(){ if(t3playing){ t3Stop(); return; } t3playing=true;
+  var b=document.getElementById('t3b1'); b.textContent='⏸ 停止'; b.classList.add('playing');
+  var k=0; t3Show(0);
+  t3timer=setInterval(function(){ k++; if(k>3){k=0;} t3Show(k);
+    if(k===0){ t3Stop(); }
+  },1300);
+}
+function t3Step(){
+  // 逐步走：单击前进一镜（0→1→2→3→0 循环），不自动播放
+  t3Stop();
+  var k=(t3cur+1)%4;
+  t3Show(k);
+  // 视觉反馈：点一下亮一下
+  var b=document.getElementById('t3b2');
+  if(b){ b.style.background='var(--accent-pink)'; b.style.color='#fff';
+    setTimeout(function(){ b.style.background='#fff'; b.style.color='var(--accent-pink)'; },180); }
+}
+function t3Stop(){ if(t3timer) clearInterval(t3timer); t3timer=null; t3playing=false;
+  var b=document.getElementById('t3b1'); b.textContent='▶ 连续播'; b.classList.remove('playing'); }
+function t3Collapse(){
+  var h='<table class="summary-table" style="margin-top:12px"><tr><th>组别</th><th>均值x</th><th>均值y</th><th>r</th><th>直线</th></tr>';
+  for(var k=0;k<4;k++){ var p=QUART[k]; var sx=0,sy=0; for(var i=0;i<p.length;i++){sx+=p[i][0];sy+=p[i][1];}
+    h+='<tr><td>第'+(k+1)+'组</td><td>'+(sx/p.length).toFixed(1)+'</td><td>'+(sy/p.length).toFixed(2)+'</td><td>'+pearson(p).toFixed(3)+'</td><td>y=3+0.5x</td></tr>'; }
+  h+='</table>'
+    +'<div class="explain" style="margin-top:10px;background:#fff7ed;border-left-color:var(--accent-pink)">'
+    +'<b>印证一下</b>：表格里四组的数字（均值、r、直线）<b>完全一样</b>，但「抹掉的形状」——回到上面那张并排图看，散点分布天差地别（①正常散布 ②抛物线 ③一个大离群点主导 ④x 几乎不变+一点异常）。'
+    +'这就是「先看图」的铁律：<b>凭 r = 0.816 下结论前，先回去看图</b>，否则第 3、4 组的真相会被摘要误导。'
+    +'</div>';
+  document.getElementById('t3summary').innerHTML=h;
+}
+/* 自己画点 */
+var t3user=[];
+var t3c2=document.getElementById('t3c2');
+t3c2.addEventListener('click',function(e){ var r=t3c2.getBoundingClientRect();
+  var cx=(e.clientX-r.left)/r.width*t3c2.width, cy=(e.clientY-r.top)/r.height*t3c2.height;
+  var pad=30,plotW=t3c2.width-2*pad,plotH=t3c2.height-2*pad;
+  var vx=(cx-pad)/plotW*16, vy=(1-(cy-pad)/plotH)*16;
+  t3user.push([vx,vy]); t3DrawUser(); });
+function t3DrawUser(){
+  var x=t3c2.getContext('2d'),W=t3c2.width,H=t3c2.height; x.clearRect(0,0,W,H);
+  var pad=30,plotW=W-2*pad,plotH=H-2*pad;
+  x.strokeStyle='#e2e8f0'; x.beginPath(); x.moveTo(pad,pad); x.lineTo(pad,pad+plotH); x.lineTo(pad+plotW,pad+plotH); x.lineTo(pad+plotW,pad); x.stroke();
+  for(var i=0;i<t3user.length;i++){ var px=pad+(t3user[i][0]/16)*plotW, py=pad+plotH-(t3user[i][1]/16)*plotH;
+    x.fillStyle='#ec4899'; x.beginPath(); x.arc(px,py,4,0,7); x.fill(); }
+  if(t3user.length>=2){ var lr=linreg(t3user);
+    x.strokeStyle='#1e293b'; x.lineWidth=2; x.beginPath();
+    var y1=lr.i+lr.s*0, y2=lr.i+lr.s*16;
+    x.moveTo(pad, pad+plotH-(y1/16)*plotH); x.lineTo(pad+plotW, pad+plotH-(y2/16)*plotH); x.stroke(); x.lineWidth=1;
+    document.getElementById('t3s2').innerHTML='你画了 '+t3user.length+' 个点，拟合线斜率 '+lr.s.toFixed(3)+'。试试加一个离群点，看直线被拽偏多少。';
+  }
+}
+function t3Clear(){ t3user=[]; t3DrawUser(); document.getElementById('t3s2').textContent='点画布添加点，自动画拟合线。'; }
+t3DrawAll();
+
+/* ============ 主题04 贝叶斯 ============ */
+var t4c1=document.getElementById('t4c1'),t4ctx=t4c1.getContext('2d');
+var t4simpc1=document.getElementById('t4simpc1'),t4simpctx=t4simpc1.getContext('2d');
+/* P0-1 步进模式：t4Stage 控制网格分镜（0=只看先验 / 1=加灵敏度 / 2=加假阳 / 3=聚焦阳性） */
+var t4Stage=3, t4playing=false, t4timer=null;
+var T4_STEP=[
+  '<b>镜 1 · 先验</b>：先什么都不测，只看这 1000 人本来什么样。红+蓝 = 真有病的人（先验 ',
+  '<b>镜 2 · 检测的灵敏度</b>：给所有人做检测。真有病的人里，灵敏度高的被查出来（红），灵敏度漏掉的仍然是蓝。灵敏度决定红蓝怎么分。',
+  '<b>镜 3 · 假阳涌入</b>：没病的人里也有一部分被误报（绿）。注意——<b>绿色数量远超红色</b>，虽然健康人单个的假阳率只有几个百分点，但健康人基数太大。',
+  '<b>镜 4 · 聚焦阳性</b>：把所有阳性（红+绿）挑出来看：红 ',
+  '<b>四镜走完</b>：这就是贝叶斯的核心——<b>阳性 ≠ 患病</b>。检测本身很准（灵敏度 90%），但人群里病人太少，假阳靠"基数大"把水搅浑，阳性里真患病的只占一小部分。'
+];
+function t4UpdateStep(){
+  var el=document.getElementById('t4steptxt');
+  var no=document.querySelector('#t4step .step-no');
+  if(no) no.textContent='镜 '+(t4Stage+1);
+  if(!el) return;
+  if(t4Stage===0){
+    var p=parseFloat(document.getElementById('t4p').value);
+    el.innerHTML=T4_STEP[0]+Math.round(p)+'%。<b>只画真有病的</b>——其它格子先不填。';
+  } else if(t4Stage===1){
+    el.innerHTML=T4_STEP[1];
+  } else if(t4Stage===2){
+    var p2=parseFloat(document.getElementById('t4p').value)/100, f2v=parseFloat(document.getElementById('t4f').value), f2=f2v/100;
+    var sick2=Math.round(1000*p2), healthy2=1000-sick2, fp2=Math.round(healthy2*f2);
+    el.innerHTML=T4_STEP[2]+'（此刻假阳率 '+Math.round(f2v)+'%，绿 '+fp2+' 人）';
+  } else if(t4Stage===3){
+    var p3=parseFloat(document.getElementById('t4p').value)/100, s3=parseFloat(document.getElementById('t4s').value)/100, f3=parseFloat(document.getElementById('t4f').value)/100;
+    var sick3=Math.round(1000*p3), tp3=Math.round(sick3*s3), h3=1000-sick3, fp3=Math.round(h3*f3);
+    var tot3=tp3+fp3, ch3=tot3>0?tp3/tot3*100:0;
+    el.innerHTML=T4_STEP[3]+tp3+' 人、绿 '+fp3+' 人——<b>真患病只占 '+(ch3).toFixed(1)+'%</b>。';
+  } else {
+    el.innerHTML=T4_STEP[4];
+  }
+}
+function t4Calc(){
+  var p=parseFloat(document.getElementById('t4p').value)/100;
+  var s=parseFloat(document.getElementById('t4s').value)/100;
+  var f=parseFloat(document.getElementById('t4f').value)/100;
+  // 三滑块当前值 pill 实时同步（视觉联动入口）
+  document.getElementById('t4p_val').textContent=Math.round(p*100)+'%';
+  document.getElementById('t4s_val').textContent=Math.round(s*100)+'%';
+  document.getElementById('t4f_val').textContent=Math.round(f*100)+'%';
+  var N=1000, sick=Math.round(N*p), truePos=Math.round(sick*s), healthy=N-sick, falsePos=Math.round(healthy*f);
+  var totalPos=truePos+falsePos, chance=totalPos>0?truePos/totalPos*100:0;
+  document.getElementById('t4out').innerHTML='1000 人中：真有病 <b>'+sick+'</b> 人，测出阳性 <b>'+truePos+'</b> 人；没病 <b>'+healthy+'</b> 人，误报阳性 <b>'+falsePos+'</b> 人。阳性共 <b>'+totalPos+'</b> 人，真有病的只占 <b>'+chance.toFixed(1)+'%</b>。';
+  document.getElementById('t4bar').style.width=chance+'%';
+  document.getElementById('t4pct').textContent=chance.toFixed(2)+'%';
+  document.getElementById('t4tp').textContent=truePos; document.getElementById('t4fp').textContent=falsePos;
+  // 先验 → 检测 → 后验 步骤条联动
+  document.getElementById('t4p_prior').textContent=Math.round(p*100)+'%';
+  document.getElementById('t4p_test').textContent='灵 '+Math.round(s*100)+'% · 假 '+Math.round(f*100)+'%';
+  document.getElementById('t4p_post_val').textContent=chance.toFixed(2)+'%';
+  // 网格（按 t4Stage 分镜渲染）
+  var W=t4c1.width,H=t4c1.height; t4ctx.clearRect(0,0,W,H);
+  // 顶部留出标题带（标题 baseline 24 + 字号下沿 → 至少 40px），避免与第一行格子重叠
+  var pad=10, padTop=40, tagH=30;
+  var cols=40,rows=25, cw=(W-2*pad)/cols, ch=(H-padTop-pad)/rows, cell=Math.min(cw,ch)-1.5;
+  var gridH=rows*ch, gridW=cols*cw;
+  var offX=(W-gridW)/2, offY=padTop;
+  var gi=0;
+  for(var r=0;r<rows;r++) for(var col=0;col<cols;col++){
+    if(gi>=N) break; var gx=offX+col*cw+(cw-cell)/2, gy=offY+r*ch+(ch-cell)/2;
+    var state;
+    if(gi<sick){ state = (gi<truePos)?'red':'blue'; }
+    else { var hi=gi-sick; state=(hi<falsePos)?'green':'gray'; }
+    var col2;
+    if(t4Stage===0){
+      // 镜1：只画真有病（红/蓝），其余格子淡到几乎看不见
+      col2 = (state==='red')?'#ef4444':(state==='blue')?'#3b82f6':'#f1f5f9';
+    } else if(t4Stage===1){
+      // 镜2：加检测 → 红蓝分明；健康人保持极淡（还没引入假阳）
+      col2 = (state==='red')?'#ef4444':(state==='blue')?'#3b82f6':'#f1f5f9';
+    } else if(t4Stage===2){
+      // 镜3：假阳涌入 → 绿出现
+      col2 = state==='red'?'#ef4444':state==='blue'?'#3b82f6':state==='green'?'#10b981':'#e2e8f0';
+    } else {
+      // 镜4：聚焦阳性 —— 红绿加深，灰/蓝淡出
+      col2 = state==='red'?'#dc2626':state==='green'?'#059669':state==='blue'?'#dbeafe':'#f1f5f9';
+    }
+    t4ctx.fillStyle = col2;
+    t4ctx.fillRect(gx,gy,cell,cell); gi++;
+  }
+  // 分镜提示（独立标题带，与网格不重叠；字号自适应，过长自动省略）
+  var stageTag=['镜1 只看先验：真有病的 '+sick+' 人','镜2 加检测：红='+truePos+' 真阳 / 蓝='+(sick-truePos)+' 漏诊','镜3 加假阳：绿='+falsePos+' 人涌入','镜4 聚焦阳性：红 '+truePos+' vs 绿 '+falsePos+' → 后验 '+chance.toFixed(1)+'%'][t4Stage];
+  t4ctx.fillStyle = (t4Stage===0)?'#f5f3ff':'#f8fafc';
+  t4ctx.fillRect(pad-4,6,W-2*pad+8,tagH-8);
+  t4ctx.fillStyle = (t4Stage===0)?'#7c3aed':'#475569';
+  var tagSize=13; t4ctx.font='bold '+tagSize+'px sans-serif'; t4ctx.textAlign='left';
+  var maxW=W-2*pad-6;
+  while(tagSize>10 && t4ctx.measureText(stageTag).width>maxW){ tagSize--; t4ctx.font='bold '+tagSize+'px sans-serif'; }
+  if(t4ctx.measureText(stageTag).width>maxW){
+    while(stageTag.length>6 && t4ctx.measureText(stageTag+'…').width>maxW){ stageTag=stageTag.slice(0,-1); }
+    stageTag+='…';
+  }
+  t4ctx.fillText(stageTag, pad, 24);
+  document.getElementById('t4s1').innerHTML='红=真有病且阳性('+truePos+')；蓝=真有病漏诊('+(sick-truePos)+')；绿=无病假阳('+falsePos+')；灰=无病阴性('+(healthy-falsePos)+')。稀有病时绿色远多于红色。';
+  t4UpdateStep();
+}
+function t4Step(){
+  // 逐步走：单击前进一镜（0→1→2→3→0 循环），不自动播放
+  t4StopAnim();
+  t4Stage=(t4Stage+1)%4;
+  t4Calc();
+  var b=document.getElementById('t4b2');
+  if(b){ b.style.background='var(--accent-pink)'; b.style.color='#fff';
+    setTimeout(function(){ b.style.background='#fff'; b.style.color='var(--accent-pink)'; },180); }
+}
+function t4Play(){
+  if(t4playing){ t4StopAnim(); return; }
+  t4playing=true; t4Stage=0;
+  var b=document.getElementById('t4b1'); b.textContent='⏸ 停止'; b.classList.add('playing');
+  t4Calc();
+  t4timer=setInterval(function(){ t4Stage++;
+    if(t4Stage>3){ t4Stage=0; t4Calc(); t4StopAnim(); return; }
+    t4Calc();
+  },1600);
+}
+function t4StopAnim(){
+  if(t4timer) clearInterval(t4timer); t4timer=null; t4playing=false;
+  var b=document.getElementById('t4b1'); if(b){ b.textContent='▶ 连续播'; b.classList.remove('playing'); }
+}
+/* 辛普森掉头柱状图：分组看/合计看 切换
+   数字：分组内 A 都略优于 B，但 A 收更多重症（结构差）→ 合计反被 B 反超
+   A: 轻症 50 人 治愈 48 (96%)，重症 100 人 治愈 55 (55%) → 总 103/150 = 68.67%
+   B: 轻症 100 人 治愈 92 (92%)，重症 50 人 治愈 26 (52%) → 总 118/150 = 78.67%
+   分组: 轻症 A 96 > B 92 (A 优), 重症 A 55 > B 52 (A 优)
+   合计: A 68.67 < B 78.67 (B 优) → 掉头
+*/
+function t4Simp(){
+  var v=document.getElementById('t4simp').value, t=document.getElementById('t4simptxt');
+  var W=t4simpc1.width,H=t4simpc1.height;
+  t4simpctx.clearRect(0,0,W,H);
+  // 背景 + 标题
+  t4simpctx.fillStyle='#0f172a'; t4simpctx.font='bold 13px sans-serif'; t4simpctx.textAlign='left';
+  t4simpctx.fillText('A 药 vs B 药：每组柱越高治愈率越高', 14, 22);
+  // 公共数据
+  var A_blue='#3b82f6', B_pink='#ec4899';
+  var groups=[{name:'轻症', A:96, B:92}, {name:'重症', A:55, B:52}];
+  var totals={A:68.67, B:78.67};
+  var padL=44, padR=20, padT=44, padB=70;
+  var plotW=W-padL-padR, plotH=H-padT-padB;
+  // y 轴 0-100%
+  t4simpctx.strokeStyle='#e2e8f0'; t4simpctx.lineWidth=1;
+  for(var p=0;p<=100;p+=20){
+    var yy=padT+plotH-(p/100)*plotH;
+    t4simpctx.beginPath(); t4simpctx.moveTo(padL,yy); t4simpctx.lineTo(padL+plotW,yy); t4simpctx.stroke();
+    t4simpctx.fillStyle='#94a3b8'; t4simpctx.font='10px sans-serif'; t4simpctx.textAlign='right';
+    t4simpctx.fillText(p+'%', padL-4, yy+3);
+  }
+  if(v==='grp'){
+    // 分组看：两组柱（A 蓝 + B 粉），每组并排 2 柱
+    var slotW=plotW/groups.length, barW=(slotW-30)/2;
+    for(var i=0;i<groups.length;i++){
+      var slotX=padL+i*slotW+slotW/2;
+      var gA=groups[i].A, gB=groups[i].B;
+      // A 柱
+      var ha=(gA/100)*plotH, hA=padT+plotH-ha;
+      t4simpctx.fillStyle=A_blue; t4simpctx.fillRect(slotX-barW-3, hA, barW, ha);
+      t4simpctx.fillStyle='#fff'; t4simpctx.font='bold 11px sans-serif'; t4simpctx.textAlign='center';
+      t4simpctx.fillText(gA+'%', slotX-barW/2-3, hA-4);
+      // B 柱
+      var hb=(gB/100)*plotH, hB=padT+plotH-hb;
+      t4simpctx.fillStyle=B_pink; t4simpctx.fillRect(slotX+3, hB, barW, hb);
+      t4simpctx.fillStyle='#fff'; t4simpctx.font='bold 11px sans-serif';
+      t4simpctx.fillText(gB+'%', slotX+barW/2+3, hB-4);
+      // 组名
+      t4simpctx.fillStyle='#475569'; t4simpctx.font='13px sans-serif'; t4simpctx.textAlign='center';
+      t4simpctx.fillText(groups[i].name, slotX, padT+plotH+22);
+      // 标注谁优
+      var winner = (gA>gB)?'A 优':'B 优';
+      t4simpctx.fillStyle=(gA>gB)?A_blue:B_pink; t4simpctx.font='bold 12px sans-serif';
+      t4simpctx.fillText(winner, slotX, padT+plotH+44);
+    }
+    t.innerHTML='<b>分组看</b>：每组（轻症 / 重症）里 A 药治愈率都比 B 药高一点点（96% vs 92%，55% vs 52%）。如果你只看分组，会得出「<b>A 药更好</b>」的结论——但这只是故事的上半。';
+  } else {
+    // 合计看：一根柱槽，内 A/B 双柱
+    var slotX=padL+plotW/2, barW=plotW/2-30;
+    var ha=(totals.A/100)*plotH, hA=padT+plotH-ha;
+    var hb=(totals.B/100)*plotH, hB=padT+plotH-hb;
+    // A 总柱
+    t4simpctx.fillStyle=A_blue; t4simpctx.fillRect(slotX-barW-3, hA, barW, ha);
+    t4simpctx.fillStyle='#fff'; t4simpctx.font='bold 12px sans-serif'; t4simpctx.textAlign='center';
+    t4simpctx.fillText('A '+totals.A.toFixed(2)+'%', slotX-barW/2-3, hA-4);
+    // B 总柱
+    t4simpctx.fillStyle=B_pink; t4simpctx.fillRect(slotX+3, hB, barW, hb);
+    t4simpctx.fillStyle='#fff'; t4simpctx.font='bold 12px sans-serif';
+    t4simpctx.fillText('B '+totals.B.toFixed(2)+'%', slotX+barW/2+3, hB-4);
+    // 组名
+    t4simpctx.fillStyle='#475569'; t4simpctx.font='13px sans-serif'; t4simpctx.textAlign='center';
+    t4simpctx.fillText('合计治愈率（轻重病人混一起）', slotX, padT+plotH+22);
+    t4simpctx.fillStyle=B_pink; t4simpctx.font='bold 12px sans-serif';
+    t4simpctx.fillText('B 优', slotX, padT+plotH+44);
+    // 注解：结构差
+    t4simpctx.fillStyle='#7c2d12'; t4simpctx.font='bold 12px sans-serif'; t4simpctx.textAlign='left';
+    t4simpctx.fillText('⚠ 反转原因：A 收的重症占比更高（67% vs 33%）', 14, H-12);
+    t.innerHTML='<b>合计看</b>：把轻重病人<b>混在一起</b>算总治愈率，A 跌到 '+totals.A.toFixed(2)+'%，B 升到 '+totals.B.toFixed(2)+'%——<b>B 反超了</b>。原因不在药物效果，而在<b>结构差</b>：A 收的重症患者占总病人数 67%，重症治愈率天然比轻症低，把 A 的整体治愈率拖下去了。<br>这就是「<b>辛普森掉头</b>」：分组结论 + 合计结论 方向相反。<b>经验</b>：看到「A 全方位胜过 B」的标题时，问一句——<b>两组的样本结构一样吗？</b>';
+  }
+}
+t4Calc();
+
+/* ============ 主题05 p值 ============ */
+function t5Guard(){
+  var ratio=parseFloat(document.getElementById('t5ratio').value);
+  var guard=100, enemy=Math.round(ratio*guard), leak=Math.round(enemy*0.05);
+  var c=document.getElementById('t5c1'),x=c.getContext('2d'),W=c.width,H=c.height; x.clearRect(0,0,W,H);
+  var padB=30,padT=20,plotW=W-20,plotH=H-padT-padB, maxv=Math.max(guard,enemy,leak)*1.1;
+  var bw=plotW/3*0.6, gap=plotW/3;
+  function bar(i,val,col,lab){ var bh=val/maxv*plotH, bx=10+i*gap+(gap-bw)/2, by=padT+plotH-bh;
+    x.fillStyle=col; x.fillRect(bx,by,bw,bh); x.fillStyle='#475569'; x.font='12px sans-serif'; x.textAlign='center';
+    x.fillText(lab, bx+bw/2, padT+plotH+16); x.fillText(val, bx+bw/2, by-4); }
+  bar(0,guard,'#3b82f6','守卫 100'); bar(1,enemy,'#ef4444','敌军 '+enemy); bar(2,leak,'#f59e0b','漏入假阳 '+leak);
+  var warn = leak>guard;
+  document.getElementById('t5s1').innerHTML='敌军 '+enemy+'（守卫 '+ratio+' 倍），5% 漏网 = <b>'+leak+'</b> 个假阳性涌入。'+(warn?'⚠️ 假阳性已超过守卫总数，城堡被假阳性淹没！':'守卫还能拦住。');
+  document.getElementById('t5d1').className = warn?'status-dot gold':'status-dot';
+}
+function t5Hack1(){
+  // 模拟1：50次切数据；每次在多个随机切分里取最小p，报告显著数
+  var sig=0, pArr=[];
+  for(var k=0;k<50;k++){
+    var bestp=1;
+    for(var m=0;m<8;m++){ // 8 次「切数据」尝试
+      var g1=[],g2=[]; for(var i=0;i<10;i++){ g1.push(randn()); g2.push(randn()); }
+      var p=welchP(g1,g2); if(p<bestp) bestp=p;
+    }
+    pArr.push(bestp);
+    if(bestp<0.05) sig++;
+  }
+  document.getElementById('t5hack').innerHTML='模拟1（切数据）：50 次实验，每次可切分 8 次取最显著，共 <b style="color:#ef4444">'+sig+'</b> 次「显著」。单次实验本只该 ≈2–3 次（5%），但「切 8 刀取最优」把假阳性率推到约 1−0.95⁸≈34%（≈17/50）——切得越多。切得越多，越容易钓出假阳性——作者原书得 18/50。';
+  t5DrawHack('切数据 · 50次实验中「最小 p 值」分布', pArr, 0.05);
+}
+function t5Hack2(){
+  // 模拟2：20次抛硬币，允许抛到显著为止
+  var sig=0, pArr=[], flipsArr=[];
+  for(var k=0;k<20;k++){
+    var heads=0,tails=0,flips=0,got=false;
+    while(flips<1000){ flips++; if(Math.random()<0.5) heads++; else tails++;
+      if(flips>=10){ var p=binomP(heads,tails); if(p<0.05){ got=true; break; } } }
+    flipsArr.push(flips);
+    // 模拟抛到停止时的 p 值（用停止时的累积比例重算）
+    pArr.push(got?0.03:binomP(heads,tails));
+    if(got) sig++;
+  }
+  document.getElementById('t5hack').innerHTML='模拟2（加数据）：20 次抛硬币，允许「抛到显著为止」（最多 1000 次），共 <b style="color:#ef4444">'+sig+'</b> 次钓出显著（固定 10 次时 20 次里通常仅 0–1 次）。「加数据直到显著」能把一个公平硬币的差异做成显著——作者原书得 12/20。';
+  t5DrawHack('加数据 · 20次实验中「最终 p 值」分布（颜色=抛硬币次数）', pArr, 0.05, flipsArr);
+}
+function t5DrawHack(title, pArr, threshold, flipsArr){
+  // p-hacking 结果柱状图：X 轴是实验序号，Y 轴是 p 值（log），阈值线 + 红/蓝区分
+  var c=document.getElementById('t5hackc1'),x=c.getContext('2d'),W=c.width,H=c.height;
+  x.clearRect(0,0,W,H);
+  var padL=42, padR=12, padT=18, padB=28;
+  var plotW=W-padL-padR, plotH=H-padT-padB;
+  // Y 轴 log10(p)，范围 -7..0
+  var yMin=-7, yMax=0;
+  function yMap(p){ if(p<=0) p=1e-9; return padT + plotH*(1 - (Math.log10(p)-yMin)/(yMax-yMin)); }
+  // 网格 + Y 轴标签
+  x.strokeStyle='#e2e8f0'; x.lineWidth=1; x.font='11px sans-serif'; x.fillStyle='#64748b'; x.textAlign='right';
+  for(var e=yMin; e<=yMax; e++){
+    var yy=yMap(Math.pow(10,e));
+    x.beginPath(); x.moveTo(padL,yy); x.lineTo(W-padR,yy); x.stroke();
+    x.fillText(e===0?'1':('10^'+e), padL-4, yy+3);
+  }
+  // X 轴
+  x.strokeStyle='#cbd5e1'; x.beginPath(); x.moveTo(padL,padT+plotH); x.lineTo(W-padR,padT+plotH); x.stroke();
+  // 阈值线 p=0.05
+  var yT=yMap(threshold);
+  x.strokeStyle='#ef4444'; x.setLineDash([4,3]); x.lineWidth=1.5;
+  x.beginPath(); x.moveTo(padL,yT); x.lineTo(W-padR,yT); x.stroke(); x.setLineDash([]);
+  x.fillStyle='#ef4444'; x.textAlign='left';
+  x.fillText('p=0.05 门槛', padL+4, yT-4);
+  // 5σ 线
+  var y5=yMap(3e-7);
+  x.strokeStyle='#a855f7'; x.setLineDash([3,3]); x.lineWidth=1;
+  x.beginPath(); x.moveTo(padL,y5); x.lineTo(W-padR,y5); x.stroke(); x.setLineDash([]);
+  x.fillStyle='#a855f7';
+  x.fillText('5σ = 1/350万（粒子物理用）', padL+4, y5-4);
+  // 柱子（每根 1px 宽）+ 颜色按 flips 渐变（仅模拟2）
+  var n=pArr.length;
+  var colW=Math.max(2, Math.min(10, (plotW-20)/n - 1));
+  for(var k=0;k<n;k++){
+    var p=pArr[k];
+    var yy=yMap(Math.max(p, 1e-9));
+    var bx=padL + 10 + k*((plotW-20)/n);
+    // 颜色：模拟2 按 flips 渐变（少=红，多=绿）；模拟1 统一红
+    var col='#ef4444';
+    if(flipsArr){
+      var f=flipsArr[k];
+      if(f<=20) col='#dc2626';
+      else if(f<=50) col='#ea580c';
+      else if(f<=100) col='#f59e0b';
+      else col='#16a34a';
+    }
+    x.fillStyle=col;
+    x.fillRect(bx, yy, colW, padT+plotH - yy);
+  }
+  // 标题
+  x.fillStyle='#0f172a'; x.font='bold 12px sans-serif'; x.textAlign='left';
+  x.fillText(title, padL, 13);
+  // 底部 X 轴说明
+  x.fillStyle='#64748b'; x.font='10px sans-serif';
+  x.fillText('实验 1', padL+10, padT+plotH+14);
+  x.textAlign='right';
+  x.fillText('实验 '+n, W-padR, padT+plotH+14);
+}
+function t5DrawTimeline(){
+  // 250 年弧线：从 1760（无门槛）到 2012（350万分之一）的「门槛收紧」曲线
+  var c=document.getElementById('t5tlc1'),x=c.getContext('2d'),W=c.width,H=c.height;
+  x.clearRect(0,0,W,H);
+  var padL=30, padR=30, padT=14, padB=14;
+  var plotW=W-padL-padR, plotH=H-padT-padB;
+  // 4 个时间点 + Y 轴值（log 化 p 值，越低越严苛）
+  var pts=[
+    {yr:'1760s', p:1,    label:'无量化门槛'},
+    {yr:'1854',  p:1,    label:'无门槛（迟40年）'},
+    {yr:'1925',  p:0.05, label:'0.05 费希尔'},
+    {yr:'2012',  p:3e-7, label:'350万分之一 希格斯'},
+  ];
+  var yMin=-7.5, yMax=0.3;
+  function yMap(p){ if(p<=0) p=1e-9; return padT + plotH*(1 - (Math.log10(p)-yMin)/(yMax-yMin)); }
+  function xMap(i){ return padL + (i/(pts.length-1))*plotW; }
+  // 弧线（贝塞尔）
+  x.strokeStyle='#a855f7'; x.lineWidth=2.5; x.fillStyle='rgba(168,85,247,0.12)';
+  var bx=padL, by=padT+plotH, cx=W-padR, cy=padT+plotH;
+  x.beginPath(); x.moveTo(xMap(0), yMap(pts[0].p));
+  for(var i=1;i<pts.length;i++){
+    var px=xMap(i), py=yMap(pts[i].p);
+    var cpx=(xMap(i-1)+px)/2;
+    x.bezierCurveTo(cpx, yMap(pts[i-1].p), cpx, py, px, py);
+  }
+  x.stroke();
+  // 填充弧线下方区域（更直观）
+  x.lineTo(xMap(pts.length-1), padT+plotH);
+  x.lineTo(xMap(0), padT+plotH);
+  x.closePath(); x.fill();
+  // 重画曲线（在填充之上）
+  x.strokeStyle='#7c3aed'; x.lineWidth=2.5;
+  x.beginPath(); x.moveTo(xMap(0), yMap(pts[0].p));
+  for(var j=1;j<pts.length;j++){
+    var px=xMap(j), py=yMap(pts[j].p);
+    var cpx=(xMap(j-1)+px)/2;
+    x.bezierCurveTo(cpx, yMap(pts[j-1].p), cpx, py, px, py);
+  }
+  x.stroke();
+  // 4 个节点（圆+标签）
+  for(var m=0;m<pts.length;m++){
+    var xx=xMap(m), yy=yMap(pts[m].p);
+    x.fillStyle='#fff'; x.strokeStyle='#7c3aed'; x.lineWidth=2;
+    x.beginPath(); x.arc(xx,yy,6,0,Math.PI*2); x.fill(); x.stroke();
+    x.fillStyle='#0f172a'; x.font='bold 11px sans-serif'; x.textAlign='center';
+    x.fillText(pts[m].yr, xx, yy-10);
+    x.font='10px sans-serif'; x.fillStyle='#64748b';
+    x.fillText(pts[m].label, xx, Math.min(yy+22, padT+plotH+12));
+  }
+  // 纵轴说明：左「松」右「严」
+  x.font='11px sans-serif'; x.fillStyle='#7c3aed';
+  x.textAlign='left'; x.fillText('门槛松（p 大）', padL, padT+12);
+  x.textAlign='right'; x.fillText('门槛严（p 小）', W-padR, padT+12);
+}
+function randn(){ var u=0,v=0; while(u===0)u=Math.random(); while(v===0)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+function welchP(a,b){ var n=a.length,m=b.length; var ma=avg(a),mb=avg(b),va=varr(a,ma),vb=varr(b,mb);
+  var se=Math.sqrt(va/n+vb/m); if(se===0) return 1; var t=Math.abs(ma-mb)/se;
+  return 2*(1-normalCdf(t)); }
+function binomP(h,t){ var n=h+t; if(n===0) return 1; var p=h/n; var se=Math.sqrt(0.25/n); if(se===0) return 1;
+  var z=Math.abs(p-0.5)/se; return 2*(1-normalCdf(z)); }
+function avg(a){ var s=0; for(var i=0;i<a.length;i++) s+=a[i]; return s/a.length; }
+function varr(a,m){ var s=0; for(var i=0;i<a.length;i++) s+=(a[i]-m)*(a[i]-m); return s/(a.length-1); }
+function normalCdf(z){
+  if(z<0) return 1-normalCdf(-z);
+  var t=1/(1+0.2316419*z);
+  var d=0.3989422804014327*Math.exp(-z*z/2);
+  var p=d*t*(0.319381530 + t*(-0.356563782 + t*(1.781477937 + t*(-1.821255978 + t*1.330274429))));
+  return 1-p;
+}
+function erf(x){ return 2*normalCdf(x*Math.SQRT2)-1; }
+t5Guard();
+t5DrawTimeline();
+
+/* ============ 主题06 抽样 ============ */
+var T6TRUE=0.5, T6BIAS=0.8;
+var t6c1=document.getElementById('t6c1'),t6ctx=t6c1.getContext('2d');
+var t6playing=false,t6timer=null,t6hist=[];
+var t6c2=document.getElementById('t6c2'),t6c2ctx=t6c2?t6c2.getContext('2d'):null;
+var t6curScenario='random', t6curN=500;
+var t6samples={ '1936': [], '2016': [], 'random': [] };  // 累积多条曲线（每组最多 3 条）
+function t6Sample(){ var bias=document.getElementById('t6bias').checked;
+  var trueP = bias?T6BIAS:T6TRUE; return Math.random()<trueP?1:0; }
+function t6Draw(){
+  var n=parseInt(document.getElementById('t6n').value);
+  var bias=document.getElementById('t6bias').checked;
+  t6hist=[]; var red=0;
+  for(var i=1;i<=n;i++){ red+=t6Sample(); t6hist.push(red/i); }
+  var W=t6c1.width,H=t6c1.height; t6ctx.clearRect(0,0,W,H);
+  var padL=40,padB=30,padT=20,plotW=W-padL-16,plotH=H-padT-padB;
+  t6ctx.strokeStyle='#e2e8f0'; t6ctx.beginPath(); t6ctx.moveTo(padL,padT); t6ctx.lineTo(padL,padT+plotH); t6ctx.lineTo(padL+plotW,padT+plotH); t6ctx.stroke();
+  // 真值线
+  var trueV=bias?T6BIAS:T6TRUE;
+  var yt=padT+plotH-trueV*plotH; t6ctx.strokeStyle='#94a3b8'; t6ctx.setLineDash([5,4]); t6ctx.beginPath(); t6ctx.moveTo(padL,yt); t6ctx.lineTo(padL+plotW,yt); t6ctx.stroke(); t6ctx.setLineDash([]);
+  t6ctx.fillStyle='#94a3b8'; t6ctx.font='11px sans-serif'; t6ctx.textAlign='left'; t6ctx.fillText('总体真值 '+(trueV*100)+'%', padL+4, yt-4);
+  // 样本线
+  t6ctx.strokeStyle='#3b82f6'; t6ctx.lineWidth=2; t6ctx.beginPath();
+  for(var i=0;i<t6hist.length;i++){ var px=padL+(i+1)/n*plotW, py=padT+plotH-t6hist[i]*plotH;
+    if(i===0) t6ctx.moveTo(px,py); else t6ctx.lineTo(px,py); }
+  t6ctx.stroke(); t6ctx.lineWidth=1;
+  var last=t6hist[t6hist.length-1];
+  document.getElementById('t6s1').innerHTML='样本量 '+n+'：样本比例收敛到 <b>'+(last*100).toFixed(1)+'%</b>。'+(bias?'⚠️ 偏差样本稳定停在 '+(T6BIAS*100)+'%，偏离真值 '+(T6TRUE*100)+'%——越准越偏。':'随机样本随 n 增大逼近真值 '+(T6TRUE*100)+'%。');
+  document.getElementById('t6out').innerHTML = bias
+    ? '<b>只抽富人</b>：抽样框系统性偏向某一群人，样本比例锁死在偏差值，再大也到不了总体真值。这就是 1936 年《文学文摘》的病根。'
+    : '随机抽球：每次多加一个球，样本比例就向总体真值靠近一点——<b>大数定律</b>。样本越大越稳。';
+}
+function t6Play(){ if(t6playing){ t6Stop(); return; } t6playing=true;
+  var b=document.getElementById('t6b1'); b.textContent='⏸ 停止'; b.classList.add('playing');
+  var n=parseInt(document.getElementById('t6n').value), bias=document.getElementById('t6bias').checked, red=0;
+  t6hist=[]; var i=0;
+  t6timer=setInterval(function(){ i++; red+=t6Sample(); t6hist.push(red/i);
+    var W=t6c1.width,H=t6c1.height; t6ctx.clearRect(0,0,W,H);
+    var padL=40,padB=30,padT=20,plotW=W-padL-16,plotH=H-padT-padB;
+    t6ctx.strokeStyle='#e2e8f0'; t6ctx.beginPath(); t6ctx.moveTo(padL,padT); t6ctx.lineTo(padL,padT+plotH); t6ctx.lineTo(padL+plotW,padT+plotH); t6ctx.stroke();
+    var trueV=bias?T6BIAS:T6TRUE, yt=padT+plotH-trueV*plotH; t6ctx.strokeStyle='#94a3b8'; t6ctx.setLineDash([5,4]); t6ctx.beginPath(); t6ctx.moveTo(padL,yt); t6ctx.lineTo(padL+plotW,yt); t6ctx.stroke(); t6ctx.setLineDash([]);
+    t6ctx.fillStyle='#94a3b8'; t6ctx.font='11px sans-serif'; t6ctx.textAlign='left'; t6ctx.fillText('总体真值 '+(trueV*100)+'%', padL+4, yt-4);
+    t6ctx.strokeStyle='#3b82f6'; t6ctx.lineWidth=2; t6ctx.beginPath();
+    for(var j=0;j<t6hist.length;j++){ var px=padL+(j+1)/i*plotW, py=padT+plotH-t6hist[j]*plotH; if(j===0) t6ctx.moveTo(px,py); else t6ctx.lineTo(px,py); }
+    t6ctx.stroke(); t6ctx.lineWidth=1;
+    if(i>=n){ t6Stop(); var last=t6hist[t6hist.length-1];
+      document.getElementById('t6s1').innerHTML='样本量 '+n+'：样本比例收敛到 <b>'+(last*100).toFixed(1)+'%</b>。'+(bias?'⚠️ 偏差样本锁死在 '+(T6BIAS*100)+'%。':'随机样本逼近真值 '+(T6TRUE*100)+'%。'); }
+  },30);
+}
+function t6Stop(){ if(t6timer) clearInterval(t6timer); t6timer=null; t6playing=false;
+  var b=document.getElementById('t6b1'); b.textContent='▶ 播放演示'; b.classList.remove('playing'); }
+t6Draw();
+t6CompareDraw();
+
+
+/* ============ P0-2 一键重来 ============ */
+function t1Reset(){ t1Stop();
+  var r=document.getElementById('t1rich'); r.value=20; t1Draw();
+  t1DrawMode(0);
+  document.getElementById('t1trap').value='base';
+  t1Trap();
+}
+function t2Reset(){
+  t2StopAnim();
+  t2Prepare(); t2Stage=0; t2Draw1();
+  document.getElementById('t2d1').className='status-dot';
+  document.getElementById('t2s1').innerHTML='已重来：换了一批随机数据、回到镜 1。点「▶ 连续播」看完整过程，或「⏭ 逐步走」一镜一镜停下讲解。';
+  var c=document.getElementById('t2third'); if(c.checked){ c.checked=false; t2Draw2(); }
+}
+function t3Reset(){ t3Stop();
+  document.getElementById('t3summary').innerHTML='';
+  t3Clear();
+  t3Show(0);
+}
+function t4Reset(){
+  t4StopAnim();
+  t4Stage=3;  // 重置回「完整视图」
+  document.getElementById('t4p').value=2;
+  document.getElementById('t4s').value=90;
+  document.getElementById('t4f').value=8;
+  t4Calc();
+  document.getElementById('t4simp').value='grp';
+  t4Simp();
+}
+function t5Reset(){
+  document.getElementById('t5ratio').value=20;
+  t5Guard();
+  document.getElementById('t5hack').innerHTML='';
+  var hc=document.getElementById('t5hackc1').getContext('2d');
+  hc.clearRect(0,0,600,160);
+  t5DrawTimeline();
+}
+function t6Reset(){ t6Stop();
+  document.getElementById('t6n').value=200;
+  var b=document.getElementById('t6bias'); if(b.checked){ b.checked=false; }
+  t6Draw();
+  // 清 1936 vs 2016 对比图
+  t6samples = { '1936': [], '2016': [], 'random': [] };
+  t6CompareDraw();
+  document.getElementById('t6c2out').innerHTML = '选一种抽样框，看「同样本量 N=500」下，3 条样本比例曲线各自怎么收敛。点按钮重画可换次随机种子。';
+}
+
+/* T6 1936 vs 2016 对比图
+   - 3 个按钮：1936 抽样框 / 2016 民调 / 真随机
+   - 每次点按钮，重画 1 条"该抽样框下的样本比例随 n 变化"曲线（用真实抽样模拟）
+   - 同图累积 3 颜色曲线（红=1936、蓝=2016、绿=真随机），方便直接对比
+   - 样本量滑块改 n（默认 500）
+*/
+function t6Compare(scenario){
+  t6curScenario = scenario;
+  // 真实历史偏差值
+  var TRUE_P = 0.5;
+  var BIAS_MAP = { '1936': 0.80, '2016': 0.51, 'random': 0.50 };
+  var biasedP = BIAS_MAP[scenario];
+  var N = parseInt(document.getElementById('t6cn').value);
+  t6curN = N;
+  // 模拟：抽 N 个球，biasedP 概率是红球
+  var red = 0, line = [];
+  for (var i = 1; i <= N; i++) {
+    if (Math.random() < biasedP) red++;
+    line.push(red / i);
+  }
+  t6samples[scenario].push(line);
+  if (t6samples[scenario].length > 3) t6samples[scenario].shift();  // 保留最近 3 条
+  t6CompareDraw();
+  // 解释
+  var deviation = (biasedP - TRUE_P) * 100;
+  var last = line[line.length - 1] * 100;
+  var txt = scenario === '1936'
+    ? '<b>1936《文学文摘》</b>：抽样框严重偏向（80% 富人有 A 倾向），最终估计 <b style="color:#ef4444">' + last.toFixed(1) + '%</b>，偏离真值 50% 共 <b>' + deviation.toFixed(0) + ' 个百分点</b>——240 万人也救不回。'
+    : scenario === '2016'
+    ? '<b>2016 民调</b>：抽样框按教育程度修正后只有 <b style="color:#3b82f6">' + deviation.toFixed(0) + ' 个百分点</b>偏差，最终估计 <b>' + last.toFixed(1) + '%</b>——和真值 50% 只差一线。'
+    : '<b>真随机</b>：每个球机会均等，最终估计 <b style="color:#10b981">' + last.toFixed(1) + '%</b>，逼近真值 50%——这就是大数定律。';
+  document.getElementById('t6c2out').innerHTML = txt;
+}
+function t6CompareRefresh(){
+  // 改样本量滑块 → 用当前 scenario 重画一条新曲线
+  t6Compare(t6curScenario);
+}
+function t6CompareDraw(){
+  // 同图叠加 3 抽样框的曲线
+  var c = document.getElementById('t6c2'), x = c.getContext('2d'),
+      W = c.width, H = c.height;
+  x.clearRect(0, 0, W, H);
+  var padL = 38, padR = 12, padT = 16, padB = 24;
+  var plotW = W - padL - padR, plotH = H - padT - padB;
+  // Y 轴范围 0..1
+  function yMap(v) { return padT + plotH * (1 - v); }
+  function xMap(i, n) { return padL + (i / n) * plotW; }
+  // 网格 + Y 轴刻度
+  x.strokeStyle = '#e2e8f0'; x.lineWidth = 1;
+  x.font = '10px sans-serif'; x.fillStyle = '#64748b'; x.textAlign = 'right';
+  for (var p = 0; p <= 1; p += 0.1) {
+    var yy = yMap(p);
+    x.beginPath(); x.moveTo(padL, yy); x.lineTo(W - padR, yy); x.stroke();
+    x.fillText((p * 100).toFixed(0) + '%', padL - 4, yy + 3);
+  }
+  // X 轴
+  x.strokeStyle = '#cbd5e1';
+  x.beginPath(); x.moveTo(padL, padT + plotH); x.lineTo(W - padR, padT + plotH); x.stroke();
+  // 真值虚线 50%
+  var yTrue = yMap(0.5);
+  x.strokeStyle = '#0f172a'; x.setLineDash([5, 4]); x.lineWidth = 1.5;
+  x.beginPath(); x.moveTo(padL, yTrue); x.lineTo(W - padR, yTrue); x.stroke();
+  x.setLineDash([]);
+  x.fillStyle = '#0f172a'; x.textAlign = 'left';
+  x.fillText('真值 50%', padL + 4, yTrue - 4);
+  // 1936 偏差带 80% 虚线
+  var yBias = yMap(0.8);
+  x.strokeStyle = '#ef4444'; x.setLineDash([3, 3]); x.lineWidth = 1;
+  x.beginPath(); x.moveTo(padL, yBias); x.lineTo(W - padR, yBias); x.stroke(); x.setLineDash([]);
+  x.fillStyle = '#ef4444'; x.fillText('1936 抽样框真值 80%', padL + 4, yBias - 4);
+  // 三组曲线
+  var colors = { '1936': '#ef4444', '2016': '#3b82f6', 'random': '#10b981' };
+  var labels = { '1936': '1936', '2016': '2016', 'random': '真随机' };
+  for (var s in t6samples) {
+    var lines = t6samples[s];
+    for (var k = 0; k < lines.length; k++) {
+      var arr = lines[k];
+      var n = arr.length;
+      var isCurrent = (s === t6curScenario && k === lines.length - 1);
+      x.strokeStyle = colors[s];
+      x.lineWidth = isCurrent ? 2.5 : 1;
+      x.globalAlpha = isCurrent ? 1 : 0.5;
+      x.beginPath();
+      for (var j = 0; j < n; j++) {
+        var px = xMap(j + 1, n), py = yMap(arr[j]);
+        if (j === 0) x.moveTo(px, py); else x.lineTo(px, py);
+      }
+      x.stroke();
+    }
+  }
+  x.globalAlpha = 1;
+  // 标题 + 图例
+  x.fillStyle = '#0f172a'; x.font = 'bold 12px sans-serif'; x.textAlign = 'left';
+  x.fillText('三条抽样框下的样本比例随 n 变化（N=' + t6curN + '）', padL, 12);
+  // 图例（右上）
+  x.font = '11px sans-serif'; x.textAlign = 'left';
+  var lx = W - padR - 130, ly = padT + 4;
+  for (var s2 in colors) {
+    x.strokeStyle = colors[s2]; x.lineWidth = (s2 === t6curScenario) ? 2.5 : 1;
+    x.beginPath(); x.moveTo(lx, ly + 6); x.lineTo(lx + 20, ly + 6); x.stroke();
+    x.fillStyle = colors[s2];
+    x.fillText(labels[s2] + (s2 === t6curScenario ? ' ●' : ''), lx + 24, ly + 10);
+    ly += 16;
+  }
+  // X 轴说明
+  x.fillStyle = '#64748b'; x.font = '10px sans-serif';
+  x.textAlign = 'left';
+  x.fillText('样本量 n →', padL + 8, padT + plotH + 14);
+  x.textAlign = 'right';
+  x.fillText('n=' + t6curN, W - padR, padT + plotH + 14);
+}
+
+/* 初始化时把首页设为 active（默认已是） */
+</script>
+<style id="portal-back-style">
+.portal-back{position:fixed;right:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;height:48px;padding:0 18px;border-radius:24px;background:rgba(28,32,44,.86);color:#fff;font-size:15px;font-weight:600;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.25);font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;transition:transform .15s,background .15s}
+.portal-back:hover{background:rgba(28,32,44,.96);transform:translateY(-2px)}
+.portal-back:visited{color:#fff}
+@media (max-width:520px){.portal-back{height:44px;padding:0 14px;font-size:14px;right:12px;bottom:12px}}
+</style>
+<a href="./index.html" class="portal-back" aria-label="返回门户">← 返回门户</a>
+</body>
+</html>

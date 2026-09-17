@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="给孩子的数学探索台 —— 图论、概率、统计学、微积分的交互学习入口">
+<title>数学探索台</title>
+<style>
+:root{
+  --bg:#f8f9fc;
+  --card-bg:#ffffff;
+  --text:#1a1a2e;
+  --text-light:#555;
+  --border:#e2e8f0;
+  --shadow:0 4px 24px rgba(0,0,0,.08);
+  --radius:16px;
+  --accent-blue:#3b82f6;
+  --accent-green:#10b981;
+  --accent-orange:#f59e0b;
+  --accent-red:#ef4444;
+  --accent-purple:#8b5cf6;
+  --accent-pink:#ec4899;
+  --accent-gray:#94a3b8;
+  --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding:36px 20px calc(48px + env(safe-area-inset-bottom,0px));
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px;margin:0 auto}
+
+/* ---------- 顶部 ---------- */
+header{text-align:center;margin-bottom:44px}
+h1{
+  font-size:clamp(26px,5.2vw,40px);
+  font-weight:800;
+  letter-spacing:.5px;
+  margin-bottom:14px;
+  background:linear-gradient(120deg,var(--accent-blue),var(--accent-purple));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.subtitle{
+  color:var(--text-light);
+  font-size:clamp(14px,2.7vw,17px);
+  max-width:640px;
+  margin:0 auto;
+}
+.meta{
+  margin-top:18px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--text-light);
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:7px 16px;
+  box-shadow:var(--shadow);
+}
+.meta b{color:var(--text);font-weight:700}
+
+/* ---------- 分组 ---------- */
+.group{margin-bottom:40px}
+.group-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:clamp(16px,3vw,20px);
+  font-weight:700;
+  margin-bottom:18px;
+  padding-left:2px;
+}
+.group-title .dot{
+  width:11px;height:11px;border-radius:50%;
+  flex:0 0 auto;
+  box-shadow:0 0 0 4px color-mix(in srgb,currentColor 12%,transparent);
+}
+.group-title .count{
+  font-size:13px;font-weight:500;color:var(--text-light);
+}
+
+/* ---------- 卡片网格 ---------- */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(258px,1fr));
+  gap:18px;
+}
+.card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  min-height:190px;
+  padding:22px 22px 20px;
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  text-decoration:none;
+  color:inherit;
+  overflow:hidden;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto 0;
+  height:5px;
+  background:var(--accent);
+}
+.card:hover,.card:focus-visible{
+  transform:translateY(-4px);
+  border-color:var(--accent);
+  box-shadow:0 12px 32px rgba(0,0,0,.13);
+  outline:none;
+}
+.card:active{transform:translateY(-1px)}
+
+.card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+.icon{
+  font-size:30px;
+  line-height:1;
+}
+.badge{
+  font-size:12px;
+  font-weight:700;
+  padding:4px 11px;
+  border-radius:999px;
+  color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,#fff);
+  border:1px solid color-mix(in srgb,var(--accent) 28%,#fff);
+  white-space:nowrap;
+}
+.card h3{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:6px;
+  letter-spacing:.3px;
+}
+.chapter{
+  font-size:13px;
+  color:var(--accent);
+  font-weight:600;
+  margin-bottom:10px;
+}
+.desc{
+  font-size:14.5px;
+  color:var(--text-light);
+  flex:1 1 auto;
+}
+.prereq{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px dashed var(--border);
+  font-size:12.5px;
+  color:var(--text-light);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.prereq .tag{
+  font-weight:600;
+  color:var(--text);
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:2px 8px;
+}
+
+/* ---------- 占位卡 ---------- */
+.card--todo{
+  cursor:not-allowed;
+  opacity:.62;
+  --accent:var(--accent-gray) !important;
+}
+.card--todo::before{background:repeating-linear-gradient(90deg,var(--accent-gray) 0 6px,transparent 6px 12px)}
+.card--todo:hover{transform:none;border-color:var(--border);box-shadow:var(--shadow)}
+.card--todo h3,.card--todo .desc{color:var(--text-light)}
+
+/* ---------- 页脚 ---------- */
+footer{
+  margin-top:52px;
+  text-align:center;
+  font-size:13px;
+  color:var(--text-light);
+  line-height:2;
+}
+footer .sep{opacity:.4;margin:0 8px}
+
+@media (max-width:520px){
+  body{padding:26px 15px calc(40px + env(safe-area-inset-bottom,0px))}
+  header{margin-bottom:32px}
+  .grid{gap:14px;grid-template-columns:1fr}
+  .card{min-height:0;padding:19px 18px 17px}
+  .icon{font-size:26px}
+  .card h3{font-size:18.5px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>数学探索台</h1>
+    <p class="subtitle">用会动的图画，把数学里那些"看不见"的道理看明白。</p>
+    <div class="meta">
+      <span>共 <b id="m-total">5</b> 个主题</span>
+      <span>·</span>
+      <span>持续更新中</span>
+    </div>
+  </header>
+
+  <main id="catalog"></main>
+
+  <footer>
+    <div>点开任意一张卡片就能开始探索</div>
+    <div style="margin-top:6px">每页右下角都有 <span class="tag" style="font-weight:600">← 返回门户</span> 按钮</div>
+  </footer>
+</div>
+
+<script>
+/* =========================================================
+   目录数据 —— 新增一篇，只改这里
+   字段说明：
+     group   分组名
+     accent  该分组的主题色变量
+     items[] 卡片列表
+       file   门户目录内的文件名（同目录相对路径）
+       title  学科名
+       chapter 章节来源（副标题）
+       desc   一句话定位
+       badge  右上角角标
+       prereq 前置建议（可选）
+       ready  false = 灰显占位卡，不可点
+   ========================================================= */
+const CATALOG = [
+  {
+    group: '离散与网络',
+    accent: '--accent-blue',
+    items: [
+      {
+        file: 'graph.html',
+        title: '图论',
+        chapter: '第七章 · 万物皆可「图」',
+        desc: '用点和线描述关系 —— 社交网络、地图导航、甚至"单行道"背后都是同一套道理。',
+        badge: '1 篇',
+        ready: true
+      }
+    ]
+  },
+  {
+    group: '不确定性与数据',
+    accent: '--accent-orange',
+    items: [
+      {
+        file: 'probability.html',
+        title: '概率',
+        chapter: '描述可能性的数学',
+        desc: '把"可能发生"变成能算的数字。骰子、抽奖、天气预报，都靠它。',
+        badge: '1 篇',
+        ready: true
+      },
+      {
+        file: 'statistics.html',
+        title: '统计学',
+        chapter: '不完美的目击证人',
+        desc: '数据不会说谎，但会误导人。学会从一堆数字里读出真相。',
+        badge: '1 篇',
+        prereq: '概率',
+        ready: true
+      }
+    ]
+  },
+  {
+    group: '变化的语言',
+    accent: '--accent-purple',
+    items: [
+      {
+        file: 'functions.html',
+        title: '函数先导',
+        chapter: '描述变化的语言',
+        desc: '想研究"变化"，先要学会写它的语言。这是通往微积分的第一步。',
+        badge: '入门',
+        ready: true
+      },
+      {
+        file: 'calculus1.html',
+        title: '微积分 · 上篇',
+        chapter: '瞬间',
+        desc: '怎么抓住"一瞬间"的变化？把无穷小的一刹那算清楚。',
+        badge: '20 page',
+        prereq: '函数先导',
+        ready: true
+      },
+      {
+        file: 'calculus2.html',
+        title: '微积分 · 下篇',
+        chapter: '规划中',
+        desc: '还在路上 —— 敬请期待。',
+        badge: '规划中',
+        ready: false
+      }
+    ]
+  }
+];
+
+/* ---------------- 渲染 ---------------- */
+(function render() {
+  const root = document.getElementById('catalog');
+  let total = 0;
+  const frag = document.createDocumentFragment();
+
+  CATALOG.forEach(group => {
+    const readyCount = group.items.filter(i => i.ready !== false).length;
+    total += readyCount;
+
+    const sec = document.createElement('section');
+    sec.className = 'group';
+
+    const title = document.createElement('h2');
+    title.className = 'group-title';
+    title.innerHTML =
+      '<span class="dot" style="background:var(' + group.accent + ');color:var(' + group.accent + ')"></span>' +
+      escapeHtml(group.group) +
+      '<span class="count">' + readyCount + ' 个主题</span>';
+    sec.appendChild(title);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    group.items.forEach(item => {
+      const ready = item.ready !== false;
+      const el = document.createElement(ready ? 'a' : 'div');
+      el.className = 'card' + (ready ? '' : ' card--todo');
+      el.style.setProperty('--accent', 'var(' + group.accent + ')');
+      if (ready) {
+        el.href = './' + item.file;
+      } else {
+        el.setAttribute('aria-disabled', 'true');
+        el.setAttribute('title', '规划中，尚未开放');
+      }
+
+      let html = '';
+      html += '<div class="card-head">';
+      html += '<span class="icon" aria-hidden="true">' + (item.icon || iconFor(item.file)) + '</span>';
+      if (item.badge) html += '<span class="badge">' + escapeHtml(item.badge) + '</span>';
+      html += '</div>';
+      html += '<h3>' + escapeHtml(item.title) + '</h3>';
+      if (item.chapter) html += '<p class="chapter">' + escapeHtml(item.chapter) + '</p>';
+      html += '<p class="desc">' + escapeHtml(item.desc || '') + '</p>';
+      if (item.prereq) {
+        html += '<div class="prereq">建议先看 <span class="tag">' + escapeHtml(item.prereq) + '</span></div>';
+      }
+      el.innerHTML = html;
+
+      grid.appendChild(el);
+    });
+
+    sec.appendChild(grid);
+    frag.appendChild(sec);
+  });
+
+  root.appendChild(frag);
+  document.getElementById('m-total').textContent = total;
+})();
+
+/* 按文件名给默认图标（也可在数据里用 icon 字段覆盖） */
+function iconFor(file) {
+  if (file.indexOf('graph') === 0) return '🕸️';
+  if (file.indexOf('probability') === 0) return '🎲';
+  if (file.indexOf('statistics') === 0) return '📊';
+  if (file.indexOf('functions') === 0) return '📈';
+  if (file.indexOf('calculus1') === 0) return '⏱️';
+  if (file.indexOf('calculus2') === 0) return '⏳';
+  return '📘';
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+</script>
+</body>
+</html>

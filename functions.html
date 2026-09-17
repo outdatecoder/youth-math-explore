@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="EsrAvC6eFRBiBYftjW3xxG">
+<head data-page-node-id="eQgrZoiT19idTRhF8c6aSa">
+<meta charset="UTF-8" data-page-node-id="vR4Cw1W280lINIgQwcOUYX">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="PFQS4d7puEdsF4APU5uI1x">
+<title>函数先导：描述变化的语言</title>
+<style>
+  :root {
+    --bg: #f8f9fc;
+    --card-bg: #ffffff;
+    --text: #1a1a2e;
+    --text-light: #555;
+    --border: #e2e8f0;
+    --accent-blue: #3b82f6;
+    --accent-green: #10b981;
+    --accent-orange: #f59e0b;
+    --accent-red: #ef4444;
+    --accent-purple: #8b5cf6;
+    --accent-pink: #ec4899;
+    --shadow: 0 4px 24px rgba(0,0,0,.08);
+    --radius: 16px;
+    --font: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; animation: fadeIn .4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* ===== 首页 ===== */
+  .home-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    padding: 56px 24px 44px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='.06'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .home-header > * { position: relative; z-index: 1; }
+  .chapter-tag {
+    display: inline-block;
+    padding: 6px 18px;
+    border: 1px solid rgba(255,255,255,.5);
+    border-radius: 999px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+  }
+  .home-header h1 { font-size: 34px; font-weight: 600; margin-bottom: 10px; letter-spacing: 2px; }
+  .home-header .subtitle { font-size: 16px; opacity: .92; }
+
+  .home-container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+  .intro-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border-left: 5px solid var(--accent-purple);
+    padding: 22px 26px;
+    margin-top: -20px;
+    position: relative;
+    font-size: 15px;
+    color: var(--text-light);
+  }
+  .intro-card b { color: var(--text); }
+
+  .tree-box {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 20px 18px;
+    margin-top: 20px;
+  }
+  .tree-box h2 { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+  .tree-main { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 6px 0 2px; }
+  .tnode {
+    flex: 0 0 auto; border: 1px solid var(--border); border-radius: 12px;
+    padding: 8px 14px; font-size: 14px; font-weight: 600; background: #fbfcfe;
+    display: flex; flex-direction: column; align-items: center; min-width: 76px;
+  }
+  .tnode span { font-size: 12px; color: var(--text-light); font-weight: 400; }
+  .tnode.end { border-color: var(--accent-blue); background: #eff6ff; color: #1d4ed8; }
+  .tnode.end span { color: var(--accent-blue); }
+  .tarrow { color: #94a3b8; font-size: 15px; }
+  .tree-note { font-size: 13px; color: var(--text-light); margin-top: 10px; }
+  .tree-note b { color: var(--accent-orange); }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+  }
+  .sec-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+    border-top: 4px solid var(--accent-blue);
+    position: relative;
+  }
+  .sec-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,.14); }
+  .sec-card .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 12px;
+    color: #fff; font-size: 15px; font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .sec-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .sec-card .kw { font-size: 13px; color: var(--text-light); margin-bottom: 12px; }
+  .sec-card .enter { font-size: 13px; font-weight: 500; }
+  .footer-note { text-align: center; color: var(--text-light); font-size: 13px; margin-top: 28px; }
+
+  /* ===== 子节页 ===== */
+  .sub-nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 24px;
+  }
+  .sub-nav .back {
+    cursor: pointer; color: var(--accent-blue); font-size: 15px; font-weight: 500;
+    white-space: nowrap;
+  }
+  .sub-nav .divider { color: #cbd5e1; }
+  .sub-nav .title { font-size: 17px; font-weight: 600; }
+  .sub-nav .nav-next {
+    margin-left: auto; cursor: pointer; color: var(--accent-blue);
+    font-size: 14px; font-weight: 500; white-space: nowrap;
+  }
+
+  .sub-container { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .graph-area {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+  }
+
+  .story-card {
+    border-left: 4px solid var(--accent-purple);
+    background: #faf5ff;
+    border-radius: 0 12px 12px 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #4c1d95;
+    margin-bottom: 14px;
+  }
+  .story-card b { color: #6d28d9; }
+
+  .toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .mode-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mode-btn {
+    padding: 7px 16px; border: 1px solid var(--border); border-radius: 10px;
+    font-size: 14px; cursor: pointer; background: #fff; color: var(--text-light);
+    transition: all .15s ease;
+  }
+  .mode-btn.active { border-color: var(--accent-blue); color: var(--accent-blue); background: #eff6ff; }
+  .play-btn {
+    padding: 8px 18px; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 500; cursor: pointer; color: #fff;
+    background: var(--accent-blue); transition: all .15s ease;
+  }
+  .play-btn.playing { background: var(--accent-red); }
+  .toolbar-hint { font-size: 13px; color: var(--text-light); }
+
+  .canvas-box {
+    border: 1px solid var(--border); border-radius: 12px; padding: 8px;
+    background: #fbfcfe;
+  }
+  .canvas-box canvas { width: 100%; height: auto; display: block; border-radius: 8px; }
+  #cv1 { width: 100%; height: auto; }
+  #cv2 { width: 100%; height: auto; }
+  #cv3 { width: 100%; height: auto; }
+  #cv4 { width: 100%; height: auto; }
+  #cv5 { width: 100%; height: auto; }
+  .canvas-caption { font-size: 13px; color: var(--text-light); text-align: center; margin-top: 6px; }
+
+  .ctrl-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; align-items: center; }
+  .ctrl-label { font-size: 13px; color: var(--text-light); margin-right: 2px; }
+  .ctrl-btn {
+    padding: 7px 14px; border: 1px solid var(--border); border-radius: 10px;
+    font-size: 14px; cursor: pointer; background: #fff; color: var(--text);
+    transition: all .15s ease;
+  }
+  .ctrl-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+  .ctrl-btn.primary { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+  .ctrl-btn.on { border-color: var(--accent-blue); background: #eff6ff; color: var(--accent-blue); font-weight: 500; }
+  .ctrl-btn.wide { min-width: 46px; }
+
+  .status-bar {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 14px; padding: 10px 14px;
+    background: #f1f5f9; border-radius: 10px; font-size: 14px; color: var(--text);
+  }
+  .status-bar.alarm { background: #fef2f2; color: #b91c1c; }
+  .status-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent-blue); flex-shrink: 0; }
+  .status-dot.gold { background: var(--accent-orange); }
+  .status-dot.red { background: var(--accent-red); }
+
+  .kv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 10px; margin-top: 14px; }
+  .kv { background: #f1f5f9; border-radius: 10px; padding: 10px 12px; }
+  .kv .k { font-size: 12px; color: var(--text-light); }
+  .kv .v { font-size: 18px; font-weight: 600; color: var(--text); }
+  .kv.hi { background: #eff6ff; }
+  .kv.hi .v { color: #1d4ed8; }
+
+  .chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; min-height: 28px; }
+  .chip {
+    font-size: 12px; padding: 4px 10px; border-radius: 999px;
+    background: #f1f5f9; color: var(--text-light); border: 1px solid var(--border);
+  }
+  .chip.now { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; font-weight: 500; }
+
+  .explain-box {
+    margin-top: 16px; border-left: 4px solid var(--accent-blue);
+    background: #f8fafc; border-radius: 0 12px 12px 0; padding: 14px 16px;
+    font-size: 14px; color: var(--text-light);
+  }
+  .explain-box b { color: var(--text); }
+  .explain-box .step { color: var(--accent-blue); font-weight: 500; }
+
+  .plot-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+  .plot-table th, .plot-table td { border: 1px solid var(--border); padding: 5px 4px; text-align: center; }
+  .plot-table th { background: #f8fafc; color: var(--text-light); font-weight: 500; }
+  .plot-table td.hit { background: #eff6ff; color: #1d4ed8; font-weight: 600; }
+  .plot-table td.void { background: #fef2f2; color: #b91c1c; }
+  .table-wrap { display: none; }
+
+  .quiz-box {
+    margin-top: 16px; border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+  }
+  .quiz-box h4 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .quiz-q { font-size: 15px; color: var(--text); margin-bottom: 12px; }
+  .quiz-btn {
+    padding: 7px 16px; border: 1px solid var(--border); border-radius: 10px;
+    font-size: 14px; cursor: pointer; background: #fff; color: var(--accent-blue);
+  }
+  .quiz-answer {
+    display: none; margin-top: 12px; padding: 12px 14px;
+    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;
+    font-size: 14px; color: #166534;
+  }
+  .quiz-answer.show { display: block; }
+
+  .hook-box {
+    margin-top: 16px; border: 1px solid #bfdbfe; background: #eff6ff;
+    border-radius: 12px; padding: 16px;
+  }
+  .hook-box h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: #1d4ed8; }
+  .hook-box p { font-size: 14px; color: #1e3a8a; }
+
+  /* 侧栏 */
+  .side-panel { display: flex; flex-direction: column; gap: 16px; }
+  .panel-card {
+    background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px;
+  }
+  .panel-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .panel-card .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .concept-card {
+    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 16px 18px;
+  }
+  .concept-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #166534; }
+  .concept-card p { font-size: 14px; color: #14532d; }
+  .rule-item {
+    border-left: 4px solid var(--accent-blue); background: #f8fafc;
+    border-radius: 0 10px 10px 0; padding: 12px 14px; font-size: 14px; color: var(--text-light); margin-top: 10px;
+  }
+  .rule-item b { color: var(--text); }
+  .panel-card p { font-size: 14px; color: var(--text-light); }
+
+  .warn-card { background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 14px 16px; }
+  .warn-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: #b45309; }
+  .warn-card p { font-size: 14px; color: #78350f; }
+  .warn-card p + p { margin-top: 6px; }
+
+  /* 倒着找 */
+  .calc-box { margin-top: 16px; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .calc-box h4 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+  .calc-out { margin-top: 10px; padding: 12px 14px; background: #f8fafc; border-radius: 10px; font-size: 14px; color: var(--text-light); }
+  .calc-out b { color: var(--accent-blue); }
+  .num-input {
+    width: 82px; padding: 7px 10px; border: 1px solid var(--border);
+    border-radius: 10px; font-size: 14px; font-family: var(--font);
+  }
+
+  /* 滑块组 */
+  .slider-row { margin-bottom: 14px; }
+  .slider-row label { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--text); margin-bottom: 6px; }
+  .slider-row label b { color: var(--accent-blue); white-space: nowrap; }
+  .slider-row input[type=range] { width: 100%; accent-color: var(--accent-blue); cursor: pointer; }
+  .tab-panel { display: none; }
+  .tab-panel.on { display: block; }
+
+  /* 提示 toast */
+  #toast {
+    position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%) translateY(20px);
+    background: rgba(26,26,46,.9); color: #fff; padding: 12px 22px; border-radius: 999px;
+    font-size: 14px; opacity: 0; pointer-events: none; transition: all .3s ease; z-index: 999;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .home-header h1 { font-size: 26px; }
+    .ctrl-btn, .mode-btn, .play-btn, .quiz-btn { min-height: 44px; }
+    .sub-nav { padding: 12px 14px; gap: 10px; }
+    .sub-nav .title { font-size: 15px; }
+  }
+</style>
+</head>
+<body data-page-node-id="C5quIDC3XKG6z3BHaIEDZz">
+
+<!-- ================= 首页 ================= -->
+<div class="page active" id="page-home" data-page-node-id="678lScL3Wr0Jy95aFl1Fmk">
+  <div class="home-header" data-page-node-id="0dAxLtIHHNTrOMnQnVwTIK">
+    <span class="chapter-tag" data-page-node-id="BCOmzjPL6yLg5IEEWELlou">第 0 章 · 先导</span>
+    <h1 data-page-node-id="Af4GMIKiaMryHlAB4A2Umv">函数：描述变化的语言</h1>
+    <p class="subtitle" data-page-node-id="0SVMpsOen0OwEiwlrOBepa">微积分讲的是「变化」，而变化要用函数来描述 —— 所以先补这一课</p>
+  </div>
+
+  <div class="home-container" data-page-node-id="laabnCGAbkD3Y8tNHxfsBG">
+    <div class="intro-card" data-page-node-id="f1IeS48vD0EqbvyJdcEwsk">
+      <b data-page-node-id="mlQBIDuh3xGIq4lI0l21e3">这一页只做一件事：</b>补上微积分需要的函数最小集 —— <b data-page-node-id="uQLZr3YyNHBIJ2DjptKTwj">对应、图象、斜率</b>。它不是完整的函数教程：不讲复合函数、反函数、图象变换，也不做单调性证明。
+    </div>
+
+    <div class="tree-box" data-page-node-id="IJSTBa9u98owFdRe906Ctw">
+      <h2 data-page-node-id="DLHEEcLf5QZKfaatFZnt20">5 节主线</h2>
+      <div class="tree-main" data-page-node-id="X5Z0lzle8rOTEiFo8VFdDB">
+        <div class="tnode" data-page-node-id="LpUf3pHSMWUjjUBUxm2Rpd">0.1<span data-page-node-id="WcpGJk17Sk1Q3CfRqL4oqy">对应</span></div>
+        <div class="tarrow" data-page-node-id="uXnd6gejl0CGNWEDwQSA0L">→</div>
+        <div class="tnode" data-page-node-id="BEt4v3Z3CkOkaABEfprqKA">0.2<span data-page-node-id="mQrRrxGTtcTB1J60N4Rzzj">记号</span></div>
+        <div class="tarrow" data-page-node-id="C3OKaYmTebDGr5W88R3EHv">→</div>
+        <div class="tnode" data-page-node-id="wlhzJ4b1iWoBoPux6570Vb">0.3<span data-page-node-id="5hQ0Uj7MqhaNRn7V4dlPAE">图象</span></div>
+        <div class="tarrow" data-page-node-id="3apJGhP5pTAZrpBHtPBHGB">→</div>
+        <div class="tnode" data-page-node-id="spx8YzR2vhDpUcKkEH34qG">0.4<span data-page-node-id="BaWCRQhtvGmHeEzNsQ1eCa">家族</span></div>
+        <div class="tarrow" data-page-node-id="uDjlOov8tFAhwx7ckQ1gia">→</div>
+        <div class="tnode end" data-page-node-id="dRVBpURChgam39egq67Hmi">0.5<span data-page-node-id="uYuBS4uHZ6nVFvkhkB4MFm">斜率</span></div>
+      </div>
+      <p class="tree-note" data-page-node-id="pNQvOXoZSrSHweEJEZyARn">最后一节的终点，就是微积分第一课的起点 —— <b data-page-node-id="btLXwAofzSnYZ2QgFNu8g9">这条缝是全站最重要的一条接缝</b>。</p>
+    </div>
+
+    <div class="section-grid" data-page-node-id="Au5brRx6myMwJ3m43aTTq5">
+      <div class="sec-card" style="border-top-color:#3b82f6;" onclick="goTo(1)" data-page-node-id="ZRixDR7TBNPIN3iKwQyRJa">
+        <div class="num" style="background:#3b82f6;" data-page-node-id="yUDNgD6bHm42RAUHDS7Bcl">0.1</div>
+        <h3 data-page-node-id="cXdMRfOs87tAT76gERbALo">一个 x 只配一个 y</h3>
+        <p class="kw" data-page-node-id="87ympDkxLlLHNWvCSa5Yhx">对应 · 唯一确定 · 反例机器</p>
+        <p class="enter" style="color:#3b82f6;" data-page-node-id="G0wG4J0cN5IV8uoLEz5a9h">进入 →</p>
+      </div>
+      <div class="sec-card" style="border-top-color:#10b981;" onclick="goTo(2)" data-page-node-id="6gDBfjqnJ4k7HqVMTrWltg">
+        <div class="num" style="background:#10b981;" data-page-node-id="S4zc6qNLbhad5tegx0oXVX">0.2</div>
+        <h3 data-page-node-id="6W7xFIUSZ0pAksdXuI6cMk">y = f(x) 怎么读</h3>
+        <p class="kw" data-page-node-id="CVenVF5zNeoVSBmOcXvA1D">记号 · 求值 · 倒着找 x</p>
+        <p class="enter" style="color:#10b981;" data-page-node-id="xdRq6seqmqyrq0y3rM6E84">进入 →</p>
+      </div>
+      <div class="sec-card" style="border-top-color:#f59e0b;" onclick="goTo(3)" data-page-node-id="8yoluWI0DBSipCHfEfQBmB">
+        <div class="num" style="background:#f59e0b;" data-page-node-id="Bqu9ij3Fxon4v83fveocok">0.3</div>
+        <h3 data-page-node-id="Rs9LbpqLrhLPESwef0A9pG">从式子到曲线</h3>
+        <p class="kw" data-page-node-id="7r0FrRSFN3QAcl3fH0AgbZ">列表 · 描点 · 连线 · 定义域</p>
+        <p class="enter" style="color:#f59e0b;" data-page-node-id="436qASD5OVzphAehVajqeY">进入 →</p>
+      </div>
+      <div class="sec-card" style="border-top-color:#8b5cf6;" onclick="goTo(4)" data-page-node-id="Mr5D6sxsShoGtEhJ2ElJtZ">
+        <div class="num" style="background:#8b5cf6;" data-page-node-id="sqBh8mqYbxJh4wx1PFZg9j">0.4</div>
+        <h3 data-page-node-id="CoQp91KSWEBqye3pE6J7Hw">认识几个老朋友</h3>
+        <p class="kw" data-page-node-id="fQz95ms0xuDNQH4tCA4DDv">一次 · 二次 · 指数（只看形状）</p>
+        <p class="enter" style="color:#8b5cf6;" data-page-node-id="v7kbxHCxYm9ctEFd9nIKZQ">进入 →</p>
+      </div>
+      <div class="sec-card" style="border-top-color:#ef4444;" onclick="goTo(5)" data-page-node-id="1TlcUiRZGYrpnXE3jUluiH">
+        <div class="num" style="background:#ef4444;" data-page-node-id="Do4AAeGuirRfFHJcDOReB4">0.5</div>
+        <h3 data-page-node-id="Szd1BFiS5GlY4KA3G8Qcxk">变化有多快</h3>
+        <p class="kw" data-page-node-id="tIbJoQehZXUEMSOXf6YZof">横向差 / 纵向差 · 两点连线 · 坡度稳定</p>
+        <p class="enter" style="color:#ef4444;" data-page-node-id="KZmrWVRFCbZRAC1Xk104Nm">进入 →</p>
+      </div>
+    </div>
+
+    <p class="footer-note" data-page-node-id="at8iKMlAvSE68FM87GPZ2q">5 节 · 单文件 · 双击打开即可用 · 无需联网</p>
+  </div>
+</div>
+
+<!-- ================= 0.1 ================= -->
+<div class="page" id="page-f1" data-page-node-id="RyS5MEPJOX5ygYDjttkCXP">
+  <div class="sub-nav" data-page-node-id="DrWB0wbtRoY5G3Df2UmV57">
+    <span class="back" onclick="goHome()" data-page-node-id="oBGtbUX31AqUI9aovVFpxN">← 返回首页</span>
+    <span class="divider" data-page-node-id="0LMK1acTj4sRQ2galFAf07">|</span>
+    <span class="title" data-page-node-id="4CA33ehtctQwgRGlAG7iFV">0.1　一个 x 只配一个 y</span>
+    <span class="nav-next" onclick="goTo(2)" data-page-node-id="52QQhNQMq96fjY54c4ppt0">下一节 →</span>
+  </div>
+  <div class="sub-container" data-page-node-id="Axbp3p17ZrEHIRICXdp1EY">
+    <div class="layout" data-page-node-id="RUSfAUmGcYaD5S73eX9rFc">
+      <div class="graph-area" data-page-node-id="evge4Lbmu5CwwicRMT82o1">
+        <div class="story-card" data-page-node-id="H4CoZCEX0Tj5rEWJ7xhU2m"><b data-page-node-id="wYnym5YLwAcXoH1EMvUxB5">故事开场：</b>你按自动售货机的 3 号键，它今天掉出可乐、明天掉出矿泉水 —— 你还敢用吗？一个输入只能对应一个输出，这才叫「确定的规则」。</div>
+
+        <div class="toolbar" data-page-node-id="FaZt4aEJzbm2bnexcFBqFD">
+          <span class="toolbar-hint" data-page-node-id="9996xYS1gWeJzdFypasLJ1">先选一台机器，再选一个数字喂进去。同一台机器可以反复喂。</span>
+          <button class="play-btn" id="btn-play1" onclick="play1()" data-page-node-id="3qowY0tUReBzkORtBc002m">▶ 播放演示</button>
+        </div>
+
+        <div class="canvas-box" data-page-node-id="kVtcxCz6whC07cBpP4V7xz">
+          <canvas id="cv1" width="620" height="372" data-page-node-id="BmcH4YF4CDecfneETsBikr"></canvas>
+          <p class="canvas-caption" data-page-node-id="H0mIdgbB3w4kWEkUaW8EAr">左边是输入 x，右边是机器吐出来的结果</p>
+        </div>
+
+        <div class="ctrl-row" id="m1-row" data-page-node-id="Als2kYxDmVhQ5GcHEVi3f1">
+          <span class="ctrl-label" data-page-node-id="CDDAFFkuHzIO1Cpw7sf1kt">选机器：</span>
+          <button class="ctrl-btn on" id="m1-b0" onclick="setMachine(0)" data-page-node-id="HwgRSNc8G0hhG1qcMfe5Dg">加倍机</button>
+          <button class="ctrl-btn" id="m1-b1" onclick="setMachine(1)" data-page-node-id="PqmWGsM41cqyfPf8wQI02s">加一机</button>
+          <button class="ctrl-btn" id="m1-b2" onclick="setMachine(2)" data-page-node-id="fkddcX7tHplQqH5zIfvLHf">平方机</button>
+          <button class="ctrl-btn" id="m1-b3" onclick="setMachine(3)" data-page-node-id="XDwNwos2Ks4FpfyAl3YebI">加倍加一机</button>
+          <button class="ctrl-btn" id="m1-b4" onclick="setMachine(4)" data-page-node-id="a0DpwhYubrFV3FjjKW4DDA">坏机器？</button>
+        </div>
+
+        <div class="ctrl-row" data-page-node-id="v2NPdEHXYnGaiHUkirLcN6">
+          <span class="ctrl-label" data-page-node-id="qSsmlH0uiuqYEx4YBkOqB7">喂给它 x =</span>
+          <button class="ctrl-btn wide" onclick="feed1(1)" data-page-node-id="0MkApgCOPJP4kg3M0naNQ6">1</button>
+          <button class="ctrl-btn wide" onclick="feed1(2)" data-page-node-id="X2lvDhQZYFdBnHVyVszkF6">2</button>
+          <button class="ctrl-btn wide" onclick="feed1(3)" data-page-node-id="zTbu6Iv5O5WorkewwuKanc">3</button>
+          <button class="ctrl-btn wide" onclick="feed1(4)" data-page-node-id="Jt9cNyXF6Q0UCiUc9bBRq6">4</button>
+          <button class="ctrl-btn primary" onclick="reset1()" data-page-node-id="Nm8B3hLnQVCSlhBcKROb9J">重置</button>
+        </div>
+
+        <div class="status-bar" id="st1-bar" data-page-node-id="pcS7btPs9yfNWCwbHMsJha"><span class="status-dot" id="st1-dot" data-page-node-id="HY7cG3SwrKkkSkD06iEJOD"></span><span id="st1" data-page-node-id="7oEaGmndOrSQqFavvJiKQT">还没喂过。点上面一个数字，把它喂给机器。</span></div>
+
+        <div class="explain-box" data-page-node-id="Pp05YF09ht7m4AR3EAVoAO">
+          <b data-page-node-id="C2Sig5IKqt1dbsPY4L30oN">关键就一句话：</b>同一个 x，不管问多少次，答案都必须一样 —— 这才叫「<b data-page-node-id="sFWzJwaworEkXI8m0X5GZx">唯一确定</b>」。<br data-page-node-id="cDg2CJ1yE5IXWkPiOdbbtw">
+          好机器满足这条，所以它<strong data-page-node-id="bcK6fe0tNdN3pcf1sGGHAV">确定了一个对应</strong>；坏机器不满足，所以它<strong data-page-node-id="i0q2sEAezwXU8XA8UQAoWv">不是函数</strong>。
+        </div>
+
+        <div class="quiz-box" data-page-node-id="xnxxMF5NWerryfaoyCrUvT">
+          <h4 data-page-node-id="bLKcolJxSF8zFVrFfYDYVy">自测</h4>
+          <p class="quiz-q" data-page-node-id="3LH1MbHMHMwFm82UE6StgH">下面哪一种「规则」不是函数？<br data-page-node-id="Bo3YjFNXF3a8BbJeVGB4ol">A. 输入一个数，输出它的两倍<br data-page-node-id="qiHiPd1n5bke5bZpQGXSvz">B. 输入一个数，输出它的平方<br data-page-node-id="HtQQ4Eel9HEDUYlVY4V7GG">C. 输入一个班的学生，输出他所在的小组（有人同时在两个组）</p>
+          <button class="quiz-btn" id="q1-btn" onclick="toggleAnswer('q1-ans','q1-btn')" data-page-node-id="VuxmssQ0yKzb3JBz7jM9o6">看解答 ↓</button>
+          <div class="quiz-answer" id="q1-ans" data-page-node-id="EWsxu5UDMF8ZHjzWiZdHQp">答案是 <b data-page-node-id="KbaK9cNjW72rOCFNTlOb3z">C</b>。同一个学生对应了两个小组 —— 一个输入给了两个输出，所以它不是函数。A 和 B 都很确定：给同一个数，永远得到同一个结果。</div>
+        </div>
+
+        <div class="hook-box" data-page-node-id="bJBGKzEHTEUuSCHKoGYlc3">
+          <h4 data-page-node-id="sokJZMFKwqhx4FBzug9XbZ">本节终点 → 下一节</h4>
+          <p data-page-node-id="pcMPTfBX0jru3jNQ0TJScH">这条「确定的规则」需要一个名字，数学家只用了两个字母来叫它。下一节就看 <b data-page-node-id="QLv45eclLRAxmsHQzUJ2AU">f(x)</b> 到底怎么读。</p>
+        </div>
+      </div>
+
+      <div class="side-panel" data-page-node-id="jrjttaLnWnswgEZH2sMJKi">
+        <div class="concept-card" data-page-node-id="48uFr7nJwXzYBS5lJoJiZw">
+          <h4 data-page-node-id="h4DjsFwWvyMVFRNorjferl">概念卡</h4>
+          <p data-page-node-id="zKLUVqOpFRuBAdJLeuGZhk">如果对每一个 x，都<b data-page-node-id="EP0AG4TmLC8J8kKfh7Wzkh">只有唯一一个</b> y 和它对应，就说 y 是 x 的函数。</p>
+        </div>
+        <div class="panel-card" data-page-node-id="TOYdxr2zt9dpMQzbSXyMVC">
+          <h4 data-page-node-id="1DWFF0zALCZGEKXfAGhSlk"><span class="dot" style="background:#3b82f6;" data-page-node-id="UQZGJeKEciCAvpoUGoDro3"></span>要点</h4>
+          <div class="rule-item" data-page-node-id="X5YRAk3GOjeeoqpxsysfos"><b data-page-node-id="wZHwFxI1VINe0YfKTpjBYC">第 1 步</b>　选一个输入 x。</div>
+          <div class="rule-item" data-page-node-id="byFXcIjPWI5cK1H6ztCI8s"><b data-page-node-id="FjrQ8VVpTokagyUHNrrVfu">第 2 步</b>　机器按规则算出 y。</div>
+          <div class="rule-item" data-page-node-id="vTZoSacVdjY26UlAnF2CrG"><b data-page-node-id="CYmKLd2GTQ9qjqOZ55OMma">第 3 步</b>　再喂一次同样的 x，看答案变不变。</div>
+        </div>
+        <div class="warn-card" data-page-node-id="hc2xBRhYjAbtjzCASGtbCn">
+          <h4 data-page-node-id="z811u8HUhsT40rspNxClUP">易错</h4>
+          <p data-page-node-id="rmmiFGy2IyXg7xoxxIlH1I">「一个 x 对一个 y」不等于「一个 y 只能来自一个 x」。</p>
+          <p data-page-node-id="8PYN2HZcjJ6C2fqGAWEB3g">平方机里，x = 2 和 x = −2 都给 4 —— 这是允许的，仍然是函数。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 0.2 ================= -->
+<div class="page" id="page-f2" data-page-node-id="dSYWNdsQaSoKGd8mg4yhAu">
+  <div class="sub-nav" data-page-node-id="CFDLXCdZEoVKnVNAWUnm7E">
+    <span class="back" onclick="goHome()" data-page-node-id="mp5WTAJWJGubKOlJKpFJHU">← 返回首页</span>
+    <span class="divider" data-page-node-id="NtIqhyN6GbCcVoyl9U8ARe">|</span>
+    <span class="title" data-page-node-id="WdZlpjB07gEggCAk62NaB6">0.2　y = f(x) 怎么读</span>
+    <span class="nav-next" onclick="goTo(3)" data-page-node-id="w7GHytwgQDTeYzRh5MOVsI">下一节 →</span>
+  </div>
+  <div class="sub-container" data-page-node-id="XCGe2zD3Id85QjGnlH3Zan">
+    <div class="layout" data-page-node-id="HDLwoyY2qkmrZgGQR1E9tf">
+      <div class="graph-area" data-page-node-id="CtQ1vHRYY81YNKIrfxfD6H">
+        <div class="story-card" data-page-node-id="nlAPzGlYohoFGPpPfUsA9J"><b data-page-node-id="S11G2MyR1SmEhDocbRyv4K">故事开场：</b>数学家给这台机器起了个很短的名字 —— <b data-page-node-id="LF92mZhp9iJGo3Y6T23P9M">f</b>。所以写 <b data-page-node-id="MTOXfDDbIEYQARhbzeX9MP">f(3)</b> 的时候，那个括号不是乘法，而是「把 3 递给机器 f」。</div>
+
+        <div class="toolbar" data-page-node-id="e6oTjA3vCrjF1B62obi40w">
+          <span class="toolbar-hint" data-page-node-id="6er80Hlzu9M3QDzJHErFvS">换机器、换 x，看右边的结果怎么跟着变。</span>
+          <button class="play-btn" id="btn-play2" onclick="play2()" data-page-node-id="cbYKtL08yeHwsc1CLp8OAQ">▶ 播放演示</button>
+        </div>
+
+        <div class="canvas-box" data-page-node-id="yh1HDGSA0DpaJYhpTM0gJh">
+          <canvas id="cv2" width="620" height="300" data-page-node-id="oDDeDKnKzNNFYVUn2b7a3C"></canvas>
+          <p class="canvas-caption" data-page-node-id="NJIAJDBfgKYy838tCM8JqT">x 进 → 机器 f 算 → f(x) 出</p>
+        </div>
+
+        <div class="ctrl-row" data-page-node-id="FH1kR1OdFopKKPSFShxcnY">
+          <span class="ctrl-label" data-page-node-id="ql65rACU6JI81QmyEZkOnD">选机器：</span>
+          <button class="ctrl-btn on" id="m2-b0" onclick="setMachine2(0)" data-page-node-id="8sh25E7rlV3HLqDxSOB0mI">f(x) = 2x</button>
+          <button class="ctrl-btn" id="m2-b1" onclick="setMachine2(1)" data-page-node-id="tKSjlE4qIkB6W8npYwcNGC">f(x) = x + 1</button>
+          <button class="ctrl-btn" id="m2-b2" onclick="setMachine2(2)" data-page-node-id="14Zqi2d3FVewCr1VcUgNmK">f(x) = x²</button>
+        </div>
+
+        <div class="ctrl-row" data-page-node-id="XUkBMGXz8SCigq8NBzT1Xw">
+          <span class="ctrl-label" data-page-node-id="1B2FESYXlYBcqYt5dC5u0e">喂进去 x =</span>
+          <button class="ctrl-btn wide" onclick="setX2(1)" data-page-node-id="7qCfxGCXwLlnaWcoa71axq">1</button>
+          <button class="ctrl-btn wide" onclick="setX2(2)" data-page-node-id="jGf0IkY2FoYYDkeGi2BKnD">2</button>
+          <button class="ctrl-btn wide" onclick="setX2(3)" data-page-node-id="gM0WLUu7pOKfbuHqeI18jt">3</button>
+          <button class="ctrl-btn wide" onclick="setX2(4)" data-page-node-id="I1HVdTy0ND933Xcx71GfHb">4</button>
+          <button class="ctrl-btn wide" onclick="setX2(5)" data-page-node-id="P8u8K5kew0HmH2PerpPxlx">5</button>
+          <button class="ctrl-btn wide" onclick="setX2(6)" data-page-node-id="u4Z6PZqG6gFSk2FVT5NQiA">6</button>
+          <button class="ctrl-btn primary" onclick="reset2()">重置</button>
+        </div>
+
+        <div class="status-bar" data-page-node-id="9ISMUBNLIGmSUgN5JWeAX0"><span class="status-dot" id="st2-dot" data-page-node-id="Qgc3AIcHxZsep2IaNfme9p"></span><span id="st2" data-page-node-id="TvYntUaWSqve6ZqAmIpWa3">f(2) = 4，读作「f 在 2 处的值」。</span></div>
+
+        <div class="calc-box" data-page-node-id="lkeD5yQxEnSXGx5nWFT4oW">
+          <h4 data-page-node-id="WKhviV7tZpN3xKyR1hi3B9">倒着找：如果 f(x) = ?，那 x 应该是几？</h4>
+          <div class="ctrl-row" style="margin-top:0;" data-page-node-id="U5uptPvXT2vaPrHn4T1awu">
+            <span class="ctrl-label" data-page-node-id="DNnmSoyzmzDjeIQAMDFUIG">我想要的结果是</span>
+            <input class="num-input" id="inv2-in" type="number" value="10" step="1" data-page-node-id="Qgg4MZ4z1YIDO89ZgAqy4A">
+            <button class="ctrl-btn primary" onclick="findX2()" data-page-node-id="R8CT9K6gdsDuzRcpTUjNBn">找一找</button>
+          </div>
+          <div class="calc-out" id="inv2-out" data-page-node-id="uonK2aUTov4yxZH2aehQ7v">输入一个数，再点「找一找」。</div>
+        </div>
+
+        <div class="explain-box" data-page-node-id="ArZFoarqhKp9R7iHSGemnO">
+          <b data-page-node-id="9qaKORkM9RiwikGKTFAxhq">三种写法，一个意思：</b><span class="step" data-page-node-id="0KE9f4TUeUyGNirtPQsnbS">y = 2x</span>　和　<span class="step" data-page-node-id="KUSsBEjWWBvieOIrxqKLaS">f(x) = 2x</span>　和　<span class="step" data-page-node-id="CgbOHMhwIpiA6wyAqFHlcC">f(3) = 6</span>。<br data-page-node-id="5KfHhrUcWr8vZEEi9CDnAw">
+          最后一个说的是：把 3 交给规则，得到 6。x 是括号里的那个「位置」，f(x) 是那个位置上「填出来的数」。
+        </div>
+
+        <div class="quiz-box" data-page-node-id="k7LgtGIkBOfGgapMeoV3Ej">
+          <h4 data-page-node-id="eRCt0y30ekvcdTJ2ITTq1D">自测</h4>
+          <p class="quiz-q" data-page-node-id="Tq9T6CxgHaSMxHm7KSl34h">已知 f(x) = 2x + 1。那么 f(4) 是多少？f(x) 里的那个 f 需要乘 4 吗？</p>
+          <button class="quiz-btn" id="q2-btn" onclick="toggleAnswer('q2-ans','q2-btn')" data-page-node-id="ido4EQQRfF2jTPJaDKaCiC">看解答 ↓</button>
+          <div class="quiz-answer" id="q2-ans" data-page-node-id="NQSo9zZkRIC6GQ2dlhEdcx">f(4) = 2 × 4 + 1 = <b data-page-node-id="uRgHk7RodLAKCUXt4mvoCj">9</b>。<b data-page-node-id="8wmBXSHI7BTLG0dFhlXOBp">f 不用乘 4</b> —— 它只是机器的名字。真正参与计算的是规则里的 2x + 1，而 4 是塞进去的那个 x。</div>
+        </div>
+
+        <div class="hook-box" data-page-node-id="zE1sZmVFutHwsPgW1WfznI">
+          <h4 data-page-node-id="lpLLbRyC0VE8exg3AKUfJx">本节终点 → 下一节</h4>
+          <p data-page-node-id="xlvPrjvOoBOGRYxhLDe4iU">式子能算了，但它还是「藏在盒子里的规则」。下一节把它画到纸上，让它变成看得见的曲线。</p>
+        </div>
+      </div>
+
+      <div class="side-panel" data-page-node-id="Ez3zUp3rCznlN1PdN5xT6Y">
+        <div class="concept-card" data-page-node-id="C2JqFM1rM5NVfNmTiLkjM0">
+          <h4 data-page-node-id="sZc35urENJspOIZGPMfTwr">概念卡</h4>
+          <p data-page-node-id="BGD7J4G4JDoUCOEeSyfTeN">f(x) 读作「<b data-page-node-id="37oYkXfxdOQiRtlWkjWqkb">f 在 x 处的值</b>」，是「把 x 喂给规则后得到的数」，不是 f 乘 x。</p>
+        </div>
+        <div class="panel-card" data-page-node-id="NWQd0eZiCFlcNnf4l3ghqw">
+          <h4 data-page-node-id="PJ9mWwlK6jEQ1qig0HIVHy"><span class="dot" style="background:#3b82f6;" data-page-node-id="Our1ZwRLb8sT7Cn1OatvK7"></span>要点</h4>
+          <div class="rule-item" data-page-node-id="uqTDtzl29CqJO2NvSYcca6"><b data-page-node-id="b9F9jzXXjtHz2izdKXjZOe">第 1 步</b>　看清规则 f(x) 长什么样。</div>
+          <div class="rule-item" data-page-node-id="zMf0OYmc2YDddyfZzYRpA7"><b data-page-node-id="gK2xXdKQlbXaqXZ6GFBuLy">第 2 步</b>　把括号里的数<b data-page-node-id="uG2x9O32fRq0vWdYUbRSYz">替换</b>进规则里的每一个 x。</div>
+          <div class="rule-item" data-page-node-id="Q711k3tKCmAD0i2m4Snury"><b data-page-node-id="60GBTaYD4um8YsHKvlYvPW">第 3 步</b>　算出来的答案就是 f(括号里那个数)。</div>
+        </div>
+        <div class="warn-card" data-page-node-id="m7oyuqb3OqI99rchchRpDx">
+          <h4 data-page-node-id="X3GNvIUC9817ETjZF6n8s2">易错</h4>
+          <p data-page-node-id="S8tyB1eqB4Fl4odmhVKNBl"><b data-page-node-id="cK3uHnOAFSt8MpVPrdBP2e">f(x) 不是 f × x。</b>f(3) 是「在 3 处的值」；而 f 乘 3 根本没有意义 —— f 是个机器，不是数。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 0.3 ================= -->
+<div class="page" id="page-f3" data-page-node-id="rYA1rDic4c34IcdxC0vDp3">
+  <div class="sub-nav" data-page-node-id="RN9Rbzg3RQytdtvhgorYZY">
+    <span class="back" onclick="goHome()" data-page-node-id="7FySJNagheME36E2urfF9p">← 返回首页</span>
+    <span class="divider" data-page-node-id="MB9Sert1dm4ArvCuMFtbyl">|</span>
+    <span class="title" data-page-node-id="BILLqrmGQr3IEMd9eQbBzu">0.3　从式子到曲线</span>
+    <span class="nav-next" onclick="goTo(4)" data-page-node-id="saCB1w4RNuOamfzoDHqr5q">下一节 →</span>
+  </div>
+  <div class="sub-container" data-page-node-id="xQt5XWmQmteulWvZRUUJeV">
+    <div class="layout" data-page-node-id="iMlFRixPoKpAPjQhk2jQJj">
+      <div class="graph-area" data-page-node-id="NiqKT31x3LMg034wFcKvgn">
+        <div class="story-card" data-page-node-id="hOHg8oBVqj2otMYoDBgz6f"><b data-page-node-id="OnvQWxmPnb6Fn23c1GBx9N">故事开场：</b>一支笔在纸上走。x 往右挪一点，y 就往上挪一点。把每一步的位置都点一个点，走完连起来 —— 就成了曲线。</div>
+
+        <div class="toolbar" data-page-node-id="DXAhl2jCKIrGnpGFdp6xq2">
+          <span class="toolbar-hint" data-page-node-id="PIjN81vpPaMH6Qd8l3BC6n">按「列表 → 描点 → 连线」三步走，也可以拖下面的滑块一格一格看。</span>
+          <button class="play-btn" id="btn-play3" onclick="play3()" data-page-node-id="AnjUBHM9F8KOKoyXXd5uzd">▶ 播放演示</button>
+        </div>
+
+        <div class="canvas-box" data-page-node-id="t1tp6vzPucnvrZ3oQsAiy4">
+          <canvas id="cv3" width="620" height="300" data-page-node-id="j2hH0zRK5X97BsgHBpqYng"></canvas>
+          <p class="canvas-caption" data-page-node-id="Ud0O8Y5derACPLQ9zYuLNI">蓝点是被描出来的，蓝线是把它们连起来</p>
+        </div>
+
+        <div class="ctrl-row" data-page-node-id="gwliEwlkaHdV6ZAGj4PA4I">
+          <span class="ctrl-label" data-page-node-id="GrywZDwYAEyRGl6dcEPuEe">选函数：</span>
+          <button class="ctrl-btn on" id="f3-b0" onclick="setFn3(0)" data-page-node-id="25CVvw4GY49XKDYDRdNxXP">y = x + 1</button>
+          <button class="ctrl-btn" id="f3-b1" onclick="setFn3(1)" data-page-node-id="aQjpfD6ijqjifGgvGI7qWL">y = x² ÷ 4</button>
+          <button class="ctrl-btn" id="f3-b2" onclick="setFn3(2)" data-page-node-id="LHe64VNiU7mE1WCQ0WWnpr">y = 8 ÷ x</button>
+        </div>
+
+        <div class="ctrl-row" data-page-node-id="Np151MCxvzBpuLYcB1FjUm">
+          <button class="ctrl-btn" id="s3-b0" onclick="stepList()" data-page-node-id="uoCtzUbsmYih2qtpqls0sk">① 列表</button>
+          <button class="ctrl-btn" id="s3-b1" onclick="stepPlot()" data-page-node-id="wQO821dYnc9FWBe4G7ezIH">② 描点</button>
+          <button class="ctrl-btn" id="s3-b2" onclick="stepLine()" data-page-node-id="l7C5cj6XeB5e5w0SnvpslN">③ 连线</button>
+          <button class="ctrl-btn primary" onclick="reset3()" data-page-node-id="s2lXlxEErf6CZUE2t03Aip">重置</button>
+        </div>
+
+        <div class="ctrl-row" data-page-node-id="EVWHBWSmYVcmK8OPuWkflT">
+          <span class="ctrl-label" data-page-node-id="wr0Swoyt2umxU4TaIwWDEs">拖 x 走一格：</span>
+          <input type="range" id="s3-x" min="0" max="8" step="1" value="3" oninput="setX3(parseInt(this.value,10))" style="flex:1; min-width:180px; accent-color:var(--accent-blue);" data-page-node-id="frmazwEcjA5oETQng750aD">
+        </div>
+
+        <div class="status-bar" data-page-node-id="8SKQQDDg7lEACLJelDEw2Q"><span class="status-dot" id="st3-dot" data-page-node-id="fd2XNsizOm31yunxT2ZjqB"></span><span id="st3" data-page-node-id="mj2gk6SHrotkuLNJPFqqAn">还没开始。先按「① 列表」看一眼 x 和 y 的对应。</span></div>
+
+        <div class="table-wrap" id="t3-wrap" data-page-node-id="i6ca7BJ6dyyA1Tx3u5fmAf">
+          <table class="plot-table" id="t3-table" data-page-node-id="tBVv1OW2R4Ngv4c9FX89Ho"></table>
+        </div>
+
+        <div class="explain-box" data-page-node-id="4E3lKPzT6RBBhwNfeHmWJH">
+          <b data-page-node-id="01ExEVSaQ9u6JxJqveIJR9">图象不是画出来的，是「点」出来的。</b><br data-page-node-id="tHJxeFAQBEHYReB1jgSHZh">
+          一个点 = 一对 (x, y)。把足够多的点描在同一张纸上，它们自然排成一条线 —— 这就是函数的图象。<br data-page-node-id="amWEmrqNl1MfDHyeY8upUU">
+          <b data-page-node-id="vItPp6kxmT99v02OMoPcwL">还有一个坑：</b>并不是所有的 x 都能喂进去。比如 y = 8 ÷ x，x 就不能是 0。
+        </div>
+
+        <div class="quiz-box" data-page-node-id="QokrWAA9LGrCVkPX2muWHG">
+          <h4 data-page-node-id="nFeQNAqsb4gsKdmJA3gMIn">自测</h4>
+          <p class="quiz-q" data-page-node-id="Ku14JvJsgqoZFLCkRnfQC3">对 y = 8 ÷ x，为什么 x = 0 不能算？如果 x 从 1 一直变到 0.01，y 会怎么变？</p>
+          <button class="quiz-btn" id="q3-btn" onclick="toggleAnswer('q3-ans','q3-btn')" data-page-node-id="7kcswSObu22H9H4OxWG3K6">看解答 ↓</button>
+          <div class="quiz-answer" id="q3-ans" data-page-node-id="EzeE47OI8DQpSn2x6mo5XE">因为 8 ÷ 0 没有意义（没有任何数乘 0 能得到 8）。所以 x = 0 <b data-page-node-id="ukHPGVARDuxSteSNEF2Lhr">不算在这个函数的「可喂范围」里</b>。x 越小、越靠近 0，y 就越大：8 ÷ 0.01 = 800，8 ÷ 0.001 = 8000 —— 它冲得没有上限。</div>
+        </div>
+
+        <div class="hook-box" data-page-node-id="4bcJ8UXxQ9axZW10qHlWjR">
+          <h4 data-page-node-id="C7cExqATbkqiKzkS3Xyjy8">本节终点 → 下一节</h4>
+          <p data-page-node-id="VISCFglJD6iFJHbrg8D63y">现在你会把式子画成曲线了。但曲线有很多种长相 —— 下一节认识三个最常见的「老面孔」。</p>
+        </div>
+      </div>
+
+      <div class="side-panel" data-page-node-id="N8PFTbxGq1nv8lHHiXd34G">
+        <div class="concept-card" data-page-node-id="KCuTaFcFymEFEFDAHHRP6C">
+          <h4 data-page-node-id="tOjF1naq6ZUUEBqjGSgVrh">概念卡</h4>
+          <p data-page-node-id="U58ozF5AG1GeTmNJdfflWs">把每一对 (x, y) 当成一个点画在坐标系里，所有这样的点合起来，就是<b data-page-node-id="u7YYCYBGnIRVXhZTXJ8Z95">这个函数的图象</b>。</p>
+        </div>
+        <div class="panel-card" data-page-node-id="CtR59vPwcQrNOsabWxlmQN">
+          <h4 data-page-node-id="mEGKFw0xiBQ0l1evjoUeRP"><span class="dot" style="background:#3b82f6;" data-page-node-id="jOmpJjvMByN6w925Chtjxe"></span>要点</h4>
+          <div class="rule-item" data-page-node-id="5VzPe4S48vDCquSyQGDFaQ"><b data-page-node-id="PsnipEVDDAJkoKORNxACZO">第 1 步 列表</b>　选几个 x，算出对应的 y，排成一张表。</div>
+          <div class="rule-item" data-page-node-id="wFXrcQm9Mxj7taJTS35vyx"><b data-page-node-id="5C3XJmCg51JTPE0ZMXNrKr">第 2 步 描点</b>　每个 (x, y) 在坐标系里点一个点。</div>
+          <div class="rule-item" data-page-node-id="IRMoh6BmoQKgx7FYmN6SAD"><b data-page-node-id="dQKidbmYxnfFGo7XPXARkV">第 3 步 连线</b>　把点按 x 从小到大连起来。</div>
+        </div>
+        <div class="warn-card" data-page-node-id="YQEOR9FdclHLlKXoB0HM4d">
+          <h4 data-page-node-id="qbtqyktO69UKcokqeAiQn6">易错</h4>
+          <p data-page-node-id="w4sBAhOKxUOxZ1IBLX9v5s"><b data-page-node-id="AHgxfLNg4noAsJ4W9I5frY">「能喂的 x」是有范围的。</b>分式里分母不能是 0；这个范围就叫<b data-page-node-id="L6E9aJ8CynngVPHya78h19">定义域</b>。</p>
+          <p data-page-node-id="iKXQY9RB8k51Oj17IoYNcA">能算出来的 y 的范围，叫<b data-page-node-id="y5CkJPDehkdxpf9P6CvHo1">值域</b>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 0.4 ================= -->
+<div class="page" id="page-f4" data-page-node-id="AhXBRCJAGhxSkKqAXksKFK">
+  <div class="sub-nav" data-page-node-id="H6GF1bNP8Vq4eoy7IH1DwN">
+    <span class="back" onclick="goHome()" data-page-node-id="wEfYjL4s3FgxluFFZikCIX">← 返回首页</span>
+    <span class="divider" data-page-node-id="3xRXtpp3g98Hw1EKivKnx4">|</span>
+    <span class="title" data-page-node-id="kaiGZwHJclWva3gLUuh49l">0.4　认识几个老朋友</span>
+    <span class="nav-next" onclick="goTo(5)" data-page-node-id="y6NqfoRRnLwNV1P5YqBkCi">下一节 →</span>
+  </div>
+  <div class="sub-container" data-page-node-id="Bwli5NpM1kDVNA4DGk0C2q">
+    <div class="layout" data-page-node-id="5qKd1IuXCNdxxSIKAWHYpf">
+      <div class="graph-area" data-page-node-id="Io36LXiJLa8D53WvOh3lYD">
+        <div class="story-card" data-page-node-id="G1enk0ik4oBXYmGyiV80fx"><b data-page-node-id="xrGSk64pvE9MNscA5ZwHfv">故事开场：</b>不是所有的增长都长一个样 —— 有的匀速往前，有的先慢后快，有的越到后面越疯。认住三种形状，以后见到曲线就能叫出名字。</div>
+
+        <div class="toolbar" data-page-node-id="6KSOiBANyEJrVlWQElYPGK">
+          <span class="toolbar-hint" data-page-node-id="AEQPHmDJhYAV0NPk4GZyGA">切换三个标签，拖滑块改参数，看曲线怎么变。灰色虚线是参照物。</span>
+          <button class="play-btn" id="btn-play4" onclick="play4()" data-page-node-id="zmJKzaBnDmyQST9XpfrSkc">▶ 播放演示</button>
+        </div>
+
+        <div class="canvas-box" data-page-node-id="OScFCE88OML63CkxlBcLcm">
+          <canvas id="cv4" width="620" height="300" data-page-node-id="vMvntT42DdIFjqswcjC9T7"></canvas>
+          <p class="canvas-caption" data-page-node-id="9oinUTEzLjWZQibDjUYFQX">灰色虚线 = 参照曲线，蓝色实线 = 你调出来的曲线</p>
+        </div>
+
+        <div class="toolbar" style="margin-top:14px; margin-bottom:6px;" data-page-node-id="dfeIhkP719RN8BbKaSlHkT">
+          <div class="mode-group" data-page-node-id="nfMRCImFdmc2B30a83G2wA">
+            <button class="mode-btn active" id="t4-b0" onclick="setTab4(0)" data-page-node-id="UxLq6JTOWZWDFGNG9RnPFR">一次函数</button>
+            <button class="mode-btn" id="t4-b1" onclick="setTab4(1)" data-page-node-id="4pzk93CKzR1uru1U1DNiGP">二次函数</button>
+            <button class="mode-btn" id="t4-b2" onclick="setTab4(2)" data-page-node-id="MUJsUBgjr88dM49bSGe62E">指数函数</button>
+          </div>
+          <button class="ctrl-btn primary" onclick="reset4()" style="margin-left:auto;">重置</button>
+        </div>
+
+        <div class="tab-panel on" id="p4-0" data-page-node-id="4oUo4Y6PBMVcAJ9sA0lt1c">
+          <div class="slider-row" data-page-node-id="o4O4U1GhLoDudS2P3HWvUL">
+            <label data-page-node-id="4dBEonlSTo515r1V96ffFB">y = k x + b　→　k = <b id="v4-k" data-page-node-id="4qOzk2xTO0eZF0Duh1xGDn">1</b></label>
+            <input type="range" id="s4-k" min="-3" max="3" step="0.5" value="1" oninput="upd4()" data-page-node-id="4F9ca1GrMArmlgikqFipji">
+          </div>
+          <div class="slider-row" data-page-node-id="iL6tFIJEAV8dGw5xQw7EcP">
+            <label data-page-node-id="Da0wc8X8MmqhF4dgGSbBqU">上下位置 b = <b id="v4-b" data-page-node-id="C8fTx7ikACDWYBqj0Ehj9F">0</b></label>
+            <input type="range" id="s4-b" min="-4" max="4" step="0.5" value="0" oninput="upd4()" data-page-node-id="QmvgmnVfGPiu7ZIXc2GkDp">
+          </div>
+        </div>
+
+        <div class="tab-panel" id="p4-1" data-page-node-id="HUf07PZASTdwW5dmQ4mCSJ">
+          <div class="slider-row" data-page-node-id="4DUNyBveJwtJGxquCMmhUT">
+            <label data-page-node-id="isDOu3MTZ66wCrz9MEECnH">y = a (x − h)²　→　a = <b id="v4-a" data-page-node-id="fkmbR47IcCgQZB9s8iTqve">1</b></label>
+            <input type="range" id="s4-a" min="-2" max="2" step="0.25" value="1" oninput="upd4()" data-page-node-id="mHt8amd0jdPEHB4aJiRt5G">
+          </div>
+          <div class="slider-row" data-page-node-id="yjlhi8bhEgzwQtPbGIWAsx">
+            <label data-page-node-id="xC7ZFuQR4jD1seCxF9Zr9W">左右位置 h = <b id="v4-h" data-page-node-id="TFxKH1RAtkhsm8zXWjnAFz">0</b></label>
+            <input type="range" id="s4-h" min="-4" max="4" step="0.5" value="0" oninput="upd4()" data-page-node-id="GizeHlTdwdpt7G8QNFw9z7">
+          </div>
+        </div>
+
+        <div class="tab-panel" id="p4-2" data-page-node-id="C8rJ36jZerqaFsmuBDN7WA">
+          <div class="slider-row" data-page-node-id="hZhmsAE6tUIhFBGLaW0cyT">
+            <label data-page-node-id="7UxqPM3IrBvdehVFuFZ2Sb">y = aˣ　→　底数 a = <b id="v4-e" data-page-node-id="dRo77F3pdWpUGAdU5HItTq">2</b></label>
+            <input type="range" id="s4-e" min="0.5" max="3" step="0.1" value="2" oninput="upd4()" data-page-node-id="WCcQNLL9QhyLTeZ27MrKXP">
+          </div>
+        </div>
+
+        <div class="status-bar" data-page-node-id="QvBgFDS9CXVI6nKhuWGSHm"><span class="status-dot" id="st4-dot" data-page-node-id="wAGZDX2FoHgDE2wm8KXstu"></span><span id="st4" data-page-node-id="Arzb5e8ZIkOmQub9gl5l9w">一次函数：每往右走 1 格，就往上走 k 格。</span></div>
+
+        <div class="explain-box" id="ex4" data-page-node-id="03cskBrSGNHGpcCzBpLywh">
+          <b data-page-node-id="WsL2LcuBFvCgD0Y2eps3ED">一次函数</b>的长相是直的。<b data-page-node-id="9C36xDLWS0qCDnLDXgKIBH">k</b> 管倾斜：k 越大越陡，k 是负数就往下斜；<b data-page-node-id="PgUSo9Ct3Y8wgOYmXaixKS">b</b> 管位置：它决定这条线在 y 轴上从哪儿穿过去。
+        </div>
+
+        <div class="quiz-box" style="background:#fffbeb; border-color:#fde68a;" data-page-node-id="S9xM9ttGXmB0tDpd6CJTIf">
+          <h4 style="color:#b45309;" data-page-node-id="qOPUaKbBSFZd0thHHbDf0J">这一节不设自测题</h4>
+          <p class="quiz-q" style="color:#78350f;" data-page-node-id="kDi1jlp9dGuBjKYDcruafs">指数函数在初中还没学，这里<b data-page-node-id="q4kL4fcHfe9hQx828KShE8">只要求你认住它的形状</b> —— 越往右越陡，永远在 0 的上方。它的运算规律以后正式学，先不用管。</p>
+        </div>
+
+        <div class="hook-box" data-page-node-id="cgigzOcRlc6fKbcDzrFB03">
+          <h4 data-page-node-id="avUAgt9V7BVos0M7udnCJ1">本节终点 → 下一节</h4>
+          <p data-page-node-id="nJA6QR3SurJGqWKDmvswAa">形状认住了。现在问一个更狠的问题：在同一个点上，这条曲线到底「涨得多快」？</p>
+        </div>
+      </div>
+
+      <div class="side-panel" data-page-node-id="7azq2ZVmL6vYIDtMoglO3A">
+        <div class="concept-card" data-page-node-id="mhZoftmTJzY3joaRZ7T5xf">
+          <h4 data-page-node-id="9G9OxTrT59ervRYH4uJPQs">概念卡</h4>
+          <p data-page-node-id="lFs9uX0YDyfKoB4WADy5j3">常见的函数有几张「标准脸」：<b data-page-node-id="RFrR7AosKYR5i1F3zQnMK8">一次</b>是直线，<b data-page-node-id="6ion2x5IkuSJEw6RJnzByg">二次</b>是抛物线，<b data-page-node-id="ETBf8BLaxv9JNMgbq515uF">指数</b>是一路加速往上冲。</p>
+        </div>
+        <div class="panel-card" data-page-node-id="Jl49mpmjNtZnxp6Zl4Z4if">
+          <h4 data-page-node-id="mcqqZcgpmNJQ48d9hiBWKS"><span class="dot" style="background:#8b5cf6;" data-page-node-id="lNceCO9HiVAuH6oWI7y7PL"></span>要点</h4>
+          <div class="rule-item" data-page-node-id="71L0ycWsqsLG1JuppFd4aM"><b data-page-node-id="fBdvPXcMyvLhMi1WVU5dvn">一次</b>　y = kx + b，匀速变化，形状是直的。</div>
+          <div class="rule-item" data-page-node-id="wgD5QwA4Jr7tZiO2Oh0fIS"><b data-page-node-id="9mL1spwty4NDQPKi7Vb3nH">二次</b>　y = ax²，先慢后快（或先快后慢），有个最高点或最低点。</div>
+          <div class="rule-item" data-page-node-id="5Q1tHcSjqeUtgiheI2zwY8"><b data-page-node-id="Jh8PhF2rDJQjSixybGlmiT">指数</b>　y = aˣ，越往后涨得越猛，永远大于 0。</div>
+        </div>
+        <div class="warn-card" data-page-node-id="6WeScFbyJn9J4lO3fQ1iWf">
+          <h4 data-page-node-id="0myc6K5awfAmHTH7YYwHnQ">易错</h4>
+          <p data-page-node-id="z4mX0KkIBpqAp2OyPRTZOc">把 a 拖到 <b data-page-node-id="d2udT0urUjgQHAyrRrmtNO">0</b> 时，抛物线会变成一条直线 —— 那时它其实已经不是二次函数了，退化成了一次函数。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 0.5 ================= -->
+<div class="page" id="page-f5" data-page-node-id="JqDF6hgVBMk6nRfoXBeSec">
+  <div class="sub-nav" data-page-node-id="HfaqdmRBERcHZuRoUyoyPd">
+    <span class="back" onclick="goHome()" data-page-node-id="JzMOVq1gTAF9LDQLfvH6hA">← 返回首页</span>
+    <span class="divider" data-page-node-id="nR0kpCuDjGYSNnhjpGwpis">|</span>
+    <span class="title" data-page-node-id="0Y86g0UbkkPYjya3ibw9Zl">0.5　变化有多快</span>
+    <span class="nav-next" onclick="goHome()" data-page-node-id="1CewUteAJSymSa6M33WlD0">回到首页</span>
+  </div>
+  <div class="sub-container" data-page-node-id="5sl70aAN3Ho7LdQjO0ex1z">
+    <div class="layout" data-page-node-id="VdwVOZXEuGYl1xOsdQBkqU">
+      <div class="graph-area" data-page-node-id="WjFB55Us6YAOzzWIZb97fk">
+        <div class="story-card" data-page-node-id="ZUeRqbh7F9nv97mfHahXHZ"><b data-page-node-id="PlTl2RBcP4WiNYMCzGquCy">故事开场：</b>两个人赛跑，谁快？比的不是「谁跑得远」，而是「同样一段时间里，谁跑得更多」。这个「每单位时间跑多远」，就是变化率。</div>
+
+        <div class="toolbar" data-page-node-id="QY62qkB9VhCxZTQHWtgUF3">
+          <span class="toolbar-hint" data-page-node-id="CLW9LT65O1EGuhhhYg2mSB">拖滑块让 B 靠近 A，或点「▶ 播放演示」看它自己滑过去。盯着 k 看。</span>
+          <button class="play-btn" id="btn-play5" onclick="play5()" data-page-node-id="nr0VCyFR7j2W9vqKKgDrTv">▶ 播放演示</button>
+        </div>
+
+        <div class="canvas-box" data-page-node-id="Mj2mAvdwPjhWB8kH7FnPPl">
+          <canvas id="cv5" width="620" height="340" data-page-node-id="5JOFpK5BtwEbDAMcDNjBuf"></canvas>
+          <p class="canvas-caption" data-page-node-id="C3LZHH9iqIExNV65rAEe8g">A 固定不动，B 可以拖 —— 橙色实线就是 A、B 两点连成的那条线，它的坡度就是 k</p>
+        </div>
+
+        <div class="ctrl-row" data-page-node-id="myryW41DFiFSs5asG9HYfO">
+          <span class="ctrl-label" data-page-node-id="PRLFFMjiusRPNbGoHrTast">B 的横坐标 x =</span>
+          <button class="ctrl-btn" onclick="nudge5(-0.1)" data-page-node-id="SHTdZzHWSxZmUMgEi5U0y8">− 步进</button>
+          <button class="ctrl-btn" onclick="nudge5(0.1)" data-page-node-id="pkUJTpWGpi1lEaF2TTQdBc">＋ 步进</button>
+          <button class="ctrl-btn primary" onclick="reset5()" data-page-node-id="X0l9xGK99QCI5pmIOkcx0A">重置</button>
+        </div>
+
+        <div class="ctrl-row" data-page-node-id="c44pzI7MliT0jgZAmyCJV2">
+          <input type="range" id="s5-x" min="1.02" max="3.2" step="0.02" value="3.2" oninput="setXB(parseFloat(this.value))" style="flex:1; min-width:200px; accent-color:var(--accent-orange);" data-page-node-id="dq6dXtlKpGIgXSaIGe2FOi">
+        </div>
+
+        <div class="status-bar" id="st5-bar" data-page-node-id="FWQLllecERZHtIfZwZGQOO"><span class="status-dot gold" id="st5-dot" data-page-node-id="wuuAmM5MscFUIt5sqToXJF"></span><span id="st5" data-page-node-id="aCvATCZHSwkDImIZmuDskg">现在 B 在 x = 3.20，两点连线的斜率 k = 4.20。把 B 往左拖向 A(1, 1)。</span></div>
+
+        <div class="kv-grid" data-page-node-id="cJSA08jJ6SzJGCozg0gDhe">
+          <div class="kv" data-page-node-id="3nSDph38hTNZfBDSQgH9Ag"><div class="k" data-page-node-id="qZawp3VdF3LE1ePqWAzZmf">A（固定）</div><div class="v" id="kv5-a" data-page-node-id="VNWl8KqxwZRu4Z9dz5uJYY">(1, 1)</div></div>
+          <div class="kv" data-page-node-id="pMtqz38zoqLJoUaW7ZyUI5"><div class="k" data-page-node-id="DplR8gLZ4SRr1MGG0xtEdW">B（可拖）</div><div class="v" id="kv5-b" data-page-node-id="dQAtPiUYYFlh43Gn3e38Xx">(3.20, 10.24)</div></div>
+          <div class="kv" data-page-node-id="tcG1AIivNX6iBT2eAPGnWp"><div class="k" data-page-node-id="P6cUTgEmxwUCHRfxF43Tfq">横向差 = x_B − x_A</div><div class="v" id="kv5-dx" data-page-node-id="jviUw6NBTBqXUsFxcO9sB2">2.20</div></div>
+          <div class="kv" data-page-node-id="Y8xgF1RkFEUgpl4FF8j53T"><div class="k" data-page-node-id="NtGGl5fdO3YlJDELS2A5eG">纵向差 = y_B − y_A</div><div class="v" id="kv5-dy" data-page-node-id="jh6TTsFwcjCpWscO10M76T">9.24</div></div>
+          <div class="kv hi" data-page-node-id="aBgK0lTYRVeRZ20C6ml5SF"><div class="k" data-page-node-id="QSVlmPzaVHSPKHD1w0eY8x">斜率 k = 纵向差 ÷ 横向差</div><div class="v" id="kv5-k" data-page-node-id="VSXju7dX0gTMssSqKtcXqv">4.20</div></div>
+        </div>
+
+        <div class="chip-row" id="s5-logs" data-page-node-id="9BHg5pYmfgVBn2tClVcNni"><span class="chip" data-page-node-id="Nww1pLGdyowTTfvwPxNgMK">k 的变化会记录在这里</span></div>
+
+        <div class="explain-box" data-page-node-id="00RuSZ4WcJJJhETZjbOmvJ">
+          <b data-page-node-id="ASRpYAdHiN6zRAfHXK4OFW">斜率就是「变化有多快」：</b>每往右走 1 格，往上走几格。<br data-page-node-id="FvVzYpuyUlRC9iPFbRCzOO">
+          横向差是水平走的路，纵向差是竖直涨的高度，<b data-page-node-id="H0Ol6aEZwRXuTIm278VF73">k = 纵向差 ÷ 横向差</b>。<br data-page-node-id="kQBfzM1BIpGRUJ0ymG0zFo">
+          注意看：B 一直往 A 靠，k 会一直往 <b data-page-node-id="d7GPT5d7VWWoRoxdx04tc2">2</b> 跑 —— 而且它跑不到 2 以外的任何地方。
+        </div>
+
+        <div class="quiz-box" data-page-node-id="COudCjozjFIQZOE43qUB5j">
+          <h4 data-page-node-id="nJ3VmhhgVdNUtMkEdPNPTO">自测</h4>
+          <p class="quiz-q" data-page-node-id="2C5408vCVH9IayvHRAQDVm">B 从远处慢慢滑向 A(1, 1)，两点连线的斜率 k 一直在变。它会越来越靠近哪一个数？这个数跟你把尺子「贴着」A 点量出来的斜率，是同一个数吗？</p>
+          <button class="quiz-btn" id="q5-btn" onclick="toggleAnswer('q5-ans','q5-btn')" data-page-node-id="nUgW1xymaAEKhOSGdi3NOH">看解答 ↓</button>
+          <div class="quiz-answer" id="q5-ans" data-page-node-id="HNrV9OQ2WYGrOB3aiReBkK">它会一直靠近 <b data-page-node-id="Oh27mHoIYDi1EHqGFIuhHS">2</b>，但不会跑到 2 以外。而且<b data-page-node-id="9xSurHC5nqu9LBMxNPOpCe">是同一个数</b> —— 当 B 无限靠近 A 时，两点连成的线就越来越贴近 A 点「那一刻」的方向。这个「k 最后跑到的数」，就是曲线在 A 点的<b data-page-node-id="Ru96skf7xZkTi9xDlTwaYl">瞬时变化率</b>，也正是下一章要讲的 <b data-page-node-id="AVatRIGNTocr4FAwrL79Sf">导数</b>。</div>
+        </div>
+
+        <div class="hook-box" data-page-node-id="b9oluT2tp1wmZKfGJ1wk8A">
+          <h4 data-page-node-id="4CQXJxRKyCq9fyEHFNZtU7">本节终点 → 第 1 章</h4>
+          <p data-page-node-id="DfTrSUzuzHlc0cScN6xhld">「B 越靠近 A，k 越靠近 2」—— 到这里，函数先导就结束了。<br data-page-node-id="Po2FgWOv1kNggKdYRO8NsF">
+          微积分的第一课要回答的是：B 不能真的踩到 A 上（那就没法相除了），那怎么知道 A 点「那一刻」变化有多快？这个数会被正式取个名字：<b data-page-node-id="wHMl0gCIaCq6BvDur6BX2B">导数</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel" data-page-node-id="LEw3o2kFJI6cWxUVtS5d0g">
+        <div class="concept-card" data-page-node-id="eDEP1Vd1ZN1NVlH7NFpZNw">
+          <h4 data-page-node-id="pG2Xtd12PRUl8ENkd344xS">概念卡</h4>
+          <p data-page-node-id="hBVpZz3m0YQ0r9Vk19esgh">两点之间的<b data-page-node-id="XeoCArVWipWZgKoB1GoUtK">平均变化率</b> = 竖直变化 ÷ 水平变化，也就是这两点连线的<b data-page-node-id="ZUeXqtNygSe43GsSiuLtW0">斜率</b>。</p>
+        </div>
+        <div class="panel-card" data-page-node-id="dAxQyBZ7nzBoXQcg9dFkJC">
+          <h4 data-page-node-id="Fslrky9krjCDKixCmb3e4L"><span class="dot" style="background:#ef4444;" data-page-node-id="DqEHd8zfFzCsKQG30mls24"></span>要点</h4>
+          <div class="rule-item" data-page-node-id="jGKbHPsFgbsDk0gomZIV0S"><b data-page-node-id="6amGoWfafrgCv0CrSzGhBW">第 1 步</b>　取两个点 A、B，写出坐标。</div>
+          <div class="rule-item" data-page-node-id="MJCzojvDxMW4ypUb6bzdBz"><b data-page-node-id="jSBIEyfidIJWAXF4yAMoMW">第 2 步</b>　算横向差 = x_B − x_A，纵向差 = y_B − y_A。</div>
+          <div class="rule-item" data-page-node-id="b1bxx3WjrZ1v4e0ujweUBn"><b data-page-node-id="F9489StLULViXJwXzQNhoA">第 3 步</b>　两者相除得 k，这就是变化率（连线的坡度）。</div>
+        </div>
+        <div class="warn-card" data-page-node-id="7OeQZecGd1bWTXzENdUlxl">
+          <h4 data-page-node-id="vdY4NAU9yyIGZ5s5fGOfxR">易错</h4>
+          <p data-page-node-id="sTQbjMs1PApgP5kP88ypZJ"><b data-page-node-id="J8ATCtH0kvRmIQm5kEee8T">「两点在图上看起来重合了」≠「那就是 A 点的坡度」。</b>图会骗人，数字不会。</p>
+          <p data-page-node-id="UlZQHFVAqZqV6ALl8jyYgU">所以横向差的数值<b data-page-node-id="cG192rXNw6NHrMZ3n98vhe">永远显示在屏幕上</b>，我们不许它藏起来 —— 哪怕它已经小到 0.02。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" data-page-node-id="0dkfxqYiLiCAZPyb0KyPoK"></div>
+
+<script>
+  // ================= 页面切换 =================
+  function hideAll() {
+    document.getElementById('page-home').classList.remove('active');
+    document.getElementById('page-f1').classList.remove('active');
+    document.getElementById('page-f2').classList.remove('active');
+    document.getElementById('page-f3').classList.remove('active');
+    document.getElementById('page-f4').classList.remove('active');
+    document.getElementById('page-f5').classList.remove('active');
+    stop1(); stop2(); stop3(); stop4(); stop5();
+  }
+  function goTo(n) {
+    hideAll();
+    document.getElementById('page-f' + n).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  function goHome() {
+    hideAll();
+    document.getElementById('page-home').classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  var toastTimer = null;
+  function toast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('show'); }, 1800);
+  }
+  function toggleAnswer(ansId, btnId) {
+    var ans = document.getElementById(ansId);
+    var btn = document.getElementById(btnId);
+    if (ans.classList.contains('show')) {
+      ans.classList.remove('show');
+      btn.textContent = '看解答 ↓';
+    } else {
+      ans.classList.add('show');
+      btn.textContent = '收起解答 ↑';
+    }
+  }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function fmt2(v) { return (Math.round(v * 100) / 100).toFixed(2); }
+
+  // 共用的画布工具：建立"数值 → 像素"的映射
+  function makeMap(x0, y0, x1, y1, xmin, xmax, ymin, ymax) {
+    return {
+      x0: x0, y0: y0, x1: x1, y1: y1,
+      xmin: xmin, xmax: xmax, ymin: ymin, ymax: ymax,
+      X: function (x) { return x0 + (x - xmin) / (xmax - xmin) * (x1 - x0); },
+      Y: function (y) { return y1 - (y - ymin) / (ymax - ymin) * (y1 - y0); }
+    };
+  }
+  function drawGrid(c, m, xStep, yStep) {
+    c.save();
+    c.strokeStyle = '#eef2f7';
+    c.lineWidth = 1;
+    var x, y;
+    for (x = Math.ceil(m.xmin / xStep) * xStep; x <= m.xmax + 1e-9; x += xStep) {
+      c.beginPath(); c.moveTo(m.X(x), m.y0); c.lineTo(m.X(x), m.y1); c.stroke();
+    }
+    for (y = Math.ceil(m.ymin / yStep) * yStep; y <= m.ymax + 1e-9; y += yStep) {
+      c.beginPath(); c.moveTo(m.x0, m.Y(y)); c.lineTo(m.x1, m.Y(y)); c.stroke();
+    }
+    // 坐标轴
+    c.strokeStyle = '#cbd5e1';
+    c.lineWidth = 1.2;
+    if (m.ymin <= 0 && m.ymax >= 0) {
+      c.beginPath(); c.moveTo(m.x0, m.Y(0)); c.lineTo(m.x1, m.Y(0)); c.stroke();
+    }
+    if (m.xmin <= 0 && m.xmax >= 0) {
+      c.beginPath(); c.moveTo(m.X(0), m.y0); c.lineTo(m.X(0), m.y1); c.stroke();
+    }
+    c.restore();
+  }
+  function drawCurve(c, m, f, xa, xb, color, width, dash) {
+    c.save();
+    c.beginPath();
+    c.rect(m.x0, m.y0, m.x1 - m.x0, m.y1 - m.y0);
+    c.clip();
+    c.strokeStyle = color;
+    c.lineWidth = width;
+    if (dash) c.setLineDash(dash);
+    c.beginPath();
+    var started = false, i, step = (xb - xa) / 400, y;
+    for (i = 0; i <= 400; i++) {
+      var x = xa + i * step;
+      y = f(x);
+      if (y === null || !isFinite(y) || y < m.ymin - 5 || y > m.ymax + 5) { started = false; continue; }
+      if (!started) { c.moveTo(m.X(x), m.Y(y)); started = true; }
+      else c.lineTo(m.X(x), m.Y(y));
+    }
+    c.stroke();
+    c.setLineDash([]);
+    c.restore();
+  }
+  function dot(c, cx, cy, r, fill) {
+    c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2);
+    c.fillStyle = fill; c.fill();
+    c.strokeStyle = '#fff'; c.lineWidth = 1.5; c.stroke();
+  }
+  function label(c, text, cx, cy, color, size, align, baseline) {
+    c.font = (size || 12) + 'px sans-serif';
+    c.fillStyle = color || '#475569';
+    c.textAlign = align || 'center';
+    c.textBaseline = baseline || 'middle';
+    c.fillText(text, cx, cy);
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+  }
+  // 带白色底片的文字：专给紧贴运动图形的标注用（B 点、横向差、纵向差）。
+  // 这些标注的位置由拖动决定，无法靠预留空白保证不被曲线压住，
+  // 所以在文字后面垫一块不透明白底，无论几何图形怎么经过都保证可读。
+  function labelChip(c, text, cx, cy, color, size, align, pad) {
+    size = size || 12;
+    align = align || 'center';
+    if (pad === undefined) pad = 4;
+    c.font = size + 'px sans-serif';
+    var tw = c.measureText(text).width, p = pad;
+    var tx0 = align === 'right' ? cx - tw : (align === 'left' ? cx : cx - tw / 2);
+    c.fillStyle = 'rgba(255,255,255,0.92)';
+    c.beginPath();
+    c.rect(tx0 - p, cy - size * 0.72 - p * 0.6, tw + p * 2, size * 1.44 + p * 1.2);
+    c.fill();
+    label(c, text, cx, cy, color, size, align);
+  }
+  // 刻度数字：曲线可以任意穿过坐标区，所以刻度也垫底片，保证永远读得清
+  function tick(c, text, cx, cy, align) {
+    labelChip(c, text, cx, cy, '#94a3b8', 11, align, 2.5);
+  }
+
+  // ================= 0.1 函数机 =================
+  var cv1 = document.getElementById('cv1');
+  var c1 = cv1.getContext('2d');
+  var PICK = [1, 2, 3, 4];
+  // 行距 72：给「输入圆(r=18)」与「双输出框(±31)」都留出足够净空
+  var ROWY = [106, 178, 250, 322];
+
+  var MACHINES = [
+    { name: '加倍机', label: 'y = 2x', good: function (x) { return 2 * x; } },
+    { name: '加一机', label: 'y = x + 1', good: function (x) { return x + 1; } },
+    { name: '平方机', label: 'y = x²', good: function (x) { return x * x; } },
+    { name: '加倍加一机', label: 'y = 2x + 1', good: function (x) { return 2 * x + 1; } },
+    { name: '坏机器？', label: 'y = ？', good: null }
+  ];
+  var f1 = { m: 0, hist: {}, last: null };
+  var t1 = null;
+
+  var badSeq = {};
+  function setMachine(i) {
+    f1.m = i;
+    f1.hist = {};
+    f1.last = null;
+    // 坏机器的「第几次」计数必须随换机一起清零：否则换走再换回来时，
+    // 喂 1 会直接命中「第二次」分支给出 101，「第一次/第二次」对比失效。
+    badSeq = {};
+    for (var k = 0; k < MACHINES.length; k++) {
+      var b = document.getElementById('m1-b' + k);
+      if (b) b.className = 'ctrl-btn' + (k === i ? ' on' : '');
+    }
+    draw1();
+    setStatus1('机器换好了（' + MACHINES[i].name + '）。喂一个数字试试。', false);
+  }
+  function machineOut(x) {
+    var m = MACHINES[f1.m];
+    if (m.good) return m.good(x);
+    // 坏机器：同一个 x 第一次给 2x，第二次给 x + 100
+    badSeq[x] = (badSeq[x] || 0) + 1;
+    return badSeq[x] === 1 ? 2 * x : x + 100;
+  }
+  function feed1(x) {
+    var y = machineOut(x);
+    var prev = f1.hist[x] || [];
+    var dup = false;
+    for (var i = 0; i < prev.length; i++) if (prev[i] === y) dup = true;
+    if (!dup) prev.push(y);
+    f1.hist[x] = prev;
+    f1.last = { x: x, y: y, multi: prev.length >= 2 };
+    draw1();
+    if (prev.length >= 2) {
+      setStatus1('喂进 ' + x + '：第一次出来 ' + prev[0] + '，第二次出来 ' + prev[1] +
+        '。同一个输入给了两个不同的结果 —— 这不是函数。', true);
+    } else {
+      setStatus1('喂进 ' + x + '，出来 ' + y + '。再喂一次同样的 ' + x + ' 试试。', false);
+    }
+  }
+  function setStatus1(msg, alarm) {
+    document.getElementById('st1').textContent = msg;
+    document.getElementById('st1-bar').className = 'status-bar' + (alarm ? ' alarm' : '');
+    document.getElementById('st1-dot').className = 'status-dot' + (alarm ? ' red' : '');
+  }
+  function draw1() {
+    var W = cv1.width, H = cv1.height;
+    c1.clearRect(0, 0, W, H);
+    var m = MACHINES[f1.m];
+    label(c1, '当前机器：' + m.name + '　（' + m.label + '）', 14, 22, m.good ? '#334155' : '#b91c1c', 13, 'left');
+    // 列标题独占顶部一条带（y=48），与下方图形区之间画一条分隔线，
+    // 避免第一行的输入圆 / 输出框压到标题文字上。
+    label(c1, '输入 x', 70, 48, '#94a3b8', 12);
+    label(c1, '输出 f(x)', 266, 48, '#94a3b8', 12);
+    c1.strokeStyle = '#e2e8f0'; c1.lineWidth = 1;
+    c1.beginPath(); c1.moveTo(14, 70); c1.lineTo(W - 14, 70); c1.stroke();
+    for (var i = 0; i < PICK.length; i++) {
+      var x = PICK[i], ry = ROWY[i];
+      c1.beginPath(); c1.arc(70, ry, 18, 0, Math.PI * 2);
+      c1.fillStyle = '#eff6ff'; c1.fill();
+      c1.strokeStyle = '#3b82f6'; c1.lineWidth = 1.5; c1.stroke();
+      label(c1, String(x), 70, ry, '#1d4ed8', 14);
+      var outs = f1.hist[x] || [];
+      if (outs.length === 0) {
+        label(c1, '还没喂过', 200, ry, '#cbd5e1', 13, 'left');
+        continue;
+      }
+      if (outs.length === 1) {
+        c1.strokeStyle = '#3b82f6'; c1.lineWidth = 1.5;
+        c1.beginPath(); c1.moveTo(88, ry); c1.lineTo(200, ry); c1.stroke();
+        c1.fillStyle = '#eff6ff'; c1.strokeStyle = '#3b82f6'; c1.lineWidth = 1.2;
+        c1.beginPath(); c1.rect(200, ry - 15, 132, 30); c1.fill(); c1.stroke();
+        label(c1, '输出 ' + outs[0], 266, ry, '#1d4ed8', 13);
+      } else {
+        c1.strokeStyle = '#3b82f6'; c1.lineWidth = 1.5;
+        c1.beginPath(); c1.moveTo(88, ry); c1.lineTo(200, ry - 16); c1.stroke();
+        c1.strokeStyle = '#ef4444';
+        c1.beginPath(); c1.moveTo(88, ry); c1.lineTo(200, ry + 16); c1.stroke();
+        c1.fillStyle = '#eff6ff'; c1.strokeStyle = '#3b82f6'; c1.lineWidth = 1.2;
+        c1.beginPath(); c1.rect(200, ry - 31, 132, 30); c1.fill(); c1.stroke();
+        label(c1, '第一次 ' + outs[0], 266, ry - 16, '#1d4ed8', 13);
+        c1.fillStyle = '#fef2f2'; c1.strokeStyle = '#ef4444';
+        c1.beginPath(); c1.rect(200, ry + 1, 132, 30); c1.fill(); c1.stroke();
+        label(c1, '第二次 ' + outs[1], 266, ry + 16, '#b91c1c', 13);
+      }
+    }
+  }
+  function play1() {
+    if (t1) { stop1(); return; }
+    var btn = document.getElementById('btn-play1');
+    btn.textContent = '⏸ 停止'; btn.classList.add('playing');
+    setMachine(f1.m);
+    var seq = MACHINES[f1.m].good ? [1, 2, 3, 4] : [1, 2, 1, 2, 3, 3];
+    var i = 0;
+    t1 = setInterval(function () {
+      if (i >= seq.length) { stop1(); return; }
+      feed1(seq[i]); i++;
+    }, 620);
+  }
+  function stop1() {
+    if (t1) { clearInterval(t1); t1 = null; }
+    var b = document.getElementById('btn-play1');
+    if (b) { b.textContent = '▶ 播放演示'; b.classList.remove('playing'); }
+  }
+  function reset1() {
+    stop1();
+    f1.hist = {}; f1.last = null; badSeq = {};
+    draw1();
+    setStatus1('已经清空。喂一个数字，把它喂给机器。', false);
+  }
+  setMachine(0);
+  draw1();
+
+  // ================= 0.2 记号 =================
+  var cv2 = document.getElementById('cv2');
+  var c2 = cv2.getContext('2d');
+  var M2 = [
+    { label: 'f(x) = 2x', f: function (x) { return 2 * x; } },
+    { label: 'f(x) = x + 1', f: function (x) { return x + 1; } },
+    { label: 'f(x) = x²', f: function (x) { return x * x; } }
+  ];
+  var f2 = { m: 0, x: 2 };
+  var t2 = null;
+
+  function setMachine2(i) {
+    f2.m = i;
+    for (var k = 0; k < M2.length; k++) {
+      var b = document.getElementById('m2-b' + k);
+      if (b) b.className = 'ctrl-btn' + (k === i ? ' on' : '');
+    }
+    draw2(); updStatus2();
+  }
+  function setX2(x) {
+    f2.x = x;
+    draw2(); updStatus2();
+    document.getElementById('inv2-out').innerHTML = '输入一个数，再点「找一找」。';
+  }
+  function updStatus2() {
+    var y = M2[f2.m].f(f2.x);
+    document.getElementById('st2').textContent =
+      'f(' + f2.x + ') = ' + y + '，读作「f 在 ' + f2.x + ' 处的值」。';
+  }
+  function setStatus2(msg) {
+    document.getElementById('st2').textContent = msg;
+  }
+  function draw2() {
+    var W = cv2.width, H = cv2.height;
+    c2.clearRect(0, 0, W, H);
+    var y = M2[f2.m].f(f2.x);
+    var midY = 168;
+    label(c2, '把 ' + f2.x + ' 递给规则 f，它吐出 ' + y, W / 2, 34, '#334155', 15);
+    // 输入圆
+    c2.beginPath(); c2.arc(108, midY, 40, 0, Math.PI * 2);
+    c2.fillStyle = '#eff6ff'; c2.fill();
+    c2.strokeStyle = '#3b82f6'; c2.lineWidth = 2; c2.stroke();
+    label(c2, 'x =', 108, midY - 12, '#60a5fa', 12);
+    label(c2, String(f2.x), 108, midY + 11, '#1d4ed8', 20);
+    // 箭头 1
+    drawArrow(c2, 156, midY, 248, midY, '#94a3b8');
+    // 机器盒
+    c2.fillStyle = '#f8fafc'; c2.strokeStyle = '#cbd5e1'; c2.lineWidth = 1.5;
+    roundRect(c2, 252, midY - 52, 148, 104, 14);
+    c2.fill(); c2.stroke();
+    label(c2, 'f', 326, midY - 14, '#475569', 28);
+    label(c2, M2[f2.m].label, 326, midY + 24, '#64748b', 13);
+    // 箭头 2
+    drawArrow(c2, 408, midY, 500, midY, '#94a3b8');
+    // 输出圆
+    c2.beginPath(); c2.arc(540, midY, 46, 0, Math.PI * 2);
+    c2.fillStyle = '#f0fdf4'; c2.fill();
+    c2.strokeStyle = '#10b981'; c2.lineWidth = 2; c2.stroke();
+    label(c2, 'f(' + f2.x + ') =', 540, midY - 15, '#34d399', 12);
+    label(c2, String(y), 540, midY + 12, '#047857', 22);
+    // 读法
+    label(c2, 'f(' + f2.x + ') = ' + y + '　读作「f 在 ' + f2.x + ' 处的值」', W / 2, 268, '#1d4ed8', 14);
+  }
+  function drawArrow(c, x1, y1, x2, y2, color) {
+    c.save();
+    c.strokeStyle = color; c.lineWidth = 1.8;
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
+    var a = Math.atan2(y2 - y1, x2 - x1);
+    c.fillStyle = color;
+    c.beginPath();
+    c.moveTo(x2, y2);
+    c.lineTo(x2 - 11 * Math.cos(a - 0.4), y2 - 11 * Math.sin(a - 0.4));
+    c.lineTo(x2 - 11 * Math.cos(a + 0.4), y2 - 11 * Math.sin(a + 0.4));
+    c.closePath(); c.fill();
+    c.restore();
+  }
+  function roundRect(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.lineTo(x + w - r, y); c.quadraticCurveTo(x + w, y, x + w, y + r);
+    c.lineTo(x + w, y + h - r); c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    c.lineTo(x + r, y + h); c.quadraticCurveTo(x, y + h, x, y + h - r);
+    c.lineTo(x, y + r); c.quadraticCurveTo(x, y, x + r, y);
+    c.closePath();
+  }
+  function findX2() {
+    var target = parseFloat(document.getElementById('inv2-in').value);
+    var out = document.getElementById('inv2-out');
+    if (isNaN(target)) { out.innerHTML = '请先填一个数。'; return; }
+    var hits = [];
+    for (var x = 1; x <= 12; x++) {
+      if (M2[f2.m].f(x) === target) hits.push(x);
+    }
+    var head = '在 ' + M2[f2.m].label + ' 里，想让结果等于 <b>' + target + '</b>：<br>';
+    if (hits.length === 0) {
+      out.innerHTML = head + '在 1 到 12 的整数里，<b>找不到</b>这样的 x。' +
+        '（比如 f(x) = 2x 时，结果是偶数才有解；' + target + ' 不是。）';
+    } else {
+      var list = '';
+      for (var i = 0; i < hits.length; i++) list += (i ? '、' : '') + '<b>x = ' + hits[i] + '</b>';
+      out.innerHTML = head + '答案是 ' + list + '。把它代回去：f(' + hits[0] + ') = <b>' + target + '</b>，对上了。';
+    }
+  }
+  function play2() {
+    if (t2) { stop2(); return; }
+    var btn = document.getElementById('btn-play2');
+    btn.textContent = '⏸ 停止'; btn.classList.add('playing');
+    var seq = [1, 2, 3, 4, 5, 6];
+    var i = 0;
+    t2 = setInterval(function () {
+      if (i >= seq.length) { stop2(); return; }
+      setX2(seq[i]); i++;
+    }, 640);
+  }
+  function stop2() {
+    if (t2) { clearInterval(t2); t2 = null; }
+    var b = document.getElementById('btn-play2');
+    if (b) { b.textContent = '▶ 播放演示'; b.classList.remove('playing'); }
+  }
+  function reset2() {
+    stop2();
+    document.getElementById('inv2-in').value = 10;
+    setMachine2(0);   // 机器回到 f(x) = 2x
+    setX2(2);         // x 回到 2，同时清掉「倒着找」的结果
+    setStatus2('已经重置：机器回到 f(x) = 2x，x 回到 2。');
+  }
+  setMachine2(0);
+  draw2();
+
+  // ================= 0.3 从式子到曲线 =================
+  var cv3 = document.getElementById('cv3');
+  var c3 = cv3.getContext('2d');
+  var F3 = [
+    { label: 'y = x + 1', tex: 'y = x + 1', f: function (x) { return x + 1; } },
+    { label: 'y = x² ÷ 4', tex: 'y = x² ÷ 4', f: function (x) { return x * x / 4; } },
+    { label: 'y = 8 ÷ x', tex: 'y = 8 ÷ x', f: function (x) { return x === 0 ? null : 8 / x; } }
+  ];
+  var XS = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  var f3 = { k: 0, cur: 3, listed: false, plotted: 0, lined: false };
+  var t3 = null;
+
+  function setFn3(i) {
+    f3.k = i;
+    for (var k = 0; k < F3.length; k++) {
+      var b = document.getElementById('f3-b' + k);
+      if (b) b.className = 'ctrl-btn' + (k === i ? ' on' : '');
+    }
+    reset3();
+    setStatus3('换成了 ' + F3[i].label + '。先按「① 列表」。', false);
+  }
+  function setStatus3(msg, warn) {
+    document.getElementById('st3').textContent = msg;
+    document.getElementById('st3-dot').className = 'status-dot' + (warn ? ' gold' : '');
+  }
+  function ymax3() {
+    var m = 0, i, y;
+    for (i = 0; i < XS.length; i++) {
+      y = F3[f3.k].f(XS[i]);
+      if (y !== null && y > m) m = y;
+    }
+    var steps = [2, 4, 6, 8, 10, 12, 16, 20, 24, 32];
+    for (i = 0; i < steps.length; i++) if (m <= steps[i]) return steps[i];
+    return Math.ceil(m / 10) * 10;
+  }
+  // 绘图区上边界下移到 44：给左上角的表达式标签（y=14，字高框到 ~21）留净空。
+  // 否则切到 y = x²÷4 时，最高点的橙色虚线会正好压在表达式文字上。
+  function box3() { return { x0: 56, y0: 44, x1: 596, y1: 274 }; }
+  function map3() {
+    var b = box3();
+    return makeMap(b.x0, b.y0, b.x1, b.y1, 0, 8, 0, ymax3());
+  }
+  function draw3() {
+    var W = cv3.width, H = cv3.height;
+    c3.clearRect(0, 0, W, H);
+    var m = map3();
+    drawGrid(c3, m, 1, ymax3() / 8);
+    var i, x, y;
+    for (i = 0; i <= 8; i++) label(c3, String(i), m.X(i), m.Y(0) + 14, '#94a3b8', 11);
+    label(c3, F3[f3.k].tex, 12, 14, '#334155', 13, 'left');
+    // 已描出的点
+    for (i = 0; i < f3.plotted; i++) {
+      x = XS[i]; y = F3[f3.k].f(x);
+      if (y === null) continue;
+      dot(c3, m.X(x), m.Y(y), 4.5, '#3b82f6');
+    }
+    // 连线
+    if (f3.lined) {
+      drawCurve(c3, m, F3[f3.k].f, 0, 8, '#3b82f6', 2.2);
+    }
+    // 当前滑块位置
+    y = F3[f3.k].f(f3.cur);
+    if (y !== null) {
+      c3.save();
+      c3.setLineDash([4, 4]); c3.strokeStyle = '#f59e0b'; c3.lineWidth = 1.2;
+      c3.beginPath(); c3.moveTo(m.X(f3.cur), m.Y(0)); c3.lineTo(m.X(f3.cur), m.Y(y)); c3.stroke();
+      c3.beginPath(); c3.moveTo(m.X(0), m.Y(y)); c3.lineTo(m.X(f3.cur), m.Y(y)); c3.stroke();
+      c3.setLineDash([]);
+      c3.restore();
+      dot(c3, m.X(f3.cur), m.Y(y), 6, '#f59e0b');
+      labelChip(c3, '(' + f3.cur + ', ' + (Math.round(y * 100) / 100) + ')', m.X(f3.cur) + 8, m.Y(y) - 14, '#b45309', 12, 'left');
+    }
+  }
+  function buildTable() {
+    var h = '<tr><th>x</th>';
+    var i;
+    for (i = 0; i < XS.length; i++) h += '<th>' + XS[i] + '</th>';
+    h += '</tr><tr><td>y</td>';
+    for (i = 0; i < XS.length; i++) {
+      var y = F3[f3.k].f(XS[i]);
+      if (y === null) h += '<td class="void">无意义</td>';
+      else h += '<td id="td3-' + i + '">' + (Math.round(y * 100) / 100) + '</td>';
+    }
+    h += '</tr>';
+    document.getElementById('t3-table').innerHTML = h;
+  }
+  function stepList() {
+    f3.listed = true;
+    document.getElementById('t3-wrap').style.display = 'block';
+    document.getElementById('s3-b0').className = 'ctrl-btn on';
+    buildTable();
+    setStatus3('① 列表完成：选好 x，一个个算出 y。下一步按「② 描点」。', false);
+  }
+  function stepPlot() {
+    if (!f3.listed) { toast('先按「① 列表」'); return; }
+    f3.plotted = 0;
+    f3.lined = false;
+    var i = 0;
+    if (t3) { clearInterval(t3); t3 = null; }
+    t3 = setInterval(function () {
+      if (i >= XS.length) {
+        clearInterval(t3); t3 = null;
+        document.getElementById('s3-b1').className = 'ctrl-btn on';
+        setStatus3('② 描点完成：' + XS.length + ' 个点都点上了。下一步按「③ 连线」。', false);
+        return;
+      }
+      f3.plotted = i + 1;
+      var td = document.getElementById('td3-' + i);
+      if (td && F3[f3.k].f(XS[i]) !== null) td.className = 'hit';
+      draw3(); i++;
+    }, 260);
+  }
+  function stepLine() {
+    if (f3.plotted < XS.length) { toast('先按「② 描点」把点描完'); return; }
+    f3.lined = true;
+    document.getElementById('s3-b2').className = 'ctrl-btn on';
+    draw3();
+    setStatus3('③ 连线完成 —— 这就是 ' + F3[f3.k].label + ' 的图象。拖下面的滑块，看点在曲线上怎么走。', false);
+  }
+  function setX3(x) {
+    f3.cur = x;
+    var y = F3[f3.k].f(x);
+    draw3();
+    if (y === null) {
+      setStatus3('x = 0 时，' + F3[f3.k].label + ' 要算 8 ÷ 0 —— 没有意义。所以 x = 0 不在定义域里。', true);
+    } else {
+      setStatus3('x = ' + x + ' 时，y = ' + (Math.round(y * 100) / 100) + '。', false);
+    }
+  }
+  function play3() {
+    if (t3) { stop3(); return; }
+    var btn = document.getElementById('btn-play3');
+    btn.textContent = '⏸ 停止'; btn.classList.add('playing');
+    stepList();
+    setTimeout(function () { stepPlot(); }, 500);
+    setTimeout(function () { stepLine(); }, 3100);
+    setTimeout(function () { stop3(); }, 3600);
+  }
+  function stop3() {
+    if (t3) { clearInterval(t3); t3 = null; }
+    var b = document.getElementById('btn-play3');
+    if (b) { b.textContent = '▶ 播放演示'; b.classList.remove('playing'); }
+  }
+  function reset3() {
+    stop3();
+    f3.listed = false; f3.plotted = 0; f3.lined = false;
+    document.getElementById('t3-wrap').style.display = 'none';
+    document.getElementById('t3-table').innerHTML = '';
+    document.getElementById('s3-b0').className = 'ctrl-btn';
+    document.getElementById('s3-b1').className = 'ctrl-btn';
+    document.getElementById('s3-b2').className = 'ctrl-btn';
+    draw3();
+  }
+  setFn3(0);
+
+  // ================= 0.4 三个老朋友 =================
+  var cv4 = document.getElementById('cv4');
+  var c4 = cv4.getContext('2d');
+  var f4 = { tab: 0 };
+  var t4 = null;
+
+  function setTab4(i) {
+    f4.tab = i;
+    for (var k = 0; k < 3; k++) {
+      document.getElementById('t4-b' + k).className = 'mode-btn' + (k === i ? ' active' : '');
+      document.getElementById('p4-' + k).className = 'tab-panel' + (k === i ? ' on' : '');
+    }
+    if (i === 0) setStatus4('一次函数：每往右走 1 格，就往上走 k 格。', '一次函数');
+    if (i === 1) setStatus4('二次函数：它有一个最低点（或最高点），两头都往上（或都往下）。', '二次函数');
+    if (i === 2) setStatus4('指数函数：越往右涨得越猛，而且永远大于 0。', '指数函数');
+    upd4();
+  }
+  function setStatus4(msg, tag) {
+    document.getElementById('st4').textContent = tag + '：' + msg;
+  }
+  function P4() {
+    return {
+      k: parseFloat(document.getElementById('s4-k').value),
+      b: parseFloat(document.getElementById('s4-b').value),
+      a: parseFloat(document.getElementById('s4-a').value),
+      h: parseFloat(document.getElementById('s4-h').value),
+      e: parseFloat(document.getElementById('s4-e').value)
+    };
+  }
+  function curFn4() {
+    var p = P4();
+    if (f4.tab === 0) return function (x) { return p.k * x + p.b; };
+    if (f4.tab === 1) return function (x) { return p.a * (x - p.h) * (x - p.h); };
+    return function (x) { return Math.pow(p.e, x); };
+  }
+  function refFn4() {
+    var p = P4();
+    if (f4.tab === 0) return function (x) { return x; };
+    if (f4.tab === 1) return function (x) { return x * x; };
+    return function (x) { return Math.pow(2, x); };
+  }
+  function upd4() {
+    var p = P4();
+    document.getElementById('v4-k').textContent = p.k;
+    document.getElementById('v4-b').textContent = p.b;
+    document.getElementById('v4-a').textContent = p.a;
+    document.getElementById('v4-h').textContent = p.h;
+    document.getElementById('v4-e').textContent = p.e;
+    var ex = document.getElementById('ex4');
+    if (f4.tab === 0) {
+      ex.innerHTML = '<b>一次函数</b>的长相是直的。<b>k</b> 管倾斜：k 越大越陡，k 是负数就往下斜；<b>b</b> 管位置：它决定这条线在 y 轴上从哪儿穿过去。';
+      if (p.k === 0) {
+        document.getElementById('st4-dot').className = 'status-dot gold';
+        setStatus4('k = 0 时它变成了一条水平线：y 永远是 ' + p.b + '，不管 x 怎么变。', '一次函数');
+      } else {
+        document.getElementById('st4-dot').className = 'status-dot';
+        setStatus4('现在 y = ' + p.k + 'x ' + (p.b < 0 ? '− ' + Math.abs(p.b) : '+ ' + p.b) +
+          '：每往右 1 格，上升 ' + p.k + ' 格。', '一次函数');
+      }
+    } else if (f4.tab === 1) {
+      ex.innerHTML = '<b>二次函数</b>的长相像一只碗或一座拱桥。<b>a</b> 决定开口朝上（a &gt; 0）还是朝下（a &lt; 0），也决定它有多瘦；<b>h</b> 决定这只碗左右挪到哪儿。';
+      if (p.a === 0) {
+        document.getElementById('st4-dot').className = 'status-dot gold';
+        setStatus4('a = 0 时平方项消失了，它其实变成了一条直线 —— 已经不是二次函数了。', '二次函数');
+      } else {
+        document.getElementById('st4-dot').className = 'status-dot';
+        setStatus4('顶点在 (' + p.h + ', 0)，开口朝' + (p.a > 0 ? '上' : '下') + '。', '二次函数');
+      }
+    } else {
+      ex.innerHTML = '<b>指数函数</b>的长相是「一路加速」。它<b>只要求认形状</b>：底数 a &gt; 1 时越往右越陡，0 &lt; a &lt; 1 时一路下降，但永远贴着 0 也不会碰到 0。';
+      document.getElementById('st4-dot').className = 'status-dot';
+      if (p.e > 1) setStatus4('底数 ' + p.e + ' 大于 1：越往右涨得越猛。', '指数函数');
+      else if (p.e === 1) setStatus4('底数 = 1 时它变成水平线 y = 1，不涨也不跌。', '指数函数');
+      else setStatus4('底数 ' + p.e + ' 小于 1：一路往下降，但永远大于 0。', '指数函数');
+    }
+    draw4();
+  }
+  function draw4() {
+    var W = cv4.width, H = cv4.height;
+    c4.clearRect(0, 0, W, H);
+    var ys, m;
+    // 绘图区上边界下移到 y=46，把 0..38 让给函数表达式标签。
+    // 否则拖到 k=1、b=4 时直线会正好穿过右上角的标签文字。
+    if (f4.tab === 2) {
+      m = makeMap(56, 46, 596, 276, -3, 3, 0, 8);
+    } else {
+      m = makeMap(56, 46, 596, 276, -6, 6, -6, 10);
+    }
+    drawGrid(c4, m, 1, 1);
+    for (var i = Math.ceil(m.xmin); i <= m.xmax; i++) {
+      if (i % 2 === 0 && i !== 0) tick(c4, String(i), m.X(i), m.Y(0) + 14);
+    }
+    for (i = Math.ceil(m.ymin); i <= m.ymax; i++) {
+      if (i % 2 === 0 && i !== 0) tick(c4, String(i), m.X(0) - 14, m.Y(i), 'right');
+    }
+    var dash = f4.tab === 2 ? [5, 5] : [6, 5];
+    drawCurve(c4, m, refFn4(), m.xmin, m.xmax, '#cbd5e1', 2, dash);
+    drawCurve(c4, m, curFn4(), m.xmin, m.xmax, '#3b82f6', 2.6);
+    var p = P4();
+    if (f4.tab === 0) {
+      label(c4, 'y = ' + p.k + 'x ' + (p.b < 0 ? '− ' + Math.abs(p.b) : '+ ' + p.b), 606, 14, '#1d4ed8', 14, 'right');
+      label(c4, '虚线参照：y = x', 606, 30, '#94a3b8', 12, 'right');
+    } else if (f4.tab === 1) {
+      label(c4, 'y = ' + p.a + ' (x ' + (p.h < 0 ? '+ ' + Math.abs(p.h) : '− ' + p.h) + ')²', 606, 14, '#1d4ed8', 14, 'right');
+      label(c4, '虚线参照：y = x²', 606, 30, '#94a3b8', 12, 'right');
+      dot(c4, m.X(p.h), m.Y(0), 5, '#f59e0b');
+    } else {
+      label(c4, 'y = ' + p.e + 'ˣ', 606, 14, '#1d4ed8', 14, 'right');
+      label(c4, '虚线参照：y = 2ˣ', 606, 30, '#94a3b8', 12, 'right');
+    }
+  }
+  function play4() {
+    if (t4) { stop4(); return; }
+    var btn = document.getElementById('btn-play4');
+    btn.textContent = '⏸ 停止'; btn.classList.add('playing');
+    var tab = f4.tab;
+    var seq = tab === 0 ? [-2, -1, 0, 1, 2, 3] : (tab === 1 ? [-2, -1, -0.5, 0.5, 1, 2] : [0.6, 1, 1.5, 2, 2.5, 3]);
+    var i = 0;
+    t4 = setInterval(function () {
+      if (i >= seq.length) { stop4(); return; }
+      if (tab === 0) document.getElementById('s4-k').value = seq[i];
+      if (tab === 1) document.getElementById('s4-a').value = seq[i];
+      if (tab === 2) document.getElementById('s4-e').value = seq[i];
+      upd4(); i++;
+    }, 620);
+  }
+  function stop4() {
+    if (t4) { clearInterval(t4); t4 = null; }
+    var b = document.getElementById('btn-play4');
+    if (b) { b.textContent = '▶ 播放演示'; b.classList.remove('playing'); }
+  }
+  function reset4() {
+    stop4();
+    // 三组参数各自回到初始值
+    document.getElementById('s4-k').value = 1;
+    document.getElementById('s4-b').value = 0;
+    document.getElementById('s4-a').value = 1;
+    document.getElementById('s4-h').value = 0;
+    document.getElementById('s4-e').value = 2;
+    setTab4(0);       // 标签回到「一次函数」，内部会 upd4() 重绘
+    setStatus4('参数全部回到起点。', '已重置');
+  }
+  setTab4(0);
+
+  // ================= 0.5 两点连线滑向稳定坡度 =================
+  var cv5 = document.getElementById('cv5');
+  var c5 = cv5.getContext('2d');
+  var AX = 1;            // A 固定在 x = 1
+  var XMIN5 = 1.02, XMAX5 = 3.2;
+  var s5 = { xB: 3.2, logs: [] };
+  var t5 = null;
+  function f5(x) { return x * x; }
+  function targetSlope5() { return 2 * AX; }   // A 点「那一刻」的真实坡度（答案基准，不画在图上）
+  function box5() { return { x0: 56, y0: 46, x1: 596, y1: 300 }; }
+  function map5() {
+    var b = box5();
+    return makeMap(b.x0, b.y0, b.x1, b.y1, 0, 3.4, 0, 11.7);
+  }
+  function setXB(v) {
+    var nv = clamp(v, XMIN5, XMAX5);
+    if (nv < s5.xB - 1e-9) log5(nv);
+    s5.xB = nv;
+    var el = document.getElementById('s5-x');
+    if (el) el.value = nv;
+    draw5(); upd5();
+  }
+  function nudge5(d) { setXB(s5.xB + d); }
+  function log5(x) {
+    var k = (f5(x) - f5(AX)) / (x - AX);
+    for (var i = 0; i < s5.logs.length; i++) {
+      if (Math.abs(s5.logs[i].x - x) < 1e-9) return;
+    }
+    s5.logs.push({ x: x, k: k });
+    if (s5.logs.length > 9) s5.logs.shift();
+    renderLogs5();
+  }
+  function renderLogs5() {
+    var box = document.getElementById('s5-logs');
+    if (s5.logs.length === 0) { box.innerHTML = '<span class="chip">k 的变化会记录在这里</span>'; return; }
+    var h = '';
+    for (var i = 0; i < s5.logs.length; i++) {
+      var last = i === s5.logs.length - 1;
+      h += '<span class="chip' + (last ? ' now' : '') + '">x = ' + fmt2(s5.logs[i].x) + '　k = ' + fmt2(s5.logs[i].k) + '</span>';
+    }
+    box.innerHTML = h;
+  }
+  function upd5() {
+    var x = s5.xB, y = f5(x);
+    var dx = x - AX, dy = y - f5(AX);
+    var k = dy / dx;
+    document.getElementById('kv5-b').textContent = '(' + fmt2(x) + ', ' + fmt2(y) + ')';
+    document.getElementById('kv5-dx').textContent = fmt2(dx);
+    document.getElementById('kv5-dy').textContent = fmt2(dy);
+    document.getElementById('kv5-k').textContent = fmt2(k);
+    var msg = '现在 B 在 x = ' + fmt2(x) + '，横向差 = ' + fmt2(dx) + '，两点连线的斜率 k = ' + fmt2(k) + '。';
+    if (dx > 0.8) msg += '把 B 往左拖向 A(1, 1)。';
+    else if (dx > 0.2) msg += '已经很近了，k 正在往 ' + fmt2(targetSlope5()) + ' 靠。';
+    else msg += '注意：横向差已经小到 ' + fmt2(dx) + ' 了 —— 图上几乎看不出来，但数字不会骗人。永远看数字，别看「像不像重合」。';
+    document.getElementById('st5').textContent = msg;
+    document.getElementById('st5-dot').className = 'status-dot' + (dx <= 0.2 ? ' gold' : '');
+  }
+  function draw5() {
+    var W = cv5.width, H = cv5.height;
+    c5.clearRect(0, 0, W, H);
+    var m = map5();
+    drawGrid(c5, m, 0.2, 1);
+    var i;
+    for (i = 0; i <= 3; i++) tick(c5, String(i), m.X(i), m.Y(0) + 15);
+    for (i = 0; i <= 10; i += 2) tick(c5, String(i), m.X(0) - 12, m.Y(i), 'right');
+    // 放在左上角的标题带：曲线 x² 在右下方向冲顶，右上角一定会被它穿过
+    label(c5, 'y = x²', 66, 22, '#3b82f6', 13, 'left');
+
+    var xB = s5.xB, yB = f5(xB);
+    var yA = f5(AX);
+    var k = (yB - yA) / (xB - AX);
+
+    // 曲线
+    drawCurve(c5, m, f5, 0, 3.4, '#3b82f6', 2.4);
+    // 只画曲线 + 两点连线。不画「贴着 A 的那条线」—— 它属第 6 章，先导章不提前烧掉。
+    c5.save();
+    c5.beginPath(); c5.rect(m.x0, m.y0, m.x1 - m.x0, m.y1 - m.y0); c5.clip();
+    // 两点连线（实线）
+    c5.strokeStyle = '#f59e0b'; c5.lineWidth = 2.2;
+    c5.beginPath();
+    c5.moveTo(m.X(0), m.Y(yA + k * (0 - AX)));
+    c5.lineTo(m.X(3.4), m.Y(yA + k * (3.4 - AX)));
+    c5.stroke();
+    // 横向差 / 纵向差 直角腿
+    c5.setLineDash([4, 4]); c5.strokeStyle = '#94a3b8'; c5.lineWidth = 1.2;
+    c5.beginPath(); c5.moveTo(m.X(AX), m.Y(yA)); c5.lineTo(m.X(xB), m.Y(yA)); c5.stroke();
+    c5.beginPath(); c5.moveTo(m.X(xB), m.Y(yA)); c5.lineTo(m.X(xB), m.Y(yB)); c5.stroke();
+    c5.setLineDash([]);
+    c5.restore();
+
+    // 直角腿的文字（不裁剪，保证看得见）。这些标注跟着 B 走，位置无法预先留白，
+    // 所以统一用白底片 + 近右缘自动翻边，避免被曲线穿过或跑出画布。
+    var dxTxt = '横向差 = ' + fmt2(xB - AX);
+    labelChip(c5, dxTxt, (m.X(AX) + m.X(xB)) / 2, m.Y(yA) + 18, '#64748b', 12);
+
+    var dyTxt = '纵向差 = ' + fmt2(yB - yA);
+    c5.font = '12px sans-serif';
+    var dyW = c5.measureText(dyTxt).width;
+    var dyRight = m.X(xB) + 8 + dyW > W - 8;
+    labelChip(c5, dyTxt, dyRight ? m.X(xB) - 8 : m.X(xB) + 8, (m.Y(yA) + m.Y(yB)) / 2,
+      '#64748b', 12, dyRight ? 'right' : 'left');
+
+    dot(c5, m.X(AX), m.Y(yA), 6, '#1d4ed8');
+    label(c5, 'A (' + fmt2(AX) + ', ' + fmt2(yA) + ')', m.X(AX) - 10, m.Y(yA) - 18, '#1d4ed8', 13, 'right');
+    dot(c5, m.X(xB), m.Y(yB), 6, '#f59e0b');
+    var bTxt = 'B (' + fmt2(xB) + ', ' + fmt2(yB) + ')';
+    c5.font = '13px sans-serif';
+    var bW = c5.measureText(bTxt).width;
+    var bRight = m.X(xB) + 10 + bW > W - 8;
+    labelChip(c5, bTxt, bRight ? m.X(xB) - 10 : m.X(xB) + 10, m.Y(yB) - 18,
+      '#b45309', 13, bRight ? 'right' : 'left');
+  }
+  var SEQ5 = [3.2, 2.6, 2.2, 1.8, 1.5, 1.3, 1.2, 1.12, 1.06, 1.02];
+  function play5() {
+    if (t5) { stop5(); return; }
+    var btn = document.getElementById('btn-play5');
+    btn.textContent = '⏸ 停止'; btn.classList.add('playing');
+    var seq = [], i;
+    for (i = 0; i < SEQ5.length; i++) if (SEQ5[i] < s5.xB - 1e-9) seq.push(SEQ5[i]);
+    if (seq.length === 0) seq = SEQ5.slice();
+    var j = 0;
+    t5 = setInterval(function () {
+      if (j >= seq.length) { stop5(); return; }
+      setXB(seq[j]); j++;
+    }, 640);
+  }
+  function stop5() {
+    if (t5) { clearInterval(t5); t5 = null; }
+    var b = document.getElementById('btn-play5');
+    if (b) { b.textContent = '▶ 播放演示'; b.classList.remove('playing'); }
+  }
+  function reset5() {
+    stop5();
+    s5.xB = XMAX5; s5.logs = [];
+    document.getElementById('s5-x').value = XMAX5;
+    renderLogs5();
+    draw5(); upd5();
+  }
+  setXB(XMAX5);
+</script>
+<style id="portal-back-style">
+.portal-back{position:fixed;right:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;height:48px;padding:0 18px;border-radius:24px;background:rgba(28,32,44,.86);color:#fff;font-size:15px;font-weight:600;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.25);font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;transition:transform .15s,background .15s}
+.portal-back:hover{background:rgba(28,32,44,.96);transform:translateY(-2px)}
+.portal-back:visited{color:#fff}
+@media (max-width:520px){.portal-back{height:44px;padding:0 14px;font-size:14px;right:12px;bottom:12px}}
+</style>
+<a href="./index.html" class="portal-back" aria-label="返回门户">← 返回门户</a>
+</body>
+</html>

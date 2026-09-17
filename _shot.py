@@ -135,7 +135,7 @@ shot('13_index_footer', BASE + '/', 1280, 1320)
 # ------------------------------------------------- 1.1 门户 hero 结构探针
 # 门户顶部是满幅渐变色块 + 骑在色块下沿的白色导言卡（对齐各学科页 .home-header / .intro-card）。
 # 这几条只能靠几何/计算样式判定，截图看不出「卡片有没有骑上去」「h1 是不是白字」。
-HERO_PROBE = """
+HERO_PROBE = r"""
 <script>
 (function(){
   var o = {};
@@ -157,6 +157,14 @@ HERO_PROBE = """
   o.introTop = Math.round(intro.getBoundingClientRect().top);
   o.introLeft = Math.round(intro.getBoundingClientRect().left);
   o.scrollW = de.scrollWidth;
+  // 导言卡实际行数（需求要求「最多三行」，用几何反推，不靠肉眼数）
+  var ics = getComputedStyle(intro);
+  var lh = parseFloat(ics.lineHeight) || 0;
+  var ih = intro.getBoundingClientRect().height
+         - parseFloat(ics.paddingTop) - parseFloat(ics.paddingBottom)
+         - parseFloat(ics.borderTopWidth) - parseFloat(ics.borderBottomWidth);
+  o.introLines = lh > 0 ? Math.round(ih / lh) : -1;
+  o.introChars = (intro.textContent || '').replace(/\s+/g, '').length;
   var c = document.querySelector('.card');
   o.cardLeft = c ? Math.round(c.getBoundingClientRect().left) : -1;
   document.title = 'HERO|' + JSON.stringify(o);
@@ -173,9 +181,14 @@ def run_hero_probe(w, h):
     return raw, (json.loads(m.group(1)) if m else None)
 
 
-print('--- 门户 hero 结构探针 · 桌面 1280x900 ---')
-HERO_RAW, HERO = run_hero_probe(1280, 900)
-print('  %s' % HERO_RAW)
+# 窄屏用 500px：Edge headless 有最小窗口宽度，更小的值会渲染出「右侧被裁切」的假象
+print('--- 门户 hero 结构探针（桌面 1280 / 平板 834 / 窄屏 500） ---')
+HEROES = {}
+for _tag, _w, _h in (('1280', 1280, 900), ('834', 834, 1000), ('500', 500, 860)):
+    _raw, _data = run_hero_probe(_w, _h)
+    HEROES[_tag] = _data
+    print('  @%-5s %s' % (_tag, _raw))
+HERO_RAW, HERO = ('', HEROES['1280'])
 
 # ------------------------------------------------- 2. 学科页 顶部（真实状态）
 print('--- 学科页 顶部真实状态（左上应见「返回门户」，右下应不见「返回顶部」） ---')
@@ -449,6 +462,16 @@ else:
         '门户导言卡: 与卡片区左边缘对齐 (导言=%d 卡片=%d)' % (HERO['introLeft'], HERO['cardLeft']))
     chk(HERO['scrollW'] <= HERO['viewW'] + 1,
         '门户: 无横向溢出 (scrollW=%d 视口=%d)' % (HERO['scrollW'], HERO['viewW']))
+
+for _tag, _lim in (('1280', 3), ('834', 3), ('500', 3)):
+    _d = HEROES.get(_tag)
+    if not _d:
+        chk(False, '门户导言卡 @%s: 探针未取到' % _tag)
+        continue
+    chk(_d['introLines'] <= _lim,
+        '门户导言卡 @%-4s: %d 行 (上限 %d)，%d 字' % (_tag, _d['introLines'], _lim, _d['introChars']))
+    chk(_d['scrollW'] <= _d['viewW'] + 1,
+        '门户 @%-4s: 无横向溢出 (scrollW=%d 视口=%d)' % (_tag, _d['scrollW'], _d['viewW']))
 
 print('')
 print('NAV RESULT:', 'ALL PASS' if fail == 0 else '%d FAILED' % fail)

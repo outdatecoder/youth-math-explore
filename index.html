@@ -92,7 +92,9 @@ h1{
 /* ---------- 卡片网格 ---------- */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(258px,1fr));
+  /* 固定列数而非 auto-fit：否则"离散与网络"这种只有 1 张卡的分组，
+     卡片会被拉伸到整行宽度，与其它分组的卡片宽度不一致。 */
+  grid-template-columns:repeat(3,1fr);
   gap:18px;
 }
 .card{
@@ -201,7 +203,13 @@ footer{
 }
 footer .sep{opacity:.4;margin:0 8px}
 
-@media (max-width:520px){
+/* 平板：2 列 */
+@media (max-width:920px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* 手机：1 列 */
+@media (max-width:600px){
   body{padding:26px 15px calc(40px + env(safe-area-inset-bottom,0px))}
   header{margin-bottom:32px}
   .grid{gap:14px;grid-template-columns:1fr}

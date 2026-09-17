@@ -33,6 +33,19 @@
 
   ③ Cytoscape 本地化探针
      验证 window.cytoscape 由本地 vendor 脚本提供，而不是 CDN 兜住的假成功。
+
+  ④ 「返回门户」为什么不是固定 top（补丁 P2 v3）
+     这 5 个页面的左上角布局差异极大：页面自带的「返回首页 / 返回知识地图」按钮
+     底部在 37~70px 之间，而它下方的可用空隙位置各不相同（graph 的 s2 窄屏下，
+     返回键底部 70px 到「操作模式」标签 120px 之间只有 50px，而按钮高 44px）。
+     实测不存在任何固定下移量能让 5 个页面 × 全部 41 个子节都不遮挡。
+     故改为运行时测量：吸附到内置返回键下方 6px，再向下避让「纯文字块 + 可交互
+     控件」（canvas/svg 视为图形不避让，与右下角「返回顶部」同属浮动按钮的取舍）。
+     因此本脚本的断言不写死 top，而是断言「贴左边 + 不与内置返回键重叠 + 完整可见」。
+
+     另注：学科页的 fadeIn 关键帧含 transform:translateY(12px)，子节切换后立刻
+     测量会读到偏下 12px 的中间态。补丁因此在 180ms 与 700ms 各定位一次；
+     本脚本的子节几何探针也等到 900ms 后再读，避开这个陷阱。
 """
 import io
 import json
@@ -208,6 +221,73 @@ print('--- 导航按钮行为探针 · 窄屏 500x780（抽验 graph） ---')
 raw, narrow = run_probe('graph', 500, 780)
 print('  graph.html      %s' % raw)
 
+# ------------------------------- 4.1 子节内「返回门户」几何探针（贴左 + 不遮挡内置返回键）
+SUBPROBE = """
+<script>
+(function(){
+  try { %(nav)s } catch (e) {}
+  setTimeout(function(){
+    var b = document.querySelector('.portal-back');
+    var de = document.documentElement;
+    var rb = b.getBoundingClientRect();
+    var own = null;
+    var cands = document.querySelectorAll('a,button,span,label');
+    for (var i = 0; i < cands.length; i++) {
+      var el = cands[i];
+      if (el === b || (el.closest && el.closest('.portal-back,.portal-top'))) continue;
+      if (el.children.length) continue;
+      var txt = (el.textContent || '').replace(/\\s+/g, '');
+      if (txt.indexOf('返回') < 0 || txt.length > 16) continue;
+      var rr = el.getBoundingClientRect();
+      if (rr.width < 1 || rr.height < 1) continue;
+      if (own === null || rr.bottom > own[3]) {
+        own = [Math.round(rr.left), Math.round(rr.top), Math.round(rr.width), Math.round(rr.height)];
+      }
+    }
+    var o = {
+      backRect: [Math.round(rb.left), Math.round(rb.top), Math.round(rb.width), Math.round(rb.height)],
+      ownBackRect: own,
+      client: [de.clientWidth, de.clientHeight]
+    };
+    document.title = 'SUB|' + JSON.stringify(o);
+  }, 900);
+})();
+</script>
+"""
+
+SUB_NAV = {
+    'graph': 'goToSection(1)',
+    'probability': 'goTo(1)',
+    'statistics': "goTo('t1')",
+    'functions': 'goTo(1)',
+    'calculus1': 'goC1(1)',
+}
+
+
+def run_sub_probe(name, w, h):
+    html = fetch('/%s.html' % name)
+    html = html.replace('</head>', KILL_ANIM + '\n</head>', 1)
+    html = html.replace('</body>', SUBPROBE % {'nav': SUB_NAV[name]} + '</body>', 1)
+    raw = title_of(edge(tmp_page(html), w, h, dump=True))
+    os.remove(os.path.join(PORTAL, '_tmp_shot.html'))
+    m = re.match(r'SUB\|(\{.*\})$', raw.strip(), re.S)
+    return raw, (json.loads(m.group(1)) if m else None)
+
+
+print('--- 子节内返回门户几何探针 · 桌面 1280x900 ---')
+subdesk = {}
+for name in PAGES:
+    raw, res = run_sub_probe(name, 1280, 900)
+    print('  %-15s %s' % (name + '.html', raw))
+    subdesk[name] = res
+
+print('--- 子节内返回门户几何探针 · 窄屏 500x780 ---')
+subnarrow = {}
+for name in PAGES:
+    raw, res = run_sub_probe(name, 500, 780)
+    print('  %-15s %s' % (name + '.html', raw))
+    subnarrow[name] = res
+
 # ------------------------------------------------------ 5. Cytoscape 本地化验收
 print('--- Cytoscape 本地化验收 ---')
 probe = ('<!DOCTYPE html><html><head><meta charset="utf-8">'
@@ -237,8 +317,9 @@ def assert_page(label, r):
     lx, ly, lw, lh = r['backRect']
     tx, ty, tw, th = r['topRect']
 
-    chk(lx <= off + 8 and ly <= off + 8,
-        '%s: 返回门户固定在左上 (left=%s top=%s, 期望 %s)' % (label, lx, ly, off))
+    chk(lx <= off + 8, '%s: 返回门户贴左边 (left=%s, 期望 %s)' % (label, lx, off))
+    chk(off - 1 <= ly and ly + lh <= ch,
+        '%s: 返回门户完整落在视口内 (top=%s h=%s 视口高 %s)' % (label, ly, lh, ch))
     chk(lh >= 44, '%s: 返回门户高度 %s >= 44 (触控友好)' % (label, lh))
     chk(r['backHref'] == './index.html', '%s: 返回门户 href = %s' % (label, r['backHref']))
 
@@ -275,6 +356,35 @@ if narrow and not narrow.get('missing'):
     assert_page('graph@500', narrow)
 else:
     chk(False, 'graph@500: 探针未取到按钮 (%s)' % narrow)
+
+
+def assert_sub(label, r):
+    """子节内：返回门户必须贴左、完整可见，且落在页面内置「返回…」控件下方且不重叠。"""
+    if not r:
+        chk(False, '%s: 子节探针未取到数据' % label)
+        return
+    cw, ch = r['client']
+    off = expected_offset(cw)
+    lx, ly, lw, lh = r['backRect']
+    chk(abs(lx - off) <= 1, '%s: 仍贴左边 (left=%s 期望 %s)' % (label, lx, off))
+    chk(ly >= off - 1 and ly + lh <= ch,
+        '%s: 完整落在视口内 (top=%s h=%s 视口高 %s)' % (label, ly, lh, ch))
+    own = r.get('ownBackRect')
+    if not own:
+        chk(False, '%s: 未找到页面内置「返回…」控件，无法断言遮挡' % label)
+        return
+    olx, oly, olw, olh = own
+    chk(ly >= oly + olh + 5,
+        '%s: 位于内置返回键下方 (top=%s vs 内置底部=%s)' % (label, ly, oly + olh))
+    no_overlap = (ly >= oly + olh) or (lx >= olx + olw) or (olx >= lx + lw)
+    chk(no_overlap, '%s: 与内置返回键不重叠 (门户 x%s-%s y%s-%s / 内置 x%s-%s y%s-%s)'
+        % (label, lx, lx + lw, ly, ly + lh, olx, olx + olw, oly, oly + olh))
+
+
+for name in PAGES:
+    assert_sub('%s@1280 子节' % name, subdesk.get(name))
+for name in PAGES:
+    assert_sub('%s@500 子节' % name, subnarrow.get(name))
 
 print('')
 print('NAV RESULT:', 'ALL PASS' if fail == 0 else '%d FAILED' % fail)

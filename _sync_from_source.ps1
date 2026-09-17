@@ -11,7 +11,8 @@
 
   补丁清单：
     P1  Cytoscape 本地化   unpkg CDN -> ./vendor/cytoscape.min.js
-    P2  门户导航按钮       左上「← 返回门户」 + 右下「返回顶部 ↑」（滚动 >240px 淡入）
+    P2  门户导航按钮       左上「← 返回门户」(自适应下移到页面自带返回键下方)
+                          + 右下「返回顶部 ↑」(滚动 >240px 淡入)
     行尾规范化             统一为 LF
 #>
 
@@ -34,10 +35,16 @@ $CDN_PATTERN = '<script src="https://unpkg\.com/cytoscape@[\d\.]+/dist/cytoscape
 $CDN_REPLACE = '<script src="./vendor/cytoscape.min.js"></script>'
 
 # ---------- 补丁 P2：门户导航按钮 ----------
-#   v2 布局：左上角固定「← 返回门户」；右下角固定「返回顶部 ↑」（下滚超过 240px 才淡入）
-#   用 <!-- portal-nav:start/end --> 包裹，方便以后整块替换，不留残骸。
-#   注：5 个页面均以 window 为滚动容器（各页自身用了 window.scrollTo(0,0)），
-#       且原本 position:fixed 计数为 0，所以两枚按钮不会撞到页面自有元素。
+#   v3 布局：
+#     · 左上「← 返回门户」—— 位置由脚本在运行时测量决定：吸附到页面自带「返回…」
+#       控件下方 6px，并向下避让正文文字与可交互控件（画布/图形视为软遮挡，不避让，
+#       与右下角「返回顶部」同属浮动按钮的既定取舍）。
+#       原因：这 5 个页面的左上角布局差异极大（graph 的 s2 窄屏下，返回键底部 70px
+#       到「操作模式」标签 120px 之间只有 50px，而按钮高 44px），不存在任何固定的
+#       下移量能让 5 个页面 × 全部子节都躲开。
+#     · 右下「返回顶部 ↑」—— 下滚超过 240px 才淡入。
+#   用 <!-- portal-nav:start/end --> 包裹，方便整块替换，不留残骸。
+#   注：5 个页面原本 position:fixed 计数为 0，两枚按钮不会与页面自有元素争夺层。
 $BACK_PATCH = @'
 <!-- portal-nav:start -->
 <style id="portal-nav-style">
@@ -54,19 +61,131 @@ $BACK_PATCH = @'
 <button type="button" class="portal-top" id="portal-top-btn" aria-label="返回顶部">返回顶部 ↑</button>
 <script id="portal-nav-script">
 (function(){
-  var btn = document.getElementById('portal-top-btn');
-  if (!btn) return;
-  function sync(){
-    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
-    if (y > 240) { btn.classList.remove('portal-top--off'); }
-    else { btn.classList.add('portal-top--off'); }
+  var back = document.querySelector('.portal-back');
+  var topBtn = document.getElementById('portal-top-btn');
+
+  /* ---------- 返回顶部：滚动超过 240px 才显示 ---------- */
+  if (topBtn) {
+    var sync = function(){
+      var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      if (y > 240) { topBtn.classList.remove('portal-top--off'); }
+      else { topBtn.classList.add('portal-top--off'); }
+    };
+    topBtn.addEventListener('click', function(){
+      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      catch (e) { window.scrollTo(0, 0); }
+    });
+    window.addEventListener('scroll', sync, { passive: true });
+    sync();
   }
-  btn.addEventListener('click', function(){
-    try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    catch (e) { window.scrollTo(0, 0); }
-  });
-  window.addEventListener('scroll', sync, { passive: true });
-  sync();
+
+  /* ---------- 返回门户：吸附到页面自带「返回…」控件下方，并避让文字/控件 ---------- */
+  if (!back) return;
+
+  var SKIP_TAGS = { HTML:1, BODY:1, HEAD:1, SCRIPT:1, STYLE:1, META:1, TITLE:1, LINK:1,
+                    CANVAS:1, SVG:1, IMG:1, VIDEO:1, AUDIO:1, IFRAME:1 };
+  var CTRL_TAGS = { A:1, BUTTON:1, INPUT:1, SELECT:1, TEXTAREA:1, LABEL:1, OPTION:1 };
+  var GAP = 6;          /* 与页面自带返回控件的最小间距 */
+  var MAX_EXTRA = 260;  /* 向下寻找空位的最大探索距离 */
+
+  function scrollY(){ return window.pageYOffset || document.documentElement.scrollTop || 0; }
+  function mine(el){
+    return el === back || el === topBtn || (el.closest && el.closest('.portal-back,.portal-top'));
+  }
+
+  /* 页面自带「返回…」控件的底部（文档坐标，与滚动位置无关）。
+     只认页面顶部 240px 内的控件，避免滚动后被正文里的“返回”字样带偏。 */
+  function ownNavBottom(sy){
+    var best = null;
+    var els = document.querySelectorAll('a,button,span,div[onclick],label');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (mine(el) || el.children.length) continue;
+      var t = (el.textContent || '').replace(/\s+/g, '');
+      if (t.indexOf('返回') < 0 || t.length > 16) continue;
+      var r = el.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1) continue;
+      var dt = r.top + sy;
+      if (dt > 240) continue;
+      var b = r.bottom + sy;
+      if (best === null || b > best) best = b;
+    }
+    return best;
+  }
+
+  /* 左上窄带内的「硬遮挡」：正文文字 + 可交互控件。
+     canvas / svg / img 及其内部文字视为图形，不参与避让。 */
+  function blockers(l, w, top, bottom){
+    var out = [], x0 = l - 6, x1 = l + w + 6, sy = scrollY();
+    var els = document.querySelectorAll('*');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i], tag = el.tagName;
+      if (SKIP_TAGS[tag] || mine(el)) continue;
+      if (el.closest && el.closest('svg,canvas')) continue;
+      var r = el.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1) continue;
+      if (r.right <= x0 || r.left >= x1) continue;
+      var t = r.top + sy, b = r.bottom + sy;
+      if (b <= top || t >= bottom) continue;
+      var hard = CTRL_TAGS[tag] || el.hasAttribute('onclick');
+      if (!hard) {
+        /* 纯文字块（无子元素且有文字）整体算遮挡。不加长度上限：这类元素的盒子
+           就是它文字本身的范围，不会像带子元素的容器那样把整列正文算成一块。 */
+        hard = (el.children.length === 0) && (el.textContent || '').trim().length > 0;
+      }
+      if (hard) out.push([r.left, t, r.right, b]);
+    }
+    return out;
+  }
+
+  function place(){
+    if (!back.offsetHeight) return;
+    var sy = scrollY();
+    var r = back.getBoundingClientRect();
+    var l = r.left, w = r.width, h = r.height;
+    var base = (document.documentElement.clientWidth <= 520) ? 12 : 16;
+    var ob = ownNavBottom(sy);
+    var start = (ob === null) ? base : Math.max(base, Math.ceil(ob) + GAP);
+    var maxTop = Math.max(base, Math.round(window.innerHeight * 0.55) - h);
+    var limit = Math.min(start + MAX_EXTRA, maxTop);
+    var boxes = blockers(l, w, start - h, start + MAX_EXTRA + h);
+    var y = start;
+    for (; y <= limit; y++) {
+      var hit = false;
+      for (var i = 0; i < boxes.length; i++) {
+        var e = boxes[i];
+        if (e[2] <= l || l + w <= e[0]) continue;
+        if (e[3] <= y || y + h <= e[1]) continue;
+        hit = true; break;
+      }
+      if (!hit) break;
+    }
+    if (y > limit) y = start;      /* 实在找不到空位就退回起点，不做无意义的下漂 */
+    var next = Math.round(y) + 'px';
+    if (back.style.top !== next) back.style.top = next;
+  }
+
+  /* 两次校正：子节切换带 .page.active { animation: fadeIn .4s }，其中含
+     transform: translateY(12px)。动画进行中测量会偏下 12px，所以 180ms 先粗定位，
+     700ms（动画结束后）再按稳定布局精校一次。place() 结果相同则不写 DOM。 */
+  var timer = 0, settle = 0;
+  function schedule(){
+    clearTimeout(timer);  timer  = setTimeout(place, 180);
+    clearTimeout(settle); settle = setTimeout(place, 700);
+  }
+
+  window.addEventListener('resize', schedule);
+  window.addEventListener('orientationchange', schedule);
+  window.addEventListener('load', schedule);
+  document.addEventListener('click', schedule, true);
+  if (window.MutationObserver) {
+    try {
+      new MutationObserver(schedule).observe(document.documentElement,
+        { attributes: true, attributeFilter: ['class'], subtree: true });
+    } catch (e) {}
+  }
+  place();      /* 解析阶段先定位，避免首屏闪动 */
+  schedule();   /* 字体/图片就位后再校正一次 */
 })();
 </script>
 <!-- portal-nav:end -->
@@ -148,6 +267,7 @@ foreach ($item in $MAP) {
     if ($t -match 'unpkg\.com')     { Write-Host "FAIL  $($item.Dst)  still references unpkg CDN"    -ForegroundColor Red; $fail++ }
     if (-not ($t -match 'portal-back'))    { Write-Host "FAIL  $($item.Dst)  missing back-to-portal btn" -ForegroundColor Red; $fail++ }
     if (-not ($t -match 'portal-top-btn')) { Write-Host "FAIL  $($item.Dst)  missing back-to-top btn"    -ForegroundColor Red; $fail++ }
+    if (-not ($t -match 'ownNavBottom'))   { Write-Host "FAIL  $($item.Dst)  missing adaptive nav placement" -ForegroundColor Red; $fail++ }
     if (([regex]::Matches($t, '<!--\s*portal-nav:start\s*-->')).Count -ne 1) {
         Write-Host "FAIL  $($item.Dst)  nav patch not injected exactly once" -ForegroundColor Red; $fail++
     }

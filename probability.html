@@ -1616,19 +1616,131 @@
 <button type="button" class="portal-top" id="portal-top-btn" aria-label="返回顶部">返回顶部 ↑</button>
 <script id="portal-nav-script">
 (function(){
-  var btn = document.getElementById('portal-top-btn');
-  if (!btn) return;
-  function sync(){
-    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
-    if (y > 240) { btn.classList.remove('portal-top--off'); }
-    else { btn.classList.add('portal-top--off'); }
+  var back = document.querySelector('.portal-back');
+  var topBtn = document.getElementById('portal-top-btn');
+
+  /* ---------- 返回顶部：滚动超过 240px 才显示 ---------- */
+  if (topBtn) {
+    var sync = function(){
+      var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      if (y > 240) { topBtn.classList.remove('portal-top--off'); }
+      else { topBtn.classList.add('portal-top--off'); }
+    };
+    topBtn.addEventListener('click', function(){
+      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      catch (e) { window.scrollTo(0, 0); }
+    });
+    window.addEventListener('scroll', sync, { passive: true });
+    sync();
   }
-  btn.addEventListener('click', function(){
-    try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    catch (e) { window.scrollTo(0, 0); }
-  });
-  window.addEventListener('scroll', sync, { passive: true });
-  sync();
+
+  /* ---------- 返回门户：吸附到页面自带「返回…」控件下方，并避让文字/控件 ---------- */
+  if (!back) return;
+
+  var SKIP_TAGS = { HTML:1, BODY:1, HEAD:1, SCRIPT:1, STYLE:1, META:1, TITLE:1, LINK:1,
+                    CANVAS:1, SVG:1, IMG:1, VIDEO:1, AUDIO:1, IFRAME:1 };
+  var CTRL_TAGS = { A:1, BUTTON:1, INPUT:1, SELECT:1, TEXTAREA:1, LABEL:1, OPTION:1 };
+  var GAP = 6;          /* 与页面自带返回控件的最小间距 */
+  var MAX_EXTRA = 260;  /* 向下寻找空位的最大探索距离 */
+
+  function scrollY(){ return window.pageYOffset || document.documentElement.scrollTop || 0; }
+  function mine(el){
+    return el === back || el === topBtn || (el.closest && el.closest('.portal-back,.portal-top'));
+  }
+
+  /* 页面自带「返回…」控件的底部（文档坐标，与滚动位置无关）。
+     只认页面顶部 240px 内的控件，避免滚动后被正文里的“返回”字样带偏。 */
+  function ownNavBottom(sy){
+    var best = null;
+    var els = document.querySelectorAll('a,button,span,div[onclick],label');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (mine(el) || el.children.length) continue;
+      var t = (el.textContent || '').replace(/\s+/g, '');
+      if (t.indexOf('返回') < 0 || t.length > 16) continue;
+      var r = el.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1) continue;
+      var dt = r.top + sy;
+      if (dt > 240) continue;
+      var b = r.bottom + sy;
+      if (best === null || b > best) best = b;
+    }
+    return best;
+  }
+
+  /* 左上窄带内的「硬遮挡」：正文文字 + 可交互控件。
+     canvas / svg / img 及其内部文字视为图形，不参与避让。 */
+  function blockers(l, w, top, bottom){
+    var out = [], x0 = l - 6, x1 = l + w + 6, sy = scrollY();
+    var els = document.querySelectorAll('*');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i], tag = el.tagName;
+      if (SKIP_TAGS[tag] || mine(el)) continue;
+      if (el.closest && el.closest('svg,canvas')) continue;
+      var r = el.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1) continue;
+      if (r.right <= x0 || r.left >= x1) continue;
+      var t = r.top + sy, b = r.bottom + sy;
+      if (b <= top || t >= bottom) continue;
+      var hard = CTRL_TAGS[tag] || el.hasAttribute('onclick');
+      if (!hard) {
+        /* 纯文字块（无子元素且有文字）整体算遮挡。不加长度上限：这类元素的盒子
+           就是它文字本身的范围，不会像带子元素的容器那样把整列正文算成一块。 */
+        hard = (el.children.length === 0) && (el.textContent || '').trim().length > 0;
+      }
+      if (hard) out.push([r.left, t, r.right, b]);
+    }
+    return out;
+  }
+
+  function place(){
+    if (!back.offsetHeight) return;
+    var sy = scrollY();
+    var r = back.getBoundingClientRect();
+    var l = r.left, w = r.width, h = r.height;
+    var base = (document.documentElement.clientWidth <= 520) ? 12 : 16;
+    var ob = ownNavBottom(sy);
+    var start = (ob === null) ? base : Math.max(base, Math.ceil(ob) + GAP);
+    var maxTop = Math.max(base, Math.round(window.innerHeight * 0.55) - h);
+    var limit = Math.min(start + MAX_EXTRA, maxTop);
+    var boxes = blockers(l, w, start - h, start + MAX_EXTRA + h);
+    var y = start;
+    for (; y <= limit; y++) {
+      var hit = false;
+      for (var i = 0; i < boxes.length; i++) {
+        var e = boxes[i];
+        if (e[2] <= l || l + w <= e[0]) continue;
+        if (e[3] <= y || y + h <= e[1]) continue;
+        hit = true; break;
+      }
+      if (!hit) break;
+    }
+    if (y > limit) y = start;      /* 实在找不到空位就退回起点，不做无意义的下漂 */
+    var next = Math.round(y) + 'px';
+    if (back.style.top !== next) back.style.top = next;
+  }
+
+  /* 两次校正：子节切换带 .page.active { animation: fadeIn .4s }，其中含
+     transform: translateY(12px)。动画进行中测量会偏下 12px，所以 180ms 先粗定位，
+     700ms（动画结束后）再按稳定布局精校一次。place() 结果相同则不写 DOM。 */
+  var timer = 0, settle = 0;
+  function schedule(){
+    clearTimeout(timer);  timer  = setTimeout(place, 180);
+    clearTimeout(settle); settle = setTimeout(place, 700);
+  }
+
+  window.addEventListener('resize', schedule);
+  window.addEventListener('orientationchange', schedule);
+  window.addEventListener('load', schedule);
+  document.addEventListener('click', schedule, true);
+  if (window.MutationObserver) {
+    try {
+      new MutationObserver(schedule).observe(document.documentElement,
+        { attributes: true, attributeFilter: ['class'], subtree: true });
+    } catch (e) {}
+  }
+  place();      /* 解析阶段先定位，避免首屏闪动 */
+  schedule();   /* 字体/图片就位后再校正一次 */
 })();
 </script>
 <!-- portal-nav:end --></body>

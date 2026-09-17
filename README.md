@@ -123,23 +123,25 @@ python -m http.server 8765 --directory "D:/WorkBuddy/7-数学学习门户"
 3. **回退** —— 左上角常驻「← 返回门户」回到首页；页面长了用右下角「返回顶部 ↑」（向下滚动一段后才会出现）；
 4. **顺序建议** —— 推荐先「函数先导」再「微积分 · 上篇」；「概率」放在「统计学」之前。
 
-### 5.4 发布到网上（GitHub Pages）
+### 5.4 在线访问（已发布）
 
-发布后微信内可直接打开、可分享。步骤：
+**线上地址：<https://outdatecoder.github.io/youth-math-explore/>**
 
-1. GitHub 网页新建 **public** 仓库（如 `math-explore`），**不要**勾选 Add README / .gitignore；
-2. 本地配置并推送：
+仓库：<https://github.com/outdatecoder/youth-math-explore>（public）· 托管：GitHub Pages，`main` 分支根目录。
 
-   ```bash
-   git config user.email "<你的 GitHub 邮箱>"
-   git remote add origin https://github.com/<用户名>/math-explore.git
-   git push -u origin main
-   ```
+微信内可直接打开、可分享。仓库内三份预置文件正在发挥作用：`.nojekyll`（关闭 Jekyll 处理）、英文文件名 slug（避免中文 URL 编码）、`.gitattributes`（锁定行尾）。
 
-3. 仓库 **Settings → Pages → Source** 选 `Deploy from a branch`，分支 `main`、目录 `/ (root)`，保存；
-4. 约 1 分钟后访问 `https://<用户名>.github.io/math-explore/`。
+**更新线上内容**：
 
-仓库内已预置 `.nojekyll`（关闭 GitHub Pages 的 Jekyll 处理）、英文文件名 slug（避免中文 URL 编码）、`.gitattributes`（锁定行尾），这三项就是为发布准备的。
+```bash
+git add -A
+git commit -m "更新说明"
+git push
+```
+
+推送后 Pages **自动重建**，约 1 分钟生效，无需额外操作。
+
+> 若改的是学习内容本身，记得**先双击 `_sync.cmd`** 从源仓库同步过来（见 5.6），否则推上去的还是旧快照。
 
 ### 5.5 新增一个主题（扩展）
 

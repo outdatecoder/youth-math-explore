@@ -132,6 +132,51 @@ shot('02_index_tablet', BASE + '/', 834, 1700)
 shot('03_index_mobile', BASE + '/', 400, 2400)
 shot('13_index_footer', BASE + '/', 1280, 1320)
 
+# ------------------------------------------------- 1.1 门户 hero 结构探针
+# 门户顶部是满幅渐变色块 + 骑在色块下沿的白色导言卡（对齐各学科页 .home-header / .intro-card）。
+# 这几条只能靠几何/计算样式判定，截图看不出「卡片有没有骑上去」「h1 是不是白字」。
+HERO_PROBE = """
+<script>
+(function(){
+  var o = {};
+  var hero = document.querySelector('.hero');
+  var intro = document.querySelector('.intro');
+  var h1 = hero && hero.querySelector('h1');
+  if (!hero || !intro || !h1) {
+    document.title = 'HERO|' + JSON.stringify({missing: true, hero: !!hero, intro: !!intro, h1: !!h1});
+    return;
+  }
+  var de = document.documentElement;
+  var cs = getComputedStyle(hero);
+  o.heroBg = cs.backgroundImage;
+  o.h1Color = getComputedStyle(h1).color;
+  o.h1Text = (h1.textContent || '').trim();
+  o.viewW = de.clientWidth;
+  o.heroW = Math.round(hero.getBoundingClientRect().width);
+  o.heroBottom = Math.round(hero.getBoundingClientRect().bottom);
+  o.introTop = Math.round(intro.getBoundingClientRect().top);
+  o.introLeft = Math.round(intro.getBoundingClientRect().left);
+  o.scrollW = de.scrollWidth;
+  var c = document.querySelector('.card');
+  o.cardLeft = c ? Math.round(c.getBoundingClientRect().left) : -1;
+  document.title = 'HERO|' + JSON.stringify(o);
+})();
+</script>
+"""
+
+
+def run_hero_probe(w, h):
+    html = fetch('/index.html').replace('</body>', HERO_PROBE + '</body>', 1)
+    raw = title_of(edge(tmp_page(html), w, h, dump=True))
+    os.remove(os.path.join(PORTAL, '_tmp_shot.html'))
+    m = re.match(r'HERO\|(\{.*\})$', raw.strip(), re.S)
+    return raw, (json.loads(m.group(1)) if m else None)
+
+
+print('--- 门户 hero 结构探针 · 桌面 1280x900 ---')
+HERO_RAW, HERO = run_hero_probe(1280, 900)
+print('  %s' % HERO_RAW)
+
 # ------------------------------------------------- 2. 学科页 顶部（真实状态）
 print('--- 学科页 顶部真实状态（左上应见「返回门户」，右下应不见「返回顶部」） ---')
 for i, name in enumerate(PAGES, start=4):
@@ -385,6 +430,25 @@ for name in PAGES:
     assert_sub('%s@1280 子节' % name, subdesk.get(name))
 for name in PAGES:
     assert_sub('%s@500 子节' % name, subnarrow.get(name))
+
+# --- 门户 hero（顶部色块 + 骑边的导言卡） ---
+if not HERO or HERO.get('missing'):
+    chk(False, '门户 hero: 探针未取到（.hero/.intro/h1 缺失）%s' % HERO_RAW)
+else:
+    chk('linear-gradient' in HERO['heroBg'] and 'rgb(102, 126, 234)' in HERO['heroBg']
+        and 'rgb(118, 75, 162)' in HERO['heroBg'],
+        '门户 hero: 顶部为紫蓝渐变色块 (#667eea -> #764ba2)')
+    chk(HERO['h1Color'] == 'rgb(255, 255, 255)',
+        '门户 hero: 标题为白字，在色块上可读 (color=%s)' % HERO['h1Color'])
+    chk(HERO['h1Text'] == '数学探索台', '门户 hero: 标题文案 = %s' % HERO['h1Text'])
+    chk(HERO['introTop'] < HERO['heroBottom'],
+        '门户导言卡: 骑在色块下沿 (卡顶=%d < 色块底=%d)' % (HERO['introTop'], HERO['heroBottom']))
+    chk(abs(HERO['heroW'] - HERO['viewW']) <= 1,
+        '门户 hero: 横向满幅 (hero宽=%d 视口=%d)' % (HERO['heroW'], HERO['viewW']))
+    chk(HERO['cardLeft'] == HERO['introLeft'],
+        '门户导言卡: 与卡片区左边缘对齐 (导言=%d 卡片=%d)' % (HERO['introLeft'], HERO['cardLeft']))
+    chk(HERO['scrollW'] <= HERO['viewW'] + 1,
+        '门户: 无横向溢出 (scrollW=%d 视口=%d)' % (HERO['scrollW'], HERO['viewW']))
 
 print('')
 print('NAV RESULT:', 'ALL PASS' if fail == 0 else '%d FAILED' % fail)

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="给孩子的数学探索台 —— 图论、概率、统计学、微积分的交互学习入口">
+<meta name="description" content="数学探索台 —— 给孩子的数学互动学习网站：用会动的图、能拖的滑块和小实验，把课本上看不见的数学道理玩明白。图论、概率、统计学、微积分的交互学习入口。">
 <title>数学探索台</title>
 <style>
 :root{
@@ -30,44 +30,91 @@ body{
   background:var(--bg);
   color:var(--text);
   min-height:100vh;
-  padding:36px 20px calc(48px + env(safe-area-inset-bottom,0px));
+  padding:0 0 calc(48px + env(safe-area-inset-bottom,0px));
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
-.wrap{max-width:1060px;margin:0 auto}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
 
-/* ---------- 顶部 ---------- */
-header{text-align:center;margin-bottom:44px}
-h1{
-  font-size:clamp(26px,5.2vw,40px);
-  font-weight:800;
-  letter-spacing:.5px;
-  margin-bottom:14px;
-  background:linear-gradient(120deg,var(--accent-blue),var(--accent-purple));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+/* ---------- 顶部 hero（满幅色块，与各学科页 .home-header 同一套配色） ---------- */
+.hero{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  color:#fff;
+  text-align:center;
+  padding:56px 22px 80px;
 }
-.subtitle{
-  color:var(--text-light);
-  font-size:clamp(14px,2.7vw,17px);
-  max-width:640px;
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='.06'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(540px 280px at 16% -10%,rgba(255,255,255,.24),transparent 70%),
+    radial-gradient(480px 250px at 90% 112%,rgba(255,255,255,.18),transparent 72%);
+}
+.hero > *{position:relative;z-index:1}
+.hero-tag{
+  display:inline-block;
+  padding:6px 18px;
+  border:1px solid rgba(255,255,255,.5);
+  border-radius:999px;
+  font-size:13px;
+  letter-spacing:.5px;
+  margin-bottom:18px;
+  color:rgba(255,255,255,.9);
+}
+.hero-tag b{color:#fff;font-weight:700}
+.hero h1{
+  font-size:clamp(28px,5.6vw,42px);
+  font-weight:800;
+  letter-spacing:1.5px;
+  margin-bottom:12px;
+  text-shadow:0 2px 12px rgba(58,38,110,.28);
+}
+.hero-sub{
+  font-size:clamp(14px,2.7vw,16.5px);
+  color:rgba(255,255,255,.92);
+  max-width:680px;
   margin:0 auto;
 }
-.meta{
-  margin-top:18px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-size:13px;
+
+/* ---------- 导言卡：骑在色块下沿（同各学科页 .intro-card） ---------- */
+.intro{
+  position:relative;
+  z-index:2;
+  margin-top:-34px;
+  margin-bottom:42px;
+  padding:22px 26px;
+  background:var(--card-bg);
+  border-radius:var(--radius);
+  border-left:5px solid var(--accent-purple);
+  box-shadow:0 10px 30px rgba(26,26,46,.13);
+  font-size:15px;
   color:var(--text-light);
+}
+.intro b{color:var(--accent-purple);font-weight:700}
+.intro .hl{color:var(--text);font-weight:600}
+
+/* ---------- 小标签 ---------- */
+.tag{
+  display:inline-block;
+  font-weight:600;
+  color:var(--text);
   background:var(--card-bg);
   border:1px solid var(--border);
-  border-radius:999px;
-  padding:7px 16px;
-  box-shadow:var(--shadow);
+  border-radius:6px;
+  padding:2px 8px;
+  font-size:12.5px;
 }
-.meta b{color:var(--text);font-weight:700}
 
 /* ---------- 分组 ---------- */
 .group{margin-bottom:40px}
@@ -210,8 +257,11 @@ footer .sep{opacity:.4;margin:0 8px}
 
 /* 手机：1 列 */
 @media (max-width:600px){
-  body{padding:26px 15px calc(40px + env(safe-area-inset-bottom,0px))}
-  header{margin-bottom:32px}
+  .hero{padding:44px 18px 68px}
+  .hero h1{letter-spacing:.5px}
+  .hero-sub{font-size:14.5px}
+  .intro{margin-top:-28px;margin-bottom:34px;padding:18px 18px 16px;font-size:14.5px}
+  .wrap{padding:0 15px}
   .grid{gap:14px;grid-template-columns:1fr}
   .card{min-height:0;padding:19px 18px 17px}
   .icon{font-size:26px}
@@ -224,22 +274,23 @@ footer .sep{opacity:.4;margin:0 8px}
 </style>
 </head>
 <body>
+
+<div class="hero">
+  <span class="hero-tag">共 <b id="m-total">5</b> 个主题 · 持续更新中</span>
+  <h1>数学探索台</h1>
+  <p class="hero-sub">用会动的图画，把数学里那些「看不见」的道理看明白。</p>
+</div>
+
 <div class="wrap">
-  <header>
-    <h1>数学探索台</h1>
-    <p class="subtitle">用会动的图画，把数学里那些"看不见"的道理看明白。</p>
-    <div class="meta">
-      <span>共 <b id="m-total">5</b> 个主题</span>
-      <span>·</span>
-      <span>持续更新中</span>
-    </div>
-  </header>
+  <div class="intro">
+    这里是给孩子的<b>数学互动学习站</b> —— 用会动的图、能拖的滑块和小实验，把课本上那些「看不见」的道理，变成看得见、玩得懂的东西。<b>不用背公式，也不用刷题</b>，先让孩子心里冒出那句「咦，这个有意思」；兴趣一起，剩下的他自己就会往下走。
+  </div>
 
   <main id="catalog"></main>
 
   <footer>
     <div>点开任意一张卡片就能开始探索</div>
-    <div style="margin-top:6px">每页左上角都有 <span class="tag" style="font-weight:600">← 返回门户</span>，右下角有 <span class="tag" style="font-weight:600">返回顶部 ↑</span></div>
+    <div style="margin-top:6px">每页左上角都有 <span class="tag">← 返回门户</span>，右下角有 <span class="tag">返回顶部 ↑</span></div>
   </footer>
 </div>
 

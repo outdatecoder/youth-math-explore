@@ -1675,12 +1675,35 @@
   }
   setXB(XMAX5);
 </script>
-<style id="portal-back-style">
-.portal-back{position:fixed;right:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;height:48px;padding:0 18px;border-radius:24px;background:rgba(28,32,44,.86);color:#fff;font-size:15px;font-weight:600;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.25);font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;transition:transform .15s,background .15s}
-.portal-back:hover{background:rgba(28,32,44,.96);transform:translateY(-2px)}
+<!-- portal-nav:start -->
+<style id="portal-nav-style">
+.portal-back,.portal-top{position:fixed;z-index:99999;display:inline-flex;align-items:center;justify-content:center;border-radius:24px;background:rgba(28,32,44,.86);color:#fff;font-size:15px;font-weight:600;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.25);font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;transition:opacity .2s,visibility .2s,transform .15s,background .15s}
+.portal-back{left:16px;top:16px;height:48px;padding:0 18px}
+.portal-top{right:16px;bottom:16px;height:48px;padding:0 18px;border:0;cursor:pointer;-webkit-appearance:none;appearance:none}
+.portal-back:hover,.portal-top:hover{background:rgba(28,32,44,.96);transform:translateY(-2px)}
 .portal-back:visited{color:#fff}
-@media (max-width:520px){.portal-back{height:44px;padding:0 14px;font-size:14px;right:12px;bottom:12px}}
+.portal-top--off{opacity:0;visibility:hidden;pointer-events:none}
+@media (max-width:520px){.portal-back,.portal-top{height:44px;padding:0 14px;font-size:14px}.portal-back{left:12px;top:12px}.portal-top{right:12px;bottom:12px}}
+@media print{.portal-back,.portal-top{display:none}}
 </style>
 <a href="./index.html" class="portal-back" aria-label="返回门户">← 返回门户</a>
-</body>
+<button type="button" class="portal-top" id="portal-top-btn" aria-label="返回顶部">返回顶部 ↑</button>
+<script id="portal-nav-script">
+(function(){
+  var btn = document.getElementById('portal-top-btn');
+  if (!btn) return;
+  function sync(){
+    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+    if (y > 240) { btn.classList.remove('portal-top--off'); }
+    else { btn.classList.add('portal-top--off'); }
+  }
+  btn.addEventListener('click', function(){
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    catch (e) { window.scrollTo(0, 0); }
+  });
+  window.addEventListener('scroll', sync, { passive: true });
+  sync();
+})();
+</script>
+<!-- portal-nav:end --></body>
 </html>

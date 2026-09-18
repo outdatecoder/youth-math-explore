@@ -411,9 +411,8 @@
         <p class="kw" data-page-node-id="4mUR2WujrNAjxHreTwEoe3">独立 vs 相关 · 金融危机</p>
         <p class="enter" style="color:#8b5cf6;" data-page-node-id="2SvC0fBInXpkXzDvClwifd">进入 →</p>
       </div>
-      <div class="sec-card" style="border-top-color:#ec4899;" onclick="soon(6)" data-page-node-id="ut0238AA4CqSPiFf9A0fDD">
+      <div class="sec-card" style="border-top-color:#ec4899;" onclick="goTo(6)" data-page-node-id="ut0238AA4CqSPiFf9A0fDD">
         <span class="num" style="background:#ec4899;" data-page-node-id="iEf1muGlDhyRWEwsgYmjmT">06</span>
-        <span class="soon" data-page-node-id="VFAnsyDZ0ZDEgfDdHkfo2m">制作中</span>
         <h3 data-page-node-id="U7kKRHb4BEYre3imbGy6G4">数字也会骗人</h3>
         <p class="kw" data-page-node-id="oQ3QxYTjQiGQtn579AcJR6">相关≠因果 · 抽样</p>
         <p class="enter" style="color:#ec4899;" data-page-node-id="8B5I2gPknu9Hg4k4eLyRuo">进入 →</p>
@@ -893,6 +892,108 @@
   </div>
 </div>
 
+<!-- ================= 主题 06 ================= -->
+<div class="page" id="page-s6">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">06 数字也会骗人</span>
+  </div>
+
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="toolbar">
+          <div class="mode-group">
+            <button class="mode-btn active" id="s6m-a" onclick="s6Mode('a')">相关≠因果</button>
+            <button class="mode-btn" id="s6m-b" onclick="s6Mode('b')">抽样陷阱</button>
+          </div>
+          <span class="toolbar-hint" id="s6-hint">拖滑块调「气温」，看两条无关的线怎么变成「高相关」</span>
+          <button class="play-btn" id="btn-play6" onclick="playS6()">▶ 播放演示</button>
+          <button class="coin-btn danger" onclick="resetS6()">清空</button>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="s6Canvas" width="580" height="300"></canvas>
+          <p class="canvas-caption" id="s6-cap">散点图：横轴 = 冰淇淋卖了多少，纵轴 = 游泳池溺水人数，每个点 = 一年。</p>
+        </div>
+
+        <div class="status-bar">
+          <span class="status-dot" id="s6-dot"></span>
+          <span id="s6-status">点「▶ 播放演示」，看「气温」这个第三变量怎么把两条无关的线拉成高相关</span>
+        </div>
+
+        <div class="explain-box" id="s6-explain"><span class="step">小知识</span>　<b>相关</b> = 两件事一起变；<b>因果</b> = 一件真的造成了另一件。看到「两件事相关」先别急着说谁导致谁——很可能是<b>第三个原因</b>在同时推动它们。</div>
+
+        <div class="calc-box" id="s6-ctl-a">
+          <h4>🌡️ 第三变量制造机（拖一拖，看假相关怎么被造出来）</h4>
+          <div class="slider-row">
+            <label>气温对两者的影响力（第三变量） <b id="s6-c-v">0%</b></label>
+            <input type="range" id="s6-c" min="0" max="100" step="1" value="0" oninput="updateS6A()">
+          </div>
+          <p class="canvas-caption" style="margin-bottom:10px;">真实世界：天越热 → 冰淇淋卖得越多，游泳池也越挤、溺水越多。<b>冰淇淋不会让人溺水</b>，它俩只是被同一个「气温」推着一起变——这就是「相关不等于因果」。</p>
+          <div class="calc-result" id="s6-a-out"></div>
+        </div>
+
+        <div class="calc-box" id="s6-ctl-b" style="display:none;">
+          <h4>📞 民调模拟器（问错人，问再多也没用）</h4>
+          <div class="slider-row">
+            <label>打算问多少人 <b id="s6-n-v">30 人</b></label>
+            <input type="range" id="s6-n" min="5" max="100" step="5" value="30" oninput="updateS6B()">
+          </div>
+          <p class="canvas-caption" style="margin-bottom:10px;">这个国家里 <b>70% 的人支持「蓝队」</b>、30% 支持红队。但只有富裕家庭装得起电话，而富裕家庭更爱投红队。看看两种问法各得到什么结果。</p>
+          <div class="calc-result" id="s6-b-out">打算问 <b>30</b> 人。真实结果是蓝队 70%——<b>随机抽</b>可以问出这个数字，<b>只问装得起电话的家庭</b>却会问出完全相反的结果。</div>
+          <div class="monty-btns">
+            <button class="coin-btn primary" onclick="s6Ask('random')">随机抽一次</button>
+            <button class="coin-btn" onclick="s6Ask('biased')">按电话簿抽一次</button>
+          </div>
+          <p class="canvas-caption" style="margin-top:6px;">怎么用：点「随机抽一次」，从全国随机挑 N 个人，结果会接近真相；点「按电话簿抽一次」，只用装了电话的家庭当样本——你会发现样本越大，它越「精确地错」。</p>
+          <p class="monty-stat" id="s6-b-sim">点上面的按钮，看这一回的民调结果。</p>
+        </div>
+
+        <div class="quiz-box" id="s6-quiz-a">
+          <h4>小测一下</h4>
+          <p class="quiz-q">有人在统计里发现：冰淇淋卖得越多的月份，游泳池里溺水的人也比平时多，两者相关系数 r 高达 0.8。这说明「吃冰淇淋会让人溺水」吗？</p>
+          <button class="quiz-btn" id="btn-answer6a" onclick="toggleAnswer('quiz-answer6a','btn-answer6a')">看解答 ↓</button>
+          <div class="quiz-answer" id="quiz-answer6a">
+            不能这么说。真正的原因是<b>气温</b>：天越热，冰淇淋卖得越多，同时去游泳的人越多、溺水也越多。气温是一个「<b>第三变量</b>」，它同时在推动这两件事。<br>
+            看到「两件事相关」，先问三句：① 有没有第三个原因在同时推动它们？② 会不会是倒过来的（会不会是长寿的人更有钱买红酒）？③ 会不会只是两条「都没怎么变」的长期曲线被凑成了一对？
+          </div>
+        </div>
+
+        <div class="quiz-box" id="s6-quiz-b" style="display:none;">
+          <h4>小测一下</h4>
+          <p class="quiz-q">1936 年美国《文学文摘》杂志做了史上最大的民调：发出 1000 万份问卷、收回 240 万份——结果把总统人选预测反了。为什么问得越多，反而错得越离谱？</p>
+          <button class="quiz-btn" id="btn-answer6b" onclick="toggleAnswer('quiz-answer6b','btn-answer6b')">看解答 ↓</button>
+          <div class="quiz-answer" id="quiz-answer6b">
+            因为它的 240 万人<b>不是随机抽的</b>：名单来自电话簿、杂志订户、俱乐部会员——那年头只有<b>富裕家庭</b>才装得起电话、订得起杂志，而富裕家庭更可能投共和党。<br>
+            样本虽然巨大，却整整齐齐地偏向一边，这叫<b>样本偏差</b>。所以关键是：<b>样本的质量（随机）比样本的数量更重要</b>——问错人，问再多也只是「精确地错」。
+          </div>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>💡 同一批数字，四种真相</h4>
+          <p>四个班都统计了「学习时间 vs 考试分数」：一个班正常散布；一个班是完美的直线（只有 1 个孩子例外）；一个班是往下弯的曲线（学太久反而掉分）；一个班所有人都只学 8 小时。四张图天差地别，可算出来的相关系数<b>全是 0.816</b>——所以看统计之前，先看图。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#f59e0b;"></span> 一算就懂</h4>
+          <p>相关系数 r 是 −1 到 +1 之间的一个数：<b>+1</b> = 一个升另一个也升；<b>0</b> = 没关系；<b>−1</b> = 一个升另一个降。它只说明「两条线长得像」。看到相关数字，问三句：</p>
+          <div class="rule-item"><b>①</b>　是不是两条「都没怎么变」的长期曲线被凑成了一对？</div>
+          <div class="rule-item"><b>②</b>　有没有第三个变量在同时推动它们？</div>
+          <div class="rule-item"><b>③</b>　因果方向会不会是反的？</div>
+        </div>
+        <div class="rec-warn">
+          <h4>⚠️ 240 万人，也问错了</h4>
+          <p>1936 年《文学文摘》收了 <b>240 万</b>份问卷，预测兰登 57.1% 大胜；结果罗斯福 60.8% 压倒性获胜。<b>问题不在样本太小，而在样本太偏</b>——那年头只有富裕家庭装得起电话、订得起杂志。</p>
+          <p style="margin-top:8px;">同样的坑 2016 年的民调也踩了一半（学历高的人更愿意受访）。所以记住：<b>样本质量 &gt; 样本数量</b>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="toast" data-page-node-id="RVxGGdGJmUgQCTW274cCy9"></div>
 
 <script>
@@ -904,11 +1005,13 @@
     document.getElementById('page-s3').classList.remove('active');
     document.getElementById('page-s4').classList.remove('active');
     document.getElementById('page-s5').classList.remove('active');
+    document.getElementById('page-s6').classList.remove('active');
     if (demoTimer) stopDemo();
     if (s2playing) stopS2();
     if (s3playing) stopS3();
     if (s4playing) stopS4();
     if (s5playing) stopS5();
+    if (s6playing) stopS6();
   }
   function goTo(n) {
     hideAll();
@@ -917,6 +1020,7 @@
     if (n === 3) document.getElementById('page-s3').classList.add('active');
     if (n === 4) document.getElementById('page-s4').classList.add('active');
     if (n === 5) document.getElementById('page-s5').classList.add('active');
+    if (n === 6) document.getElementById('page-s6').classList.add('active');
     window.scrollTo(0, 0);
   }
   function goHome() {
@@ -1876,6 +1980,382 @@
     if (st) st.textContent = '直方图：横轴 = 一年收不回几笔，柱子越高 = 这样的年头越多，柱子越靠右越危险（红色 ≈ 一起崩）。';
   }
 
+  // ===== 主题06 数字也会骗人（相关≠因果 / 抽样）=====
+  var s6canvas = document.getElementById('s6Canvas');
+  var s6ctx = s6canvas.getContext('2d');
+  var s6mode = 'a';
+  var s6playing = false;
+  var s6anim = null, s6timer = null, s6timer2 = null;
+
+  // ---- 模式A 数据：12 年的「气温 / 两个随机噪声」----
+  var s6seed = 20260918;
+  function s6rnd() {
+    s6seed = (s6seed * 16807) % 2147483647;
+    return s6seed / 2147483647;
+  }
+  var s6NY = 12;
+  var s6temp = [], s6ra = [], s6rb = [];
+  (function () {
+    for (var i = 0; i < s6NY; i++) {
+      s6temp.push(12 + s6rnd() * 76);   // 气温 12~88
+      s6ra.push(s6rnd() * 100);         // 冰淇淋自己的随机部分
+      s6rb.push(s6rnd() * 100);         // 溺水自己的随机部分
+    }
+  })();
+  var s6c = 0;                          // 第三变量影响力 0~1
+  var s6pts = s6points(0);
+
+  function s6points(c) {
+    var pts = [];
+    for (var i = 0; i < s6NY; i++) {
+      pts.push([
+        c * s6temp[i] + (1 - c) * s6ra[i],
+        c * s6temp[i] + (1 - c) * s6rb[i]
+      ]);
+    }
+    return pts;
+  }
+  function s6corr(pts) {
+    var n = pts.length;
+    if (n === 0) return 0;
+    var sx = 0, sy = 0, i;
+    for (i = 0; i < n; i++) { sx += pts[i][0]; sy += pts[i][1]; }
+    var mx = sx / n, my = sy / n, sxx = 0, syy = 0, sxy = 0;
+    for (i = 0; i < n; i++) {
+      var dx = pts[i][0] - mx, dy = pts[i][1] - my;
+      sxx += dx * dx; syy += dy * dy; sxy += dx * dy;
+    }
+    var d = Math.sqrt(sxx * syy);
+    return d === 0 ? 0 : sxy / d;
+  }
+  function s6fit(pts) {
+    var n = pts.length, sx = 0, sy = 0, sxx = 0, sxy = 0, i;
+    for (i = 0; i < n; i++) { sx += pts[i][0]; sy += pts[i][1]; sxx += pts[i][0] * pts[i][0]; sxy += pts[i][0] * pts[i][1]; }
+    var den = n * sxx - sx * sx;
+    if (den === 0) return null;
+    var b = (n * sxy - sx * sy) / den;
+    var a = (sy - b * sx) / n;
+    return [b, a];
+  }
+  function s6rDesc(r) {
+    var a = Math.abs(r);
+    if (a >= 0.8) return '强相关';
+    if (a >= 0.5) return '中等相关';
+    if (a >= 0.3) return '弱相关';
+    return '几乎没关系';
+  }
+
+  // ---- 模式B 数据：100 个家庭 ----
+  // i 0~59  普通 + 蓝（60）   i 60~69  普通 + 红（10）
+  // i 70~79 富裕 + 蓝（10）   i 80~99  富裕 + 红（20）
+  var s6pool = [];
+  (function () {
+    for (var i = 0; i < 100; i++) {
+      var rich = i >= 70;
+      var blue = i < 60 || (i >= 70 && i < 80);
+      s6pool.push({ rich: rich, blue: blue });
+    }
+  })();
+  var s6n = 30;
+  var s6randPct = null, s6biasPct = null;
+
+  // ---- 模式A 绘制 ----
+  function drawS6A() {
+    var W = s6canvas.width, H = s6canvas.height;
+    s6ctx.clearRect(0, 0, W, H);
+    var pL = 62, pR = W - 18, pT = 66, pB = H - 38;
+    var plotW = pR - pL, plotH = pB - pT, maxV = 100;
+    function X(v) { return pL + v / maxV * plotW; }
+    function Y(v) { return pB - v / maxV * plotH; }
+    var r = s6corr(s6pts);
+
+    // 标题带
+    s6ctx.textAlign = 'left';
+    s6ctx.fillStyle = '#475569';
+    s6ctx.font = '13px sans-serif';
+    s6ctx.fillText('冰淇淋卖得多，溺水的人也多？', 12, 22);
+    s6ctx.font = '11px sans-serif';
+    s6ctx.fillStyle = '#94a3b8';
+    s6ctx.fillText('每个点 = 一年　横轴：冰淇淋销量　纵轴：溺水人数', 12, 44);
+    s6ctx.textAlign = 'right';
+    s6ctx.font = 'bold 14px sans-serif';
+    s6ctx.fillStyle = Math.abs(r) >= 0.5 ? '#ef4444' : '#94a3b8';
+    s6ctx.fillText('r = ' + r.toFixed(2), W - 18, 24);
+
+    // 网格 + 纵轴刻度
+    s6ctx.font = '11px sans-serif';
+    for (var v = 0; v <= maxV; v += 25) {
+      var gy = Y(v);
+      s6ctx.strokeStyle = '#f1f5f9';
+      s6ctx.beginPath(); s6ctx.moveTo(pL, gy); s6ctx.lineTo(pR, gy); s6ctx.stroke();
+      s6ctx.fillStyle = '#94a3b8';
+      s6ctx.textAlign = 'right';
+      s6ctx.fillText(v + '', pL - 6, gy + 4);
+    }
+
+    // 坐标轴
+    s6ctx.strokeStyle = '#cbd5e1';
+    s6ctx.beginPath();
+    s6ctx.moveTo(pL, pT); s6ctx.lineTo(pL, pB); s6ctx.lineTo(pR, pB);
+    s6ctx.stroke();
+
+    // 横轴刻度
+    s6ctx.textAlign = 'center';
+    s6ctx.fillStyle = '#94a3b8';
+    for (v = 0; v <= maxV; v += 50) s6ctx.fillText(v + '', X(v), pB + 15);
+    s6ctx.fillText('冰淇淋销量', (pL + pR) / 2, pB + 31);
+
+    // 趋势线（红虚线）
+    var fit = s6fit(s6pts);
+    if (fit) {
+      function clamp(v2) { return Math.max(0, Math.min(maxV, v2)); }
+      s6ctx.strokeStyle = '#ef4444';
+      s6ctx.setLineDash([5, 4]);
+      s6ctx.lineWidth = 2;
+      s6ctx.beginPath();
+      s6ctx.moveTo(X(0), Y(clamp(fit[1])));
+      s6ctx.lineTo(X(maxV), Y(clamp(fit[0] * maxV + fit[1])));
+      s6ctx.stroke();
+      s6ctx.setLineDash([]);
+      s6ctx.lineWidth = 1;
+    }
+
+    // 散点
+    for (var i = 0; i < s6pts.length; i++) {
+      s6ctx.fillStyle = 'rgba(139,92,246,0.85)';
+      s6ctx.beginPath();
+      s6ctx.arc(X(s6pts[i][0]), Y(s6pts[i][1]), 5, 0, 6.2832);
+      s6ctx.fill();
+    }
+  }
+
+  // ---- 模式B 绘制 ----
+  function s6bar(y, lab, pct, has) {
+    var lx = 108, bx = 112, bw = 384, bh = 22;
+    s6ctx.textAlign = 'right';
+    s6ctx.font = '11px sans-serif';
+    s6ctx.fillStyle = '#64748b';
+    s6ctx.fillText(lab, lx, y + 15);
+    s6ctx.fillStyle = '#f1f5f9';
+    s6ctx.fillRect(bx, y, bw, bh);
+    if (has) {
+      s6ctx.fillStyle = '#3b82f6';
+      s6ctx.fillRect(bx, y, bw * pct / 100, bh);
+    }
+    s6ctx.textAlign = 'left';
+    s6ctx.font = 'bold 12px sans-serif';
+    s6ctx.fillStyle = has ? '#334155' : '#cbd5e1';
+    s6ctx.fillText(has ? pct + '%' : '—', bx + bw + 8, y + 16);
+  }
+
+  function drawS6B() {
+    var W = s6canvas.width;
+    s6ctx.clearRect(0, 0, W, s6canvas.height);
+
+    // 标题带
+    s6ctx.textAlign = 'left';
+    s6ctx.fillStyle = '#475569';
+    s6ctx.font = '13px sans-serif';
+    s6ctx.fillText('这个国家 100 个家庭：蓝队 70 人、红队 30 人', 12, 20);
+
+    // 人群点阵（10 列 × 10 行）
+    var x0 = 40, y0 = 32, cw = 50, ch = 13, rad = 4.5;
+    for (var i = 0; i < 100; i++) {
+      var col = Math.floor(i / 10), row = i % 10;
+      s6ctx.fillStyle = s6pool[i].blue ? '#3b82f6' : '#ef4444';
+      s6ctx.beginPath();
+      s6ctx.arc(x0 + col * cw + cw / 2, y0 + row * ch + ch / 2, rad, 0, 6.2832);
+      s6ctx.fill();
+    }
+    // 富裕家庭框（右侧 3 列）
+    s6ctx.strokeStyle = '#f59e0b';
+    s6ctx.setLineDash([4, 4]);
+    s6ctx.strokeRect(x0 + 7 * cw - 5, y0 - 5, 3 * cw + 10, 10 * ch + 10);
+    s6ctx.setLineDash([]);
+    s6ctx.fillStyle = '#b45309';
+    s6ctx.font = '11px sans-serif';
+    s6ctx.textAlign = 'center';
+    s6ctx.fillText('装得起电话（电话簿只覆盖这一片）', x0 + 7 * cw + 1.5 * cw, y0 + 10 * ch + 20);
+
+    // 对比条
+    s6bar(196, '真实情况', 70, true);
+    s6bar(227, '随机抽 ' + s6n + ' 人', s6randPct === null ? 0 : s6randPct, s6randPct !== null);
+    s6bar(258, '按电话簿抽 ' + s6n + ' 人', s6biasPct === null ? 0 : s6biasPct, s6biasPct !== null);
+  }
+
+  function drawS6() {
+    if (s6mode === 'a') drawS6A(); else drawS6B();
+  }
+
+  // ---- 状态条 ----
+  function updateS6Status() {
+    var el = document.getElementById('s6-status');
+    var dot = document.getElementById('s6-dot');
+    if (!el) return;
+    if (s6mode === 'a') {
+      var r = s6corr(s6pts);
+      var c = Math.round(s6c * 100);
+      var tail;
+      if (c < 5) tail = '两条线各管各的，几乎没关系。';
+      else if (c < 60) tail = 'r 正在变高——可它们之间还是没有任何因果关系，只是被同一个「气温」推着走。';
+      else tail = 'r 快接近 1 了（几乎完全同步）！但冰淇淋还是不会让人溺水——真正的原因是第三变量「气温」。';
+      el.innerHTML = '气温的影响力 <b>' + c + '%</b>：相关系数 <b>r = ' + r.toFixed(2) + '</b>（'
+        + s6rDesc(r) + '）。' + tail;
+    } else {
+      var s = '这个国家真实情况：蓝队 <b>70%</b>、红队 30%。';
+      if (s6randPct !== null) {
+        s += '　随机抽 <b>' + s6n + '</b> 人 → 蓝队 <b>' + s6randPct + '%</b>（'
+          + (Math.abs(s6randPct - 70) <= 8 ? '很接近真相 ✓' : '有点偏，样本小就容易碰巧抽偏') + '）';
+      }
+      if (s6biasPct !== null) {
+        s += '　按电话簿抽 <b>' + s6n + '</b> 人 → 蓝队 <b style="color:#ef4444">' + s6biasPct
+          + '%</b>，红队反而成了多数 ✗　样本越大，这个错误只会越「精确」。';
+      }
+      if (s6randPct === null && s6biasPct === null) s += '　点下面两个按钮，各抽一次看看。';
+      el.innerHTML = s;
+    }
+    if (dot) dot.className = 'status-dot gold';
+  }
+
+  // ---- 模式A 交互 ----
+  function updateS6A() {
+    var c = parseFloat(document.getElementById('s6-c').value);
+    document.getElementById('s6-c-v').textContent = c + '%';
+    s6c = c / 100;
+    s6pts = s6points(s6c);
+    drawS6A();
+    var r = s6corr(s6pts);
+    var out = document.getElementById('s6-a-out');
+    if (out) {
+      out.innerHTML = '相关系数 <b>r = ' + r.toFixed(2) + '</b>（' + s6rDesc(r) + '）。'
+        + (c === 0
+          ? '现在「气温」完全没起作用，两条线各随机，r 应该接近 0。'
+          : '注意：r 只说明「两条线长得像」，<b>不说明谁导致谁</b>——把气温关掉（拖回 0%），它俩立刻就变回没关系。')
+    }
+    updateS6Status();
+  }
+
+  // ---- 模式B 交互 ----
+  function updateS6B(keep) {
+    s6n = parseFloat(document.getElementById('s6-n').value);
+    document.getElementById('s6-n-v').textContent = s6n + ' 人';
+    if (!keep) {
+      s6randPct = null; s6biasPct = null;
+      var sim = document.getElementById('s6-b-sim');
+      if (sim) sim.textContent = '人数改成 ' + s6n + ' 了，重新点一次上面的按钮吧。';
+    }
+    var out = document.getElementById('s6-b-out');
+    if (out) {
+      out.innerHTML = '打算问 <b>' + s6n + '</b> 人。真实结果是蓝队 70%——'
+        + '<b>随机抽</b>可以问出这个数字，<b>只问装得起电话的家庭</b>却会问出完全相反的结果。';
+    }
+    drawS6B();
+    updateS6Status();
+  }
+
+  function s6Ask(kind) {
+    var N = s6n, blue = 0, i, idx;
+    if (kind === 'random') {
+      for (i = 0; i < N; i++) {
+        idx = Math.floor(Math.random() * 100);
+        if (s6pool[idx].blue) blue++;
+      }
+      s6randPct = Math.round(blue / N * 100);
+    } else {
+      for (i = 0; i < N; i++) {
+        idx = 70 + Math.floor(Math.random() * 30);
+        if (s6pool[idx].blue) blue++;
+      }
+      s6biasPct = Math.round(blue / N * 100);
+    }
+    var sim = document.getElementById('s6-b-sim');
+    if (sim) {
+      sim.innerHTML = (kind === 'random' ? '随机抽了 <b>' : '按电话簿抽了 <b>') + N + '</b> 人：'
+        + '其中支持蓝队的有 <b>' + blue + '</b> 人 → 蓝队支持率 <b>'
+        + Math.round(blue / N * 100) + '%</b>。';
+    }
+    drawS6B();
+    updateS6Status();
+  }
+
+  // ---- 模式切换 ----
+  function s6Mode(m) {
+    stopS6();
+    s6mode = m;
+    var am = m === 'a';
+    document.getElementById('s6m-a').classList.toggle('active', am);
+    document.getElementById('s6m-b').classList.toggle('active', !am);
+    document.getElementById('s6-ctl-a').style.display = am ? '' : 'none';
+    document.getElementById('s6-ctl-b').style.display = am ? 'none' : '';
+    document.getElementById('s6-quiz-a').style.display = am ? '' : 'none';
+    document.getElementById('s6-quiz-b').style.display = am ? 'none' : '';
+    document.getElementById('s6-hint').textContent = am
+      ? '拖滑块调「气温」，看两条无关的线怎么变成「高相关」'
+      : '换不同的问法抽样，看民调怎么「精确地错」';
+    document.getElementById('s6-cap').innerHTML = am
+      ? '散点图：横轴 = 冰淇淋卖了多少，纵轴 = 游泳池溺水人数，每个点 = 一年。'
+      : '上面 = 这个国家的 100 个家庭（蓝点支持蓝队、红点支持红队），右侧虚线框 = 装得起电话的家庭；下面 = 三种问法得到的「蓝队支持率」。';
+    document.getElementById('s6-explain').innerHTML = am
+      ? '<span class="step">小知识</span>　<b>相关</b> = 两件事一起变；<b>因果</b> = 一件真的造成了另一件。看到「两件事相关」先别急着说谁导致谁——很可能是<b>第三个原因</b>在同时推动它们。'
+      : '<span class="step">小知识</span>　想知道大家怎么想，不用问每一个人——只要<b>随机</b>抽一小群，比例就八九不离十。但「随机」很难做到：要是只问装得起电话的人，问得再多也是<b>精确地错</b>。';
+    if (am) updateS6A(); else updateS6B(true);
+  }
+
+  // ---- 播放 / 停止 / 清空 ----
+  function playS6() {
+    if (s6playing) { stopS6(); return; }
+    s6playing = true;
+    var btn = document.getElementById('btn-play6');
+    btn.textContent = '⏸ 停止'; btn.classList.add('playing');
+    if (s6mode === 'a') {
+      document.getElementById('s6-c').value = 0;
+      var c = 0;
+      s6anim = setInterval(function () {
+        c += 2;
+        if (c >= 100) c = 100;
+        document.getElementById('s6-c').value = c;
+        updateS6A();
+        if (c >= 100) stopS6();
+      }, 40);
+    } else {
+      s6Ask('random');
+      s6timer = setTimeout(function () { s6Ask('biased'); }, 900);
+      s6timer2 = setTimeout(function () { stopS6(); }, 1700);
+    }
+  }
+
+  function stopS6() {
+    if (s6anim) { clearInterval(s6anim); s6anim = null; }
+    if (s6timer) { clearTimeout(s6timer); s6timer = null; }
+    if (s6timer2) { clearTimeout(s6timer2); s6timer2 = null; }
+    s6playing = false;
+    var b = document.getElementById('btn-play6');
+    if (b) { b.textContent = '▶ 播放演示'; b.classList.remove('playing'); }
+  }
+
+  function resetS6() {
+    stopS6();
+    if (s6mode === 'a') {
+      document.getElementById('s6-c').value = 0;
+      updateS6A();
+    } else {
+      document.getElementById('s6-n').value = 30;
+      s6randPct = null; s6biasPct = null;
+      var sim = document.getElementById('s6-b-sim');
+      if (sim) sim.textContent = '点上面的按钮，看这一回的民调结果。';
+      updateS6B(true);
+    }
+    var dot = document.getElementById('s6-dot');
+    if (dot) dot.className = 'status-dot';
+  }
+
+  function s6Init() {
+    // 只画「当前模式」的画面。曾同时调 updateS6A() + updateS6B(true)，
+    // 两者都往同一块 canvas 上画，最终停在 B —— 首屏于是出现
+    // 「标签页高亮模式A、控制面板是模式A、画布却是模式B」的错位。
+    if (s6mode === 'a') updateS6A(); else updateS6B(true);
+  }
+
   // 初始化
   drawCoin();
   renderDivision();
@@ -1888,6 +2368,7 @@
   drawS4(0);
   drawS5(0);
   histReset();
+  s6Init();
 </script>
 <!-- portal-nav:start -->
 <style id="portal-nav-style">

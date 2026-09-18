@@ -393,9 +393,8 @@
         <p class="kw" data-page-node-id="wtJlfjm17xdrN1MEYqqjxO">贝叶斯 · 假阳性</p>
         <p class="enter" style="color:#10b981;" data-page-node-id="lvxgLBfaAacvn1M7AXQWXs">进入 →</p>
       </div>
-      <div class="sec-card" style="border-top-color:#f59e0b;" onclick="soon(3)" data-page-node-id="nJtu7JVyC02jewL33u8EDr">
+      <div class="sec-card" style="border-top-color:#f59e0b;" onclick="goTo(3)" data-page-node-id="nJtu7JVyC02jewL33u8EDr">
         <span class="num" style="background:#f59e0b;" data-page-node-id="0ma1Z7W1aWKDs2wr25uKG0">03</span>
-        <span class="soon" data-page-node-id="WWVMg0CXgjdBJ7FhY2Cfi0">制作中</span>
         <h3 data-page-node-id="bNHFT5CK4UAVwJQEVHK80R">彩票到底值不值</h3>
         <p class="kw" data-page-node-id="hBTyHLojOvShkYFQcDEAq6">期望值 · 别上当</p>
         <p class="enter" style="color:#f59e0b;" data-page-node-id="HQlOxYJFeSoTyQpwkQL7Sn">进入 →</p>
@@ -633,6 +632,91 @@
   </div>
 </div>
 
+<!-- ================= 主题 03 ================= -->
+<div class="page" id="page-s3">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">03 彩票到底值不值</span>
+  </div>
+
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="toolbar">
+          <span class="toolbar-hint">点「▶ 播放演示」看钱怎么一去不回，或拖滑块算算你要亏多少</span>
+          <button class="play-btn" id="btn-play3" onclick="playS3()">▶ 播放演示</button>
+          <button class="coin-btn danger" onclick="resetS3()">清空</button>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="s3Canvas" width="580" height="260"></canvas>
+          <p class="canvas-caption">红线 = 你买彩票花的钱，蓝线 = 你实际拿回的钱。买得越多，两条线拉得越开——这张图就是「值不值」的答案。</p>
+        </div>
+
+        <div class="status-bar">
+          <span class="status-dot" id="s3-dot"></span>
+          <span id="s3-status">点「▶ 播放演示」，看买 500 张彩票最后剩多少</span>
+        </div>
+
+        <div class="explain-box">
+          <span class="step">小知识</span>　一张彩票值多少钱，不看它最高能中多少，而看<b>「奖金 × 中奖概率」</b>加起来是多少。这个数叫<b>期望值</b>，通俗说就是「长期平均值」：买一辈子，平均每张能拿回多少。
+        </div>
+
+        <div class="calc-box">
+          <h4>🧮 彩票账本（拖一拖，看你要亏多少）</h4>
+          <div class="slider-row">
+            <label>你打算买多少张 <b id="s3-n-v">100 张</b></label>
+            <input type="range" id="s3-n" min="10" max="1000" step="10" value="100" oninput="updateS3Calc()">
+          </div>
+          <p class="canvas-caption" style="margin-bottom:10px;">这张彩票的固定规则：<b>2 元一张</b>；头奖 <b>500 万元</b>，概率 <b>千万分之一</b>；另有 <b>5 元</b>的小奖，概率 <b>百分之一</b>。所以它平均每张只值 <b>0.5 + 0.05 = 0.55 元</b>。</p>
+          <div class="calc-result" id="s3-calc-out"></div>
+          <div class="calc-bars">
+            <div class="calc-bar"><span class="lab">你花的钱</span><span class="track"><span class="fill" id="s3-bar-cost" style="background:#ef4444;width:0%;"></span></span><span class="num" id="s3-bar-cost-n">0</span></div>
+            <div class="calc-bar"><span class="lab">期望拿回</span><span class="track"><span class="fill" id="s3-bar-back" style="background:#f59e0b;width:0%;"></span></span><span class="num" id="s3-bar-back-n">0</span></div>
+          </div>
+          <div class="monty-btns">
+            <button class="coin-btn primary" onclick="s3Sim()">模拟买一次</button>
+            <button class="coin-btn danger" onclick="resetS3Calc()">重置滑块</button>
+          </div>
+          <p class="canvas-caption" style="margin-top:6px;">怎么用：每点一次「模拟买一次」，就按上面滑块的张数真买一回，看实际中了几次小奖、亏了多少钱。想亲眼看「中头奖」得买够一千万张——而那时你已经花掉 2000 万元。</p>
+          <p class="monty-stat" id="s3-sim-out">点「模拟买一次」，看这一回亏多少。</p>
+        </div>
+
+        <div class="quiz-box">
+          <h4>小测一下</h4>
+          <p class="quiz-q">有一种刮刮乐：2 元一张，有 10% 的概率刮出 5 元，其余 90% 什么都没用。它的期望值是多少？买它划算吗？</p>
+          <button class="quiz-btn" id="btn-answer3" onclick="toggleAnswer('quiz-answer3','btn-answer3')">看解答 ↓</button>
+          <div class="quiz-answer" id="quiz-answer3">
+            期望值 = 5 × 10% = <b>0.5 元</b>。<br>
+            可你花了 <b>2 元</b>，平均只拿回 0.5 元，<b>每张亏 1.5 元</b>。<br>
+            先算出期望值、再和票价比一比，就知道值不值——这就是对抗「万一中了呢」的武器。
+          </div>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>💡 期望值 = 长期平均值</h4>
+          <p>它不是说「你这次能拿到 0.55 元」，而是说「买很多很多次，平均每次拿到 0.55 元」。就像说「每个家庭平均 1.8 个孩子」——并没有哪个家庭真有 1.8 个孩子。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#f59e0b;"></span> 一算就懂</h4>
+          <p>算一张彩票值多少，只要两步：</p>
+          <div class="rule-item"><b>第1步</b>　把每个奖的「奖金 × 中奖概率」分别算出来：头奖 500 万 × 千万分之一 = 0.5 元；小奖 5 元 × 百分之一 = 0.05 元。</div>
+          <div class="rule-item"><b>第2步</b>　全部加起来：0.5 + 0.05 = <b>0.55 元</b>。这就是这张彩票的期望值。</div>
+          <p style="margin-top:10px;">它卖 2 元，却只值 0.55 元。差出来的那 1.45 元去哪儿了？办彩票、发奖金、做公益，还有一部分变成了组织者的收入。</p>
+        </div>
+        <div class="rec-warn">
+          <h4>⚠️ 期望值陷阱：你等不到「长期」</h4>
+          <p>期望值只在「买很多很多次」时才成立，可人的一辈子不够长。有人开这样的赌局：花 1 元，有十亿分之一的机会赢 100 亿元——算起来期望值高达 10 元，稳赚。可你拿 100 万元去赌，几乎一定血本无归，根本撑不到「平均」出现的那天。</p>
+          <p style="margin-top:8px;">所以看到「期望值很高」先别激动，问一句：<b>我要重复多少次，才轮得到这个平均？</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ================= 主题 04 ================= -->
 <div class="page" id="page-s4" data-page-node-id="jpGP6FyjWhLXro7jyX5kRk">
   <div class="sub-nav" data-page-node-id="ZPMK5PEmYdVJCnDWllJTH6">
@@ -817,10 +901,12 @@
     document.getElementById('page-home').classList.remove('active');
     document.getElementById('page-s1').classList.remove('active');
     document.getElementById('page-s2').classList.remove('active');
+    document.getElementById('page-s3').classList.remove('active');
     document.getElementById('page-s4').classList.remove('active');
     document.getElementById('page-s5').classList.remove('active');
     if (demoTimer) stopDemo();
     if (s2playing) stopS2();
+    if (s3playing) stopS3();
     if (s4playing) stopS4();
     if (s5playing) stopS5();
   }
@@ -828,6 +914,7 @@
     hideAll();
     if (n === 1) document.getElementById('page-s1').classList.add('active');
     if (n === 2) document.getElementById('page-s2').classList.add('active');
+    if (n === 3) document.getElementById('page-s3').classList.add('active');
     if (n === 4) document.getElementById('page-s4').classList.add('active');
     if (n === 5) document.getElementById('page-s5').classList.add('active');
     window.scrollTo(0, 0);
@@ -1225,6 +1312,205 @@
     document.getElementById('monty-stat').textContent = '换门胜率 - · 不换胜率 -';
   }
 
+  // ===== 主题03 彩票 / 期望值 =====
+  var s3canvas = document.getElementById('s3Canvas');
+  var s3ctx = s3canvas.getContext('2d');
+  var s3MAX = 500;                 // 演示最多买 500 张
+  var s3PRICE = 2;                 // 每张 2 元
+  var s3BIG = 5000000;             // 头奖 500 万元
+  var s3BIGP = 1 / 10000000;       // 头奖概率 千万分之一
+  var s3SMALL = 5;                 // 小奖 5 元
+  var s3SMALLP = 1 / 100;          // 小奖概率 百分之一
+  var s3EV = s3BIG * s3BIGP + s3SMALL * s3SMALLP;   // 0.5 + 0.05 = 0.55 元
+  var s3hist = [];                 // 每一张的中奖金额
+  var s3Anim = null;
+  var s3playing = false;
+
+  function s3gen() {
+    s3hist = [];
+    for (var i = 0; i < s3MAX; i++) {
+      var r = Math.random();
+      if (r < s3BIGP) s3hist.push(s3BIG);
+      else if (r < s3BIGP + s3SMALLP) s3hist.push(s3SMALL);
+      else s3hist.push(0);
+    }
+  }
+
+  function drawS3(progress) {
+    var W = s3canvas.width, H = s3canvas.height;
+    s3ctx.clearRect(0, 0, W, H);
+    var pL = 62, pR = W - 18, pT = 60, pB = H - 40;
+    var plotW = pR - pL, plotH = pB - pT;
+    var maxY = 1000;   // 纵轴上限：500 张 × 2 元 = 1000 元
+    s3ctx.lineWidth = 1;
+
+    function X(k) { return pL + (k / s3MAX) * plotW; }
+    function Y(v) { return pB - Math.min(v, maxY) / maxY * plotH; }
+
+    // ---- 标题带（y <= 52，与绘图区物理分离）----
+    s3ctx.textAlign = 'left';
+    s3ctx.fillStyle = '#475569';
+    s3ctx.font = '13px sans-serif';
+    s3ctx.fillText('买彩票：花出去的钱  vs  拿回来的钱', 12, 22);
+    s3ctx.font = '12px sans-serif';
+    s3ctx.fillStyle = '#ef4444';
+    s3ctx.fillText('■ 花出去的（红）', 12, 44);
+    s3ctx.fillStyle = '#3b82f6';
+    s3ctx.fillText('■ 拿回来的（蓝）', 155, 44);
+
+    // ---- 网格 + 纵轴刻度 ----
+    s3ctx.font = '11px sans-serif';
+    for (var v = 0; v <= maxY; v += 250) {
+      var gy = Y(v);
+      s3ctx.strokeStyle = '#f1f5f9';
+      s3ctx.beginPath(); s3ctx.moveTo(pL, gy); s3ctx.lineTo(pR, gy); s3ctx.stroke();
+      s3ctx.fillStyle = '#94a3b8';
+      s3ctx.textAlign = 'right';
+      s3ctx.fillText(v + ' 元', pL - 6, gy + 4);
+    }
+
+    // ---- 坐标轴 ----
+    s3ctx.strokeStyle = '#cbd5e1';
+    s3ctx.beginPath();
+    s3ctx.moveTo(pL, pT); s3ctx.lineTo(pL, pB); s3ctx.lineTo(pR, pB);
+    s3ctx.stroke();
+
+    // ---- 横轴刻度 ----
+    s3ctx.textAlign = 'center';
+    s3ctx.fillStyle = '#94a3b8';
+    for (var k = 0; k <= s3MAX; k += 100) {
+      s3ctx.fillText(k + '', X(k), pB + 15);
+    }
+    s3ctx.fillText('买的张数', (pL + pR) / 2, pB + 31);
+
+    if (progress <= 0) return;
+
+    // ---- 花费线（红）：每张 2 元 ----
+    s3ctx.strokeStyle = '#ef4444';
+    s3ctx.lineWidth = 2;
+    s3ctx.beginPath();
+    s3ctx.moveTo(X(0), Y(0));
+    s3ctx.lineTo(X(progress), Y(progress * s3PRICE));
+    s3ctx.stroke();
+
+    // ---- 回报线（蓝）：阶梯状累加 ----
+    s3ctx.strokeStyle = '#3b82f6';
+    s3ctx.beginPath();
+    s3ctx.moveTo(X(0), Y(0));
+    var back = 0;
+    for (var i = 0; i < progress; i++) {
+      back += s3hist[i];
+      s3ctx.lineTo(X(i + 1), Y(back));
+    }
+    s3ctx.stroke();
+    s3ctx.lineWidth = 1;
+
+    // ---- 终点小圆点 ----
+    s3ctx.fillStyle = '#ef4444';
+    s3ctx.beginPath(); s3ctx.arc(X(progress), Y(progress * s3PRICE), 3.5, 0, 6.2832); s3ctx.fill();
+    s3ctx.fillStyle = '#3b82f6';
+    s3ctx.beginPath(); s3ctx.arc(X(progress), Y(back), 3.5, 0, 6.2832); s3ctx.fill();
+  }
+
+  function updateS3Status() {
+    var n = s3hist.length, kSmall = 0, kBig = 0, back = 0;
+    for (var i = 0; i < n; i++) {
+      if (s3hist[i] === s3BIG) kBig++;
+      else if (s3hist[i] === s3SMALL) kSmall++;
+      back += s3hist[i];
+    }
+    var cost = n * s3PRICE;
+    var el = document.getElementById('s3-status');
+    var dot = document.getElementById('s3-dot');
+    if (!el) return;
+    el.innerHTML = '买了 <b>' + n + '</b> 张：花掉 <b>' + cost.toFixed(0) + ' 元</b>，中 <b>' + kSmall
+      + '</b> 次小奖' + (kBig ? '、<b style="color:#ef4444">' + kBig + '</b> 次头奖' : '')
+      + '，拿回 <b>' + back.toFixed(0) + ' 元</b> → 净亏 <b style="color:#ef4444">'
+      + (cost - back).toFixed(0) + ' 元</b>。平均每张只拿回 ' + (back / n).toFixed(2)
+      + ' 元，而票价是 2 元。';
+    if (dot) dot.className = 'status-dot gold';
+  }
+
+  function playS3() {
+    if (s3playing) { stopS3(); return; }
+    s3gen();
+    s3playing = true;
+    var btn = document.getElementById('btn-play3');
+    btn.textContent = '⏸ 停止'; btn.classList.add('playing');
+    var prog = 0;
+    s3Anim = setInterval(function () {
+      prog += 10;
+      if (prog >= s3MAX) {
+        prog = s3MAX; drawS3(prog);
+        clearInterval(s3Anim); s3Anim = null; s3playing = false;
+        btn.textContent = '▶ 播放演示'; btn.classList.remove('playing');
+        updateS3Status();
+      } else {
+        drawS3(prog);
+      }
+    }, 40);
+  }
+
+  function stopS3() {
+    if (s3Anim) { clearInterval(s3Anim); s3Anim = null; }
+    s3playing = false;
+    var b = document.getElementById('btn-play3');
+    if (b) { b.textContent = '▶ 播放演示'; b.classList.remove('playing'); }
+  }
+
+  function resetS3() {
+    stopS3();
+    s3hist = [];
+    drawS3(0);
+    var el = document.getElementById('s3-status');
+    if (el) el.textContent = '点「▶ 播放演示」，看买 500 张彩票最后剩多少';
+    var dot = document.getElementById('s3-dot');
+    if (dot) dot.className = 'status-dot';
+  }
+
+  function updateS3Calc() {
+    var N = parseFloat(document.getElementById('s3-n').value);
+    document.getElementById('s3-n-v').textContent = N + ' 张';
+    var cost = N * s3PRICE;
+    var back = N * s3EV;
+    var lose = cost - back;
+    document.getElementById('s3-calc-out').innerHTML =
+      '买 <b>' + N + ' 张</b>要花 <b>' + cost.toFixed(0) + ' 元</b>；每张平均只值 <b>'
+      + s3EV.toFixed(2) + ' 元</b>，所以期望拿回 <b>' + back.toFixed(1) + ' 元</b> → 净亏 <b style="color:#ef4444">'
+      + lose.toFixed(0) + ' 元</b>。';
+    document.getElementById('s3-bar-cost').style.width = '100%';
+    document.getElementById('s3-bar-cost-n').textContent = cost.toFixed(0);
+    document.getElementById('s3-bar-back').style.width = (back / cost * 100).toFixed(1) + '%';
+    document.getElementById('s3-bar-back-n').textContent = back.toFixed(0);
+  }
+
+  function s3Sim() {
+    var N = parseFloat(document.getElementById('s3-n').value);
+    var kSmall = 0, kBig = 0, back = 0;
+    for (var i = 0; i < N; i++) {
+      var r = Math.random();
+      if (r < s3BIGP) { kBig++; back += s3BIG; }
+      else if (r < s3BIGP + s3SMALLP) { kSmall++; back += s3SMALL; }
+    }
+    var cost = N * s3PRICE;
+    var net = back - cost;
+    var out = document.getElementById('s3-sim-out');
+    out.innerHTML = '真的买了 <b>' + N + ' 张</b>：花 ' + cost.toFixed(0) + ' 元，中 ' + kSmall + ' 次小奖'
+      + (kBig ? '、<b style="color:#ef4444">' + kBig + ' 次头奖！</b>' : '')
+      + '，拿回 ' + back.toFixed(0) + ' 元，实际'
+      + (net >= 0
+        ? '<b style="color:#10b981">赚 ' + net.toFixed(0) + ' 元</b>'
+        : '<b style="color:#ef4444">亏 ' + (-net).toFixed(0) + ' 元</b>')
+      + '。　（头奖概率千万分之一：平均要买一千万张才中一次，那时你已经花掉 2000 万元）';
+  }
+
+  function resetS3Calc() {
+    document.getElementById('s3-n').value = 100;
+    document.getElementById('s3-n-v').textContent = '100 张';
+    document.getElementById('s3-sim-out').textContent = '点「模拟买一次」，看这一回亏多少。';
+    updateS3Calc();
+  }
+
   // ===== 主题04 保险 / 风险 =====
   var s4canvas = document.getElementById('s4Canvas');
   var s4ctx = s4canvas.getContext('2d');
@@ -1596,6 +1882,8 @@
   updateCalc();
   montyNew();
   drawS2(0);
+  updateS3Calc();
+  drawS3(0);
   updateS4Calc();
   drawS4(0);
   drawS5(0);

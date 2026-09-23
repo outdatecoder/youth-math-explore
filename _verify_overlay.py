@@ -38,7 +38,8 @@ SEQ = {
     'functions': ['goTo(%d)' % n for n in [1, 2, 3, 4, 5]],
     'calculus1': ['goC1(%d)' % n for n in [1, 2, 3, 4, 5]]
                  + ['goC2(%d)' % n for n in [1, 2, 3, 4, 5]]
-                 + ['goC3(%d)' % n for n in [1, 2, 3, 4]],
+                 + ['goC3(%d)' % n for n in [1, 2, 3, 4]]
+                 + ['goC4(%d)' % n for n in [1, 2, 3, 4]],
 }
 
 PROBE = """<script>
@@ -90,22 +91,39 @@ window.addEventListener('load', function(){
     };
   }
 
-  function step(){
-    if (idx >= seq.length) {
-      document.documentElement.setAttribute('data-verify', JSON.stringify(out));
-      return;
-    }
-    var label = (idx === 0 ? '<HOME>' : seq[idx - 1]);
-    if (idx > 0) { try { eval(seq[idx - 1]); } catch (e) { label += ' NAVERR'; } }
-    // 等 1000ms（> 700ms 二次校正 + 400ms fadeIn 动画）后再断言
-    setTimeout(function(){
-      var r = check();
-      out.push([label, r.top, r.left, r.size, r.t1, r.t2, r.own, r.okViewport, r.vw, r.vh]);
-      idx++;
-      step();
-    }, 1000);
+  /* 单次断言快照：返回报告行所需的全部字段 */
+  function snap(label){
+    var r = check();
+    return [label, r.top, r.left, r.size, r.t1, r.t2, r.own, r.okViewport, r.vw, r.vh];
   }
-  step();
+
+  /* ===== 推进方式：async/await 链，而不是 setTimeout 递归 =====
+
+     踩过的坑（务必保留本注释，别再改回递归）：
+     原先写成 `setTimeout(step, 1000)` 递归推进，短序列没事，长序列（calculus1 有
+     19 步）会**静默丢最后一步** —— 表现为 `goC4(4)` 从报告里消失，看着像"第 4 章
+     最后一节有 bug"，实际是探针没跑完就被 headless 收尾了（进程 2.2s 就退出，
+     比短序列还快）。
+
+     排查时排除过的方向（都不是原因）：virtual-time-budget 太小（加到 600000 无效）、
+     页面导航函数坏了（`goC4(4)` 单独跑正常）、STOPPERS 回调卡死（`stopC4S4` 是空实现）。
+     真正原因是递归 setTimeout 的调度在长链下被提前终止；换成 async/await 顺序
+     `await` 之后 19 步全部走完。**改回递归会再次丢步，不要动。**
+     另：最终一次性写 data-verify（每步 flush 反而更早丢）。 */
+  function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+  (async function(){
+    var label = '<HOME>';
+    out.push(snap(label));
+    for (var i = 0; i < seq.length; i++) {
+      label = seq[i];
+      try { eval(seq[i]); } catch (e) { label += ' NAVERR'; }
+      // 等 900ms（> 700ms 二次校正 + 400ms fadeIn 动画）后再断言
+      await wait(900);
+      out.push(snap(label));
+    }
+    document.documentElement.setAttribute('data-verify', JSON.stringify(out));
+  })();
 });
 </script>"""
 
@@ -120,7 +138,7 @@ def run(page, w, h, tag):
         f.write(html)
     prof = os.path.join(OUT, 'vf_%s_%s' % (page, tag))
     r = subprocess.run([EDGE, '--headless=new', '--disable-gpu', '--no-sandbox',
-                        '--user-data-dir=' + prof, '--virtual-time-budget=200000',
+                        '--user-data-dir=' + prof, '--virtual-time-budget=600000',
                         '--window-size=%d,%d' % (w, h), '--dump-dom',
                         BASE + '/' + name], capture_output=True)
     dom = r.stdout.decode('utf-8', 'ignore')

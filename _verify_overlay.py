@@ -39,7 +39,8 @@ SEQ = {
     'calculus1': ['goC1(%d)' % n for n in [1, 2, 3, 4, 5]]
                  + ['goC2(%d)' % n for n in [1, 2, 3, 4, 5]]
                  + ['goC3(%d)' % n for n in [1, 2, 3, 4]]
-                 + ['goC4(%d)' % n for n in [1, 2, 3, 4]],
+                 + ['goC4(%d)' % n for n in [1, 2, 3, 4]]
+                 + ['goC5(%d)' % n for n in [1, 2, 3, 4]],
 }
 
 PROBE = """<script>
@@ -109,7 +110,10 @@ window.addEventListener('load', function(){
      页面导航函数坏了（`goC4(4)` 单独跑正常）、STOPPERS 回调卡死（`stopC4S4` 是空实现）。
      真正原因是递归 setTimeout 的调度在长链下被提前终止；换成 async/await 顺序
      `await` 之后 19 步全部走完。**改回递归会再次丢步，不要动。**
-     另：最终一次性写 data-verify（每步 flush 反而更早丢）。 */
+     另：最终一次性写 data-verify（每步 flush 反而更早丢）。
+
+     2026-09-30：calculus1 加了第 5 章，序列涨到 23 步，async/await 依然全跑完
+     （这条链的长度上限比递归高得多，不必改每步的等待时间）。 */
   function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 
   (async function(){

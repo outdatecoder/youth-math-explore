@@ -40,7 +40,8 @@ SEQ = {
                  + ['goC2(%d)' % n for n in [1, 2, 3, 4, 5]]
                  + ['goC3(%d)' % n for n in [1, 2, 3, 4]]
                  + ['goC4(%d)' % n for n in [1, 2, 3, 4]]
-                 + ['goC5(%d)' % n for n in [1, 2, 3, 4]],
+                 + ['goC5(%d)' % n for n in [1, 2, 3, 4]]
+                 + ['goC6(%d)' % n for n in [1, 2, 3, 4]],
 }
 
 PROBE = """<script>
@@ -113,7 +114,8 @@ window.addEventListener('load', function(){
      另：最终一次性写 data-verify（每步 flush 反而更早丢）。
 
      2026-09-30：calculus1 加了第 5 章，序列涨到 23 步，async/await 依然全跑完
-     （这条链的长度上限比递归高得多，不必改每步的等待时间）。 */
+     2026-10-19：再加第 6 章，序列到 27 步，仍然全跑完（这条链的长度上限比递归
+     高得多，不必改每步的等待时间）。 */
   function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 
   (async function(){

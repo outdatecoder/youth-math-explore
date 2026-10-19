@@ -465,6 +465,10 @@
   #cv5-2 { width: 100%; height: auto; }
   #cv5-3 { width: 100%; height: auto; }
   #cv5-4 { width: 100%; height: auto; }
+  #cv6-1 { width: 100%; height: auto; }
+  #cv6-2 { width: 100%; height: auto; }
+  #cv6-3 { width: 100%; height: auto; }
+  #cv6-4 { width: 100%; height: auto; }
 
 </style>
 </head>
@@ -3201,7 +3205,7 @@
     <span class="back" onclick="goHome()">← 返回首页</span>
     <span class="divider">|</span>
     <span class="title">5.4　生命就像密西西比河</span>
-    <span class="nav-next" onclick="goHome()">第 5 章完 · 返回首页 →</span>
+    <span class="nav-next" onclick="goC6(1)">进入第 6 章 · 福尔摩斯和迷路的自行车 →</span>
   </div>
   <div class="sub-container">
     <div class="layout">
@@ -3296,6 +3300,441 @@
     </div>
   </div>
 </div>
+<!-- ================= 第 6 章 福尔摩斯和迷路的自行车：切线就是那一刻的方向（4 节 · 骨架期）================= -->
+<!-- 本章 4 节（计划 §三）。★ 与第 5 章最大的不同：**本章第一次放行封存词「切线」** ——
+     原书第 6 章自己就用了它并给了词源（书页 63 逐字：「切线飞快地触碰到曲线上的某一点……
+     成为曲线的导数」；tangent / tangible / tango ← 拉丁语 tangere）⇒ 放行才叫忠实。
+     ★ 跨章保护：切线**只在本章放行**；另外三个"切"字头的几何词（第 2 章封存的那几个）**继续封存**
+     （`RELEASED = { 4: […], 5: [], 6: ['切线'] }` + `withoutChapter(html, 6)` 内 0 命中的脚本级断言）。
+     ★ 数据来源：全章无公式、无坐标刻度（原书亦然）—— 曲线与两条车辙都由页面**现算**
+     （前轮 = 解析参数曲线，后轮 = 由"后轮瞬时方向指向前轮"的约束积分生成）。 -->
+
+<!-- ================= 6.1 两条车辙 ================= -->
+
+<div class="page" id="page-c6-1">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">6.1　两条车辙</span>
+    <span class="nav-next" onclick="goC6(2)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b><b>一个 10 岁的男孩、一位德语老师、一辆自行车，同时不见了。</b>校长连夜赶到贝克街 221B 号请福尔摩斯帮忙 —— 手上只有湿地上的<b>两串车辙</b>。<br>福尔摩斯先按"<b>陷得深的那一串，是重的那一头</b>"判了个方向，<b>判错了</b>。<br>后来他才转过弯来：这两串车辙跟"谁重"没关系 —— 它们是<b>前轮</b>和<b>后轮</b>留下的。</div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn primary" onclick="resetC6S1()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row6-1-l">
+          <label>车身有多长：<b id="lb6-1-l">1.00 个车长</b>　—— 拖一拖，看后轮那串车辙被"拖"成什么样</label>
+          <input type="range" id="s6-1-l" min="0.7" max="1.8" step="0.05" value="1" oninput="slideLC6S1(parseFloat(this.value))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv6-1" width="620" height="380"></canvas>
+          <p class="canvas-caption"><b style="color:#3b82f6;">蓝线 = 前轮的车辙</b>（它想怎么拐就怎么拐）；<b style="color:#f59e0b;">橙线 = 后轮的车辙</b>（它<b>不能</b>自己拐，只能追）。<br>深色的那根是<b>车架</b>：后轮的位置就是被它"拽"出来的。<span style="color:#10b981;">绿虚线</span>是<b>前轮自己此刻想去的方向</b> —— 它和车架<b>不重合</b>，因为前轮在拐弯。<br><span style="color:#94a3b8;">两串车辙不是"一深一浅"，它们是前后两个轮子。</span></p>
+        </div>
+
+        <div class="step-line" id="sl6-1"></div>
+
+        <div class="status-bar" id="st6-1-bar"><span class="status-dot" id="st6-1-dot"></span><span id="st6-1"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv6-1-cell">
+            <div class="k">车身有多长（后轮 → 前轮）</div>
+            <div class="v" id="kv6-1-v">…</div>
+            <div class="k" id="kv6-1-t">…</div>
+          </div>
+          <div class="kv" id="kv6-1b-cell">
+            <div class="k">后轮（车架）朝向</div>
+            <div class="v" id="kv6-1b-v">…</div>
+            <div class="k" id="kv6-1b-t">…</div>
+          </div>
+          <div class="kv" id="kv6-1c-cell">
+            <div class="k">前轮自己此刻的朝向</div>
+            <div class="v" id="kv6-1c-v">…</div>
+            <div class="k" id="kv6-1c-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只讲一条规则：后轮的朝向，永远指着"此刻"前轮所在的位置。</b><br>
+          为什么？因为<b>后轮不能自己拐弯</b> —— 它和车架焊在一起，只能跟着车架的方向走；而车架的另一头，就插在前轮上。<br>
+          于是只要知道前轮的车辙，后轮的车辙就<b>被这条规则一步一步推出来了</b>。<br>
+          拖「车身有多长」：两条车辙的形状会一起变，可量出来那个数<b>永远是滑块上那个数</b> ——
+          因为车长是我们<b>输入</b>给这条规则的，不是量出来的结果。<br>
+          <span style="color:#94a3b8;"><b>两处诚实说明：</b>① 这里的车辙是<b>页面自己算的</b> ——
+          蓝线是给定的曲线，橙线是按上面那条规则积出来的（不是照着原书的插图描的）；<br>
+          ② 福尔摩斯一开始那个"陷得深的是重的那头"是<b>原书里的错判</b>，页面把它照实写出来，
+          因为它正是这一节要划掉的那件事：<b>车辙的方向不是靠"陷得深"</b>。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　只看两串车辙，凭什么能定出车往哪边走？<br>A. 陷得深的那一串是先过去的<br>B. 后轮不能自己拐弯，车架又是硬的 —— 所以后轮的瞬时方向永远指着前轮"此刻"的位置，后轮那串车辙只能一直"追"<br>C. 两串车辙的间距越走越宽，宽的那头是前方</p>
+          <button class="quiz-btn" id="q61a-btn" onclick="toggleAnswer('q61a-ans','q61a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q61a-ans">答案是 <b>B</b>。车辙的<b>方向</b>不是"深浅"给的 —— 那是福尔摩斯一开始的错判。<br>真正给方向的是<b>车架</b>：后轮被车架拽着，车架的另一头插在前轮上，所以后轮每一刻的朝向都必须<b>指着前轮现在在哪</b>。<br>把这件事画出来，就是画面上那根深色的车架线：<b>它有多长（车长）永远不变，它指哪儿，后轮就往哪儿走。</b></div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　拖动"车身有多长"滑块，两条车辙的形状都变了，可为什么量出来的车长<b>永远等于滑块上那个数</b>？<br>A. 因为页面把那个数字写死在读数格里了<br>B. 因为后轮的位置不是画出来的，是<b>按规则一步一步推出来的</b> —— 每一刻都重新保证"后轮 → 前轮 = 车长、而且方向一致"<br>C. 因为前轮的车辙也跟着变了，两个变化正好抵消</p>
+          <button class="quiz-btn" id="q61b-btn" onclick="toggleAnswer('q61b-ans','q61b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q61b-ans">答案是 <b>B</b>。<b>车长是输入，不是结果</b>：页面先用这个长度把后轮的位置推出来，再去量它 —— 所以量出来必然还是它。<br>反过来看：如果后轮的车辙能自己乱走，那么"后轮 → 前轮"这个距离就会一会儿长一会儿短。到了 6.4 你会看到，福尔摩斯正是用"<b>这个距离变不变</b>"来判断方向的。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>我们现在知道了：<b>后轮的朝向永远指着前轮</b>。可"前轮此刻的朝向"到底是什么东西？<br>把每一点上那盏<b>前照灯</b>点亮 —— 灯照出去的方向，就是那一刻的方向。那条线有个名字，叫<b>切线</b>。<br>下一节就把它画出来：<b>每一点上都有这么一条</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>两串车辙</b>：它们不是"一条深一条浅"，而是<b>前轮</b>与<b>后轮</b>留下的两条轨迹。</p>
+          <p><b>后轮不能自己拐弯</b>：它被车架焊死，只能跟着车架的方向走；而车架的另一头插在前轮上。所以<b>后轮的瞬时方向永远指着前轮"此刻"的位置</b>。</p>
+          <p><b>刚性车架</b>：两个轮子之间的那段长度是<b>焊死</b>的 —— 它一路上都不变。★ 这就是下一节要拿去当"尺子"用的那个数。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先认清两串车辙：<b>蓝线</b>是前轮的（它想怎么拐就怎么拐），<b>橙线</b>是后轮的（它只能追）。</div>
+          <div class="rule-item"><b>第 2 步</b>　看"此刻"那辆车上的<b>深色车架</b>：它指哪儿，后轮接下来就往哪儿走 —— 这不是近似，是<b>一刻一刻算出来的</b>。</div>
+          <div class="rule-item"><b>第 3 步</b>　拖「车身有多长」：两条车辙一起变形状，可<b>量出来的车长永远是滑块上那个数</b>（因为它是"输入"）。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>车辙的方向不是靠"陷得深"。</b>那是福尔摩斯一开始的错判 —— 深浅说不了方向，<b>车架</b>才有方向。</p>
+          <p><b>后轮永远不会自己拐弯。</b>前轮可以转、后轮不行 —— 这句就是"两串车辙能定方向"的全部秘密。★ 记住它，6.3 要用它来<b>从两串车辙里挑出前轮</b>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 6.2 切线：那一刻的方向 ================= -->
+
+<div class="page" id="page-c6-2">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">6.2　切线：那一刻的方向</span>
+    <span class="nav-next" onclick="goC6(3)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>夜里骑车，你靠什么认路？靠车把上那盏<b>前照灯</b>。<br>灯照出去的方向，就是你<b>此刻</b>要走的方向 —— 它和车辙上"你正踩着的那一点"是绑在一起的。<br>福尔摩斯手里那两串车辙也一样：<b>辙上的每一点，都藏着一盏灯。</b></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="btn-play6-2" onclick="playC6S2()">▶ 播放</button>
+          <button class="ctrl-btn primary" onclick="resetC6S2()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row6-2-t">
+          <label>把点拖到车辙的哪一处：<b id="lb6-2-t">正中间（山顶上）</b>　—— 拖一拖，看那条线怎么转</label>
+          <input type="range" id="s6-2-t" min="2" max="98" step="1" value="50" oninput="slidePosC6S2(parseFloat(this.value))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv6-2" width="620" height="380"></canvas>
+          <p class="canvas-caption"><b style="color:#3b82f6;">蓝线 = 一段车辙</b>（一个起伏 —— 先上一段坡，到顶，再下一段坡）。<br><b style="color:#8b5cf6;">紫线 = 过这一点的切线</b>：它<b>只在这一处</b>贴着车辙，别处都离车辙有一点距离。<br><b style="color:#60a5fa;">两根浅蓝的短弦</b>（点两边各一根）：<b>弦越短，它们越贴近那条紫线</b> —— 按「▶ 播放」看它们缩进去。<br><span style="color:#94a3b8;">原书写：切线指示的就是前照灯的方向。</span></p>
+        </div>
+
+        <div class="step-line" id="sl6-2"></div>
+
+        <div class="status-bar" id="st6-2-bar"><span class="status-dot" id="st6-2-dot"></span><span id="st6-2"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv6-2-cell">
+            <div class="k">这一刻的方向（那条线指着哪儿）</div>
+            <div class="v" id="kv6-2-v">…</div>
+            <div class="k" id="kv6-2-t">…</div>
+          </div>
+          <div class="kv" id="kv6-2b-cell">
+            <div class="k">两根弦与它差多少</div>
+            <div class="v" id="kv6-2b-v">…</div>
+            <div class="k" id="kv6-2b-t">…</div>
+          </div>
+          <div class="kv" id="kv6-2c-cell">
+            <div class="k">两根弦夹得住它吗</div>
+            <div class="v" id="kv6-2c-v">…</div>
+            <div class="k" id="kv6-2c-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只讲一件事：车辙上每一点，都有一盏前照灯。</b><br>
+          把灯照出去的那条线画出来，它就叫<b>切线</b>。灯的方向 —— 也就是<b>切线</b>的方向 ——
+          就是曲线在<b>那一点</b>的<b>瞬时方向</b>；原书说，它"成为曲线的<b>导数</b>"。<br>
+          ★ <b>切线只是那一刻的方向 —— 换一点，方向就变了。</b>拖那个点，紫线会跟着转：
+          上坡时它朝上、到山顶它<b>水平</b>、下坡时它朝下。<br>
+          那两根浅蓝的短弦是怎么来的？在点的<b>两边各取一点</b>，连起来就是一根弦。
+          <b>弦越短，它越贴近那条线</b> —— 按「▶ 播放」，看两根弦一点点缩回点上，
+          最后和紫线几乎贴在一起。这就是"切线"这个名字的来处：它<b>切</b>在这一点上。<br>
+          <span style="color:#94a3b8;"><b>两处诚实说明：</b>① 原书那两句（书页 63）逐字抄在这里 ——<br>
+          「在数学中，切线飞快地触碰到曲线上的某一点，而正是在那个短暂的瞬间，它指引了曲线的瞬时方向，成为曲线的导数。」<br>
+          「如果曲线是一辆车行驶的轨迹，那么切线指示的就是前照灯的方向。」<br>
+          ② 这条车辙和那条切线都是<b>页面自己算的</b>：曲线是给定的正弦弧，切线由它在这一点处的
+          解析方向画出来 —— 不是照着原书插图描的。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　为什么说"切线就是那一刻的方向"？<br>A. 因为切线只碰到曲线一次，碰到的那个点就是方向<br>B. 因为曲线在这一点"正要往哪儿走"，才让那条线也是那个走向 —— 它指示的就是前照灯照出去的方向<br>C. 因为切线总是水平的，方向就定下来了</p>
+          <button class="quiz-btn" id="q62a-btn" onclick="toggleAnswer('q62a-ans','q62a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q62a-ans">答案是 <b>B</b>。切线<b>不是</b>把曲线"切成两半"的意思，也不是"碰一次"就算数 —— 它是<b>那一刻的走向</b>。<br>拖一拖那个点：在山顶它水平（那一刻你正往平里走）、在上坡它朝上、在下坡它朝下。<b>换一点，方向就变了</b> —— 所以它只对<b>这一点</b>负责。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　那两根浅蓝的短弦，越短越贴近紫线 —— 这件事说明了什么？<br>A. 说明弦算错了<br>B. 说明那条紫线的方向就是"弦短到几乎没有时"的方向 —— 弦只是替我们把那一小段掰直来看<br>C. 说明曲线在这一点真的变成了直线</p>
+          <button class="quiz-btn" id="q62b-btn" onclick="toggleAnswer('q62b-ans','q62b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q62b-ans">答案是 <b>B</b>。<b>弦是替我们量方向用的</b>：在点的两边各取一点、连起来，就得到"这一小段一路走来的方向"。<br>点挨得越近，这一小段就越像那个方向本身 —— 但<b>曲线并没有变成直线</b>，它仍然在弯，只是弯得看不出来了。<br>★ 这句话很重要，5.2 已经用另一种方式说过一次：<b>"这一段是直的"不等于"它就是直的"</b>。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>现在每一点都有一盏前照灯了。<br>可要是<b>两条</b>车辙交在一起，怎么知道哪条是前轮留下的？<br>下一节：在一条轨迹上找一个<b>切线朝外</b>的点 —— 那边一条车辙都没有。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>切线</b>：过曲线上一点、并且在那个点上"贴着"曲线的那条线。<b>只在那一点贴</b>，别处都离曲线有一点距离。</p>
+          <p><b>瞬时方向</b>：曲线在这一点"正要往哪儿走"的方向。切线指的就是它 —— 也就是原书说的<b>前照灯的方向</b>。</p>
+          <p><b>两根弦</b>：在点的两边各取一点连起来。弦是直的、看得见；<b>弦越短，它越贴近那条线</b>。★ 曲线并没有因此变成直线。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先认三样东西：<b>蓝线</b>是车辙、<b>紫线</b>是过这一点的切线、<b>两根浅蓝短弦</b>在点两边。</div>
+          <div class="rule-item"><b>第 2 步</b>　拖那个点：上坡紫线朝上、<b>山顶水平</b>、下坡朝下 —— <b>换一点，方向就变了</b>。</div>
+          <div class="rule-item"><b>第 3 步</b>　按「▶ 播放」：两根弦一点点缩回点上，和紫线几乎贴在一起。★ 缩得越短，差得越小。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>切线不是"把曲线切成两半"。</b>它<b>只在这一处</b>贴着曲线；换个点，就是另一条线。</p>
+          <p><b>弦变短 ≠ 曲线变直。</b>弦只是替我们<b>量方向</b>用的。曲线在那一点仍然在弯 —— 5.2 说过：<b>"这一段是直的"不等于"它就是直的"</b>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 6.3 切线朝外的那一条 ================= -->
+
+<div class="page" id="page-c6-3">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">6.3　切线朝外的那一条</span>
+    <span class="nav-next" onclick="goC6(4)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>泥地上有两串<b>交叠</b>的车辙，哪一串是<b>前轮</b>留下的？<br>不用去猜哪条深哪条浅（福尔摩斯第一回就猜错过）：在轨迹上找一个<b>切线朝外</b>的点，一眼就能认出来。<br>两条车辙和两条切线，都是<b>页面自己算的</b> —— 前轮沿一条波浪曲线走，后轮被车架拖着一路追。</div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn primary" onclick="resetC6S3()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row6-3-t">
+          <label>把游标拖到车辙上：<b id="lb6-3-t">正在爬坡</b>　—— 看两条切线怎么指</label>
+          <input type="range" id="s6-3-t" min="2" max="98" step="1" value="40" oninput="slidePosC6S3(parseFloat(this.value))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv6-3" width="620" height="380"></canvas>
+          <p class="canvas-caption"><b style="color:#3b82f6;">蓝线 = 一条车辙</b>，<b style="color:#f59e0b;">橙线 = 另一条车辙</b>。<br><b style="color:#8b5cf6;">紫线 = 游标处（蓝线）的切线</b>；<b style="color:#10b981;">绿线 = 橙线上同一时刻那一点的切线</b>。<br>★ 看两件事：<b>绿线永远指着蓝线</b>（后轮追前轮）；而<b>紫线在波峰 / 波谷处会指向空处 —— 朝外</b>。<br><span style="color:#94a3b8;">原书写：只要在一条轨迹上找到切线朝外的点，那就是前轮的轨迹。</span></p>
+        </div>
+
+        <div class="step-line" id="sl6-3"></div>
+
+        <div class="status-bar" id="st6-3-bar"><span class="status-dot" id="st6-3-dot"></span><span id="st6-3"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv6-3-cell">
+            <div class="k">游标处的切线方向（紫线指着哪儿）</div>
+            <div class="v" id="kv6-3-v">…</div>
+            <div class="k" id="kv6-3-t">…</div>
+          </div>
+          <div class="kv" id="kv6-3b-cell">
+            <div class="k">这条切线朝外吗</div>
+            <div class="v" id="kv6-3b-v">…</div>
+            <div class="k" id="kv6-3b-t">…</div>
+          </div>
+          <div class="kv" id="kv6-3c-cell">
+            <div class="k">车长（蓝点到橙点）</div>
+            <div class="v" id="kv6-3c-v">…</div>
+            <div class="k" id="kv6-3c-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只讲一件事：哪条车辙是前轮的 —— 看切线就够。</b><br>
+          后轮被车架焊死，它<b>永远追着前轮</b>走，所以后轮的切线<b>永远指向另一条车辙</b>（看绿线，它一直指着蓝线）。<br>
+          前轮能自由转向，所以前轮的切线<b>有时会指向空处</b> —— 也就是<b>朝外</b>：切线指出去的方向，一条车辙都没有。<br>
+          ★ 所以办法是：<b>在一条轨迹上找一个切线朝外的点</b>。找到了，那条就是前轮（后轮上，你永远找不到这样的点）。<br>
+          把游标拖到<b>波峰</b>（最高处）或<b>波谷</b>（最低处）试试：紫线是不是<b>水平</b>地指出去，指向一片空地？那就是「朝外」。<br>
+          <span style="color:#94a3b8;"><b>诚实说明：</b>① 原书那句（书页 64）逐字抄在这里 ——<br>
+          「只要我们能一条轨迹上找到一个切线朝外的点，也就是切线指向的方向完全没有车辙（意味着没有车轮经过），那就是前轮的轨迹。」<br>
+          ② 两条车辙是页面自己算的：前轮沿给定的波浪曲线走，后轮由「后轮追前轮」一步步推出来 —— 不是照着原书插图描的。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　为什么后轮的切线永远指向另一条车辙？<br>A. 因为后轮想指向哪儿就指向哪儿<br>B. 因为后轮被车架焊死，只能追着前轮此刻的位置走<br>C. 因为后轮比前轮大</p>
+          <button class="quiz-btn" id="q63a-btn" onclick="toggleAnswer('q63a-ans','q63a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q63a-ans">答案是 <b>B</b>。前后轮被<b>车架</b>固定在一起，后轮不能自己拐弯，只能<b>追着前轮此刻的位置</b>走 —— 所以它的切线（绿线）永远指向前轮（蓝线上的游标）。<br>反过来说：后轮上<b>找不到</b>一个「朝外」的点。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　在一条轨迹上找到切线朝外的点，说明什么？<br>A. 这条就是前轮的轨迹<br>B. 这条就是后轮的轨迹<br>C. 自行车要翻了</p>
+          <button class="quiz-btn" id="q63b-btn" onclick="toggleAnswer('q63b-ans','q63b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q63b-ans">答案是 <b>A</b>。<b>前轮能自由转向</b>，所以它的切线有时会指向空处（朝外）；<b>后轮被车架焊死</b>，切线永远追着另一条车辙。<br>所以：<b>能找出「朝外」点的那条，就是前轮。</b>拖到波峰 / 波谷看看，紫线水平地指出去，指向一片空地 —— 那就是朝外。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>现在你知道哪条是前轮了。<br>可车到底是往哪边开的？<b>假设一个方向，沿切线量一量</b>（后轮到前轮的距离，必须恒等于车长）。<br>下一节：6000 英镑的问题。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>朝外</b>：切线的方向指向空处 —— 那一边一条车辙都没有。前轮能转向，所以它的切线会朝外；后轮不会。</p>
+          <p><b>后轮追前轮</b>：前后轮被车架固定，后轮的瞬时方向永远指向前轮此刻的位置。所以后轮的切线永远指向另一条车辙。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先认三样：<b>蓝线 / 橙线</b>是两条车辙，<b>紫线</b>是游标处的切线，<b>绿线</b>是橙线上那一点的切线。</div>
+          <div class="rule-item"><b>第 2 步</b>　看绿线：它<b>永远指着蓝线</b>（后轮追前轮）。后轮上找不到朝外的点。</div>
+          <div class="rule-item"><b>第 3 步</b>　拖游标到<b>波峰 / 波谷</b>：紫线水平地指出去，指向一片空地 —— 那就是「朝外」，这条就是前轮。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>不是"哪条深哪条是后轮"。</b>车辙的深浅看的是路面，跟前后轮没关系（福尔摩斯第一回就栽在这上面）。</p>
+          <p><b>不是"切线随便指"。</b>只有<b>前轮</b>的切线会朝外；后轮被车架焊死，切线永远追着另一条车辙。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ================= 6.4 6000 英镑的问题 ================= -->
+
+<div class="page" id="page-c6-4">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">6.4　6000 英镑的问题</span>
+    <span class="nav-next" onclick="goHome()">第 6 章完 · 返回首页 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>两条车辙已经分出了<b>前轮</b>（蓝）和<b>后轮</b>（橙）—— 那是 6.3 的本事。现在只剩最后一个问题，也就是故事里公爵悬赏 <b>6000 英镑</b> 的问题：<b>车是朝哪边开的？</b><br>福尔摩斯的办法不是猜，是<b>量</b>：假设一个方向，沿<b>后轮的切线</b>量「后轮 → 前轮」的距离 —— 它必须<b>恒定等于车长</b>。</div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn primary" id="btn-dir-lr" onclick="setDirC6S4('lr')">假设：左 → 右</button>
+          <button class="ctrl-btn" id="btn-dir-rl" onclick="setDirC6S4('rl')">假设：右 → 左</button>
+          <button class="ctrl-btn" id="btn-play6-4" onclick="playC6S4()">▶ 依次播放</button>
+          <button class="ctrl-btn primary" onclick="resetC6S4()">重置</button>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv6-4" width="620" height="380"></canvas>
+          <p class="canvas-caption">★ 两幕用的是<b>同一组车辙、同一批取点、同一把尺子</b>，只有「假设的方向」不同。<br><b style="color:#8b5cf6;">紫线段 = 沿切线量出的「后轮 → 前轮」距离</b>（从橙点量到前轮的车辙上）。<br>上面的图：车辙和量出来的紫线段；下面的图：每个位置量出的长度 —— <span style="color:#dc2626;">假设从左向右：一路起伏</span>；<span style="color:#10b981;">假设从右向左：一条水平线，正好压在车长那条虚线上</span>。</p>
+        </div>
+
+        <div class="step-line" id="sl6-4"></div>
+
+        <div class="status-bar" id="st6-4-bar"><span class="status-dot" id="st6-4-dot"></span><span id="st6-4"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv6-4-cell">
+            <div class="k">现在假设的方向</div>
+            <div class="v" id="kv6-4-v">…</div>
+            <div class="k" id="kv6-4-t">…</div>
+          </div>
+          <div class="kv" id="kv6-4b-cell">
+            <div class="k">沿切线量出的长度</div>
+            <div class="v" id="kv6-4b-v">…</div>
+            <div class="k" id="kv6-4b-t">…</div>
+          </div>
+          <div class="kv" id="kv6-4c-cell">
+            <div class="k">这一节的结论</div>
+            <div class="v" id="kv6-4c-v">…</div>
+            <div class="k" id="kv6-4c-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只讲一件事：把「猜」变成「量」。</b><br>
+          后轮被<b>车架</b>焊死，它的切线永远指着<b>此刻前轮的位置</b> —— 所以沿切线量「后轮 → 前轮」，
+          方向假设对了，这个距离就<b>恒定等于车长</b>（车身是刚性的，一毫米都不会变）。<br>
+          <b>先假设从左向右</b>（按「▶ 依次播放」一个一个量）：量出的长度一会儿长、一会儿短 ——
+          要让这个假设成立，车身就得像<b>弹簧</b>一样不停伸缩。自行车不是弹簧，所以这个假设<b>不成立</b>。<br>
+          <b>再假设从右向左</b>（拨右边那个按钮）：每一段都正好等于车长 1.40 —— 这次车身是刚的，对上了。
+          状态条和读数格里，就是这一节的结论。<br>
+          <span style="color:#94a3b8;"><b>诚实说明：</b>① 原书那两句（书页 65）逐字抄在这里 ——<br>
+          「理论上，沿着切线从后向前的距离应该与自行车的长度是一致的。但在这幅图中，随着我们在轨迹上选取不同的点，这个距离始终在变化。」<br>
+          「对此我们只能得出这样的结论：在这段旅程中，自行车车身像弹簧一样不停伸缩，长度一直在变化。」<br>
+          ② 两条车辙和每一段切线都是<b>页面自己算的</b>：前轮沿给定的波浪曲线走，后轮由「后轮追前轮」一步步推出来；
+          两幕用的是同一组车辙、同一批取点 —— 不是照着原书插图描的。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　假设「从左向右」量出来的长度一路在变，为什么就能断定这个假设不对？<br>A. 因为长度本来就会变<br>B. 因为车身是刚性的、长度不可能变 —— 长度在变，说明这个假设错了<br>C. 因为尺子不准</p>
+          <button class="quiz-btn" id="q64a-btn" onclick="toggleAnswer('q64a-ans','q64a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q64a-ans">答案是 <b>B</b>。前后轮被<b>车架</b>固定，车长一路上<b>一毫米都不会变</b>。<br>如果「从左向右」成立，沿切线量出的「后轮 → 前轮」就必须处处等于车长 —— 可它一会儿长一会儿短，等于说车身得像<b>弹簧</b>一样伸缩。自行车不是弹簧，所以这个假设<b>不成立</b>。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　为什么独轮车碾过的车辙，不能用「沿切线量长度」这一招？<br>A. 因为独轮车只有一个轮子，没有「后轮追前轮」的约束，切线长度没有理由恒定<br>B. 因为独轮车走不直<br>C. 因为纸条太小</p>
+          <button class="quiz-btn" id="q64b-btn" onclick="toggleAnswer('q64b-ans','q64b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q64b-ans">答案是 <b>A</b>。这一招的前提是：<b>后轮被车架焊死，它的切线永远指向前轮</b>，所以量出的距离恒等于车长。<br>独轮车<b>只有一个轮子</b> —— 没有「后轮追前轮」这回事，切线长度<b>没有理由恒定</b>，量出来变不变都说明不了方向。方法的适用前提：<b>两个轮子 + 刚性车身</b>。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>第 6 章收口 · 这个谜题是哪儿来的</h4>
+          <p>福尔摩斯破案用的两步，正是这一章的两件原语：<b>先认前轮</b>（在轨迹上找一个<b>切线朝外</b>的点，6.3），
+          <b>再定方向</b>（沿切线量「后轮 → 前轮」，必须恒等于车长，6.4）。</p>
+          <p>这个自行车谜题出自传记《天才玩家：约翰·康威的好奇心》：三个数学家在普林斯顿开了一个「几何与想象力」实验班，
+          预计报名 20 人左右，结果来了 <b>92</b> 个；他们撕下 <b>6 英尺</b>宽、<b>20 英尺</b>长的纸条，
+          骑着车轮涂了油漆的自行车碾过去 —— 一个真人大小的谜题。</p>
+          <p>然后教授们出了个更难的题（原书逐字）：「然而，有一组轨迹却难住了学生。彼得·多伊尔（教授之一）骑着车碾过那张纸条，然后又骑了回来，不过他骑的是辆独轮车。」<br>
+          独轮车<b>只有一个轮子</b> —— 没有「后轮追前轮」的约束，切线长度<b>没有理由恒定</b>，这一招就<b>失效</b>了。</p>
+          <p>原书说：「福尔摩斯与数学之间的关系很明显：数学就是他的镜像。」—— 从局部痕迹反推整体的运动，
+          侦探的演绎推理和微积分的推理，是同一件事。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>刚性长度检验</b>：假设一个方向，沿后轮的切线量「后轮 → 前轮」的距离。方向假设对了，它<b>恒定等于车长</b>；一路在变，说明假设错了。</p>
+          <p><b>车长</b>：前后轮之间的距离（本页 = 1.40）。前后轮被<b>车架</b>固定 —— 这个数一路上不变。</p>
+          <p><b>为什么切线能指路</b>：后轮的<b>瞬时方向</b>永远指向前轮此刻的位置（6.1 的约束）—— 所以沿切线量，量到的就是前轮。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　认东西：<b>蓝线</b> = 前轮的车辙，<b>橙线</b> = 后轮的车辙，<b>紫线段</b> = 沿切线量出的「后轮 → 前轮」。</div>
+          <div class="rule-item"><b>第 2 步</b>　假设从左向右：紫线段有长有短，下面的曲线一路起伏 —— 假设不成立。</div>
+          <div class="rule-item"><b>第 3 步</b>　假设从右向左：每段都正好是车长，曲线是一条水平线 —— 结论见读数格。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>不是"量一次就下结论"。</b>要沿整条车辙量过去：错误的方向下长度<b>一直在变</b>，正确的方向下才<b>处处相等</b>。</p>
+          <p><b>独轮车不能用这一招。</b>它只有一个轮子，没有「后轮追前轮」的约束 —— 切线长度没有理由恒定。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -3333,7 +3772,12 @@
     'page-c5-1': function () { stopC5S1(); },
     'page-c5-2': function () { stopC5S2(); },
     'page-c5-3': function () { stopC5S3(); },
-    'page-c5-4': function () { stopC5S4(); }
+    'page-c5-4': function () { stopC5S4(); },
+    // 第 6 章 4 节都有动画 → 全部登记（骨架期钩子是空实现，随各节的实现落地补上）。
+    'page-c6-1': function () { stopC6S1(); },
+    'page-c6-2': function () { stopC6S2(); },
+    'page-c6-3': function () { stopC6S3(); },
+    'page-c6-4': function () { stopC6S4(); }
   };
   function switchPage(id) {
     var i, key, el;
@@ -10316,6 +10760,1019 @@
 
   // ================= 第 5 章 JS 区 · 终点 =================
 
+  // ================= 第 6 章 JS 区 · 起点（4 节的实现都插在这条线之后）=================
+  // 两条哨兵注释把「第 6 章新增的一切」框起来 —— 验证脚本与 _chapter_scope.js 据此做 scoped 扫描。
+  // ★ 本章唯一一处放行：切线（原书自己用了 + 给了词源）；另外三个"切"字头的几何词继续封存。
+  // 第 6 章 4 节（★ 全站第一次"名词回归原书"）。节数完全数据驱动（renderSecTabs / renderTree 零改动）。
+  var C6_SECTIONS = [
+    { n: 1, label: '两条车辙' },
+    { n: 2, label: '切线：那一刻的方向' },
+    { n: 3, label: '切线朝外的那一条' },
+    { n: 4, label: '6000 英镑的问题' }
+  ];
+  function goC6(n) { switchPage('page-c6-' + n); }    // 第 6 章内部导航
+
+  // 6.1 两条车辙
+  // ★ 本节要送出的原语：**后轮的瞬时方向 ≡「后轮 → 前轮」**（原书 p64 逐字）。
+  //   两个轮子被车架焊死 ⇒ 后轮不能自己拐弯 ⇒ 它只能"追"着前轮**此刻**的位置走。
+  //
+  // 数学（页面自己算，见 §八 #1）：前轮 F(t)（给定曲线）；后轮 R(t)；|F − R| ≡ L（车架刚性）；R′ ∥ (F − R)。
+  //   对 |F−R|² = L² 求导 ⇒ (F−R)·F′ = (F−R)·R′；取 R′ = λ(F−R) ⇒ λ = (F−R)·F′ / L²
+  //   ⇒   R′ = [ (F−R)·F′ / L² ] · (F−R)      …… 后轮轨迹就是这个式子一步一步推出来的
+  //   ★ 该式把 d|F−R|²/dt 恒压成 0 ⇒ 初值满足 |F−R| = L 时，约束**自动保持**（误差只剩浮点）。
+  //
+  // ★★ 两个"落地前复核"抓出来的量（`_c6s1_numbers.py` 的实测，别改）：
+  //   ① **内积分要 n = 64000 步**（dt = 1.875e−4）。判据②（后轮的差商方向与车架的夹角 < 1e−6 rad）
+  //      实测：n = 4000 ⇒ 6.3e−5 ／ n = 16000 ⇒ 4.1e−6 ／ n = 32000 ⇒ 1.03e−6（刚好不过）／
+  //      n = 64000 ⇒ **2.57e−7** ✓。★ 计划的"画 400 个点"密度差 60 倍。
+  //   ② **交互不能用"起始方向"**（计划 §四原本写的就是它）：后轮追前轮这个式子把初值的影响
+  //      **指数衰减掉** —— 实测 t=0 差 1.53、t=4 差 3.0e−3、t=12 差 4.7e−9，
+  //      而轨迹长 12 ⇒ **画面绝大部分区域不会有反应**（拖了像没拖）。
+  //      改成「车长」滑块：L 是式子的**参数**，差异**全程恒定**（实测 ≈ 0.30，不衰减）。
+  //      ★ 顺带正好强化 6.4：不管车多长，它**一路上都不变**。
+  //
+  // ★ 术语：本章放行「切线」，但**本节不讲**它（那是 6.2 的事，这里只在钩子里点一句）；
+  //   另外三个"切"字头的几何词、"陡不陡"那个词、讲快慢的那三个词，以及"走向极限"那个三字母记号，
+  //   一律不出现 —— ★ 而这句话本身**也不能把那个记号写出来**（红线是源码级扫描，含注释）。
+  var L_DEF_C6S1 = 1.00;
+  var L_MIN_C6S1 = 0.70, L_MAX_C6S1 = 1.80, L_STEP_C6S1 = 0.05;
+  var T_END_C6S1 = 12.0;                  // t ∈ [0, 12]
+  var AMP_C6S1 = 2.20, OMG_C6S1 = 1.30;   // 前轮曲线 F(t) = (t, AMP·sin(OMG·t))
+  var NINT_C6S1 = 64000;                  // ★ 内积分步数（见上 ①）
+  var NDRAW_C6S1 = 160;                   // 每 160 步取一个画点 ⇒ 401 个点
+  // 映射：**等比**（车长是"长度"，画面被拉伸就读不出刚性了）+ 中心对齐作图区。
+  //   世界框按"L 全量程的并集"取：x∈[−2.628, 12.828]，y 的实际并集只到 ±2.728。
+  //   ★ y 的边界**不是手写的四舍五入值**，而是由像素框比例**反推**出来的 ——
+  //     手写值会让 x / y 两轴的像素/世界差 0.006%（验证脚本当场抓到）。
+  var SPANX_C6S1 = 12.828 - (-2.628);
+  var SPANY_C6S1 = SPANX_C6S1 * (330 - 96) / (596 - 56);   // ⇒ 等比是"构造出来"的，不是凑出来的
+  var MAP_C6S1 = makeMap(56, 96, 596, 330, -2.628, 12.828, -SPANY_C6S1 / 2, SPANY_C6S1 / 2);
+  var BOX_C6S1 = [56, 96, 596, 330];
+  var COL_FRONT_C6S1 = '#3b82f6', COL_REAR_C6S1 = '#f59e0b';
+  var COL_FRAME_C6S1 = '#475569', COL_HEAD_C6S1 = '#10b981';
+  var TOL_UP_C6S1 = 0.25;                 // 讲解行/状态条的分档半宽（围绕默认车长）
+  var g6_1 = { L: L_DEF_C6S1 };
+  // ★★ 缓存 **LRU-4**，不是单槽（冒烟当场抓到的 K24）：
+  //   单槽缓存返回的是**同一个对象** ⇒ 谁先前拿过引用，就被后一次计算**悄悄覆盖** ——
+  //   表现是"两条不同车长的后轮轨迹差 0.000000"（判据③直接失效）。留 4 条既够页面用，
+  //   也够验证脚本同时比两三个档位。★ 一次性算满 23 个档位 ≈ 35 MB，不能那么干。
+  var CACHE_C6S1 = [], CACHE_MAX_C6S1 = 4;
+
+  function setTxtC6S1(id, html) { var e = document.getElementById(id); if (e) e.innerHTML = html; }
+  function fXC6S1(t) { return t; }
+  function fYC6S1(t) { return AMP_C6S1 * Math.sin(OMG_C6S1 * t); }
+  function dXC6S1() { return 1; }
+  function dYC6S1(t) { return AMP_C6S1 * OMG_C6S1 * Math.cos(OMG_C6S1 * t); }
+
+  // 后轮该往哪边走：R′ = [ (F−R)·F′ / L² ] · (F−R)
+  //   ★ 注释也不能写出那个"陡不陡"的封存词（这条红线已经第八次抓到我自己的注释了）。
+  function slopeC6S1(t, px, py, L, out) {
+    var vx = fXC6S1(t) - px, vy = fYC6S1(t) - py;
+    var lam = (vx * dXC6S1(t) + vy * dYC6S1(t)) / (L * L);
+    out[0] = lam * vx; out[1] = lam * vy;
+  }
+  var K1_C6S1 = [0, 0], K2_C6S1 = [0, 0], K3_C6S1 = [0, 0], K4_C6S1 = [0, 0];
+  // 后轮轨迹：RK4 一步一步推（初值 = 后轮在前轮**正后方** L 处）。
+  // ★ 只在车长变了的时候重算（一次 64000 步 ≈ 8 ms；按档位进 LRU-4 缓存）。
+  function rearC6S1(L) {
+    var q, i, t, px, py;
+    for (q = 0; q < CACHE_C6S1.length; q++) {
+      if (CACHE_C6S1[q].L === L) { return CACHE_C6S1[q]; }
+    }
+    var h = T_END_C6S1 / NINT_C6S1;
+    var T = {
+      L: L,
+      ts: new Array(NINT_C6S1 + 1), xs: new Array(NINT_C6S1 + 1), ys: new Array(NINT_C6S1 + 1)
+    };
+    px = fXC6S1(0) - L; py = fYC6S1(0);
+    T.ts[0] = 0; T.xs[0] = px; T.ys[0] = py;
+    for (i = 0; i < NINT_C6S1; i++) {
+      t = i * h;
+      slopeC6S1(t, px, py, L, K1_C6S1);
+      slopeC6S1(t + h / 2, px + h / 2 * K1_C6S1[0], py + h / 2 * K1_C6S1[1], L, K2_C6S1);
+      slopeC6S1(t + h / 2, px + h / 2 * K2_C6S1[0], py + h / 2 * K2_C6S1[1], L, K3_C6S1);
+      slopeC6S1(t + h, px + h * K3_C6S1[0], py + h * K3_C6S1[1], L, K4_C6S1);
+      px += h / 6 * (K1_C6S1[0] + 2 * K2_C6S1[0] + 2 * K3_C6S1[0] + K4_C6S1[0]);
+      py += h / 6 * (K1_C6S1[1] + 2 * K2_C6S1[1] + 2 * K3_C6S1[1] + K4_C6S1[1]);
+      T.ts[i + 1] = t + h; T.xs[i + 1] = px; T.ys[i + 1] = py;
+    }
+    CACHE_C6S1.push(T);
+    if (CACHE_C6S1.length > CACHE_MAX_C6S1) { CACHE_C6S1.shift(); }
+    return T;
+  }
+  function rearAtC6S1(L) { var T = rearC6S1(L), n = NINT_C6S1; return [T.xs[n], T.ys[n]]; }
+  function frontAtC6S1() { return [fXC6S1(T_END_C6S1), fYC6S1(T_END_C6S1)]; }
+  function lenC6S1(L) {
+    var R = rearAtC6S1(L), F = frontAtC6S1();
+    var dx = F[0] - R[0], dy = F[1] - R[1];
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  function frameAngC6S1(L) {
+    var R = rearAtC6S1(L), F = frontAtC6S1();
+    return Math.atan2(F[1] - R[1], F[0] - R[0]);
+  }
+  function headAngC6S1() { return Math.atan2(dYC6S1(T_END_C6S1), dXC6S1(T_END_C6S1)); }
+  function turnC6S1(L) {
+    var d = headAngC6S1() - frameAngC6S1(L);
+    while (d > Math.PI) { d -= 2 * Math.PI; }
+    while (d < -Math.PI) { d += 2 * Math.PI; }
+    return d;
+  }
+  function degTxtC6S1(rad) {
+    var d = rad * 180 / Math.PI;
+    return (d < 0 ? '−' : '+') + Math.abs(d).toFixed(1) + '°';
+  }
+  function lenTxtC6S1(L) { return L.toFixed(2) + ' 个车长'; }
+  function lbandC6S1(L) {
+    if (L < L_DEF_C6S1 - TOL_UP_C6S1) { return 0; }
+    if (L > L_DEF_C6S1 + TOL_UP_C6S1) { return 2; }
+    return 1;
+  }
+  function msgC6S1() {
+    var L = g6_1.L, b = lbandC6S1(L);
+    // ★ 这里**不许出现写死的数**（"差 0.3 个车长"那种）—— 两串车辙的"横向间距"不是一个现算得出的量
+    //   （按构造，后轮→前轮这段长度恒等于车长），所以只用定性说法，不给假精度。
+    var head = [
+      '车短：后轮几乎踩着前轮的脚印走 —— 两串车辙挨得很近。',
+      '车长适中：后轮被车架"拽"着走，拐弯的地方会稍微抄一点近路。',
+      '车长：后轮离前轮远，拐弯时抄近路抄得厉害 —— 两串车辙分得很开。'
+    ][b];
+    return head + '<br>★ 不管拖到哪儿，量出来的车身长度都是 <b>' + lenTxtC6S1(L) +
+      '</b> —— 它一路上<b>没变过</b>。';
+  }
+  function stepTxtC6S1() {
+    return '先认清两串车辙：<b>蓝线是前轮</b>（它会拐弯）、<b>橙线是后轮</b>（它只能追）。' +
+      '然后看那根深色的<b>车架</b> —— 后轮的下一小步，就是沿着它走的。';
+  }
+  function drawC6S1() {
+    var cv = document.getElementById('cv6-1');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var L = g6_1.L, T = rearC6S1(L), m = MAP_C6S1, i, n = NINT_C6S1;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 作图区 ----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(BOX_C6S1[0], BOX_C6S1[1], BOX_C6S1[2] - BOX_C6S1[0], BOX_C6S1[3] - BOX_C6S1[1]);
+    // ---- 后轮的车辙（积分生成 · 橙）----
+    c.strokeStyle = COL_REAR_C6S1; c.lineWidth = 2.6;
+    c.beginPath();
+    for (i = 0; i <= n; i += NDRAW_C6S1) {
+      if (i === 0) { c.moveTo(m.X(T.xs[i]), m.Y(T.ys[i])); } else { c.lineTo(m.X(T.xs[i]), m.Y(T.ys[i])); }
+    }
+    c.stroke();
+    // ---- 前轮的车辙（给定曲线 · 蓝）----
+    c.strokeStyle = COL_FRONT_C6S1; c.lineWidth = 2.6;
+    c.beginPath();
+    for (i = 0; i <= n; i += NDRAW_C6S1) {
+      var tt = T.ts[i];
+      if (i === 0) { c.moveTo(m.X(fXC6S1(tt)), m.Y(fYC6S1(tt))); } else { c.lineTo(m.X(fXC6S1(tt)), m.Y(fYC6S1(tt))); }
+    }
+    c.stroke();
+    // ---- "此刻"那辆车：车架 + 两个轮子 + 前轮自己想去的方向 ----
+    var F = frontAtC6S1(), R = rearAtC6S1(L);
+    var fx = m.X(F[0]), fy = m.Y(F[1]), rx = m.X(R[0]), ry = m.Y(R[1]);
+    var ha = headAngC6S1(), hx = F[0] + Math.cos(ha) * 1.50, hy = F[1] + Math.sin(ha) * 1.50;
+    c.strokeStyle = COL_HEAD_C6S1; c.lineWidth = 2; c.setLineDash([6, 4]);
+    c.beginPath(); c.moveTo(fx, fy); c.lineTo(m.X(hx), m.Y(hy)); c.stroke();
+    c.setLineDash([]);
+    c.strokeStyle = COL_FRAME_C6S1; c.lineWidth = 3.4;
+    c.beginPath(); c.moveTo(rx, ry); c.lineTo(fx, fy); c.stroke();
+    dot(c, rx, ry, 5.5, COL_REAR_C6S1);
+    dot(c, fx, fy, 5.5, COL_FRONT_C6S1);
+    // ---- 标注（都带白底片，免得被曲线压住）----
+    labelChip(c, '前轮的车辙', m.X(1.6) + 6, m.Y(fYC6S1(1.6)) - 20, COL_FRONT_C6S1, 11.5, 'left', 3);
+    labelChip(c, '后轮的车辙', m.X(1.6) - 6, m.Y(fYC6S1(1.6)) + 20, COL_REAR_C6S1, 11.5, 'right', 3);
+    // ★★ 往里偏，不许往外偏（K26：截图走查抓到 —— 原来写 `+78, 'left'`，
+    //     而车架在最右边 ⇒ 文字被推到 x ≈ 633 > 620，**画出来了但在画布外面**：
+    //     版面检测器只管"两段文字压不压"，看不见"整段被推出画布"。验证脚本已补这条通用判据。）
+    labelChip(c, '车架（刚性 · 车长恒定）', (rx + fx) / 2 - 10, (ry + fy) / 2 - 26, COL_FRAME_C6S1, 11.5, 'right', 3);
+    labelChip(c, '前轮此刻想去的方向', (fx + m.X(hx)) / 2 - 40, (fy + m.Y(hy)) / 2 + 16, COL_HEAD_C6S1, 11.5, 'right', 3);
+    // ★ 这两行的 y 必须**拉开 20 px**：原来页脚在 352、横轴说明在 346，版面检测器
+    //   当场报 40/40 个档位都重叠 346 px²（文字压文字）。现在 366 / 346。
+    label(c, '两串车辙 = 前轮 + 后轮（不是"一深一浅"）', (BOX_C6S1[0] + BOX_C6S1[2]) / 2, 366, '#94a3b8', 11.5, 'center');
+    label(c, '横轴：车往前走的方向　纵轴：车辙左右摆', BOX_C6S1[0] + 4, BOX_C6S1[3] + 16, '#cbd5e1', 11, 'left');
+    // ---- 右上角读数格（与 4.x / 5.x 同位置同尺寸）----
+    c.save();
+    c.fillStyle = '#f8fafc'; c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    roundRect(c, 384, 4, 226, 86, 8); c.fill(); c.stroke();
+    c.restore();
+    label(c, '车身长度（后轮 → 前轮）', 396, 20, '#64748b', 11.5, 'left');
+    label(c, lenTxtC6S1(L), 396, 42, '#0ea5e9', 17, 'left');
+    label(c, '后轮（车架）朝向 ' + degTxtC6S1(frameAngC6S1(L)), 396, 62, COL_FRAME_C6S1, 11.5, 'left');
+    label(c, '前轮自己的朝向 ' + degTxtC6S1(headAngC6S1()), 396, 80, COL_HEAD_C6S1, 11.5, 'left');
+  }
+  function updC6S1() {
+    var L = g6_1.L;
+    var sl = document.getElementById('s6-1-l');
+    if (sl && sl.value !== String(L)) { sl.value = String(L); }
+    setTxtC6S1('lb6-1-l', lenTxtC6S1(L));
+    setTxtC6S1('kv6-1-v', lenTxtC6S1(L));
+    setTxtC6S1('kv6-1-t', '后轮 → 前轮：一路上都是这么长');
+    setTxtC6S1('kv6-1b-v', degTxtC6S1(frameAngC6S1(L)));
+    setTxtC6S1('kv6-1b-t', '车架指着前轮 —— 它只能这么走');
+    setTxtC6S1('kv6-1c-v', degTxtC6S1(headAngC6S1()));
+    setTxtC6S1('kv6-1c-t', '和车架差了 ' + Math.abs(turnC6S1(L) * 180 / Math.PI).toFixed(1) + '°（前轮在拐弯）');
+    setTxtC6S1('st6-1', msgC6S1());
+    var dt = document.getElementById('st6-1-dot');
+    if (dt) { dt.style.background = COL_FRAME_C6S1; }
+  }
+  function showStepC6S1() { setTxtC6S1('sl6-1', stepTxtC6S1()); }
+  function slideLC6S1(v) {
+    var x = Math.round(parseFloat(v) / L_STEP_C6S1) * L_STEP_C6S1;
+    if (!isFinite(x)) { x = L_DEF_C6S1; }
+    g6_1.L = Math.min(L_MAX_C6S1, Math.max(L_MIN_C6S1, Math.round(x * 100) / 100));
+    updC6S1(); drawC6S1();
+  }
+  function resetC6S1() {
+    g6_1.L = L_DEF_C6S1;
+    updC6S1(); drawC6S1(); showStepC6S1();
+    toast('回到默认车长 1.00 —— 然后自己拖一拖');
+  }
+  // 停止钩子：本节**没有运行态**（拖滑块全是瞬时重绘，★ 按 D14 也不设播放键），
+  //   但必须登记 —— STOPPERS 的约定是「切走时把上一页的运行态清干净」（与 5.1 / 5.3 同款）。
+  function stopC6S1() { }
+
+  // 落地即默认档（并显示讲解行，页面永不「内容为空」）
+  updC6S1(); drawC6S1(); showStepC6S1();
+
+  // 6.2 切线：那一刻的方向
+  // ★ 本章最高风险的一节：**切线第一次上屏**（全站第一次）。原书 p63 逐字两句见页面的展开框。
+  //
+  // 曲线：还是 6.1 那条正弦族的（"某个行驶轨迹"），但**只用半个起伏** ——
+  //     y = A·sin(ω t)，t ∈ [0, π/ω]      …… 一道"上坡 → 山顶 → 下坡"的弯
+  //   切线：过 (t₀, y(t₀))，方向 = 解析导数 A·ω·cos(ω t₀)
+  //   两根弦：t₀ 两边各取一点，h = 窗口 × p（p 由「▶ 播放」从 0.20 扫到 0.015）
+  //
+  // ★★ 落地前复核抓出来的三条（`_c6s2_numbers.py` 的实测，别改）：
+  //   K27 —— **为什么只能用半个起伏**：判据②要求"切线只与曲线在这一个点接触"。
+  //     对**严格凹**的弧这条可以**证明**：令 g(t) = 切线(t) − y(t)，则 g(t₀) = g′(t₀) = 0
+  //     且 g″ = −y″ > 0 ⇒ g 严格凸、唯一极小点在 t₀ ⇒ g > 0 且随 |t − t₀| 单调增。
+  //     ★ 而 6.1 那条**整段**（2.5 个周期）不行：两个山顶的 y **完全相同**（实测差 0.00e+00），
+  //       山顶处的水平切线会在另一个山顶**再碰一次** ⇒ 判据②对它不成立。
+  //   K28 —— 凹弧上两根弦**必然夹住**切线（右弦更平、左弦更陡），且夹角 ∝ h：
+  //     实测 h 减半 ⇒ 夹角减半（20.53° → 10.86° → 5.51° → 2.76° → 1.38°）。
+  //   K29 —— ▶ 播放 24 帧（p 从 0.20 到 0.015）：夹角 20.53° → 1.66°，**单调减**，12.4 倍。
+  //
+  // ★ 术语：本章放行「切线」；**不讲**"陡不陡"那个封存词（本节只说"方向"），
+  //   另外三个"切"字头的几何词、讲快慢的那三个词、以及"走向极限"那个三字母记号一律不出现
+  //   —— ★ 这句话本身也不许把那些字形写出来（红线是源码级扫描，含注释）。
+  var AMP_C6S2 = 2.2, OMG_C6S2 = 0.5589;     // 由像素框宽高比反推（见下）
+  var W_C6S2 = Math.PI / OMG_C6S2;           // 窗口宽 = 半个起伏 ≈ 5.6209
+  var F_MIN_C6S2 = 0.02, F_MAX_C6S2 = 0.98, F_DEF_C6S2 = 0.50;
+  var P_MIN_C6S2 = 0.015, P_MAX_C6S2 = 0.20, P_DEF_C6S2 = 0.10;
+  var FRAMES_C6S2 = 24, MS_C6S2 = 60;        // ▶ 播放：24 帧 × 60 ms ≈ 1.4 s
+  // 映射：**等比**（车辙是"长度"）+ 中心对齐作图区。
+  //   ★ y 的世界跨度**由像素框比例反推**（6.1 的教训：手写四舍五入值会让两轴差 0.006%）。
+  var SPANX_C6S2 = W_C6S2 * 1.12;
+  var SPANY_C6S2 = SPANX_C6S2 * (330 - 96) / (596 - 56);
+  // ★★ x 区间要**包住曲线**（曲线跨 [0, W]），两端各留 6%。
+  //   第一版写成 `-SPANX/2 … +SPANX/2`（以 0 为中心）⇒ 曲线上半段跑到图外、
+  //   切线标注落在 x≈664 > 620 —— 被 6.1 立下的那条**通用判据**（每条 fillText 都要在画布内）当场抓到。
+  //   （X1 − X0 恒等于 SPANX_C6S2 ⇒ 等比仍然是构造保证的。）
+  var X0_C6S2 = -W_C6S2 * 0.06, X1_C6S2 = W_C6S2 * 1.06;
+  var Y0_C6S2 = AMP_C6S2 / 2 - SPANY_C6S2 / 2, Y1_C6S2 = AMP_C6S2 / 2 + SPANY_C6S2 / 2;
+  var MAP_C6S2 = makeMap(56, 96, 596, 330, X0_C6S2, X1_C6S2, Y0_C6S2, Y1_C6S2);
+  var BOX_C6S2 = [56, 96, 596, 330];
+  var COL_CURVE_C6S2 = '#3b82f6', COL_TAN_C6S2 = '#8b5cf6', COL_CHORD_C6S2 = '#60a5fa';
+  var g6_2 = { f: F_DEF_C6S2, p: P_DEF_C6S2 };
+  var t6_2 = null, frame6_2 = 0;
+  var TAN_HALF_C6S2 = 400;                   // 切线往两头各画这么长（会被裁进作图区）
+
+  function setTxtC6S2(id, html) { var e = document.getElementById(id); if (e) e.innerHTML = html; }
+  function yC6S2(t) { return AMP_C6S2 * Math.sin(OMG_C6S2 * t); }
+  function dC6S2(t) { return AMP_C6S2 * OMG_C6S2 * Math.cos(OMG_C6S2 * t); }
+  function t0C6S2() { return W_C6S2 * g6_2.f; }          // 点在哪（窗口的 f 处）
+  function hC6S2() { return W_C6S2 * g6_2.p; }           // 弦有多长
+  function tanDegC6S2() { return Math.atan(dC6S2(t0C6S2())) * 180 / Math.PI; }
+  // 弦的方向（side = −1 左边那根，+1 右边那根）—— 弦是"两点连线的方向"
+  function chordDegC6S2(side) {
+    var t0 = t0C6S2(), h = hC6S2();
+    var t1 = t0 + side * h;
+    return Math.atan((yC6S2(t1) - yC6S2(t0)) / (t1 - t0)) * 180 / Math.PI;
+  }
+  function chordGapC6S2() {                                // 两根弦与切线差多少（取大的那个）
+    return Math.max(Math.abs(chordDegC6S2(-1) - tanDegC6S2()), Math.abs(chordDegC6S2(1) - tanDegC6S2()));
+  }
+  function bracketedC6S2() {                              // 两根弦是不是**夹住**了切线（凹弧的必然）
+    return chordDegC6S2(-1) > tanDegC6S2() && chordDegC6S2(1) < tanDegC6S2();
+  }
+  function posTxtC6S2() {
+    var f = g6_2.f;
+    if (f < 0.34) { return '左边上坡'; }
+    if (f > 0.66) { return '右边下坡'; }
+    return Math.abs(f - 0.5) < 0.04 ? '正中间（山顶上）' : '快到山顶了';
+  }
+  function degTxtC6S2(v) { return (v < 0 ? '−' : '+') + Math.abs(v).toFixed(1) + '°'; }
+  function tanTxtC6S2() {
+    var d = tanDegC6S2();
+    return Math.abs(d) < 0.05 ? '0.0°（水平）' : degTxtC6S2(d);
+  }
+  function msgC6S2() {
+    var f = g6_2.f, d = tanDegC6S2();
+    if (Math.abs(d) < 0.05) {
+      return '在这里它是<b>水平</b>的 —— 那一刻你既不往上也不往下，正走在<b>最高处</b>。';
+    }
+    return '在这里它' + (d > 0 ? '朝<b>上</b>' : '朝<b>下</b>') + '（' + degTxtC6S2(d) +
+      '）—— 车辙在往' + (f < 0.5 ? '上' : '下') + '走，灯就跟着往那边照。★ 换一点，方向就变了。';
+  }
+  function stepTxtC6S2() {
+    return '认三样东西：<b>蓝线</b>是车辙、<b>紫线</b>是过这一点的切线、' +
+      '<b>两根浅蓝短弦</b>在点两边。拖那个点看紫线怎么转；按「▶ 播放」看两根弦缩回点上。';
+  }
+  function drawC6S2() {
+    var cv = document.getElementById('cv6-2');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var m = MAP_C6S2, i, N = 400;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 作图区 ----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(BOX_C6S2[0], BOX_C6S2[1], BOX_C6S2[2] - BOX_C6S2[0], BOX_C6S2[3] - BOX_C6S2[1]);
+    // ---- 车辙（一段弧）----
+    c.strokeStyle = COL_CURVE_C6S2; c.lineWidth = 2.6;
+    c.beginPath();
+    for (i = 0; i <= N; i++) {
+      var tt = W_C6S2 * i / N;
+      if (i === 0) { c.moveTo(m.X(tt), m.Y(yC6S2(tt))); } else { c.lineTo(m.X(tt), m.Y(yC6S2(tt))); }
+    }
+    c.stroke();
+    // ---- 切线（裁进作图区：它本来就该一直延伸下去）----
+    var t0 = t0C6S2(), sl = dC6S2(t0);
+    c.save();
+    c.beginPath();
+    c.rect(BOX_C6S2[0], BOX_C6S2[1], BOX_C6S2[2] - BOX_C6S2[0], BOX_C6S2[3] - BOX_C6S2[1]);
+    c.clip();
+    c.strokeStyle = COL_TAN_C6S2; c.lineWidth = 2.4;
+    c.beginPath();
+    c.moveTo(m.X(t0 - TAN_HALF_C6S2), m.Y(yC6S2(t0) - sl * TAN_HALF_C6S2));
+    c.lineTo(m.X(t0 + TAN_HALF_C6S2), m.Y(yC6S2(t0) + sl * TAN_HALF_C6S2));
+    c.stroke();
+    c.restore();
+    // ---- 两根弦（点两边各一根）----
+    var h = hC6S2();
+    c.strokeStyle = COL_CHORD_C6S2; c.lineWidth = 2.2;
+    [-1, 1].forEach(function (sd) {
+      var ta = sd < 0 ? t0 - h : t0, tb = sd < 0 ? t0 : t0 + h;
+      c.beginPath();
+      c.moveTo(m.X(ta), m.Y(yC6S2(ta)));
+      c.lineTo(m.X(tb), m.Y(yC6S2(tb)));
+      c.stroke();
+      dot(c, m.X(tb), m.Y(yC6S2(tb)), 3, COL_CHORD_C6S2);
+    });
+    // ---- 那一点 ----
+    dot(c, m.X(t0), m.Y(yC6S2(t0)), 6, COL_TAN_C6S2);
+    // ---- 标注 ----
+    labelChip(c, '这一段车辙', m.X(W_C6S2 * 0.16), m.Y(yC6S2(W_C6S2 * 0.16)) - 22, COL_CURVE_C6S2, 11.5, 'center', 3);
+    labelChip(c, '过这一点的切线', m.X(W_C6S2 * 0.70), m.Y(yC6S2(W_C6S2 * 0.70)) - 26, COL_TAN_C6S2, 11.5, 'center', 3);
+    labelChip(c, '两根弦（点两边各一根）', m.X(W_C6S2 * 0.30), m.Y(yC6S2(W_C6S2 * 0.30)) + 26, COL_CHORD_C6S2, 11.5, 'center', 3);
+    // ★ 页脚与横轴说明行必须拉开 20 px（6.1 的教训：原来一个 348、一个 346 ⇒ 检测器报 40/40 档重叠）
+    label(c, '按「▶ 播放」看两根弦缩回点上', (BOX_C6S2[0] + BOX_C6S2[2]) / 2, 366, '#94a3b8', 11.5, 'center');
+    label(c, '横轴：车往前走的方向　纵轴：车辙的高低', BOX_C6S2[0] + 4, BOX_C6S2[3] + 16, '#cbd5e1', 11, 'left');
+    // ---- 右上角读数格（与 4.x / 5.x / 6.1 同位置同尺寸）----
+    c.save();
+    c.fillStyle = '#f8fafc'; c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    roundRect(c, 384, 4, 226, 86, 8); c.fill(); c.stroke();
+    c.restore();
+    label(c, '这一刻的方向（切线指着哪儿）', 396, 20, '#64748b', 11.5, 'left');
+    label(c, tanTxtC6S2(), 396, 42, COL_TAN_C6S2, 17, 'left');
+    label(c, '切线只在这一点贴着曲线', 396, 62, '#8b5cf6', 11.5, 'left');
+    label(c, '两根弦与它差 ' + chordGapC6S2().toFixed(1) + '°', 396, 80, COL_CHORD_C6S2, 11.5, 'left');
+  }
+  function updC6S2() {
+    var sl = document.getElementById('s6-2-t');
+    if (sl) {
+      var want = String(Math.round(g6_2.f * 100));
+      if (sl.value !== want) { sl.value = want; }
+    }
+    setTxtC6S2('lb6-2-t', posTxtC6S2());
+    setTxtC6S2('kv6-2-v', tanTxtC6S2());
+    setTxtC6S2('kv6-2-t', '上坡朝上、山顶水平、下坡朝下 —— 换一点就变');
+    setTxtC6S2('kv6-2b-v', chordGapC6S2().toFixed(1) + '°');
+    setTxtC6S2('kv6-2b-t', '弦越短，这个数越小');
+    setTxtC6S2('kv6-2c-v', bracketedC6S2() ? '夹住了' : '没夹住');
+    setTxtC6S2('kv6-2c-t', '左边那根更陡、右边那根更平 —— 切线正好在中间');
+    setTxtC6S2('st6-2', msgC6S2());
+    var dt = document.getElementById('st6-2-dot');
+    if (dt) { dt.style.background = COL_TAN_C6S2; }
+  }
+  function showStepC6S2() { setTxtC6S2('sl6-2', stepTxtC6S2()); }
+  function slidePosC6S2(v) {
+    var f = parseFloat(v) / 100;
+    if (!isFinite(f)) { f = F_DEF_C6S2; }
+    g6_2.f = Math.min(F_MAX_C6S2, Math.max(F_MIN_C6S2, Math.round(f * 100) / 100));
+    updC6S2(); drawC6S2();
+  }
+  function stopC6S2() {
+    if (t6_2) { clearInterval(t6_2); t6_2 = null; }
+    var b = document.getElementById('btn-play6-2');
+    if (b) {
+      b.textContent = '▶ 播放';
+      if (b.className.indexOf('playing') >= 0) { b.className = b.className.replace(/\s*playing/g, ''); }
+    }
+  }
+  // ▶ 播放：弦长从长到短扫一遍（24 帧），弦越短越贴近切线；扫完自己停下。
+  function playC6S2() {
+    if (t6_2) { stopC6S2(); return; }        // 播放中再点一次 = 停下（不叠两个计时器）
+    var b = document.getElementById('btn-play6-2');
+    if (b) {
+      b.textContent = '■ 停下';
+      if (b.className.indexOf('playing') < 0) { b.className += ' playing'; }
+    }
+    frame6_2 = 0;
+    g6_2.p = P_MAX_C6S2;
+    updC6S2(); drawC6S2();
+    t6_2 = setInterval(function () {
+      frame6_2++;
+      g6_2.p = P_MAX_C6S2 + (P_MIN_C6S2 - P_MAX_C6S2) * (frame6_2 / (FRAMES_C6S2 - 1));
+      updC6S2(); drawC6S2();
+      if (frame6_2 >= FRAMES_C6S2 - 1) { stopC6S2(); }
+    }, MS_C6S2);
+  }
+  function resetC6S2() {
+    stopC6S2();
+    g6_2.f = F_DEF_C6S2; g6_2.p = P_DEF_C6S2;
+    updC6S2(); drawC6S2(); showStepC6S2();
+    toast('回到山顶那一点 —— 然后自己拖一拖');
+  }
+
+  // 落地即默认档（并显示讲解行，页面永不「内容为空」）
+  updC6S2(); drawC6S2(); showStepC6S2();
+
+  // 6.3 切线朝外的那一条
+  // ★ 本节原语：**切线朝外判别法** —— 在一条轨迹上找一个切线朝外的点，那条就是前轮。
+  //
+  // 数学（页面自己算）：前轮 F(t) = (t, A·sin(ωt))（给定波浪曲线）；后轮 R(t) 由「后轮追前轮」
+  //   积分：R′ = [ (F−R)·F′ / L² ]·(F−R)（车长 |F−R| ≡ L）。后轮切线 = 车架方向（后轮→前轮）。
+  //
+  // ★★ 落地前复核抓出来的三条（`_c6s3_numbers.py` / `_c6s3_final.py` 的实测，别改）：
+  //   K31 —— **后轮处处不朝外是严格成立的（不是凑的）**：后轮切线 = 车架方向 ⇒ 前轮 F(t)
+  //      **恰好在正前方 L 处**（夹角 = 0、距离 = L < D_max）⇒ 任何半锥角下后轮朝外点恒为 0。
+  //      这是「后轮追前轮」的定义本身，不是调参调出来的。
+  //   K31-补（2026-10-16 · 第 6 章全章自检抓出来的一个细节，别改）：
+  //      λ = (F−R)·F′/L² 在这条轨迹上**会变号** —— t ∈ [1.488, 1.680]（65/4000 格 = 1.63%）
+  //      里 λ < 0 ⇒ 后轮在那 0.19 个时间单位里**沿车架反着滚**（轨迹上留了个极小的回头尖点，
+  //      弧长 6.6e−3）。所以「后轮的瞬时方向指向当前前轮的位置」这句，严格说只在 λ ≠ 0 的地方成立；
+  //      **切线作为一条直线**恒 = 车架直线（这正是 K31 用到的、也只需要用到的性质）。
+  //      ★ 结论不受影响：把方向换成真实行进方向（后轮自己的差商，含变号）重扫 400 点，
+  //        后轮朝外点**仍是 0** —— 见 `_verify_c6_invariants.js` 的 #3-①「方向口径不敏感」那条。
+  //   K32 —— 前轮朝外点**集中在波峰 / 波谷**（切线水平、指向空处），约 47%；默认档 t=4.8
+  //      （爬坡，切线 +70.7°）**非朝外** ⇒ 结论默认不出现（先藏后揭）。
+  //   K33 —— 等比映射：SPANY 由 SPANX 反推（车辙是"长度"）；两条车辙 + 切线都落在作图区内。
+  //
+  // ★ 术语：本章放行「切线」；那三个"切"字头的几何词、讲"陡不陡"的那个词、讲快慢的那三个词，
+  //   以及"走向极限"那个三字母记号一律不出现 —— ★ 这句话本身也不能把它们的字形写出来。
+  var AMP_C6S3 = 2.20, OMG_C6S3 = 1.30, L_C6S3 = 1.40;   // 前轮曲线 / 车长（车架刚性）
+  var T_END_C6S3 = 12.0;                                  // t ∈ [0, 12]
+  var NINT_C6S3 = 4000;                                   // 内积分步数（朝外判别对精度不敏感）
+  var ALPHA_C6S3 = 25, D_MULT_C6S3 = 2.5;                 // 朝外半锥 25°、前方距离 2.5×车长
+  var THETA0_C6S3 = Math.atan2(AMP_C6S3 * OMG_C6S3, 1);   // 初值方向 = 前轮出发朝向（无瞬态）≈ 70.73°
+  var F_MIN_C6S3 = 0.02, F_MAX_C6S3 = 0.98, F_DEF_C6S3 = 0.40;   // 游标量程 / 默认（t=4.8，非朝外）
+  // 映射：**等比**（SPANY 由 SPANX 反推）+ 世界框 x∈[-1.2098, 12.7477]（两条车辙并集 + 6% 边距）
+  var X0_C6S3 = -1.2098, X1_C6S3 = 12.7477;
+  var SPANX_C6S3 = X1_C6S3 - X0_C6S3;
+  var SPANY_C6S3 = SPANX_C6S3 * (330 - 96) / (596 - 56);
+  var MAP_C6S3 = makeMap(56, 96, 596, 330, X0_C6S3, X1_C6S3, -SPANY_C6S3 / 2, SPANY_C6S3 / 2);
+  var BOX_C6S3 = [56, 96, 596, 330];
+  var COL_FRONT_C6S3 = '#3b82f6', COL_REAR_C6S3 = '#f59e0b';
+  var COL_TAN_C6S3 = '#8b5cf6', COL_REAR_TAN_C6S3 = '#10b981';
+  var TAN_HALF_C6S3 = 200;                                 // 切线往两头各画这么长（会被裁进作图区）
+  var g6_3 = { f: F_DEF_C6S3 };
+  var TRACK_C6S3 = null;                                   // 预置的后轮轨迹（只算一次）
+  var K1_C6S3 = [0, 0], K2_C6S3 = [0, 0], K3_C6S3 = [0, 0], K4_C6S3 = [0, 0];
+
+  function setTxtC6S3(id, html) { var e = document.getElementById(id); if (e) e.innerHTML = html; }
+  function fXC6S3(t) { return t; }
+  function fYC6S3(t) { return AMP_C6S3 * Math.sin(OMG_C6S3 * t); }
+  function dXC6S3(t) { return 1; }
+  function dYC6S3(t) { return AMP_C6S3 * OMG_C6S3 * Math.cos(OMG_C6S3 * t); }
+  function t0C6S3() { return T_END_C6S3 * g6_3.f; }
+
+  // 后轮该往哪边走：R′ = [ (F−R)·F′ / L² ] · (F−R)
+  function slopeC6S3(t, px, py, out) {
+    var vx = fXC6S3(t) - px, vy = fYC6S3(t) - py;
+    var lam = (vx * dXC6S3(t) + vy * dYC6S3(t)) / (L_C6S3 * L_C6S3);
+    out[0] = lam * vx; out[1] = lam * vy;
+  }
+  // 后轮轨迹：RK4 一步一步推（初值 = 后轮在前轮**出发朝向的正后方** L 处 ⇒ 无瞬态）。
+  // ★ 本节车长 / 曲线固定，只算一次（4000 步 ≈ 1 ms）。
+  function rearTrackC6S3() {
+    if (TRACK_C6S3) { return TRACK_C6S3; }
+    var h = T_END_C6S3 / NINT_C6S3, i, t, px, py;
+    var T = { ts: new Array(NINT_C6S3 + 1), xs: new Array(NINT_C6S3 + 1), ys: new Array(NINT_C6S3 + 1) };
+    px = fXC6S3(0) - L_C6S3 * Math.cos(THETA0_C6S3);
+    py = fYC6S3(0) - L_C6S3 * Math.sin(THETA0_C6S3);
+    T.ts[0] = 0; T.xs[0] = px; T.ys[0] = py;
+    for (i = 0; i < NINT_C6S3; i++) {
+      t = i * h;
+      slopeC6S3(t, px, py, K1_C6S3);
+      slopeC6S3(t + h / 2, px + h / 2 * K1_C6S3[0], py + h / 2 * K1_C6S3[1], K2_C6S3);
+      slopeC6S3(t + h / 2, px + h / 2 * K2_C6S3[0], py + h / 2 * K2_C6S3[1], K3_C6S3);
+      slopeC6S3(t + h, px + h * K3_C6S3[0], py + h * K3_C6S3[1], K4_C6S3);
+      px += h / 6 * (K1_C6S3[0] + 2 * K2_C6S3[0] + 2 * K3_C6S3[0] + K4_C6S3[0]);
+      py += h / 6 * (K1_C6S3[1] + 2 * K2_C6S3[1] + 2 * K3_C6S3[1] + K4_C6S3[1]);
+      T.ts[i + 1] = t + h; T.xs[i + 1] = px; T.ys[i + 1] = py;
+    }
+    TRACK_C6S3 = T;
+    return T;
+  }
+  function rearAtC6S3(t) {
+    var T = rearTrackC6S3();
+    var i = Math.round(t / T_END_C6S3 * NINT_C6S3);
+    if (i < 0) { i = 0; } if (i > NINT_C6S3) { i = NINT_C6S3; }
+    return [T.xs[i], T.ys[i]];
+  }
+  // 「朝外」判别：点 P（方向 (dx,dy)）的前方半锥（α、D_max）内**没有** other 轨迹的点 ⇒ 朝外。
+  //   ★ 后轮切线 = 车架方向 ⇒ 前轮 F(t) 恰好在正前方 L 处（夹角 0、距离 L < D_max）⇒ 恒非朝外。
+  function isOutwardC6S3(Px, Py, dx, dy, other) {
+    var dn = Math.sqrt(dx * dx + dy * dy);
+    if (dn < 1e-15) { return true; }
+    var ux = dx / dn, uy = dy / dn;
+    var Dmax = D_MULT_C6S3 * L_C6S3;
+    var tanA = Math.tan(ALPHA_C6S3 * Math.PI / 180);
+    for (var i = 0; i < other.xs.length; i++) {
+      var vx = other.xs[i] - Px, vy = other.ys[i] - Py;
+      var along = vx * ux + vy * uy;
+      if (along <= 0 || along > Dmax) { continue; }
+      var perp = Math.abs(vx * uy - vy * ux);
+      if (perp < along * tanA) { return false; }
+    }
+    return true;
+  }
+  function frontOutwardC6S3() {
+    var t = t0C6S3();
+    return isOutwardC6S3(fXC6S3(t), fYC6S3(t), dXC6S3(t), dYC6S3(t), rearTrackC6S3());
+  }
+  function tanDegC6S3() {
+    var t = t0C6S3();
+    return Math.atan2(dYC6S3(t), dXC6S3(t)) * 180 / Math.PI;
+  }
+  function frameLenC6S3() {
+    var t = t0C6S3(), R = rearAtC6S3(t);
+    var dx = fXC6S3(t) - R[0], dy = fYC6S3(t) - R[1];
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  function posTxtC6S3() {
+    var t = t0C6S3();
+    var y = fYC6S3(t);
+    var slope = Math.abs(Math.sin(OMG_C6S3 * t));
+    // 波峰/波谷：|y| 接近振幅（2.2）且接近水平；上坡/下坡：看 dYC6S3 的符号
+    if (y > AMP_C6S3 * 0.93) { return '波峰（最高处）'; }
+    if (y < -AMP_C6S3 * 0.93) { return '波谷（最低处）'; }
+    var up = dYC6S3(t) > 0;
+    return up ? '正在上坡' : '正在下坡';
+  }
+  function degTxtC6S3(v) { return (v < 0 ? '−' : '+') + Math.abs(v).toFixed(1) + '°'; }
+  function tanTxtC6S3() {
+    var d = tanDegC6S3();
+    return Math.abs(d) < 0.5 ? '0.0°（水平）' : degTxtC6S3(d);
+  }
+  function msgC6S3() {
+    var pos = posTxtC6S3();
+    if (frontOutwardC6S3()) {
+      return '★ <b>切线朝外了</b>！它指向的地方一条车辙都没有 —— 所以<b>这一条（蓝线）就是前轮的轨迹</b>。';
+    }
+    return '这条切线<b>还没朝外</b>：它指向另一条车辙（绿线那边）。再拖一拖，到<b>' +
+      (dYC6S3(t0C6S3()) > 0 ? '波峰' : '波谷') + '</b>看看。';
+  }
+  function stepTxtC6S3() {
+    return '在一条轨迹上找<b>「切线朝外」</b>的点：紫线指出去的方向，一条车辙都没有。' +
+      '找到了，那条就是前轮（后轮上永远找不到）。';
+  }
+  function drawC6S3() {
+    var cv = document.getElementById('cv6-3');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var m = MAP_C6S3, i, N = 400;
+    var T = rearTrackC6S3();
+    var t0 = t0C6S3();
+    var Fx = fXC6S3(t0), Fy = fYC6S3(t0);
+    var R = rearAtC6S3(t0);
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 作图区 ----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(BOX_C6S3[0], BOX_C6S3[1], BOX_C6S3[2] - BOX_C6S3[0], BOX_C6S3[3] - BOX_C6S3[1]);
+    // ---- 前轮轨迹（蓝）----
+    c.strokeStyle = COL_FRONT_C6S3; c.lineWidth = 2.6;
+    c.beginPath();
+    for (i = 0; i <= N; i++) {
+      var tt = T_END_C6S3 * i / N;
+      if (i === 0) { c.moveTo(m.X(fXC6S3(tt)), m.Y(fYC6S3(tt))); } else { c.lineTo(m.X(fXC6S3(tt)), m.Y(fYC6S3(tt))); }
+    }
+    c.stroke();
+    // ---- 后轮轨迹（橙）----
+    c.strokeStyle = COL_REAR_C6S3; c.lineWidth = 2.6;
+    c.beginPath();
+    for (i = 0; i <= N; i++) {
+      var q = Math.round(NINT_C6S3 * i / N);
+      if (i === 0) { c.moveTo(m.X(T.xs[q]), m.Y(T.ys[q])); } else { c.lineTo(m.X(T.xs[q]), m.Y(T.ys[q])); }
+    }
+    c.stroke();
+    // ---- 后轮切线（绿，= 车架方向 = 后轮→前轮，一直指着蓝点；★ 只画一小段，裁进作图区）----
+    var rdx = Fx - R[0], rdy = Fy - R[1];
+    var rn = Math.sqrt(rdx * rdx + rdy * rdy) || 1;
+    var rux = rdx / rn, ruy = rdy / rn;
+    var GRN_BACK_C6S3 = 0.8 * L_C6S3, GRN_FWD_C6S3 = 1.8 * L_C6S3;
+    c.save();
+    c.beginPath();
+    c.rect(BOX_C6S3[0], BOX_C6S3[1], BOX_C6S3[2] - BOX_C6S3[0], BOX_C6S3[3] - BOX_C6S3[1]);
+    c.clip();
+    c.strokeStyle = COL_REAR_TAN_C6S3; c.lineWidth = 2.2;
+    c.beginPath();
+    c.moveTo(m.X(R[0] - rux * GRN_BACK_C6S3), m.Y(R[1] - ruy * GRN_BACK_C6S3));
+    c.lineTo(m.X(R[0] + rux * GRN_FWD_C6S3), m.Y(R[1] + ruy * GRN_FWD_C6S3));
+    c.stroke();
+    c.restore();
+    // ---- 前轮切线（紫，裁进作图区）----
+    var ddx = dXC6S3(t0), ddy = dYC6S3(t0);
+    var dn = Math.sqrt(ddx * ddx + ddy * ddy) || 1;
+    var ux = ddx / dn, uy = ddy / dn;
+    c.save();
+    c.beginPath();
+    c.rect(BOX_C6S3[0], BOX_C6S3[1], BOX_C6S3[2] - BOX_C6S3[0], BOX_C6S3[3] - BOX_C6S3[1]);
+    c.clip();
+    c.strokeStyle = COL_TAN_C6S3; c.lineWidth = 2.4;
+    c.beginPath();
+    c.moveTo(m.X(Fx - ux * TAN_HALF_C6S3), m.Y(Fy - uy * TAN_HALF_C6S3));
+    c.lineTo(m.X(Fx + ux * TAN_HALF_C6S3), m.Y(Fy + uy * TAN_HALF_C6S3));
+    c.stroke();
+    c.restore();
+    // ---- 两个轮子 ----
+    dot(c, m.X(Fx), m.Y(Fy), 6, COL_TAN_C6S3);        // 前轮（游标）
+    dot(c, m.X(R[0]), m.Y(R[1]), 5, COL_REAR_C6S3);   // 后轮
+    // ---- 朝外标注（只在朝外时画；★ 像素偏移 + 夹到画布内，防出界）----
+    if (frontOutwardC6S3()) {
+      var cpx = m.X(Fx) + ux * 140, cpy = m.Y(Fy) - uy * 140;
+      if (cpx < 60) { cpx = 60; } if (cpx > 560) { cpx = 560; }
+      if (cpy < 26) { cpy = 26; } if (cpy > 354) { cpy = 354; }
+      labelChip(c, '朝外 →', cpx, cpy, '#dc2626', 12, 'center', 3);
+    }
+    // ---- 标注 ----
+    labelChip(c, '一条车辙', m.X(fXC6S3(0.6)), m.Y(fYC6S3(0.6)) + 30, COL_FRONT_C6S3, 11.5, 'center', 3);
+    labelChip(c, '另一条车辙', m.X(T.xs[Math.round(NINT_C6S3 * 0.55)]), m.Y(T.ys[Math.round(NINT_C6S3 * 0.55)]) - 20, COL_REAR_C6S3, 11.5, 'center', 3);
+    label(c, '横轴：车往前走的方向　纵轴：车辙的高低', BOX_C6S3[0] + 4, BOX_C6S3[3] + 16, '#cbd5e1', 11, 'left');
+    // ---- 右上角读数格（与 4.x / 5.x / 6.1 / 6.2 同位置同尺寸）----
+    c.save();
+    c.fillStyle = '#f8fafc'; c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    roundRect(c, 384, 4, 226, 86, 8); c.fill(); c.stroke();
+    c.restore();
+    label(c, '游标处的切线方向（紫线指着哪儿）', 396, 20, '#64748b', 11.5, 'left');
+    label(c, tanTxtC6S3(), 396, 42, COL_TAN_C6S3, 17, 'left');
+    label(c, '这条切线朝外吗', 396, 62, '#64748b', 11.5, 'left');
+    label(c, frontOutwardC6S3() ? '朝外 ★' : '没有朝外（指向另一条车辙）', 396, 80,
+      frontOutwardC6S3() ? '#dc2626' : '#10b981', 11.5, 'left');
+  }
+  function updC6S3() {
+    var sl = document.getElementById('s6-3-t');
+    if (sl) {
+      var want = String(Math.round(g6_3.f * 100));
+      if (sl.value !== want) { sl.value = want; }
+    }
+    setTxtC6S3('lb6-3-t', posTxtC6S3());
+    setTxtC6S3('kv6-3-v', tanTxtC6S3());
+    setTxtC6S3('kv6-3-t', '波峰 / 波谷处水平，上坡朝上、下坡朝下');
+    setTxtC6S3('kv6-3b-v', frontOutwardC6S3() ? '朝外 ★' : '没有朝外');
+    setTxtC6S3('kv6-3b-t', frontOutwardC6S3() ? '切线指向空处 —— 这一条是前轮' : '切线指向另一条车辙（绿线那边）');
+    setTxtC6S3('kv6-3c-v', frameLenC6S3().toFixed(2));
+    setTxtC6S3('kv6-3c-t', '前后轮被车架固定 —— 这个数一路都不变（下一节就用它）');
+    setTxtC6S3('st6-3', msgC6S3());
+    var dt = document.getElementById('st6-3-dot');
+    if (dt) { dt.style.background = frontOutwardC6S3() ? '#dc2626' : COL_TAN_C6S3; }
+  }
+  function showStepC6S3() { setTxtC6S3('sl6-3', stepTxtC6S3()); }
+  function slidePosC6S3(v) {
+    var f = parseFloat(v) / 100;
+    if (!isFinite(f)) { f = F_DEF_C6S3; }
+    g6_3.f = Math.min(F_MAX_C6S3, Math.max(F_MIN_C6S3, Math.round(f * 100) / 100));
+    updC6S3(); drawC6S3();
+  }
+  function resetC6S3() {
+    g6_3.f = F_DEF_C6S3;
+    updC6S3(); drawC6S3(); showStepC6S3();
+    toast('回到爬坡那一点 —— 拖到波峰 / 波谷看「朝外」');
+  }
+  function stopC6S3() { }
+
+  // 落地即默认档（非朝外 ⇒ 结论不出现），并显示讲解行（页面永不「内容为空」）
+  updC6S3(); drawC6S3(); showStepC6S3();
+
+  // 6.4 6000 英镑的问题（章收口）
+  // ★ 本节原语：**刚性长度检验** —— 假设一个方向，沿后轮切线量「后轮 → 前轮」的距离：
+  //   正确方向（从右向左）下它**恒定等于车长 L**；错误方向（从左向右）下**一路在变**
+  //   （原书：车身像弹簧一样不停伸缩）—— 由此把"猜方向"变成"量方向"。
+  //
+  // 数学（页面自己算）：前轮 F(τ) = (T−τ, A·sin(ωτ))（τ 增大 ⇔ 车从右向左开）；后轮 R(τ) 由
+  //   「后轮追前轮」RK4 积分：R′ = [ (F−R)·F′ / L² ]·(F−R)（后轮在**右侧**拖尾，车长 |F−R| ≡ L）。
+  //
+  // ★★ 落地前复核抓出来的三条（`_c6s4_numbers.py` / `_c6s4_final.py` 的实测，别改）：
+  //   K41 —— 错误方向（左→右）：沿切线**反方向**量，与前轮轨迹的交点距离**一路在变**，
+  //      实测极差 3.29 ≈ 235%×车长（判据：> 20%×车长 且非单调）——"弹簧车身"，假设不成立。
+  //   K42 —— 正确方向（右→左）：后轮切线沿行驶方向**恰好指向前轮**，前轮就在距离 = 车长 L 处
+  //      （刚体）⇒ 实测 |F−R| ∈ [1.400000, 1.400000]，极差 9.4e−12 < 1e−6（恒等）。
+  //   K43 —— 等比映射：车辙作图区 SPANY 由 SPANX 反推（车辙是"长度"）；两条车辙 + 切线段 +
+  //      「长度 vs 取点位置」小图全部落在画布内（上区 [56,96,596,274] / 下区 [56,284,596,350]）。
+  //
+  // ★ 测量口径：u = 前轮→后轮 的单位向量。正确（右→左）沿 −u 量 = 刚体车长 |F−R|；
+  //   错误（左→右）沿 +u 量 = 切线与前轮轨迹的最近交点。两幕**同一组车辙、同一批采样点、
+  //   同一把尺子** —— 只有"往哪一头量"不同（判据③：同一副尺子量两次）。
+  var AMP_C6S4 = 1.60, OMG_C6S4 = 1.10, L_C6S4 = 1.40;    // 前轮曲线 / 车长（车架刚性）
+  var T_END_C6S4 = 12.0, X0_C6S4 = 12.0;                   // τ ∈ [0,12]；x = 12 − τ（τ 增大 ⇔ 向左开）
+  var NINT_C6S4 = 4000;                                    // 后轮轨迹积分步数
+  var TLO_C6S4 = 0.15, THI_C6S4 = 0.85;                    // 采样区间（两端留瞬态边距）
+  var NPTS_C6S4 = 80;                                      // 采样点数（两幕数组长度相同）
+  var FRAMES_C6S4 = 48, MS_C6S4 = 70;                      // ▶ 依次播放：48 帧 × 70ms ≈ 3.4s
+  var NFP_C6S4 = 1600;                                     // 前轮轨迹折线（求交点用）
+  // 映射（等比）：k = 540 / 14.2146 = 37.9891 像素/世界
+  var X0W_C6S4 = -0.7615, X1W_C6S4 = 13.4531;
+  var KT_C6S4 = (596 - 56) / (X1W_C6S4 - X0W_C6S4);
+  var BOX_T_C6S4 = [56, 96, 596, 274];                     // 上区：车辙 + 切线段
+  var SPANYT_C6S4 = (BOX_T_C6S4[3] - BOX_T_C6S4[1]) / KT_C6S4;
+  var MAP_C6S4 = makeMap(56, 96, 596, 274, X0W_C6S4, X1W_C6S4, -SPANYT_C6S4 / 2, SPANYT_C6S4 / 2);
+  var BOX_C_C6S4 = [56, 284, 596, 350];                    // 下区：长度 vs 取点位置 小图
+  var CYMAX_C6S4 = 3.5;                                    // 小图纵轴 0..3.5（车长线压在 40% 高度）
+  var COL_F_C6S4 = '#3b82f6', COL_R_C6S4 = '#f59e0b', COL_TAN_C6S4 = '#8b5cf6';
+  var COL_NO_C6S4 = '#dc2626', COL_YES_C6S4 = '#10b981';
+  var SEG_IDX_C6S4 = [0, 13, 26, 39, 53, 66, 79];          // 画切线段的采样点序号（均摊全段）
+  var g6_4 = { dir: 'lr', n: NPTS_C6S4 };   // dir 'lr'=假设左→右（错，默认）/ 'rl'=右→左（对）
+  var t6_4 = null, frame6_4 = 0;
+  var TRACK_C6S4 = null, PTS_C6S4 = null;
+  var K1_C6S4 = [0, 0], K2_C6S4 = [0, 0], K3_C6S4 = [0, 0], K4_C6S4 = [0, 0];
+
+  function setTxtC6S4(id, html) { var e = document.getElementById(id); if (e) e.innerHTML = html; }
+  function fX_C6S4(t) { return X0_C6S4 - t; }
+  function fY_C6S4(t) { return AMP_C6S4 * Math.sin(OMG_C6S4 * t); }
+  function dX_C6S4(t) { return -1; }
+  function dY_C6S4(t) { return AMP_C6S4 * OMG_C6S4 * Math.cos(OMG_C6S4 * t); }
+
+  // 后轮该往哪边走：R′ = [ (F−R)·F′ / L² ] · (F−R)
+  function slopeC6S4(t, px, py, out) {
+    var vx = fX_C6S4(t) - px, vy = fY_C6S4(t) - py;
+    var lam = (vx * dX_C6S4(t) + vy * dY_C6S4(t)) / (L_C6S4 * L_C6S4);
+    out[0] = lam * vx; out[1] = lam * vy;
+  }
+  // 后轮轨迹：RK4 一步一步推（初值 = 前轮出发朝向**反方向**的正后方 L 处 ⇒ 无瞬态，后轮在右侧拖尾）。
+  // ★ 车长 / 曲线固定，只算一次（4000 步 ≈ 1 ms）。
+  function rearTrackC6S4() {
+    if (TRACK_C6S4) { return TRACK_C6S4; }
+    var h = T_END_C6S4 / NINT_C6S4, i, t, px, py;
+    var T = { ts: new Array(NINT_C6S4 + 1), xs: new Array(NINT_C6S4 + 1), ys: new Array(NINT_C6S4 + 1) };
+    var d0x = dX_C6S4(0), d0y = dY_C6S4(0), dn = Math.sqrt(d0x * d0x + d0y * d0y);
+    px = fX_C6S4(0) - L_C6S4 * d0x / dn;
+    py = fY_C6S4(0) - L_C6S4 * d0y / dn;
+    T.ts[0] = 0; T.xs[0] = px; T.ys[0] = py;
+    for (i = 0; i < NINT_C6S4; i++) {
+      t = i * h;
+      slopeC6S4(t, px, py, K1_C6S4);
+      slopeC6S4(t + h / 2, px + h / 2 * K1_C6S4[0], py + h / 2 * K1_C6S4[1], K2_C6S4);
+      slopeC6S4(t + h / 2, px + h / 2 * K2_C6S4[0], py + h / 2 * K2_C6S4[1], K3_C6S4);
+      slopeC6S4(t + h, px + h * K3_C6S4[0], py + h * K3_C6S4[1], K4_C6S4);
+      px += h / 6 * (K1_C6S4[0] + 2 * K2_C6S4[0] + 2 * K3_C6S4[0] + K4_C6S4[0]);
+      py += h / 6 * (K1_C6S4[1] + 2 * K2_C6S4[1] + 2 * K3_C6S4[1] + K4_C6S4[1]);
+      T.ts[i + 1] = t + h; T.xs[i + 1] = px; T.ys[i + 1] = py;
+    }
+    TRACK_C6S4 = T;
+    return T;
+  }
+  // 「错误方向」的量法：过 (px,py)、方向 (ux,uy)（= 前轮→后轮）的直线，与前轮折线在 **+u 一侧**
+  // 的最近交点距离。无交点返回 null（实测采样区间内 0 处）。
+  function nearestHitC6S4(px, py, ux, uy, FP) {
+    var best = null, i;
+    for (i = 0; i < FP.xs.length - 1; i++) {
+      var ax = FP.xs[i], ay = FP.ys[i];
+      var dx = FP.xs[i + 1] - ax, dy = FP.ys[i + 1] - ay;
+      var den = ux * dy - uy * dx;
+      if (Math.abs(den) < 1e-12) { continue; }
+      var s = ((ax - px) * dy - (ay - py) * dx) / den;
+      var tt = ((ax - px) * uy - (ay - py) * ux) / den;
+      if (tt < -1e-9 || tt > 1 + 1e-9) { continue; }
+      if (s <= 1e-9) { continue; }
+      var ds = Math.abs(s);
+      if (best === null || ds < best) { best = ds; }
+    }
+    return best;
+  }
+  // 采样点：τ ∈ [TLO,THI]·T 均匀 NPTS 个；每个存 后轮位置 / 前轮位置 / 单位向量 u（前轮→后轮）/
+  // lenW（错误方向量出的长度）。★ 两幕共用这一批点（判据③：同一副尺子量两次）。
+  function buildPtsC6S4() {
+    if (PTS_C6S4) { return PTS_C6S4; }
+    var T = rearTrackC6S4();
+    var FP = { xs: new Array(NFP_C6S4 + 1), ys: new Array(NFP_C6S4 + 1) };
+    var i, tt;
+    for (i = 0; i <= NFP_C6S4; i++) {
+      tt = T_END_C6S4 * i / NFP_C6S4;
+      FP.xs[i] = fX_C6S4(tt); FP.ys[i] = fY_C6S4(tt);
+    }
+    var pts = [];
+    for (i = 0; i < NPTS_C6S4; i++) {
+      var j = Math.round((TLO_C6S4 + (THI_C6S4 - TLO_C6S4) * i / (NPTS_C6S4 - 1)) * NINT_C6S4);
+      var t = T.ts[j];                                     // ★ 配对口径：前轮取在后轮轨迹**自己的时刻**上
+      var Rx = T.xs[j], Ry = T.ys[j];
+      var Fx = fX_C6S4(t), Fy = fY_C6S4(t);
+      var vx = Rx - Fx, vy = Ry - Fy;
+      var vn = Math.sqrt(vx * vx + vy * vy);
+      var ux = vx / vn, uy = vy / vn;                       // 前轮→后轮（+u，反方向）
+      pts.push({ t: t, rx: Rx, ry: Ry, fx: Fx, fy: Fy, ux: ux, uy: uy,
+                 lenW: nearestHitC6S4(Rx, Ry, ux, uy, FP) });
+    }
+    PTS_C6S4 = pts;
+    return pts;
+  }
+  // 错误方向的长度范围（读数与状态条用；★ 现算，不写死）
+  function lenStatsC6S4() {
+    var pts = buildPtsC6S4(), lo = 1e18, hi = -1e18, i;
+    for (i = 0; i < pts.length; i++) {
+      if (pts[i].lenW === null) { continue; }
+      if (pts[i].lenW < lo) { lo = pts[i].lenW; }
+      if (pts[i].lenW > hi) { hi = pts[i].lenW; }
+    }
+    return { lo: lo, hi: hi };
+  }
+  // 场景序：'rl'（右→左）按 τ 升序 = 屏幕右端先量；'lr'（左→右）按 τ 降序 = 屏幕左端先量。
+  // ★ 依次播放的扫动方向 = 假设的行驶方向。
+  function rankC6S4(i) { return g6_4.dir === 'rl' ? i : NPTS_C6S4 - 1 - i; }
+  function isWrongC6S4() { return g6_4.dir === 'lr'; }
+  function chartYc6s4(v) {
+    var h = BOX_C_C6S4[3] - BOX_C_C6S4[1];
+    return BOX_C_C6S4[3] - Math.max(0, Math.min(CYMAX_C6S4, v)) / CYMAX_C6S4 * h;
+  }
+  function stepTxtC6S4() {
+    return '把「猜」变成「量」：假设一个方向，沿<b>切线</b>量「后轮 → 前轮」—— 方向对了它必须<b>恒定等于车长</b>；一路在变，假设就不成立。';
+  }
+  function msgC6S4() {
+    if (isWrongC6S4()) {
+      var st = lenStatsC6S4();
+      return '假设从左向右：量出的长度<b>一路在变</b>（最短 ' + st.lo.toFixed(2) + '、最长 ' + st.hi.toFixed(2) +
+        '，车长才 ' + L_C6S4.toFixed(2) + '）—— 车身得像弹簧一样伸缩才行，<b>不可能</b>。这个假设不成立。';
+    }
+    return '假设从右向左：每一段都<b>正好等于车长 ' + L_C6S4.toFixed(2) + '</b> —— 车身是刚性的，对上了。原书（书页 66）：「就这样，我们得出结论：从右向左是自行车行驶的正确方向。」';
+  }
+  function drawC6S4() {
+    var cv = document.getElementById('cv6-4');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var m = MAP_C6S4, i, N = 400;
+    var pts = buildPtsC6S4();
+    var T = rearTrackC6S4();
+    var wrong = isWrongC6S4();
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 上区：车辙作图区 ----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(BOX_T_C6S4[0], BOX_T_C6S4[1], BOX_T_C6S4[2] - BOX_T_C6S4[0], BOX_T_C6S4[3] - BOX_T_C6S4[1]);
+    // ---- 前轮轨迹（蓝）----
+    c.strokeStyle = COL_F_C6S4; c.lineWidth = 2.6;
+    c.beginPath();
+    for (i = 0; i <= N; i++) {
+      var tt = T_END_C6S4 * i / N;
+      if (i === 0) { c.moveTo(m.X(fX_C6S4(tt)), m.Y(fY_C6S4(tt))); } else { c.lineTo(m.X(fX_C6S4(tt)), m.Y(fY_C6S4(tt))); }
+    }
+    c.stroke();
+    // ---- 后轮轨迹（橙）----
+    c.strokeStyle = COL_R_C6S4; c.lineWidth = 2.6;
+    c.beginPath();
+    for (i = 0; i <= N; i++) {
+      var q = Math.round(NINT_C6S4 * i / N);
+      if (i === 0) { c.moveTo(m.X(T.xs[q]), m.Y(T.ys[q])); } else { c.lineTo(m.X(T.xs[q]), m.Y(T.ys[q])); }
+    }
+    c.stroke();
+    // ---- 切线段（紫：从后轮点沿切线量到前轮车辙；已量到的才画）----
+    c.save();
+    c.beginPath();
+    c.rect(BOX_T_C6S4[0], BOX_T_C6S4[1], BOX_T_C6S4[2] - BOX_T_C6S4[0], BOX_T_C6S4[3] - BOX_T_C6S4[1]);
+    c.clip();
+    c.strokeStyle = COL_TAN_C6S4; c.lineWidth = 2.2;
+    for (i = 0; i < SEG_IDX_C6S4.length; i++) {
+      var si = SEG_IDX_C6S4[i];
+      if (rankC6S4(si) >= g6_4.n) { continue; }
+      var p = pts[si];
+      var ex, ey;
+      if (wrong) {
+        if (p.lenW === null) { continue; }
+        ex = p.rx + p.lenW * p.ux; ey = p.ry + p.lenW * p.uy;
+      } else {
+        ex = p.fx; ey = p.fy;                              // 正确方向：正好量到前轮（距离 = 车长）
+      }
+      c.beginPath();
+      c.moveTo(m.X(p.rx), m.Y(p.ry));
+      c.lineTo(m.X(ex), m.Y(ey));
+      c.stroke();
+      dot(c, m.X(ex), m.Y(ey), 3.5, wrong ? COL_NO_C6S4 : COL_YES_C6S4);
+    }
+    c.restore();
+    // 后轮点（橙）
+    for (i = 0; i < SEG_IDX_C6S4.length; i++) {
+      var sj = SEG_IDX_C6S4[i];
+      if (rankC6S4(sj) >= g6_4.n) { continue; }
+      var pr = pts[sj];
+      dot(c, m.X(pr.rx), m.Y(pr.ry), 4, COL_R_C6S4);
+    }
+    // ---- 车辙标注（角色在屏上写明：静态图 + 受控图同一张，紫线段是本节的"尺子"）----
+    labelChip(c, '前轮的车辙', 268, 106, COL_F_C6S4, 11.5, 'center', 3);
+    labelChip(c, '后轮的车辙', 592, 254, COL_R_C6S4, 11.5, 'right', 3);
+    // ---- 下区：长度 vs 取点位置 小图 ----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(BOX_C_C6S4[0], BOX_C_C6S4[1], BOX_C_C6S4[2] - BOX_C_C6S4[0], BOX_C_C6S4[3] - BOX_C_C6S4[1]);
+    // 车长虚线（两幕都画：正确方向的曲线恰好压在它上面）
+    c.setLineDash([5, 4]);
+    c.strokeStyle = '#94a3b8'; c.lineWidth = 1.2;
+    c.beginPath();
+    c.moveTo(BOX_C_C6S4[0] + 2, chartYc6s4(L_C6S4));
+    c.lineTo(BOX_C_C6S4[2] - 2, chartYc6s4(L_C6S4));
+    c.stroke();
+    c.setLineDash([]);
+    labelChip(c, '车长 ' + L_C6S4.toFixed(2), BOX_C_C6S4[0] + 8, chartYc6s4(L_C6S4) - 10, '#64748b', 10.5, 'left', 2.5);
+    // 量出的长度曲线（按场景序画到第 n 个点）
+    var col = wrong ? COL_NO_C6S4 : COL_YES_C6S4;
+    c.strokeStyle = col; c.lineWidth = 2.4;
+    c.beginPath();
+    var started = false;
+    for (i = 0; i < NPTS_C6S4; i++) {
+      if (rankC6S4(i) >= g6_4.n) { continue; }
+      var pc = pts[i];
+      if (pc.lenW === null) { started = false; continue; }
+      var v = wrong ? pc.lenW : L_C6S4;
+      var px2 = m.X(pc.rx), py2 = chartYc6s4(v);
+      if (!started) { c.moveTo(px2, py2); started = true; } else { c.lineTo(px2, py2); }
+    }
+    c.stroke();
+    // 小图标注
+    labelChip(c, '每个位置量出的长度', BOX_C_C6S4[2] - 8, BOX_C_C6S4[1] + 9, '#64748b', 10.5, 'right', 2.5);
+    label(c, '横轴：车辙上的取点位置 →', BOX_C_C6S4[2] - 8, BOX_C_C6S4[3] + 14, '#cbd5e1', 11, 'right');
+    // ---- 右上角读数格（与 4.x / 5.x / 6.1–6.3 同位置同尺寸）----
+    c.save();
+    c.fillStyle = '#f8fafc'; c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    roundRect(c, 384, 4, 226, 86, 8); c.fill(); c.stroke();
+    c.restore();
+    label(c, '假设的方向', 396, 20, '#64748b', 11.5, 'left');
+    label(c, wrong ? '从左向右' : '从右向左', 396, 40, wrong ? COL_NO_C6S4 : COL_YES_C6S4, 16, 'left');
+    label(c, '量出的长度', 396, 60, '#64748b', 11.5, 'left');
+    label(c, wrong ? '一路在变（对不上车长）' : '恒等于车长（对上了）', 396, 78, wrong ? COL_NO_C6S4 : COL_YES_C6S4, 11.5, 'left');
+  }
+  function updC6S4() {
+    var wrong = isWrongC6S4();
+    var st = lenStatsC6S4();
+    setTxtC6S4('kv6-4-v', wrong ? '从左向右' : '从右向左');
+    setTxtC6S4('kv6-4-t', wrong ? '先试这个方向（原书也是先试它）' : '换这个方向再量一遍');
+    setTxtC6S4('kv6-4b-v', wrong ? ('一路在变：' + st.lo.toFixed(2) + ' ~ ' + st.hi.toFixed(2)) : ('恒等于车长 ' + L_C6S4.toFixed(2)));
+    setTxtC6S4('kv6-4b-t', wrong ? ('最长 − 最短 = ' + (st.hi - st.lo).toFixed(2) + ' ≈ ' + Math.round((st.hi - st.lo) / L_C6S4 * 100) + '%×车长') : '一点不变 —— 车身是刚性的');
+    setTxtC6S4('kv6-4c-v', wrong ? '这个假设不成立' : '★ 从右向左是自行车行驶的正确方向');
+    setTxtC6S4('kv6-4c-t', wrong ? '长度在变 ⇒ 车身得会伸缩 ⇒ 不可能' : '长度处处相等，与两幕的数值事实相符');
+    setTxtC6S4('st6-4', msgC6S4());
+    var dt = document.getElementById('st6-4-dot');
+    if (dt) { dt.style.background = wrong ? COL_NO_C6S4 : COL_YES_C6S4; }
+    var bl = document.getElementById('btn-dir-lr'), br = document.getElementById('btn-dir-rl');
+    if (bl) { bl.className = wrong ? 'ctrl-btn primary' : 'ctrl-btn'; }
+    if (br) { br.className = wrong ? 'ctrl-btn' : 'ctrl-btn primary'; }
+  }
+  function showStepC6S4() { setTxtC6S4('sl6-4', stepTxtC6S4()); }
+  function stopC6S4() {
+    if (t6_4) { clearInterval(t6_4); t6_4 = null; }
+    var b = document.getElementById('btn-play6-4');
+    if (b) {
+      b.textContent = '▶ 依次播放';
+      if (b.className.indexOf('playing') >= 0) { b.className = b.className.replace(/\s*playing/g, ''); }
+    }
+  }
+  // ▶ 依次播放：沿"假设的方向"一个一个量过去 —— 切线段一条条画出来，小图曲线一段段长出来。
+  function playC6S4() {
+    if (t6_4) { stopC6S4(); return; }        // 播放中再点一次 = 停下（不叠两个计时器）
+    var b = document.getElementById('btn-play6-4');
+    if (b) {
+      b.textContent = '■ 停下';
+      if (b.className.indexOf('playing') < 0) { b.className += ' playing'; }
+    }
+    frame6_4 = 0;
+    g6_4.n = 1;
+    updC6S4(); drawC6S4();
+    t6_4 = setInterval(function () {
+      frame6_4++;
+      g6_4.n = Math.min(NPTS_C6S4, 1 + Math.round((NPTS_C6S4 - 1) * frame6_4 / (FRAMES_C6S4 - 1)));
+      updC6S4(); drawC6S4();
+      if (frame6_4 >= FRAMES_C6S4 - 1) { stopC6S4(); }
+    }, MS_C6S4);
+  }
+  // 双态开关：换一个假设方向，同一组车辙重新量一遍（先停动画，落回完整画面）
+  function setDirC6S4(d) {
+    stopC6S4();
+    g6_4.dir = (d === 'rl') ? 'rl' : 'lr';
+    g6_4.n = NPTS_C6S4;
+    updC6S4(); drawC6S4(); showStepC6S4();
+  }
+  function resetC6S4() {
+    stopC6S4();
+    g6_4.dir = 'lr'; g6_4.n = NPTS_C6S4;
+    updC6S4(); drawC6S4(); showStepC6S4();
+    toast('回到「假设从左向右」—— 再拨到「右 → 左」看结论');
+  }
+
+  // 落地即默认档（左→右，非答案 ⇒ 结论不出现），并显示讲解行（页面永不「内容为空」）
+  updC6S4(); drawC6S4(); showStepC6S4();
+
+  // ================= 第 6 章 JS 区 · 终点 =================
+
+
   // ================= 知识树渲染（数据驱动 · a 阶段只渲染有内容的层）=================
   // 切到 b 形态（完整三层金字塔 + 灰显待排期）时，只需给 L2 / L1 的 chapters 填数据，
   // 并在此加一个"空层渲染灰卡"的分支 —— 其余代码与页面零改动。
@@ -10328,7 +11785,10 @@
     { id: 'L2', name: 'L2 方法与工具层', sub: '第 2、6、7、10、14 章', chapters: [
       { ch: 2, name: '不断坠落的月亮', hook: '牛顿用微积分解释了整个宇宙',
         kw: '平方反比定律 · 把弧掰直 · 相似三角形', target: 'page-c2-1',
-        sections: C2_SECTIONS, go: 'goC2' }
+        sections: C2_SECTIONS, go: 'goC2' },
+      { ch: 6, name: '福尔摩斯和迷路的自行车', hook: '微积分发现了关键线索',
+        kw: '切线的方向 · 瞬时方向 · 独轮车反例', target: 'page-c6-1',
+        sections: C6_SECTIONS, go: 'goC6' }
     ]},
     { id: 'L1', name: 'L1 直觉与动机层', sub: '第 3、4、5、8、9、11、12、13 章', chapters: [
       { ch: 3, name: '黄油吐司', hook: '微积分俘获了一颗心',
@@ -10389,21 +11849,27 @@
   // 每节顶部的节进度条：当前节显示节名，其余只显号 —— 窄屏（500px）也放得下。
   // 泛化版：章号 / 节表 / 导航函数全部由参数传入，加章换节不用动这里。
   function renderSecTabs(chNo, sections, goFn) {
-    var i, j, page, nav, html, n, S;
+    var i, j, page, nav, html, n, S, host;
     for (i = 0; i < sections.length; i++) {
       n = sections[i].n;
       page = document.getElementById('page-c' + chNo + '-' + n);
       if (!page) continue;
       nav = page.querySelector('.sub-nav');
-      if (!nav || page.querySelector('.sec-tabs')) continue;   // 幂等：重复调用不叠加
-      html = '<div class="sec-tabs">';
+      // ★★ 幂等判据看的是「**芯片**渲染过没有」，不是「容器在不在」（2026-10-16 · 第 6 章全章自检抓）
+      //    第 6 章的章壳在每页 .sub-nav 之后**预置了一个空的 .sec-tabs 容器**
+      //    （`_build_c6_shell.py` 的注释写的是"renderSecTabs 自动渲染"）——
+      //    旧判据见到这个空容器就 continue ⇒ 第 6 章 4 页的进度条**一直是空的**。
+      //    第 1–5 章没有预置容器，所以同一个函数在那边完全正常（走下面的 else 分支）。
+      if (!nav || page.querySelector('.sec-tab')) continue;   // 幂等：重复调用不叠加
+      html = '';
       for (j = 0; j < sections.length; j++) {
         S = sections[j];
         html += '<span class="sec-tab' + (S.n === n ? ' on' : '') + '" onclick="' + goFn + '(' + S.n + ')">'
               + chNo + '.' + S.n + (S.n === n ? '<i>' + S.label + '</i>' : '') + '</span>';
       }
-      html += '</div>';
-      nav.insertAdjacentHTML('afterend', html);
+      host = page.querySelector('.sec-tabs');
+      if (host) { host.innerHTML = html; }                   // ★ 章壳预置的空容器：**就地填**
+      else { nav.insertAdjacentHTML('afterend', '<div class="sec-tabs">' + html + '</div>'); }
     }
   }
   // 第 1 章包装：保留旧名，其它引用点零改动。

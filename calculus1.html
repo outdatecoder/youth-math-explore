@@ -469,6 +469,10 @@
   #cv6-2 { width: 100%; height: auto; }
   #cv6-3 { width: 100%; height: auto; }
   #cv6-4 { width: 100%; height: auto; }
+  #cv7-1 { width: 100%; height: auto; }
+  #cv7-2 { width: 100%; height: auto; }
+  #cv7-3 { width: 100%; height: auto; }
+  #cv7-4 { width: 100%; height: auto; }
 
 </style>
 </head>
@@ -3629,7 +3633,7 @@
     <span class="back" onclick="goHome()">← 返回首页</span>
     <span class="divider">|</span>
     <span class="title">6.4　6000 英镑的问题</span>
-    <span class="nav-next" onclick="goHome()">第 6 章完 · 返回首页 →</span>
+    <span class="nav-next" onclick="goC7(1)">进入第 7 章 · 一部未经授权的潮流传记 →</span>
   </div>
   <div class="sec-tabs"></div>
   <div class="sub-container">
@@ -3735,6 +3739,459 @@
 
 </div>
 
+<!-- ================= 第 7 章 一部未经授权的潮流传记：逻辑斯蒂增长模型的三幕（4 节 · 已收口）================= -->
+<!-- 本章 4 节（计划 §三）：7.1 第一幕：加速 / 7.2 第二幕：拐点 / 7.3 第三幕：饱和 / 7.4 玩具飞机与真引擎（章收口）。
+     ★ 原书书页 69 自己把本章分成**三幕**：加速 → 拐点 → 饱和。
+     ★★ 本章是**第二次放行封存词**（第一次是第 6 章放行的那个「切」字头几何词）：**「拐点」只在本章放行** ——
+         原书书页 72–73 用了它并给了定义（「拐点不是快速增长开始的时刻，而是快速增长达到顶点……
+         的那一刻」；「二阶导数……由正变为负」）⇒ 放行才叫忠实。
+         `RELEASED = { …, 7: ['拐点'] }` + `withoutChapter(html, 7)` 内 0 命中的脚本级断言。
+         ⚠️ `precheck` 的 forbid 表里**本来就没有**「拐点」⇒ **不要**照第 6 章的样子去加 scoped
+         （第 6 章 K20：那 5 组 scoped 是纯假阳性，已移除）。
+     ★ 继续封存的记号**一个都不写进本章**（清单见计划 §二 的表）。★ 这不是洁癖：
+       把封存词列进注释，会被本章自己的术语扫描**当成命中**（本脚本第 7 步就现场抓到过一次），
+       所以这里只描述、不枚举。
+     ★ 数据来源：全章**无坐标刻度、无数据集**（原书亦然）⇒ 曲线与反应皿都由页面**现算**：
+       指数用离散逐月乘法 `p * (1 + r)`，自催化用离散回合 `C + K * A * C`；
+       ★ **不用以 e 为底的指数函数、也不用对数**（`Math` 里那两个函数本章禁用）。 -->
+
+<!-- ================= 7.1 第一幕：加速 ================= -->
+
+<div class="page" id="page-c7-1">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">7.1　第一幕：加速</span>
+    <span class="nav-next" onclick="goC7(2)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>你随便挑一个潮流 —— 呼啦圈、魔方、电子宠物、某款手机、一群繁殖能力惊人的兔子，甚至一个正在生长的肿瘤。<br>它们长得都很像：<b>先慢，然后猛，最后停</b>。原书说这一章要分<b>三幕</b>看它们：<b>加速 → 拐点 → 饱和</b>。<br>第一节只看第一幕：<b>加速</b>。而且只问一件事 —— 两种"加速"，差在哪儿？</div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn primary" onclick="resetC7S1()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row7-1-r">
+          <label>蓝线每月乘多少：<b id="lb7-1-r">1.08（+8%）</b>　—— 拖一拖，<b>只有蓝线会动</b></label>
+          <input type="range" id="s7-1-r" min="0.01" max="0.12" step="0.01" value="0.08" oninput="slideRC7S1(parseFloat(this.value))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv7-1" width="620" height="380"></canvas>
+          <p class="canvas-caption">横轴：<b>月</b>（0–120，就是 10 年）。两条线从<b>同一个点</b>出发（p₀ = 1000）。<br><b style="color:#ef4444;">红线 = 线性</b>：每月<b>加</b> 1000；<b style="color:#3b82f6;">蓝线 = 指数级</b>：每月<b>乘</b> 1.08。<br>★★ <b>纵轴不是一根尺</b>：上半段被<b>压缩了约 52 倍</b>（断口在 15 万处）。不压缩的话，蓝线在 10 年那一端会把红线压成贴着底边的一条线 —— 那样你看到的只是"图很难画"，看不出两种增长差在哪儿。<br><span style="color:#94a3b8;">蓝线上那些小圆点，是"又翻了一番"的时刻。</span></p>
+        </div>
+
+        <div class="step-line" id="sl7-1"></div>
+
+        <div class="status-bar" id="st7-1-bar"><span class="status-dot" id="st7-1-dot"></span><span id="st7-1"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv7-1-cell">
+            <div class="k">翻番：乘到 2 倍要几个月</div>
+            <div class="v" id="kv7-1-v">…</div>
+            <div class="k" id="kv7-1-t">…</div>
+          </div>
+          <div class="kv" id="kv7-1b-cell">
+            <div class="k">10 年后，蓝线爬到</div>
+            <div class="v" id="kv7-1b-v">…</div>
+            <div class="k" id="kv7-1b-t">…</div>
+          </div>
+          <div class="kv" id="kv7-1c-cell">
+            <div class="k">蓝线是红线的</div>
+            <div class="v" id="kv7-1c-v">…</div>
+            <div class="k" id="kv7-1c-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只讲一件事：两种增长的公式，只差一个因子。</b><br>
+          <b style="color:#ef4444;">红线</b>的下一段永远是 <b>+1000</b> —— 不管它现在已经长到多大。所以它的<b>相邻两个月之差是常数</b>。<br>
+          <b style="color:#3b82f6;">蓝线</b>的下一段是「<b>现在这个数 × 1.08</b>」—— 它<b>自己越大，加得就越多</b>。这就是"指数级"。<br>
+          于是两种增长有了各自的指纹：蓝线<b>每隔 9 个月就翻一番</b>（1.08 连乘 9 次 = <b>1.999005</b>，差 0.05% 到 2）；红线<b>永远翻不了番</b>。<br>
+          只要每月乘的还是 1.08，这个「9 个月」就<b>永远不会变</b> —— 会变的只有那个系数本身（下一节就看它变）。<br>
+          拖滑块：换成 1.12，蓝线猛到冲出图外；换成 1.01，它 10 年还追不上红线 —— 可"翻番"这件事<b>一直在后台进行</b>，变的只是「多久翻一次」。<br>
+          <span style="color:#94a3b8;"><b>两处诚实说明：</b>① 原书 p71 说 10 年 <b>800 万</b>、20 年 <b>1 万亿</b> —— 这两个数与「每月 8%」<b>不能同时成立</b>（本页现算：10 年 <b>1 025 万</b>、20 年 <b>0.105 万亿</b>；真到 1 万亿要 <b>22.4 年</b>）。原书是近似口径，本页不改它，只把现算值并排写出来；<br>
+          ② 书里还有一句「达到全球 GDP 的 15%」—— 本页<b>不印</b>：页面里没有 GDP 这个数，算不出来的东西不往屏上放。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　蓝线为什么越到后面涨得越猛？<br>A. 因为页面把倍数调大了<br>B. 因为它的下一段是「现在这个数 × 1.08」—— 自己越大，乘出来的那一截就越多<br>C. 因为红线在后面偷偷变慢了</p>
+          <button class="quiz-btn" id="q71a-btn" onclick="toggleAnswer('q71a-ans','q71a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q71a-ans">答案是 <b>B</b>。这是"指数级"的全部秘密：<b>增长量本身随"现在有多大"变大</b>。<br>红线不是变慢了 —— 它每月的加数<b>一直是 1000</b>，从头到尾没变过。变的只是蓝线：它把"自己"乘进了下一段。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　拖到 1.01，10 年后蓝线（3 300）还没追上红线（121 000）。那「翻番」这句话还成立吗？<br>A. 不成立了，「翻番」只在 8% 时才有<br>B. 仍然成立 —— 变的只是「多久翻一次」（1% 要 70 个月），每月乘 1.01 这件事一次没落下<br>C. 成立，但只在第 70 个月那一个月有效</p>
+          <button class="quiz-btn" id="q71b-btn" onclick="toggleAnswer('q71b-ans','q71b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q71b-ans">答案是 <b>B</b>。系数小，翻得慢 —— 但<b>翻番这件事一直没停</b>。<br>这也解释了为什么"头几年看不出区别"：1% 的蓝线 10 年才 3.3 倍，而红线是它的 <b>36.7 倍</b>。<b>指数级增长的厉害之处不在头几年，在后面。</b></div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>蓝线一直在翻番，可它<b>不会永远翻下去</b>。<br>下一节换一个看法：不画"总共多少"，改画<b>「每个月新增了多少」</b> —— 你会看到柱子先长高、再变矮。<br>柱子最高的那一刻，就是下一节要讲的那个词：<b>拐点</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>线性增长</b>：每过一段，<b>加同一个数</b>（本节红线：每月 +1000）。相邻两个月之差恒定 ⇒ 图像是一条直线。</p>
+          <p><b>指数级增长</b>：每过一段，<b>乘同一个系数</b>（本节蓝线：每月 ×1.08）。它自己越大，加得越多 ⇒ 曲线越来越陡。</p>
+          <p><b>翻番</b>：乘到 2 倍要多久。8% 时是 <b>9 个月</b>（1.999005 倍）。★ 这个"多久"是<b>恒定</b>的 —— 指数级增长唯一的指纹。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　两条线<b>从同一个点出发</b>（p₀ = 1000），横轴是<b>同一把尺</b>（0–120 月）。不同起点、不同单位比出来的"差"，不算差。</div>
+          <div class="rule-item"><b>第 2 步</b>　只看公式：红 = <b>+1000</b>；蓝 = <b>×1.08</b>。区别<b>只有一个因子</b> —— 「现在这个数」进不进公式。</div>
+          <div class="rule-item"><b>第 3 步</b>　拖滑块：蓝线换系数就变、<b>红线纹丝不动</b> —— 谁在决定增长，一眼就看出来。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>别把"涨得猛"当成指数级。</b>8% 在头两年一点也不猛：24 个月才 6 341。猛是<b>后面</b>的事。</p>
+          <p><b>蓝线看着"变平"不是它慢下来了</b> —— 是纵轴上半段被压缩了 52 倍。尺子变了，线没变。</p>
+          <p><b>小系数时线性会赢。</b>1% 的蓝线 10 年只有 3 300，红线是它的 36.7 倍 —— 但"翻番"一次没落下。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 7.2 第二幕：拐点 ================= -->
+
+<div class="page" id="page-c7-2">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">7.2　第二幕：拐点</span>
+    <span class="nav-next" onclick="goC7(3)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>上一节的蓝线一路翻番，看着像要涨上天 —— 可现实里没有谁能永远翻下去。<br>原书把这种「先慢、再猛、最后停」的曲线叫 <b>逻辑斯蒂增长模型</b>，说它的故事要分<b>三幕</b>展开。上一节看的是第一幕：<b>加速</b>。<br>这一节只看第二幕：<b>拐点</b>。问题只有一个 —— 它到底发生在<b>哪一刻</b>？<br><span style="color:#94a3b8;">原书 p72：「在逻辑斯蒂增长模型里，拐点不是快速增长开始的时刻，而是快速增长达到顶点，到达高潮的那一刻——自那以后，漫长而缓慢的衰退便开始了。」</span></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" onclick="resetC7S2()">重置</button>
+          <button class="ctrl-btn primary" id="btn-play7-2" onclick="playC7S2()">▶ 逐月播放</button>
+        </div>
+
+        <div class="slider-row" id="row7-2-t">
+          <label>拖到第 <b id="lb7-2-t">90</b> 月　—— 上面看总数，下面看<b>每月新增</b></label>
+          <input type="range" id="s7-2-t" min="0" max="180" step="1" value="90" oninput="slideTC7S2(parseFloat(this.value))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv7-2" width="620" height="380"></canvas>
+          <p class="canvas-caption">同一把横轴（<b>月</b>，0–180，就是 15 年），上下两栏：<br><b style="color:#3b82f6;">上面 = 总共多少人</b>（原书那条 S 形曲线，天花板 = 极大值 100 万）；<b>下面 = 每个月新增多少</b>（柱子 = 这个月 − 上个月）。<br>★★ 注意看：<b>曲线还在往上爬，柱子却已经变矮了</b>。柱子最高的那一根，就是<b>拐点</b>。<br><span style="color:#94a3b8;">这条曲线不是数据，是模型：上一节的指数级增长 + 一个天花板。天花板怎么进公式，下一节讲。</span></p>
+        </div>
+
+        <div class="step-line" id="sl7-2"></div>
+
+        <div class="status-bar" id="st7-2-bar"><span class="status-dot" id="st7-2-dot"></span><span id="st7-2"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv7-2-cell">
+            <div class="k">这个月总共多少人</div>
+            <div class="v" id="kv7-2-v">…</div>
+            <div class="k" id="kv7-2-t">…</div>
+          </div>
+          <div class="kv" id="kv7-2b-cell">
+            <div class="k">本月新增（柱子高）</div>
+            <div class="v" id="kv7-2b-v">…</div>
+            <div class="k" id="kv7-2b-t">…</div>
+          </div>
+          <div class="kv" id="kv7-2c-cell">
+            <div class="k">增长在加速，还是减速</div>
+            <div class="v" id="kv7-2c-v">…</div>
+            <div class="k" id="kv7-2c-t">…</div>
+          </div>
+          <div class="kv" id="kv7-2d-cell">
+            <div class="k">离天花板还差</div>
+            <div class="v" id="kv7-2d-v">…</div>
+            <div class="k" id="kv7-2d-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只做一件事：把「新增」单独画出来。</b><br>
+          上面那张图是<b>总共多少</b>；下面那张是<b>每个月新增了多少</b> —— 也就是把"曲线有多陡"单独画成柱子。<br>
+          于是你看到了本节的那句话：<b>曲线还在往上爬，柱子却已经变矮了</b>。柱子最高的那一根，就是<b>拐点</b>。<br>
+          原书 p73 的 Instagram 例子说的正是这件事：<b>「尽管此时并不是 Instagram 用户最多的时候，但却是用户量增长速度最快的时候……」</b><br>
+          所以有<b>两个「最多」</b>，而且<b>不在同一个时刻</b>：<b>用户最多</b>在第 180 月（这条曲线到那儿还没停下），<b>本月新增最多</b>在第 90 月。<br>
+          <b style="color:#b45309;">拐点之后，它还在长 —— 只是长得越来越慢。</b><br>
+          原书还给了一句更短的定义（p73 逐字）：<b>「拐点是一个发生转变的时刻：这一刻的二阶导数由负变为正，或是（像逻辑斯蒂增长模型中的情况一样）由正变为负。」</b><br>
+          <span style="color:#94a3b8;">你不需要现在就靠这句话 —— 只要记住：<b>柱子最高那一刻，就是拐点</b>。这句话是同一件事的另一种写法：柱子（也就是新增）先变大、再变小，变大的那一段 f″ 是正的，变小以后 f″ 是负的。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　拐点是哪一刻？<br>A. 曲线开始变陡的那一刻（第 1 个月）<br>B. <b>柱子最高的那个月</b> —— 每月新增最多的时刻<br>C. 用户最多的那一天</p>
+          <button class="quiz-btn" id="q72a-btn" onclick="toggleAnswer('q72a-ans','q72a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q72a-ans">答案是 <b>B</b>。原书 p72 的定义就是这样：拐点不是变快<b>开始</b>的时刻，而是变快<b>到顶</b>的时刻。<br>「开始变快」在第 1 个月就发生了；拐点在<b>第 90 月</b>，那时候柱子最高。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　过了拐点，用户数会怎么样？<br>A. 开始变少<br>B. <b>还在长</b>，只是新增越来越少<br>C. 立刻停住不动</p>
+          <button class="quiz-btn" id="q72b-btn" onclick="toggleAnswer('q72b-ans','q72b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q72b-ans">答案是 <b>B</b>。拐点之后曲线<b>还在往上走</b>，一直到第 180 月才爬到 99.9% 的天花板。<br>变的只有柱子：越来越矮。<b>「还在长」和「长得越来越慢」可以同时成立</b> —— 这就是本节最容易读错的地方。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>看出来了：柱子先长高、再变矮，中间那一刻就是拐点。<br>可<b>为什么会变矮</b>？这条曲线凭什么"自己会停"？<br>下一节拆开公式：增速 = 一个因子让它<b>起飞</b>，另一个因子让它<b>落地</b> —— 那才叫<b>饱和</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>拐点</b>：曲线从「越涨越猛」换成「越涨越慢」的那一刻。原书 p72：<b>「拐点不是快速增长开始的时刻，而是快速增长达到顶点，到达高潮的那一刻。」</b></p>
+          <p><b>新增</b>：这个月比上个月多了多少，= p(t) − p(t−1)。把新增画成柱子，就等于把"曲线有多陡"单独拎出来看。</p>
+          <p><b>两个「最多」</b>：<b>用户最多</b>（曲线最高处，最晚才到）≠ <b>本月新增最多</b>（柱子最高处，就是拐点）。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先看<b>下面那排柱子</b>：它才是"涨得快不快"。上面那条曲线只管"现在有多少"。</div>
+          <div class="rule-item"><b>第 2 步</b>　柱子最高那根 = <b>拐点</b>。这条模型曲线里，它在<b>第 90 月</b>。</div>
+          <div class="rule-item"><b>第 3 步</b>　过了拐点，<b>曲线还在长</b>（第 180 月才到 99.9% 天花板），只是柱子越来越矮。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>拐点不是「开始变快」那一刻。</b>变快从第 1 个月就开始了；拐点是"变快"到顶的那一刻。</p>
+          <p><b>用户最多那天不是拐点。</b>用户最多在第 180 月（那时还在长），拐点在它前面 90 个月。</p>
+          <p><b>过了拐点不是开始变少。</b>只是长得越来越慢 —— 「还在长」和「长得慢」同时成立。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 7.3 第三幕：饱和 ================= -->
+
+<div class="page" id="page-c7-3">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">7.3　第三幕：饱和</span>
+    <span class="nav-next" onclick="goC7(4)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>上一节看见柱子先长高、再变矮。可它<b>凭什么</b>会变矮？<br>原书给了一个更本质的写法（p74 逐字）：<b>「某变量增长的速率与大小成比例，同时也与它的值和极大值的距离成比例。」</b><br>注意后半句 —— 这就是上一节那个天花板的用处：<b>离它越远，长得越快；越靠近它，长得越慢</b>。<br><span style="color:#94a3b8;">原书 p76 还给了个化学版本：<b>「产生的催化剂越多，产生催化剂的速度就越快。」</b> 这就是<b>自催化</b>：产物自己就是催化剂。</span></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn primary" id="btn-next7-3" onclick="stepC7S3()">下一回合 →</button>
+          <button class="ctrl-btn" id="btn-play7-3" onclick="playC7S3()">▶ 自动推进</button>
+          <button class="ctrl-btn" onclick="resetC7S3()">重置</button>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv7-3" width="620" height="380"></canvas>
+          <p class="canvas-caption">左边是<b>反应皿</b>：40 格 = 极大值 M；<b style="color:#94a3b8;">灰</b> = 还没转（A），<b style="color:#ef4444;">红</b> = 已转（C），转了一半的那格就画一半。<br>右边是同一件事的曲线：每回合能转化多少 Δ = K × <b>C</b> × <b>(M − C)</b>。<br>★★ 看清那两个因子：<b>C</b> 越大越快（自己催自己），<b>(M − C)</b> 越小越慢（快没得转了）—— <b>乘起来中间最高</b>，顶点正好在 <b>C = 一半</b>。<br><span style="color:#94a3b8;">曲线上每个点 = 一次转化（横轴是这次转化开始时的 C）。</span></p>
+        </div>
+
+        <div class="step-line" id="sl7-3"></div>
+
+        <div class="status-bar" id="st7-3-bar"><span class="status-dot" id="st7-3-dot"></span><span id="st7-3"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv7-3-cell">
+            <div class="k">第几回合</div>
+            <div class="v" id="kv7-3-v">0</div>
+            <div class="k" id="kv7-3-t">还没开始</div>
+          </div>
+          <div class="kv" id="kv7-3b-cell">
+            <div class="k">还没转（A）</div>
+            <div class="v" id="kv7-3b-v">…</div>
+            <div class="k" id="kv7-3b-t">离极大值还差这么多</div>
+          </div>
+          <div class="kv" id="kv7-3c-cell">
+            <div class="k">已转（C）</div>
+            <div class="v" id="kv7-3c-v">…</div>
+            <div class="k" id="kv7-3c-t">A + C 恒等于 40</div>
+          </div>
+          <div class="kv" id="kv7-3d-cell">
+            <div class="k">这一回合转化了</div>
+            <div class="v" id="kv7-3d-v">…</div>
+            <div class="k" id="kv7-3d-t">= K × A × C</div>
+          </div>
+          <div class="kv" id="kv7-3e-cell">
+            <div class="k">C 占 M 的</div>
+            <div class="v" id="kv7-3e-v">…</div>
+            <div class="k" id="kv7-3e-t">一半 = 20 格</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只做一件事：把那句「同时也与它的值和极大值的距离成比例」画出来。</b><br>
+          每回合的转化量：<b>Δ = K × C × (M − C)</b>。就这么一个乘法，两个因子在互相拉扯：<br>
+          · <b>C</b>（已经转了多少）在<b>变大</b> ⇒ 让它越来越快；<br>
+          · <b>(M − C)</b>（还没转多少）在<b>变小</b> ⇒ 让它越来越慢。<br>
+          一个涨一个落，<b>乘起来就是一个中间高、两头低的山</b>。山顶正好在 <b>C = M/2 = 20 格</b> —— 就是「<b>一半</b>」。<br>
+          所以"饱和"不是它累了，也不是谁踩了刹车：<b>是没得转了</b>。越接近极大值，增速越慢（原书 p74 原话）。<br>
+          <span style="color:#94a3b8;">★ 守恒：A + C 恒等于 40 —— 页面里 A 是<b>用 M − C 算出来的</b>，不是另外减一遍，所以这条守恒是<b>结构上</b>成立的（误差恒为 0），不是"算得很准"。<br>★ 那不是"调 K 调出来的"：K 换成 0.005 或 0.02，山顶仍在 C/M ≈ 一半附近（验证脚本把每个 K 都算了一遍）。K 太大时步子粗、会一步跨过中点，山顶就偏到 0.56 一带 —— 那是离散化的账，不是模型的账。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　为什么转化数会在"一半"那里最高？<br>A. 因为一半是个特别的数字<br>B. 因为 <b>C</b> 和 <b>(M − C)</b> 一个在变大、一个在变小，乘起来中间最高<br>C. 因为页面把 K 调到了 0.01</p>
+          <button class="quiz-btn" id="q73a-btn" onclick="toggleAnswer('q73a-ans','q73a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q73a-ans">答案是 <b>B</b>。这就是"两个因子相乘"的全部：<br>开始 C 太小（<b>没东西可催</b>），末尾 (M−C) 太小（<b>没东西可转</b>），两头都慢，中间最高。<br>换个 K 只改变"跑多快"，不改变"山顶在哪"。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　最后那几回合，转化量几乎是 0。那时 C 是多少？<br>A. 接近 0<br>B. <b>接近 40（极大值）</b><br>C. 停在 20 不动</p>
+          <button class="quiz-btn" id="q73b-btn" onclick="toggleAnswer('q73b-ans','q73b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q73b-ans">答案是 <b>B</b>。C 已经几乎等于 M，(M − C) 几乎等于 0 ⇒ 乘出来也几乎等于 0。<br>这就是<b>饱和</b>：曲线贴上去了，不是停了不动 —— 它<b>越来越接近，但（在模型里）永远差一点</b>。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>三幕走完了：<b>加速</b> → <b>拐点</b> → <b>饱和</b>。这条 S 形曲线，一个式子就能全说清。<br>可问题来了：<b>它能用来预测吗？</b> 原书给了一个让人不太舒服的答案 —— 有位生物学家用它预测美国人口，结论是"稳定在略低于 2 亿"，而<b>这个数我们早就超过了</b>。<br>下一节：<b>玩具飞机与真引擎</b> —— 模型到底能干什么、不能干什么。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>饱和</b>：曲线贴到极大值上，几乎不再涨。原因不是"没劲了"，是<b>没得转了</b>：<b>(M − C) → 0</b>。</p>
+          <p><b>自催化</b>：反应产物<b>自己就是催化剂</b>。原书 p76：「产生的催化剂越多，产生催化剂的速度就越快。」</p>
+          <p><b>两个因子</b>：<b>Δ = K × C × (M − C)</b> ——「现在有多少」让它起飞，「离极大值还有多远」让它落地。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先看左边皿：<b>红格只增不减</b>，A + C 恒等于 40 —— 这一节里"总量"是不动的。</div>
+          <div class="rule-item"><b>第 2 步</b>　再看右边曲线：<b>C 和 (M − C) 乘起来</b>，中间高两头低，<b>山顶在一半</b>。</div>
+          <div class="rule-item"><b>第 3 步</b>　推到后面：红格几乎铺满，转化量几乎为 0 —— <b>饱和</b>。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>别以为"转化越来越快"会一直下去。</b>C 在变大，(M − C) 同时在小 —— 两个因子一起决定快慢。</p>
+          <p><b>"到一半"不是没劲了。</b>恰恰相反：一半时转化量最大，之后才慢慢变小。</p>
+          <p><b>"一半"不是把 K 调到 0.01 调出来的。</b>K 换成 0.005 或 0.02，山顶仍在一半附近；只有 K 太大（步子太粗）才会偏出去一点。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 7.4 玩具飞机与真引擎 ================= -->
+
+<div class="page" id="page-c7-4">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">7.4　玩具飞机与真引擎</span>
+    <span class="nav-next" onclick="goHome()">第 7 章完 · 返回首页 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>上一节留下的问题是：<b>它到底能不能用来预测？</b><br>原书给了一个不太好受的例子（p76 逐字）：有位生物学家用逻辑斯蒂模型算美国人口，算出「<b>稳定在略低于 2 亿</b>」；后来的原话是 ——「<b>哎呀，这个数字我们早就超过了，而且超出了大约 1.2 亿人。</b>」<br>公式没错，参数也是照当时的历史数据定的。<b>那错在哪？</b>这一节不猜，做个能自己动手的实验：<b>只给你前面一小段历史，你能看出上限是多少吗？</b><br><span style="color:#94a3b8;">原书 p76：「这就像一个装有许多引擎的模型飞机：看起来很酷炫、逼真，却飞不起来。」—— 每个零件都对，可它飞不起来。</span></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="btn-c74-m0" onclick="pickC7S4(0)">上限 50 万</button>
+          <button class="ctrl-btn primary" id="btn-c74-m1" onclick="pickC7S4(1)">上限 100 万</button>
+          <button class="ctrl-btn" id="btn-c74-m2" onclick="pickC7S4(2)">上限 200 万</button>
+          <button class="ctrl-btn" id="btn-c74-m3" onclick="pickC7S4(3)">上限 300 万</button>
+          <button class="ctrl-btn" onclick="resetC7S4()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row7-4-n">
+          <label>窗口：只看前 <b id="lb7-4-n">36</b> 个月　—— 灰掉的点不算进比较</label>
+          <input type="range" id="s7-4-n" min="0" max="6" step="1" value="2" oninput="setWinC7S4(parseInt(this.value, 10))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv7-4" width="620" height="380"></canvas>
+          <p class="canvas-caption"><b>横轴</b> = 第几个月（0–180，就是 15 年）；<b>纵轴</b> = 人数（顶格 = 300 万）。<br><b style="color:#0f172a;">深色点</b> = 窗口内的点（参与比较），<b style="color:#94a3b8;">灰点</b> = 窗口外的点（不算）。<br>4 条彩色曲线 = 4 个<b>不同的上限</b>（50 万 / 100 万 / 200 万 / 300 万），<b>起点完全一样</b>。<br><span style="color:#94a3b8;">★★ 把滑块先短后长拖一遍：短窗口里四条几乎重合，长窗口里它们天差地别。</span></p>
+        </div>
+
+        <div class="step-line" id="sl7-4"></div>
+
+        <div class="status-bar" id="st7-4-bar"><span class="status-dot" id="st7-4-dot"></span><span id="st7-4"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv7-4-cell">
+            <div class="k">窗口（前几个月）</div>
+            <div class="v" id="kv7-4-v">…</div>
+            <div class="k" id="kv7-4-t">拖滑块改它</div>
+          </div>
+          <div class="kv" id="kv7-4b-cell">
+            <div class="k">选中的上限</div>
+            <div class="v" id="kv7-4b-v">…</div>
+            <div class="k" id="kv7-4b-t">点上面四个键换</div>
+          </div>
+          <div class="kv" id="kv7-4c-cell">
+            <div class="k">它在这个窗口的最大偏差</div>
+            <div class="v" id="kv7-4c-v">…</div>
+            <div class="k" id="kv7-4c-t">|候选 − 数据| ÷ 数据</div>
+          </div>
+          <div class="kv" id="kv7-4d-cell">
+            <div class="k">它在第 180 月的预测</div>
+            <div class="v" id="kv7-4d-v">…</div>
+            <div class="k" id="kv7-4d-t">四条里差好几倍</div>
+          </div>
+          <div class="kv" id="kv7-4e-cell">
+            <div class="k">四条预测相差</div>
+            <div class="v" id="kv7-4e-v">…</div>
+            <div class="k" id="kv7-4e-t">最大 ÷ 最小</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只做一件事：把「分不出来」变成看得见的东西。</b><br>
+          4 条候选的<b>起点完全一样</b>（都从 1000 出发），只有<b>上限</b>不同 —— 所以它们之间的差别，全部来自那个上限。<br>
+          「谁更对」用一个很朴素的数来看：<b>偏差 = |候选 − 数据| ÷ 数据</b>，取<b>窗口内</b>最大的那一个。<br>
+          · 只看前 36 个月：四条的最大偏差都在 <b>3% 以内</b>，彼此差不到 1 个百分点 ⇒ <b>分不出来</b>；<br>
+          · 看到第 120 个月：真值那条仍是 <b>2% 上下</b>，另三条偏出<b>几十个百分点</b> ⇒ <b>一眼分得出来</b>。<br>
+          <b style="color:#b45309;">同一批点：短窗口能"对得上"，长窗口才"定得住"。</b><br>
+          <span style="color:#94a3b8;">★ 这不是"多算几次就好了"：那位生物学家的问题不是算错，是他手里的历史<b>只有一小段</b>。原书 p76：「如果它无法预测一个流行趋势将在何时稳定下来，那它到底有什么作用呢？」<br>★★ <b>这批点是玩具数据</b>：原书没给数据，这些点是页面自己按 logistic 造的、还加了 2% 的摆动；人口那组数（2 亿 / 超出 1.2 亿）是<b>原书的话</b>，页面只引用、不计算。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　只给你前 36 个月的数据，你能分出哪条上限是对的吗？<br>A. 能 —— 100 万那条明显最好<br>B. 不能 —— 四条的最大偏差都在 3% 以内，差别比数据本身的抖动还小<br>C. 能 —— 颜色最深的那条就是对的</p>
+          <button class="quiz-btn" id="q74a-btn" onclick="toggleAnswer('q74a-ans','q74a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q74a-ans">答案是 <b>B</b>。36 个月里，人口才长到很小一点，四条曲线挤在一处 —— <b>谁都能"对得上"</b>。<br>这就是那位生物学家看到的全部：一段还没弯下来的历史。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　那位生物学家到底错在哪？<br>A. 公式推错了<br>B. 他手里的历史太短：上限被"还没弯下来的那一段"骗了<br>C. 他不该用数学</p>
+          <button class="quiz-btn" id="q74b-btn" onclick="toggleAnswer('q74b-ans','q74b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q74b-ans">答案是 <b>B</b>。模型本身没错，错的是<b>拿一段太短的历史去定一个要很久才看得出的数</b>（上限）。<br>原书那句「模型飞机」说的就是这件事：<b>零件都对，可它飞不起来</b> —— 能解释过去，不等于能预测未来。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>第 7 章完</h4>
+          <p>原书最后那句（p77 逐字）：<b>「数学模型描绘了一个复杂到无法完整表达的现实。对复杂的问题稍微简化一下是人类再正常不过的反应——只要我们在玩玩具之前先阅读一下细则就行。」</b><br>这一章从<b>加速</b>走到<b>拐点</b>，再到<b>饱和</b>，最后停在这句话上：<b>模型是玩具，不是答案</b>。它能把你看到的东西说清楚；能不能外推，要看它经没经过足够长的历史。<br><b>第 7 章完 —— 点右上角「第 7 章完 · 返回首页 →」回去，看看知识树上多了什么。</b></p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>窗口</b>：你能看到的"那一小段历史"。窗口越短，能定住的东西越少。</p>
+          <p><b>上限</b>：曲线最后会停在哪。窗口越短，它越定不住 —— 这正是本节的主角。</p>
+          <p><b>机械模型 / 现象学模型</b>：原书 p76 那架模型飞机 —— 每个部件都像真的，可它飞不起来。能解释过去，不等于能预测未来。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先拖滑块：窗口从 18 个月一路拖到 180 个月，看灰点怎么一个个变成深色。</div>
+          <div class="rule-item"><b>第 2 步</b>　再看读数：短窗口里四条的最大偏差都挤在一起；长窗口里三条偏出几十个百分点。</div>
+          <div class="rule-item"><b>第 3 步</b>　最后点四个键：同一条数据，四条曲线给出的第 180 月预测相差好几倍。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>别以为"多算几次就准了"。</b>错的是<b>看得太短</b>，不是算得不够多。</p>
+          <p><b>别以为"曲线贴住点"就说明模型对。</b>贴住一段，可能只是因为那一段还没弯下来。</p>
+          <p><b>别把玩具数据当历史数据。</b>这批点是页面造的；原书那两个数（2 亿 / 超出 1.2 亿）才是真事。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -3777,7 +4234,13 @@
     'page-c6-1': function () { stopC6S1(); },
     'page-c6-2': function () { stopC6S2(); },
     'page-c6-3': function () { stopC6S3(); },
-    'page-c6-4': function () { stopC6S4(); }
+    'page-c6-4': function () { stopC6S4(); },
+    // 第 7 章 4 节：7.2 / 7.3 有动画（▶ 播放），7.1 / 7.4 只拖滑块；
+    // ★ 但**四节一律登记** —— 停止钩子先占位，随各节实现补上（与第 6 章同口径）。
+    'page-c7-1': function () { stopC7S1(); },
+    'page-c7-2': function () { stopC7S2(); },
+    'page-c7-3': function () { stopC7S3(); },
+    'page-c7-4': function () { stopC7S4(); }
   };
   function switchPage(id) {
     var i, key, el;
@@ -11772,6 +12235,936 @@
 
   // ================= 第 6 章 JS 区 · 终点 =================
 
+  // ================= 第 7 章 JS 区 · 起点（4 节的实现都插在这条线之后）=================
+  // 两条哨兵注释把「第 7 章新增的一切」框起来 —— 验证脚本与 _chapter_scope.js 据此做 scoped 扫描。
+  // ★ 本章唯一一处放行：拐点（原书自己用了 + 给了定义）。
+  //   ★ 全章**不用以 e 为底的指数函数、也不用对数**：指数一律离散逐月乘 `p * (1 + r)`，
+  //     自催化一律离散回合 `C + K * A * C`（★ 封存的那两个函数名**连注释里也别写** ——
+  //     本章的不变量脚本会连注释一起扫）。
+  // 第 7 章 4 节（★ 全站第二次"名词回归原书"）。节数完全数据驱动（renderSecTabs / renderTree 零改动）。
+  var C7_SECTIONS = [
+    { n: 1, label: '第一幕：加速' },
+    { n: 2, label: '第二幕：拐点' },
+    { n: 3, label: '第三幕：饱和' },
+    { n: 4, label: '玩具飞机与真引擎' }
+  ];
+  function goC7(n) { switchPage('page-c7-' + n); }    // 第 7 章内部导航
+
+  // 7.1 第一幕：加速
+  // ★ 本节要送出的原语：**同一把时间尺上的两种增长**（原书 p69–71）。
+  //   线性 p_L(t) = 1000 + 1000·t（每段**加**同一个数）／指数级 p_E(t) = 1000·(1+r)^t（每段**乘**同一个系数）。
+  //   两者的公式**只差一个因子**：「现在这个数」进不进公式。原书 p70 的原话大意是
+  //   "这个变量越大，它长得就越快" —— ★ 那句原话里有个词是本章封存词，屏上一律不出现。
+  //
+  // ★ 禁：以 e 为底的指数函数、对数（都属第 12 章）。本节连"乘方函数"都不用 ——
+  //   指数一律**逐月乘法** v *= (1 + r)：既合"每个月乘一次"的讲法，也不可能悄悄用到 e。
+  //   ★ 这条注释本身也得小心：把那个被禁的函数名写出来，本节自己的术语扫描会当场抓到（已踩过一次）。
+  //
+  // ★★ 翻番记账的口径（K32①，屏上也要写）：k(r) = **最小的 k 使 (1+r)^k ≥ 2 × 0.9995**。
+  //   为什么不硬等 2：8% 时 1.08^9 = 1.999005 —— 差 0.05% 就到 2，而整数月只能记到 9；
+  //   若硬等 2，8% 会被记成 10 个月（1.08^10 = 2.1589），"每 9 个月翻一番"这句话就成了错的。
+  //   ★ 而"翻番"的可断言事实是：**任意相邻两个翻番点的比值恒等于 (1+r)^k**（本节 8% ⇒ 1.999005，
+  //   120 个月里共 13 段，极差 0）—— 这条与 r 无关，是恒等式。
+  //
+  // ★★ 纵轴**两段式断轴**（K32②）：下段 [0, 15 万] 100 px、上段 [15 万, 10 300 000] 130 px
+  //   ⇒ 上段压缩比 ≈ 52 倍。**必须在屏上写明**，否则就是把图骗人（红线 6）。
+  //   ★ 12% 的 10 年值实测 **8.06 亿**，比上界大 78 倍 ⇒ 越界的点顶到 y = 100 并画 ↑ 标记，
+  //     状态条明写"已经冲出图外"，不许悄悄画到画布外面去。
+  var R_DEF_C7S1 = 0.08, R_MIN_C7S1 = 0.01, R_MAX_C7S1 = 0.12, R_STEP_C7S1 = 0.01;
+  var P0_C7S1 = 1000, T_END_C7S1 = 120;
+  var V_BRK_C7S1 = 150000, V_MAX_C7S1 = 10300000;
+  var K_TOL_C7S1 = 0.9995;                 // ★ 翻番判定阈值（= 2 × 0.9995，见上 K32①）
+  var BOX_C7S1 = [56, 100, 596, 330];
+  var Y_BRK_C7S1 = 230;                    // 断口在画布上的 y（下段 330→230 = 100 px）
+  var COL_LIN_C7S1 = '#ef4444', COL_EXP_C7S1 = '#3b82f6';
+  var g7_1 = { r: R_DEF_C7S1 };
+
+  function setTxtC7S1(id, html) { var e = document.getElementById(id); if (e) { e.innerHTML = html; } }
+  // 横轴：0–120 月 → [56, 596]
+  function xC7S1(t) { return BOX_C7S1[0] + (BOX_C7S1[2] - BOX_C7S1[0]) * t / T_END_C7S1; }
+  // 纵轴：**两段式**（断轴）。下段线性 [0, 15 万] → [330, 230]；上段线性 [15 万, 1.03e7] → [230, 100]。
+  function yC7S1(v) {
+    if (v <= V_BRK_C7S1) { return BOX_C7S1[3] - 100 * v / V_BRK_C7S1; }
+    var k = 130 * (v - V_BRK_C7S1) / (V_MAX_C7S1 - V_BRK_C7S1);
+    return Y_BRK_C7S1 - (k > 130 ? 130 : k);   // ★ 越界就顶到 y = 100（K32②）
+  }
+  function clipC7S1(v) { return v > V_MAX_C7S1; }
+  // 红线：每月 +1000 —— ★ **与 r 无关**（"只有蓝线动"的结构性原因，验证脚本会断这一条）
+  function linC7S1(t) { return P0_C7S1 + P0_C7S1 * t; }
+  // 蓝线：逐月乘 (1 + r)。★ 不用任何指数函数。
+  function expC7S1(t, r) {
+    var v = P0_C7S1, i;
+    for (i = 0; i < t; i++) { v *= (1 + r); }
+    return v;
+  }
+  function dblKC7S1(r) {
+    var v = 1, k = 0;
+    while (v < 2 * K_TOL_C7S1) { v *= (1 + r); k++; if (k > 400) { break; } }
+    return k;
+  }
+  function dblValC7S1(r) {
+    var v = 1, k = dblKC7S1(r), i;
+    for (i = 0; i < k; i++) { v *= (1 + r); }
+    return v;
+  }
+  // 人类可读的量级（10 252 993 → "1025 万"；121 000 → "12.1 万"）
+  function wanC7S1(v) {
+    if (v >= 1e8) { return (v / 1e8).toFixed(2) + ' 亿'; }
+    if (v >= 1e6) { return Math.round(v / 1e4) + ' 万'; }
+    if (v >= 1e4) {
+      // ★ 整数万就别写 "10.0 万"（截图走查看到纵轴刻度写成 "10.0 万 / 5.0 万"）
+      var w = v / 1e4;
+      return (Math.abs(w - Math.round(w)) < 0.05 ? String(Math.round(w)) : w.toFixed(1)) + ' 万';
+    }
+    return String(Math.round(v));
+  }
+  function ratioTxtC7S1(r) {
+    var e = expC7S1(T_END_C7S1, r), l = linC7S1(T_END_C7S1);
+    if (e >= l) { return (e / l).toFixed(1) + ' 倍'; }
+    return '不到 1 倍（红线是它的 ' + (l / e).toFixed(1) + ' 倍）';
+  }
+  // ★ 画布上只放**短**版本（版面检测器抓到过长版把读数格挤出画布：右沿到 680 > 620）
+  function ratioShortC7S1(r) {
+    var e = expC7S1(T_END_C7S1, r), l = linC7S1(T_END_C7S1);
+    return (e / l >= 1 ? (e / l).toFixed(1) : (e / l).toFixed(2)) + ' 倍';
+  }
+  function rTxtC7S1(r) { return (1 + r).toFixed(2) + '（+' + Math.round(r * 100) + '%）'; }
+  function msgC7S1() {
+    var r = g7_1.r, k = dblKC7S1(r), e = expC7S1(T_END_C7S1, r);
+    var head;
+    if (r < 0.045) {
+      head = '系数小：10 年里蓝线还追不上红线 —— 可它<b>一直在乘 ' + (1 + r).toFixed(2) + '</b>，翻番一次没落下。';
+    } else if (r < 0.095) {
+      head = '系数适中：头两年两条线几乎看不出差别，第 5 年之后蓝线开始<b>甩开</b>红线。';
+    } else {
+      head = '系数大：蓝线 10 年是 <b>' + wanC7S1(e) + '</b> —— <b>已经冲出这张图</b>（纵轴上界 1 030 万），不是它停了。';
+    }
+    return head + '<br>★ 红线这一侧永远是 +1000（10 年 12.1 万）；蓝线每 <b>' + k + '</b> 个月翻一番。';
+  }
+  function stepTxtC7S1() {
+    return '两种增长的公式只差一个因子：<b>红线</b>的下一段是 +1000；<b>蓝线</b>的下一段是' +
+      '「<b>现在这个数 × ' + (1 + g7_1.r).toFixed(2) + '</b>」。<br>所以蓝线自己越大，加得越多 —— ' +
+      '而红线不管长到多大，每月都只加 1000。';
+  }
+  function drawC7S1() {
+    var cv = document.getElementById('cv7-1');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var r = g7_1.r, k = dblKC7S1(r), e120 = expC7S1(T_END_C7S1, r), l120 = linC7S1(T_END_C7S1);
+    var i, t, v, x, y;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 作图区 ----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(BOX_C7S1[0], BOX_C7S1[1], BOX_C7S1[2] - BOX_C7S1[0], BOX_C7S1[3] - BOX_C7S1[1]);
+    // ---- 网格 + 纵轴刻度（下段 1500 一格；上段 200 万一格）----
+    var loT = [50000, 100000], upT = [2e6, 4e6, 6e6, 8e6, 1e7], q;
+    for (q = 0; q < loT.length; q++) {
+      y = yC7S1(loT[q]);
+      c.strokeStyle = '#f1f5f9'; c.beginPath(); c.moveTo(BOX_C7S1[0], y); c.lineTo(BOX_C7S1[2], y); c.stroke();
+      label(c, wanC7S1(loT[q]), 52, y + 4, '#cbd5e1', 10.5, 'right');
+    }
+    for (q = 0; q < upT.length; q++) {
+      y = yC7S1(upT[q]);
+      c.strokeStyle = '#f1f5f9'; c.beginPath(); c.moveTo(BOX_C7S1[0], y); c.lineTo(BOX_C7S1[2], y); c.stroke();
+      label(c, wanC7S1(upT[q]), 52, y + 4, '#cbd5e1', 10.5, 'right');
+    }
+    label(c, '0', 52, BOX_C7S1[3] + 4, '#cbd5e1', 10.5, 'right');
+    // ---- 断轴：断口处两条斜杠（★ 屏上必须看得见"这里断过一次"）----
+    c.strokeStyle = '#94a3b8'; c.lineWidth = 1.6;
+    c.beginPath(); c.moveTo(50, Y_BRK_C7S1 + 5); c.lineTo(58, Y_BRK_C7S1 - 5); c.stroke();
+    c.beginPath(); c.moveTo(56, Y_BRK_C7S1 + 5); c.lineTo(64, Y_BRK_C7S1 - 5); c.stroke();
+    c.setLineDash([4, 4]); c.strokeStyle = '#e2e8f0';
+    c.beginPath(); c.moveTo(BOX_C7S1[0], Y_BRK_C7S1); c.lineTo(BOX_C7S1[2], Y_BRK_C7S1); c.stroke();
+    c.setLineDash([]);
+    // ---- 年份刻度 ----
+    var yr = [0, 24, 48, 72, 96, 120], yl = ['0', '2 年', '4 年', '6 年', '8 年', '10 年'];
+    for (q = 0; q < yr.length; q++) {
+      x = xC7S1(yr[q]);
+      c.strokeStyle = '#f1f5f9'; c.beginPath(); c.moveTo(x, BOX_C7S1[1]); c.lineTo(x, BOX_C7S1[3]); c.stroke();
+      label(c, yl[q], x, BOX_C7S1[3] + 14, '#cbd5e1', 10.5, 'center');
+    }
+    // ---- 红线（线性）----
+    c.strokeStyle = COL_LIN_C7S1; c.lineWidth = 2.4;
+    c.beginPath();
+    for (t = 0; t <= T_END_C7S1; t++) {
+      if (t === 0) { c.moveTo(xC7S1(0), yC7S1(linC7S1(0))); } else { c.lineTo(xC7S1(t), yC7S1(linC7S1(t))); }
+    }
+    c.stroke();
+    // ---- 蓝线（指数级）----
+    c.strokeStyle = COL_EXP_C7S1; c.lineWidth = 2.4;
+    c.beginPath();
+    for (t = 0; t <= T_END_C7S1; t++) {
+      v = expC7S1(t, r);
+      if (t === 0) { c.moveTo(xC7S1(0), yC7S1(v)); } else { c.lineTo(xC7S1(t), yC7S1(v)); }
+    }
+    c.stroke();
+    // ---- 翻番点（每隔 k 个月一个点）----
+    for (t = k; t <= T_END_C7S1; t += k) {
+      dot(c, xC7S1(t), yC7S1(expC7S1(t, r)), 3.2, '#93c5fd');
+    }
+    dot(c, xC7S1(0), yC7S1(P0_C7S1), 4, '#334155');
+    // ---- ★ 冲出图外的标记（K32②：不许悄悄画到画布外面）----
+    if (clipC7S1(e120)) {
+      // ★ 用 labelChip（带白底片）：直接 label 会被版面检测器判为"线条穿过文字"
+      labelChip(c, '↑ 蓝线冲出图外', 588, Y_BRK_C7S1 - 118, COL_EXP_C7S1, 11, 'right', 3);
+    }
+    // ---- 曲线标注（都带白底片）----
+    labelChip(c, '蓝线：每月 ×' + (1 + r).toFixed(2) + '（指数级）', 588, Y_BRK_C7S1 - 8, COL_EXP_C7S1, 11, 'right', 3);
+    labelChip(c, '红线：每月 +1000（线性）', 588, Y_BRK_C7S1 + 16, COL_LIN_C7S1, 11, 'right', 3);
+    // ---- 轴说明：**一行**（版面检测器抓到两行方案里第二行会压住年份刻度：342→354 vs 340→352）----
+    label(c, '横轴：月　｜　纵轴上半段压缩 ≈ 52 倍（断口 15 万）　｜　两条线都从 1000 出发',
+      BOX_C7S1[0], 366, '#94a3b8', 10.5, 'left');
+    // ---- 右上角读数格（与 4.x / 5.x / 6.x 同位置同尺寸）----
+    c.save();
+    c.fillStyle = '#f8fafc'; c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    roundRect(c, 384, 4, 226, 86, 8); c.fill(); c.stroke();
+    c.restore();
+    label(c, '翻番（乘到 2 倍）', 396, 20, '#64748b', 11, 'left');
+    label(c, k + ' 个月', 396, 42, COL_EXP_C7S1, 16, 'left');
+    label(c, (1 + r).toFixed(2) + '^' + k + ' = ' + dblValC7S1(r).toFixed(6), 396, 60, '#64748b', 10.5, 'left');
+    label(c, '10 年：' + wanC7S1(e120) + '（红线的 ' + ratioShortC7S1(r) + '）', 396, 80, '#0f172a', 10.5, 'left');
+  }
+  function updC7S1() {
+    var r = g7_1.r, k = dblKC7S1(r), e = expC7S1(T_END_C7S1, r);
+    var sl = document.getElementById('s7-1-r');
+    if (sl && sl.value !== String(r)) { sl.value = String(r); }
+    setTxtC7S1('lb7-1-r', rTxtC7S1(r));
+    setTxtC7S1('kv7-1-v', k + ' 个月');
+    setTxtC7S1('kv7-1-t', (1 + r).toFixed(2) + ' 连乘 ' + k + ' 次 = ' + dblValC7S1(r).toFixed(6) + '（差 ' +
+      ((2 - dblValC7S1(r)) / 2 * 100).toFixed(2) + '% 到 2）');
+    setTxtC7S1('kv7-1b-v', wanC7S1(e));
+    setTxtC7S1('kv7-1b-t', '红线同期只有 ' + wanC7S1(linC7S1(T_END_C7S1)));
+    setTxtC7S1('kv7-1c-v', ratioTxtC7S1(r));
+    setTxtC7S1('kv7-1c-t', '蓝线 ÷ 红线（10 年那一点）');
+    setTxtC7S1('st7-1', msgC7S1());
+    setTxtC7S1('sl7-1', stepTxtC7S1());
+    var dt = document.getElementById('st7-1-dot');
+    if (dt) { dt.style.background = COL_EXP_C7S1; }
+  }
+  function showStepC7S1() { setTxtC7S1('sl7-1', stepTxtC7S1()); }
+  function slideRC7S1(v) {
+    var x = Math.round(parseFloat(v) / R_STEP_C7S1) * R_STEP_C7S1;
+    if (!isFinite(x)) { x = R_DEF_C7S1; }
+    x = Math.round(x * 100) / 100;
+    g7_1.r = Math.min(R_MAX_C7S1, Math.max(R_MIN_C7S1, x));
+    updC7S1(); drawC7S1();
+  }
+  function resetC7S1() {
+    g7_1.r = R_DEF_C7S1;
+    updC7S1(); drawC7S1(); showStepC7S1();
+    toast('回到每月 ×1.08 —— 然后自己拖一拖，看蓝线怎么甩开红线');
+  }
+  // 停止钩子：本节**没有运行态**（拖滑块全是瞬时重绘，★ 按 D14 也不设播放键），
+  //   但必须登记 —— STOPPERS 的约定是「切走时把上一页的运行态清干净」。
+  function stopC7S1() { }
+
+  // 落地即默认档（并显示讲解行，页面永不「内容为空」）
+  updC7S1(); drawC7S1(); showStepC7S1();
+
+  // 7.2 第二幕：拐点
+  // ★ 本节要送出的原语：**把"新增"画出来，就看见了拐点**（原书 p72–73）。
+  //   模型曲线 p(t) = M / (1 + A·b^(−t))：M = 100 万（极大值 / 天花板）、p₀ = 1000、b = 1.08
+  //   ⇒ A = M/p₀ − 1 = 999（**从起点反解出来**，不写死）。柱子高 = 每月新增 = p(t) − p(t−1)。
+  //
+  // ★★ 为什么这张图能教"拐点"：曲线到第 180 月才最多，柱子却在第 90 月最高
+  //   ⇒ **两个"最多"不是一个时刻**（原书 p73 的 Instagram 例就是这句话）。
+  //   ⇒ 机器判据（验证脚本会独立重算）：① 新增序列单峰、峰月由 peakC7S2() 现算，
+  //      其后严格递减；② 峰处的 p 与 M/2 的相对误差 < 1%（★ 这几个数由验证脚本独立重算，
+  //      本文件**一个都不写** —— 写进来就成了"抄答案"）；③ 离散二阶差商变号恰好 1 次、
+  //      位置 = 峰；④ 曲线 argmax 在右端点、新增 argmax 在峰月（两者不同）。
+  //
+  // ★ 不用以 e 为底的指数、不用对数，也不用任何"乘方"函数：
+  //   序列是**逐月除一次 b** 攒出来的（离现在越远的月份，折扣就再除一次）。
+  var M_C7S2 = 1000000, P0_C7S2 = 1000, B_C7S2 = 1.08;
+  var A_C7S2 = M_C7S2 / P0_C7S2 - 1;            // = 999
+  var T_END_C7S2 = 180, T_DEF_C7S2 = 90;        // 默认停在第 90 月 —— 那一月正是拐点
+  var FRAMES_C7S2 = 60, MS_C7S2 = 45;           // ▶ 逐月播放：60 帧 × 45 ms ≈ 2.7 s 走完
+  var D_MAX_C7S2 = 20000;                       // 柱台纵轴上界（取整到 2 万，比实测峰高一点，柱子不顶框）
+  var BOX_T_C7S2 = [56, 30, 596, 186], BOX_B_C7S2 = [56, 214, 596, 322];
+  var COL_P_C7S2 = '#3b82f6', COL_ACC_C7S2 = '#10b981', COL_DEC_C7S2 = '#f59e0b';
+  var g7_2 = { t: T_DEF_C7S2 };
+  var t7_2 = null, frame7_2 = 0;
+
+  // 整条序列**预先攒一次**：a[t] = M / (1 + A·b^(−t))，靠"每月再除一次 b"递推出来。
+  var PC_C7S2 = (function () {
+    var a = [], v = 1, t;
+    for (t = 0; t <= T_END_C7S2; t++) {
+      a[t] = M_C7S2 / (1 + A_C7S2 * v);
+      v = v / B_C7S2;
+    }
+    return a;
+  })();
+  function pC7S2(t) { return PC_C7S2[t]; }
+  function addC7S2(t) { return t <= 0 ? 0 : PC_C7S2[t] - PC_C7S2[t - 1]; }
+  // 离散的 f″：p(t+1) − 2p(t) + p(t−1)。> 0 = 新增还在变大（增长在加速）；< 0 = 已经在变小。
+  function sign2C7S2(t) {
+    var q = t < 1 ? 1 : (t > T_END_C7S2 - 1 ? T_END_C7S2 - 1 : t);
+    return PC_C7S2[q + 1] - 2 * PC_C7S2[q] + PC_C7S2[q - 1];
+  }
+  // 新增最多的那个月（现算，不写死 90）
+  function peakC7S2() {
+    var b = 1, t;
+    for (t = 2; t <= T_END_C7S2; t++) { if (addC7S2(t) > addC7S2(b)) { b = t; } }
+    return b;
+  }
+  function xC7S2(t) { return BOX_T_C7S2[0] + (BOX_T_C7S2[2] - BOX_T_C7S2[0]) * t / T_END_C7S2; }
+  function yPC7S2(v) { return BOX_T_C7S2[3] - (BOX_T_C7S2[3] - BOX_T_C7S2[1]) * v / M_C7S2; }
+  function yDC7S2(d) { return BOX_B_C7S2[3] - (BOX_B_C7S2[3] - BOX_B_C7S2[1]) * d / D_MAX_C7S2; }
+
+  function setTxtC7S2(id, html) { var e = document.getElementById(id); if (e) { e.innerHTML = html; } }
+  function wanC7S2(v) {
+    if (v < 1e4) { return String(Math.round(v)); }
+    var w = v / 1e4;
+    return (Math.abs(w - Math.round(w)) < 0.05 ? String(Math.round(w)) : w.toFixed(1)) + ' 万';
+  }
+  function groupC7S2(n) {           // 三位一空格：1234567 → "1 234 567"
+    var s = String(Math.round(n)), out = '', i;
+    for (i = 0; i < s.length; i++) {
+      if (i > 0 && (s.length - i) % 3 === 0) { out += ' '; }
+      out += s.charAt(i);
+    }
+    return out;
+  }
+  function msgC7S2(t, pk) {
+    if (t <= 0) { return '第 0 月：还没开始 —— 往后拖，柱子会先长高、再变矮。'; }
+    if (t < pk) { return '第 ' + t + ' 月：柱子比上个月高 —— 增长还在加速。'; }
+    if (t === pk) { return '第 ' + t + ' 月：柱子最高的一根 —— 这一刻就是拐点。'; }
+    return '第 ' + t + ' 月：柱子开始变矮了 —— 可曲线还在往上爬。';
+  }
+  function stepTxtC7S2() {
+    var t = g7_2.t, pk = peakC7S2();
+    if (t < pk) { return '看下面那排柱子：越往右越高 —— 每月新增在变大，所以曲线越爬越陡。'; }
+    if (t === pk) { return '柱子最高的一根就在第 ' + pk + ' 月：这一刻<b>每月新增最多</b>，原书把这个时刻叫<b>拐点</b>。'; }
+    return '柱子从第 ' + pk + ' 月开始变矮 —— 可上面那条曲线<b>还在长</b>，只是长得越来越慢。';
+  }
+
+  function drawC7S2() {
+    var cv = document.getElementById('cv7-2');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var t = g7_2.t, pk = peakC7S2(), x0 = BOX_T_C7S2[0], x1 = BOX_T_C7S2[2];
+    var i, x, y, d, h, half = M_C7S2 / 2, yHalf = yPC7S2(half), bw;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+
+    // ---- 上栏：总共多少人（S 形曲线）----
+    label(c, '上面：总共多少人（天花板 = 极大值 100 万）', x0, 22, '#64748b', 10.5, 'left');
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(x0, BOX_T_C7S2[1], x1 - x0, BOX_T_C7S2[3] - BOX_T_C7S2[1]);
+    // 一半那条虚线：拐点就落在它附近（M/2）
+    c.setLineDash([4, 4]); c.strokeStyle = '#cbd5e1';
+    c.beginPath(); c.moveTo(x0, yHalf); c.lineTo(x1, yHalf); c.stroke();
+    c.setLineDash([]);
+    // ★ 版面检测器抓到：「一半：50 万」原来放在作图区里面（x = 60），游标一走过就被判"线条穿字"
+    //   ⇒ 挪到左缘（右对齐到 52，和 100 万 / 0 同一列）。虚线本身已经把"一半"画出来了。
+    label(c, '50 万', 52, yHalf + 4, '#94a3b8', 10, 'right');
+    label(c, '100 万', 52, BOX_T_C7S2[1] + 4, '#cbd5e1', 10.5, 'right');
+    label(c, '0', 52, BOX_T_C7S2[3] + 4, '#cbd5e1', 10.5, 'right');
+    // 曲线
+    c.strokeStyle = COL_P_C7S2; c.lineWidth = 2.2; c.beginPath();
+    for (i = 0; i <= T_END_C7S2; i++) {
+      x = xC7S2(i); y = yPC7S2(pC7S2(i));
+      if (i === 0) { c.moveTo(x, y); } else { c.lineTo(x, y); }
+    }
+    c.stroke();
+
+    // ---- 下栏：每月新增（柱子）----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(x0, BOX_B_C7S2[1], x1 - x0, BOX_B_C7S2[3] - BOX_B_C7S2[1]);
+    label(c, '2 万', 52, BOX_B_C7S2[1] + 4, '#cbd5e1', 10.5, 'right');
+    label(c, '0', 52, BOX_B_C7S2[3] + 4, '#cbd5e1', 10.5, 'right');
+    bw = (x1 - x0) / (T_END_C7S2 + 1);
+    for (i = 1; i <= T_END_C7S2; i++) {
+      d = addC7S2(i); y = yDC7S2(d); h = BOX_B_C7S2[3] - y;
+      c.fillStyle = (i <= pk) ? COL_ACC_C7S2 : COL_DEC_C7S2;
+      c.fillRect(xC7S2(i) - bw * 0.42, y, bw * 0.84, h < 0.6 ? 0.6 : h);
+    }
+    // 柱子最高那根：加一圈红框（它就是拐点）
+    c.strokeStyle = '#ef4444'; c.lineWidth = 1.4;
+    c.strokeRect(xC7S2(pk) - bw * 0.75, yDC7S2(addC7S2(pk)) - 1, bw * 1.5, BOX_B_C7S2[3] - yDC7S2(addC7S2(pk)) + 1);
+
+    // ---- 横轴刻度（两栏之间）----
+    var ty = [0, 36, 72, 108, 144, 180], tl = ['0', '3 年', '6 年', '9 年', '12 年', '15 年'], q;
+    for (q = 0; q < ty.length; q++) {
+      label(c, tl[q], xC7S2(ty[q]), BOX_T_C7S2[3] + 13, '#94a3b8', 10, q === 0 ? 'left' : (q === ty.length - 1 ? 'right' : 'center'));
+    }
+
+    // ---- 拐点竖线（贯穿两栏）+ 标注 ----
+    c.setLineDash([3, 3]); c.strokeStyle = '#ef4444'; c.lineWidth = 1.2;
+    c.beginPath();
+    c.moveTo(xC7S2(pk), BOX_T_C7S2[1]);
+    c.lineTo(xC7S2(pk), BOX_B_C7S2[3]);
+    c.stroke();
+    c.setLineDash([]);
+    labelChip(c, '第 ' + pk + ' 月：拐点', x1 - 6, BOX_T_C7S2[1] + 16, '#ef4444', 10.5, 'right', 3);
+    labelChip(c, '最高的一根', x1 - 6, BOX_B_C7S2[1] + 16, '#ef4444', 10.5, 'right', 3);
+
+    // ---- 游标（你现在拖到的那一月）----
+    x = xC7S2(t);
+    // ★ 游标**分两段画**（各自只在本栏内）：原来一整条贯穿，会横穿两栏之间那行年份刻度
+    //   （版面检测器抓到「0」「15 年」被判"线条穿字"）。
+    c.strokeStyle = 'rgba(15,23,42,0.45)'; c.lineWidth = 1.2;
+    c.beginPath(); c.moveTo(x, BOX_T_C7S2[1]); c.lineTo(x, BOX_T_C7S2[3]); c.stroke();
+    c.beginPath(); c.moveTo(x, BOX_B_C7S2[1]); c.lineTo(x, BOX_B_C7S2[3]); c.stroke();
+    // 曲线上的点
+    y = yPC7S2(pC7S2(t));
+    dot(c, x, y, 4, '#fff', COL_P_C7S2, 2);
+    // 柱子上的点
+    if (t >= 1) { dot(c, x, yDC7S2(addC7S2(t)), 3.4, '#fff', t <= pk ? COL_ACC_C7S2 : COL_DEC_C7S2, 1.8); }
+
+    // ---- 两栏各自的读数（白底片，免得被线和柱子穿过去）----
+    labelChip(c, '现在：' + wanC7S2(pC7S2(t)), x0 + 6, BOX_T_C7S2[1] + 16, '#1e293b', 11, 'left', 3);
+    if (t >= 1) {
+      labelChip(c, '本月新增：' + groupC7S2(addC7S2(t)), x0 + 6, BOX_B_C7S2[1] + 16, '#1e293b', 11, 'left', 3);
+    }
+
+    // ---- 结尾三行：曲线还在长 / 刹车话 / 图例 ----
+    label(c, '曲线到第 ' + T_END_C7S2 + ' 月才最多（那时已经 ' + (pC7S2(T_END_C7S2) / M_C7S2 * 100).toFixed(1) + '% 天花板）',
+      x0, 338, '#64748b', 10.5, 'left');
+    label(c, '拐点之后，它还在长 —— 只是长得越来越慢。', x0, 354, '#b45309', 11.5, 'left');
+    label(c, '绿柱 = 增长在加速 ｜ 橙柱 = 增长在减速 ｜ 竖线 = 你拖到的那一月', x0, 370, '#94a3b8', 10, 'left');
+  }
+
+  function updC7S2() {
+    var t = g7_2.t, pk = peakC7S2(), p = pC7S2(t), d = addC7S2(t), s2 = sign2C7S2(t);
+    var sl = document.getElementById('s7-2-t');
+    if (sl && sl.value !== String(t)) { sl.value = String(t); }
+    setTxtC7S2('lb7-2-t', String(t));
+    setTxtC7S2('kv7-2-v', wanC7S2(p));
+    setTxtC7S2('kv7-2-t', '天花板的 ' + (p / M_C7S2 * 100).toFixed(1) + '%');
+    setTxtC7S2('kv7-2b-v', groupC7S2(d));
+    setTxtC7S2('kv7-2b-t', t <= 0 ? '第 0 月还没开张' : (t <= pk ? '柱子还在长高' : '柱子已经在变矮'));
+    setTxtC7S2('kv7-2c-v', t === pk ? '正好在顶点' : (s2 > 0 ? '增长在加速' : '增长在减速'));
+    setTxtC7S2('kv7-2c-t', 'f″ 是' + (s2 > 0 ? '正' : '负') + '：每月新增' + (s2 > 0 ? '还在变大' : '已经在变小'));
+    setTxtC7S2('kv7-2d-v', wanC7S2(M_C7S2 - p));
+    setTxtC7S2('kv7-2d-t', '离 100 万还差这么多');
+    setTxtC7S2('st7-2', msgC7S2(t, pk));
+    var dt = document.getElementById('st7-2-dot');
+    if (dt) { dt.style.background = t < pk ? COL_ACC_C7S2 : (t === pk ? '#ef4444' : COL_DEC_C7S2); }
+  }
+  function refreshC7S2() { updC7S2(); drawC7S2(); setTxtC7S2('sl7-2', stepTxtC7S2()); }
+
+  function slideTC7S2(v) {
+    var x = parseFloat(v);
+    if (!isFinite(x)) { x = T_DEF_C7S2; }
+    g7_2.t = Math.min(T_END_C7S2, Math.max(0, Math.round(x)));
+    refreshC7S2();
+  }
+  function stopC7S2() {
+    if (t7_2) { clearInterval(t7_2); t7_2 = null; }
+    var b = document.getElementById('btn-play7-2');
+    if (b) {
+      b.textContent = '▶ 逐月播放';
+      if (b.className.indexOf('playing') >= 0) { b.className = b.className.replace(/\s*playing/g, ''); }
+    }
+  }
+  // ▶ 逐月播放：从第 0 月推到第 180 月（60 帧），走完自己停下；再点一次 = 中途停下。
+  function playC7S2() {
+    if (t7_2) { stopC7S2(); return; }
+    var b = document.getElementById('btn-play7-2');
+    if (b) {
+      b.textContent = '■ 停下';
+      if (b.className.indexOf('playing') < 0) { b.className += ' playing'; }
+    }
+    frame7_2 = 0;
+    slideTC7S2(0);
+    t7_2 = setInterval(function () {
+      frame7_2++;
+      slideTC7S2(Math.round(T_END_C7S2 * frame7_2 / (FRAMES_C7S2 - 1)));
+      if (frame7_2 >= FRAMES_C7S2 - 1) { stopC7S2(); }
+    }, MS_C7S2);
+  }
+  function resetC7S2() {
+    stopC7S2();
+    g7_2.t = T_DEF_C7S2;
+    refreshC7S2();
+    toast('停在第 90 月 —— 柱子最高的那一根就在这里');
+  }
+
+  // 落地即默认档（并显示讲解行，页面永不「内容为空」）
+  refreshC7S2();
+
+  // 7.3 第三幕：饱和
+  // ★ 本节要送出的原语：**每回合转化量 = 两个因子相乘**（原书 p74 那句"同时也与它和极大值的距离成比例"）。
+  //   反应皿 M = 40 格、先放 1 格红的；每回合 Δ = K · A · C（K = 0.01），C ← C + Δ。
+  //   ★★ A ≡ M − C（**导出来**，不是另外减一遍）⇒ 「A + C = M」这条守恒是**结构上**成立的，
+  //      误差恒为 0 —— 验证脚本断的就是这个 0，不是"算得挺准"。
+  //
+  // ★★ 抛物线 Δ(C) = K·C·(M−C)：顶点在 C = M/2（一半），两头为 0。
+  //   ⇒ 机器判据（验证脚本独立重算）：① Δ 序列单峰；② 峰位 C/M 在一半附近；
+  //      ③ C 单调增、C/M 到 99% 的回合数；④ 换 K 后峰位仍在一半附近（**不是调参调出来的**）。
+  //   ★ 本节 JS 里**一个结果数都不写**（峰值、峰位、99% 的回合…全由验证脚本独立算）。
+  //
+  // ★ 计划里"峰在第 10 回合"与"第 11 回合"是同一时刻的两种记法：
+  //   计划按"已完成 N 次转化后的**状态**"编号，屏上按"**第 r 回合发生的那次转化**"编号。
+  var M_C7S3 = 40, K_C7S3 = 0.01, C0_C7S3 = 1, R_MAX_C7S3 = 40;
+  var MS_C7S3 = 200;                              // ▶ 自动推进：每 200 ms 走一回合
+  var DELTA_MAX_C7S3 = 4.2;                       // 右图纵轴上界（顶点 = K·(M/2)² = 4，留一点余量）
+  var BOX_DISH_C7S3 = [40, 76, 268, 166];         // 左：反应皿 x, y, w, h
+  var BOX_CH_C7S3 = [336, 76, 260, 166];          // 右：抛物线 x, y, w, h
+  var CELL_C7S3 = 30, GAP_C7S3 = 4;
+  var COL_A_C7S3 = '#cbd5e1', COL_C_C7S3 = '#ef4444', COL_CURVE_C7S3 = '#3b82f6';
+  var g7_3 = { r: 0 };
+  var t7_3 = null;
+
+  // 序列一次攒好：C[r] = 第 r 回合结束时的"已转"量。A 永远由 M − C 导出。
+  var CS_C7S3 = (function () {
+    var a = [C0_C7S3], r, d;
+    for (r = 1; r <= R_MAX_C7S3; r++) {
+      d = K_C7S3 * (M_C7S3 - a[r - 1]) * a[r - 1];
+      a[r] = a[r - 1] + d;
+    }
+    return a;
+  })();
+  function cC7S3(r) { return CS_C7S3[r]; }
+  function aC7S3(r) { return M_C7S3 - CS_C7S3[r]; }
+  function dC7S3(r) { return r <= 0 ? 0 : CS_C7S3[r] - CS_C7S3[r - 1]; }
+  // 抛物线本身：给定"已转多少"，这一回合能转化多少
+  function rateC7S3(c) { return K_C7S3 * c * (M_C7S3 - c); }
+  // 转化最多的是第几回合（现算，不写死）
+  function peakRC7S3() {
+    var b = 1, r;
+    for (r = 2; r <= R_MAX_C7S3; r++) { if (dC7S3(r) > dC7S3(b)) { b = r; } }
+    return b;
+  }
+  // 换一个系数 K 时，山顶落在 C/M 的哪里（验证脚本会拿它和独立重算对比）
+  function peakCMForK_C7S3(k) {
+    var c = C0_C7S3, r, d, best = -1, cm = 0;
+    for (r = 1; r <= 300; r++) {
+      d = k * (M_C7S3 - c) * c;
+      if (d > best) { best = d; cm = c / M_C7S3; }
+      c = c + d;
+    }
+    return cm;
+  }
+
+  function setTxtC7S3(id, html) { var e = document.getElementById(id); if (e) { e.innerHTML = html; } }
+  function fx2C7S3(v) { return v.toFixed(2); }
+  function fx4C7S3(v) { return v.toFixed(4); }
+  function pctC7S3(r) { return (CS_C7S3[r] / M_C7S3 * 100).toFixed(2) + '%'; }
+
+  function xChC7S3(c) { return BOX_CH_C7S3[0] + BOX_CH_C7S3[2] * c / M_C7S3; }
+  function yChC7S3(d) { return BOX_CH_C7S3[1] + BOX_CH_C7S3[3] - BOX_CH_C7S3[3] * d / DELTA_MAX_C7S3; }
+
+  function msgC7S3(r) {
+    var pk = peakRC7S3();
+    if (r <= 0) { return '第 0 回合：皿里只有 1 格红的 —— 点「下一回合」看它怎么漫开。'; }
+    if (r < pk) { return '第 ' + r + ' 回合：红格越来越多，每回合转化的也越来越多 —— 自己催自己。'; }
+    if (r === pk) { return '第 ' + r + ' 回合：这一回合转化最多 —— 此刻 C 正好到一半附近。'; }
+    if (CS_C7S3[r] / M_C7S3 < 0.99) { return '第 ' + r + ' 回合：越转越慢 —— 没得转的越来越少了。'; }
+    return '第 ' + r + ' 回合：几乎铺满了 —— 这就是饱和：不是停了，是没得转了。';
+  }
+  function stepTxtC7S3() {
+    var r = g7_3.r, pk = peakRC7S3();
+    if (r <= 0) { return '先看左：40 格里只有 <b>1 格</b>红的；右图上的点贴在<b>最左边</b>（C 太小 ⇒ 转得慢）。'; }
+    if (r < pk) { return '红格在增多，右图的点<b>往上爬</b>：C 越大越快 —— 但 (M − C) 也在变小，两个因子正在拉锯。'; }
+    if (r === pk) { return '这一回合转化最多：<b>C 与 (M − C) 正好打个平手</b> ⇒ 乘积最大。山顶就在<b>一半</b>。'; }
+    return '红格还在铺，但每回合转化的越来越少：<b>(M − C) 太小了</b> —— 这就是饱和。';
+  }
+
+  function drawC7S3() {
+    var cv = document.getElementById('cv7-3');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var r = g7_3.r, C = cC7S3(r), pk = peakRC7S3(), i, x, y, col, row, d;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+
+    // ---- 左：反应皿（8×5 = 40 格，★ 全部画在 canvas 上，不新增 40 个 div）----
+    label(c, '反应皿：40 格 = 极大值 M', BOX_DISH_C7S3[0], 34, '#64748b', 11, 'left');
+    label(c, '灰 = 还没转（A）　红 = 已转（C）', BOX_DISH_C7S3[0], 52, '#94a3b8', 10, 'left');
+    var whole = Math.floor(C + 1e-12), frac = C - whole;
+    for (i = 0; i < M_C7S3; i++) {
+      row = Math.floor(i / 8); col = i % 8;
+      x = BOX_DISH_C7S3[0] + col * (CELL_C7S3 + GAP_C7S3);
+      y = BOX_DISH_C7S3[1] + row * (CELL_C7S3 + GAP_C7S3);
+      c.fillStyle = i < whole ? COL_C_C7S3 : COL_A_C7S3;
+      c.fillRect(x, y, CELL_C7S3, CELL_C7S3);
+      if (i === whole && frac > 0.005) {           // 正在转的那一格：按比例从下往上染红
+        c.fillStyle = COL_C_C7S3;
+        c.fillRect(x, y + CELL_C7S3 * (1 - frac), CELL_C7S3, CELL_C7S3 * frac);
+      }
+      c.strokeStyle = '#fff'; c.lineWidth = 1;
+      c.strokeRect(x + 0.5, y + 0.5, CELL_C7S3 - 1, CELL_C7S3 - 1);
+    }
+
+    // ---- 右：抛物线 Δ(C) = K·C·(M−C)，顶点在一半 ----
+    label(c, '每回合转化多少：Δ = K×C×(M−C)', BOX_CH_C7S3[0], 34, '#64748b', 11, 'left');
+    // ★ 副标题故意写短：y = 52 这一带要给山顶标注腾位置（见下面的 labelChip）。
+    label(c, '横轴：C（0…40）', BOX_CH_C7S3[0], 52, '#94a3b8', 10, 'left');
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(BOX_CH_C7S3[0], BOX_CH_C7S3[1], BOX_CH_C7S3[2], BOX_CH_C7S3[3]);
+    // 顶点的竖虚线（C = M/2）
+    c.setLineDash([4, 4]); c.strokeStyle = '#cbd5e1';
+    c.beginPath();
+    c.moveTo(xChC7S3(M_C7S3 / 2), BOX_CH_C7S3[1]);
+    c.lineTo(xChC7S3(M_C7S3 / 2), BOX_CH_C7S3[1] + BOX_CH_C7S3[3]);
+    c.stroke();
+    c.setLineDash([]);
+    // 曲线
+    c.strokeStyle = COL_CURVE_C7S3; c.lineWidth = 2.2; c.beginPath();
+    for (i = 0; i <= 160; i++) {
+      var cc = M_C7S3 * i / 160;
+      x = xChC7S3(cc); y = yChC7S3(rateC7S3(cc));
+      if (i === 0) { c.moveTo(x, y); } else { c.lineTo(x, y); }
+    }
+    c.stroke();
+    // 顶点标注 —— ★ 放在**框外**、顶点正上方（cy = 顶边 − 10）。
+    //   原先写在 `BOX_CH_C7S3[1] + 12`（框内、顶点下方 12 px），白底片（高 ~17 px）
+    //   正好把顶点 y ≈ 83.9 盖住：**"山顶"两个字把山顶盖掉了**。
+    labelChip(c, '山顶 = 一半（C = 20）', xChC7S3(M_C7S3 / 2), BOX_CH_C7S3[1] - 10, '#0f766e', 10, 'center', 3);
+    // 刻度
+    label(c, '0', BOX_CH_C7S3[0], BOX_CH_C7S3[1] + BOX_CH_C7S3[3] + 12, '#94a3b8', 10, 'left');
+    label(c, '20', xChC7S3(M_C7S3 / 2), BOX_CH_C7S3[1] + BOX_CH_C7S3[3] + 12, '#94a3b8', 10, 'center');
+    label(c, '40', BOX_CH_C7S3[0] + BOX_CH_C7S3[2], BOX_CH_C7S3[1] + BOX_CH_C7S3[3] + 12, '#94a3b8', 10, 'right');
+    label(c, '4', BOX_CH_C7S3[0] - 6, BOX_CH_C7S3[1] + 4, '#cbd5e1', 10, 'right');
+    label(c, '0', BOX_CH_C7S3[0] - 6, BOX_CH_C7S3[1] + BOX_CH_C7S3[3] + 4, '#cbd5e1', 10, 'right');
+
+    // ---- 已经走过的那些点（每个点 = 一次转化，横轴是这次转化**开始**时的 C）----
+    for (i = 1; i <= r; i++) {
+      dot(c, xChC7S3(cC7S3(i - 1)), yChC7S3(dC7S3(i)), 2.6, '#fed7aa');
+    }
+    if (r >= 1) {                                   // 当前这一次画大一点
+      dot(c, xChC7S3(cC7S3(r - 1)), yChC7S3(dC7S3(r)), 4.4, '#fff', COL_C_C7S3, 2);
+    }
+
+    // ---- 底部三行 ----
+    label(c, '第 ' + r + ' 回合：这一回合转化 ' + (r >= 1 ? fx4C7S3(dC7S3(r)) : '—') +
+      '　｜　C = ' + fx2C7S3(C) + '（' + pctC7S3(r) + '）　｜　A = ' + fx2C7S3(aC7S3(r)),
+      BOX_DISH_C7S3[0], 266, '#334155', 10.5, 'left');
+    label(c, 'C 变大 ⇒ 更快　｜　M − C 变小 ⇒ 更慢　｜　两个因子相乘，中间最高',
+      BOX_DISH_C7S3[0], 292, '#64748b', 10.5, 'left');
+    label(c, '越接近极大值，增速越慢。', BOX_DISH_C7S3[0], 316, '#b45309', 11.5, 'left');
+    label(c, 'A + C 恒等于 40（A 由 M − C 算出，守恒是结构上的）', BOX_DISH_C7S3[0], 342, '#94a3b8', 10, 'left');
+  }
+
+  function updC7S3() {
+    var r = g7_3.r;
+    setTxtC7S3('kv7-3-v', String(r));
+    setTxtC7S3('kv7-3-t', r === 0 ? '还没开始' : (r >= R_MAX_C7S3 ? '到头了（可重置）' : '点「下一回合」继续'));
+    setTxtC7S3('kv7-3b-v', fx2C7S3(aC7S3(r)));
+    setTxtC7S3('kv7-3b-t', '离极大值还差这么多');
+    setTxtC7S3('kv7-3c-v', fx2C7S3(cC7S3(r)));
+    setTxtC7S3('kv7-3c-t', 'A + C = ' + fx2C7S3(aC7S3(r) + cC7S3(r)) + '（恒等于 40）');
+    setTxtC7S3('kv7-3d-v', r >= 1 ? fx4C7S3(dC7S3(r)) : '—');
+    setTxtC7S3('kv7-3d-t', r >= 1 ? '= 0.01 × ' + fx2C7S3(aC7S3(r - 1)) + ' × ' + fx2C7S3(cC7S3(r - 1)) : '= K × A × C');
+    setTxtC7S3('kv7-3e-v', pctC7S3(r));
+    setTxtC7S3('kv7-3e-t', '一半 = 20 格');
+    setTxtC7S3('st7-3', msgC7S3(r));
+    var dt = document.getElementById('st7-3-dot');
+    if (dt) {
+      dt.style.background = r > peakRC7S3() ? '#f59e0b' : (r === peakRC7S3() ? '#ef4444' : '#10b981');
+    }
+    var b = document.getElementById('btn-next7-3');
+    if (b) { b.disabled = (r >= R_MAX_C7S3); }
+  }
+  function refreshC7S3() { updC7S3(); drawC7S3(); setTxtC7S3('sl7-3', stepTxtC7S3()); }
+
+  function stepC7S3() {
+    if (g7_3.r >= R_MAX_C7S3) { return; }
+    g7_3.r = g7_3.r + 1;
+    refreshC7S3();
+  }
+  function stopC7S3() {
+    if (t7_3) { clearInterval(t7_3); t7_3 = null; }
+    var b = document.getElementById('btn-play7-3');
+    if (b) {
+      b.textContent = '▶ 自动推进';
+      if (b.className.indexOf('playing') >= 0) { b.className = b.className.replace(/\s*playing/g, ''); }
+    }
+  }
+  // ▶ 自动推进：每 200 ms 走一回合，走到头自己停下；再点一次 = 中途停下。
+  function playC7S3() {
+    if (t7_3) { stopC7S3(); return; }
+    if (g7_3.r >= R_MAX_C7S3) { g7_3.r = 0; refreshC7S3(); }
+    var b = document.getElementById('btn-play7-3');
+    if (b) {
+      b.textContent = '■ 停下';
+      if (b.className.indexOf('playing') < 0) { b.className += ' playing'; }
+    }
+    t7_3 = setInterval(function () {
+      if (g7_3.r >= R_MAX_C7S3) { stopC7S3(); return; }
+      stepC7S3();
+      if (g7_3.r >= R_MAX_C7S3) { stopC7S3(); }
+    }, MS_C7S3);
+  }
+  function resetC7S3() {
+    stopC7S3();
+    g7_3.r = 0;
+    refreshC7S3();
+    toast('回到第 0 回合：皿里只有 1 格红的');
+  }
+
+  // 落地即默认档（并显示讲解行，页面永不「内容为空」）
+  refreshC7S3();
+
+  // 7.4 玩具飞机与真引擎（章收口）
+  // ★ 本节要送出的原语：**"对得上"是个很弱的证据** —— 数据窗口越短，能同样好地解释它的"上限"就越多。
+  //   真值：M = 100 万、p₀ = 1000、b = 1.08 的 logistic，再乘 (1 + 2% 的**确定性**摆动 sin(0.7t))。
+  //   4 条候选：M = 50 万 / 100 万 / 200 万 / 300 万 —— **起点完全一样**，只换上限。
+  //   ⇒ 四条之间的差别只可能来自 M，所以"谁对谁错"这件事没有第二个变量可赖。
+  //
+  // ★★ 本节不"套公式"（计划 §一 勘误 #1）：没有最小二乘，也没有别的参数可调。
+  //    屏上只用「偏差 = |候选 − 数据| ÷ 数据，取窗口内最大」这一个朴素的数，
+  //    而且四条候选共用一个起点 —— "调参数"这件事在画面上根本不存在。
+  //
+  // ★★ 为什么不用 pow / exp / log：b^(−t) 用**逐次除法**攒（同一份序列给曲线和数据共用），
+  //    全章的红线照旧（e 与指数函数一律不上屏）。
+  //
+  // ★ 判据是**倍数**，不是绝对百分比（这是本节唯一一处"计划 vs 实测"，见 _build_c7s4.py 头部）：
+  //   短窗口（≤ 60 月）里「最差 ÷ 真值」只有几倍 ⇒ 分不出来；长窗口（≥ 120 月）里是几十倍 ⇒ 分得出来。
+  //   阈值 5 倍正好落在这两个选项之间 —— 依据是验证脚本跑出来的 20 组 (p₀, 相位)，
+  //   不是"调到好看"的数。
+  var MTRUE_C7S4 = 1000000, P0_C7S4 = 1000, B_C7S4 = 1.08, OSC_C7S4 = 0.02, FRQ_C7S4 = 0.7;
+  var TMAX_C7S4 = 180;
+  var MCANDS_C7S4 = [500000, 1000000, 2000000, 3000000];
+  var NUMS_C7S4 = [18, 24, 36, 48, 60, 120, 180];
+  var YMAX_C7S4 = 3100000;                        // 纵轴上界（最高的候选在 180 月 ≈ 299 万）
+  var BOX_C7S4 = [72, 74, 512, 222];              // 作图区 x, y, w, h
+  var COL_CANDS_C7S4 = ['#a78bfa', '#3b82f6', '#f59e0b', '#ef4444'];
+  var RATIO_C7S4 = 5;                             // 最差 ÷ 真值 ≥ 5 倍 ⇒ 才叫"分得出来"
+  var g7_4 = { n: 36, pick: 1 };
+
+  // 候选曲线的整条序列（t = 0…180）。b^(−t) 用逐次除法，不用 pow。
+  var SER_C7S4 = (function () {
+    var out = [], i, t, M, u, arr;
+    for (i = 0; i < MCANDS_C7S4.length; i++) {
+      M = MCANDS_C7S4[i];
+      u = M / P0_C7S4 - 1;
+      arr = [];
+      for (t = 0; t <= TMAX_C7S4; t++) { arr[t] = M / (1 + u); u = u / B_C7S4; }
+      out[i] = arr;
+    }
+    return out;
+  })();
+  // 数据点 = 真值曲线（= 第 2 条候选，M = 100 万）× (1 + 2% 摆动)—— 同一份序列，不另算一遍
+  var DATA_C7S4 = (function () {
+    var a = [], t;
+    for (t = 0; t <= TMAX_C7S4; t++) {
+      a[t] = SER_C7S4[1][t] * (1 + OSC_C7S4 * Math.sin(FRQ_C7S4 * t));
+    }
+    return a;
+  })();
+
+  function dataC7S4(t) { return DATA_C7S4[t]; }
+  function candC7S4(i, t) { return SER_C7S4[i][t]; }
+  function predC7S4(i) { return SER_C7S4[i][TMAX_C7S4]; }
+  function winC7S4() { return g7_4.n; }
+
+  // 窗口内的最大偏差（屏上就用这一条：读现成序列，快）
+  function devC7S4(i, n) {
+    var w = 0, t, d;
+    for (t = 0; t <= n; t++) {
+      d = Math.abs(SER_C7S4[i][t] - DATA_C7S4[t]) / DATA_C7S4[t];
+      if (d > w) { w = d; }
+    }
+    return w;
+  }
+  // ★ 只给验证脚本用：换起点 / 换摆动相位重算（页面不显示）。
+  //   它证明"窗口越短越定不住"不是挑出来的参数 —— 20 组 (p₀, 相位) 全测过。
+  function candAtC7S4(M, t, p0) {
+    var u = M / p0 - 1, k;
+    for (k = 0; k < t; k++) { u = u / B_C7S4; }
+    return M / (1 + u);
+  }
+  function devProbeC7S4(i, n, p0, ph) {
+    var w = 0, t, c, d;
+    for (t = 0; t <= n; t++) {
+      d = candAtC7S4(MTRUE_C7S4, t, p0) * (1 + OSC_C7S4 * Math.sin(FRQ_C7S4 * t + ph));
+      c = candAtC7S4(MCANDS_C7S4[i], t, p0);
+      if (Math.abs(c - d) / d > w) { w = Math.abs(c - d) / d; }
+    }
+    return w;
+  }
+  // 窗口内四条里最差的那条（"最差"是分不分得出的分子）
+  function worstDevC7S4(n) {
+    var mx = 0, i, d;
+    for (i = 0; i < MCANDS_C7S4.length; i++) {
+      d = devC7S4(i, n);
+      if (d > mx) { mx = d; }
+    }
+    return mx;
+  }
+  // 分不分得出来：最差的那条 ÷ 真值那条 ≥ RATIO_C7S4 倍
+  function ratioC7S4(n) { return worstDevC7S4(n) / devC7S4(1, n); }
+
+  function xfC7S4(t) { return BOX_C7S4[0] + BOX_C7S4[2] * t / TMAX_C7S4; }
+  function yfC7S4(v) { return BOX_C7S4[1] + BOX_C7S4[3] - BOX_C7S4[3] * v / YMAX_C7S4; }
+
+  function setTxtC7S4(id, html) { var e = document.getElementById(id); if (e) { e.innerHTML = html; } }
+  function fxDevC7S4(v) { return (v * 100).toFixed(2) + '%'; }
+  function fxWanC7S4(v) { return (v / 10000).toFixed(2) + ' 万'; }
+  function nameMC7S4(i) { return ['50 万', '100 万', '200 万', '300 万'][i]; }
+
+  function winIdxC7S4() {
+    var i;
+    for (i = 0; i < NUMS_C7S4.length; i++) { if (NUMS_C7S4[i] === g7_4.n) { return i; } }
+    return 2;
+  }
+
+  function drawC7S4() {
+    var cv = document.getElementById('cv7-4');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var n = g7_4.n, i, t, k, x, y, xw;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+
+    // 标题（窗口长度写在这里：画在框外，不跟曲线抢地方）
+    label(c, '同一批点，4 条候选曲线（起点一样，只换上限）· 窗口：前 ' + n + ' 个月',
+      BOX_C7S4[0], 30, '#64748b', 11, 'left');
+
+    // 图例
+    for (i = 0; i < 4; i++) {
+      x = BOX_C7S4[0] + i * 118;
+      c.strokeStyle = COL_CANDS_C7S4[i];
+      c.lineWidth = (i === g7_4.pick) ? 4 : 2.2;
+      c.beginPath(); c.moveTo(x, 54); c.lineTo(x + 16, 54); c.stroke();
+      label(c, nameMC7S4(i), x + 22, 54, COL_CANDS_C7S4[i], 10.5, 'left');
+    }
+
+    // 窗口底色 + 网格 + 框
+    xw = xfC7S4(n);
+    c.fillStyle = 'rgba(59,130,246,0.07)';
+    c.fillRect(BOX_C7S4[0], BOX_C7S4[1], xw - BOX_C7S4[0], BOX_C7S4[3]);
+    c.strokeStyle = '#f1f5f9'; c.lineWidth = 1;
+    for (k = 1; k <= 3; k++) {
+      y = yfC7S4(k * 1000000);
+      c.beginPath(); c.moveTo(BOX_C7S4[0], y); c.lineTo(BOX_C7S4[0] + BOX_C7S4[2], y); c.stroke();
+    }
+    c.strokeStyle = '#e2e8f0';
+    c.strokeRect(BOX_C7S4[0], BOX_C7S4[1], BOX_C7S4[2], BOX_C7S4[3]);
+
+    // ★ 画序：没选中的三条 → 数据点 → 选中的那条。
+    //   选中的那条必须**盖在点上面**，否则 181 个深色点会把整条曲线盖成虚线，
+    //   "它贴不贴住数据"这件事就看不见了（首轮放大图 `shots/c7s4_zoom_long.png` 抓到的）。
+    function strokeC7S4(idx, lw) {
+      var tt, xx, yy;
+      c.strokeStyle = COL_CANDS_C7S4[idx];
+      c.lineWidth = lw;
+      c.beginPath();
+      for (tt = 0; tt <= TMAX_C7S4; tt++) {
+        xx = xfC7S4(tt); yy = yfC7S4(SER_C7S4[idx][tt]);
+        if (tt === 0) { c.moveTo(xx, yy); } else { c.lineTo(xx, yy); }
+      }
+      c.stroke();
+    }
+    for (i = 0; i < 4; i++) { if (i !== g7_4.pick) { strokeC7S4(i, 1.6); } }
+
+    // 数据点：窗口内深色、窗口外灰（181 个点全部画在 canvas 上，不新增 DOM）
+    for (t = 0; t <= TMAX_C7S4; t++) {
+      dot(c, xfC7S4(t), yfC7S4(DATA_C7S4[t]), t <= n ? 2.4 : 1.9,
+        t <= n ? '#0f172a' : '#cbd5e1');
+    }
+
+    // 选中的那条最后画（在点上面）
+    strokeC7S4(g7_4.pick, 3.2);
+
+    // 窗口边界
+    c.setLineDash([4, 4]); c.strokeStyle = '#94a3b8'; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(xw, BOX_C7S4[1]); c.lineTo(xw, BOX_C7S4[1] + BOX_C7S4[3]); c.stroke();
+    c.setLineDash([]);
+
+    // 刻度
+    label(c, '0', BOX_C7S4[0], BOX_C7S4[1] + BOX_C7S4[3] + 14, '#94a3b8', 10, 'center');
+    label(c, '60', xfC7S4(60), BOX_C7S4[1] + BOX_C7S4[3] + 14, '#94a3b8', 10, 'center');
+    label(c, '120', xfC7S4(120), BOX_C7S4[1] + BOX_C7S4[3] + 14, '#94a3b8', 10, 'center');
+    label(c, '180 月', BOX_C7S4[0] + BOX_C7S4[2], BOX_C7S4[1] + BOX_C7S4[3] + 14, '#94a3b8', 10, 'center');
+    label(c, '0', BOX_C7S4[0] - 8, yfC7S4(0), '#cbd5e1', 10, 'right');
+    label(c, '100 万', BOX_C7S4[0] - 8, yfC7S4(1000000), '#cbd5e1', 10, 'right');
+    label(c, '200 万', BOX_C7S4[0] - 8, yfC7S4(2000000), '#cbd5e1', 10, 'right');
+    label(c, '300 万', BOX_C7S4[0] - 8, yfC7S4(3000000), '#cbd5e1', 10, 'right');
+
+    // 裁决徽章（标题行右侧：短、位置稳、不会被曲线压住）
+    var can = ratioC7S4(n) >= RATIO_C7S4;
+    labelChip(c, can ? '分得出来' : '分不出来', BOX_C7S4[0] + BOX_C7S4[2], 30,
+      can ? '#0f766e' : '#94a3b8', 11, 'right', 4);
+
+    // 底部三行（全部现算；★ 每行都 ≤ 44 字 —— 录制器只保留前 44 个字符，
+    //   超了就等于"这行写了什么"没法被断言钉住）
+    label(c, '四条候选：起点都 1000，只换上限 M', BOX_C7S4[0], 330, '#64748b', 10, 'left');
+    label(c, '窗口内最大偏差：' + fxDevC7S4(devC7S4(0, n)) + ' / ' + fxDevC7S4(devC7S4(1, n)) +
+      ' / ' + fxDevC7S4(devC7S4(2, n)) + ' / ' + fxDevC7S4(devC7S4(3, n)),
+      BOX_C7S4[0], 352, '#334155', 10, 'left');
+    label(c, '180 月预测：' + (predC7S4(0) / 10000).toFixed(2) + ' / ' + (predC7S4(1) / 10000).toFixed(2) +
+      ' / ' + (predC7S4(2) / 10000).toFixed(2) + ' / ' + (predC7S4(3) / 10000).toFixed(2) + ' 万',
+      BOX_C7S4[0], 372, '#334155', 10, 'left');
+  }
+
+  function msgC7S4() {
+    var n = g7_4.n, can = ratioC7S4(n) >= RATIO_C7S4;
+    if (can) {
+      return '窗口前 ' + n + ' 个月：真值那条仍贴在 ' + fxDevC7S4(devC7S4(1, n)) +
+        '，最差的那条偏出 ' + ratioC7S4(n).toFixed(0) + ' 倍 —— 分得出来了。';
+    }
+    return '窗口前 ' + n + ' 个月：四条候选挤在一起（最差也只有 ' + fxDevC7S4(worstDevC7S4(n)) +
+      '）—— 光看这段历史，分不出谁对。';
+  }
+  function stepTxtC7S4() {
+    var n = g7_4.n;
+    if (ratioC7S4(n) >= RATIO_C7S4) {
+      return '看到第 <b>' + n + '</b> 个月：真值那条 <b>' + fxDevC7S4(devC7S4(1, n)) +
+        '</b>，另三条 <b>' + fxDevC7S4(devC7S4(0, n)) + ' / ' + fxDevC7S4(devC7S4(2, n)) +
+        ' / ' + fxDevC7S4(devC7S4(3, n)) + '</b> —— 藏不住了。';
+    }
+    return '只看前 <b>' + n + '</b> 个月：最差的一条也只差 <b>' + fxDevC7S4(worstDevC7S4(n)) +
+      '</b>，四条挤在一起 —— 这就是那位生物学家看到的全部。';
+  }
+
+  function updC7S4() {
+    var n = g7_4.n, pk = g7_4.pick, i, d, mx = worstDevC7S4(n), mn = 1e9, can = ratioC7S4(n) >= RATIO_C7S4;
+    for (i = 0; i < MCANDS_C7S4.length; i++) {
+      d = devC7S4(i, n);
+      if (d < mn) { mn = d; }
+    }
+    setTxtC7S4('lb7-4-n', String(n));
+    setTxtC7S4('kv7-4-v', n + ' 个月');
+    setTxtC7S4('kv7-4-t', n <= 36 ? '窗口太短：定不住' : '拉长它看变化');
+    setTxtC7S4('kv7-4b-v', nameMC7S4(pk));
+    setTxtC7S4('kv7-4c-v', fxDevC7S4(devC7S4(pk, n)));
+    setTxtC7S4('kv7-4c-t', '四条都在这条线上：' + fxDevC7S4(mn) + ' ~ ' + fxDevC7S4(mx));
+    setTxtC7S4('kv7-4d-v', fxWanC7S4(predC7S4(pk)));
+    setTxtC7S4('kv7-4e-v', (predC7S4(3) / predC7S4(0)).toFixed(1) + ' 倍');
+    setTxtC7S4('st7-4', msgC7S4());
+    setTxtC7S4('sl7-4', stepTxtC7S4());
+    var dt = document.getElementById('st7-4-dot');
+    if (dt) { dt.style.background = can ? '#10b981' : '#94a3b8'; }
+    var sl = document.getElementById('s7-4-n');
+    if (sl) { sl.value = String(winIdxC7S4()); }
+    for (i = 0; i < MCANDS_C7S4.length; i++) {
+      d = document.getElementById('btn-c74-m' + i);
+      if (d) { d.className = 'ctrl-btn' + (i === pk ? ' primary' : ''); }
+    }
+  }
+  function refreshC7S4() { updC7S4(); drawC7S4(); }
+
+  function setWinC7S4(idx) {
+    var k = parseInt(idx, 10);
+    if (isNaN(k) || k < 0 || k >= NUMS_C7S4.length) { return; }
+    g7_4.n = NUMS_C7S4[k];
+    refreshC7S4();
+  }
+  function pickC7S4(i) {
+    if (i < 0 || i >= MCANDS_C7S4.length) { return; }
+    g7_4.pick = i;
+    refreshC7S4();
+  }
+  function resetC7S4() {
+    g7_4.n = 36;
+    g7_4.pick = 1;
+    refreshC7S4();
+    toast('回到默认：窗口 36 个月、上限 100 万');
+  }
+  // ★ D7：本节**不设**播放键（没有动画帧）⇒ 没有计时器，停止钩子保持空实现。
+  function stopC7S4() { }
+
+  // 落地即默认档（页面永不「内容为空」）
+  refreshC7S4();
+
+  // ================= 第 7 章 JS 区 · 终点 =================
+
+
 
   // ================= 知识树渲染（数据驱动 · a 阶段只渲染有内容的层）=================
   // 切到 b 形态（完整三层金字塔 + 灰显待排期）时，只需给 L2 / L1 的 chapters 填数据，
@@ -11788,7 +13181,13 @@
         sections: C2_SECTIONS, go: 'goC2' },
       { ch: 6, name: '福尔摩斯和迷路的自行车', hook: '微积分发现了关键线索',
         kw: '切线的方向 · 瞬时方向 · 独轮车反例', target: 'page-c6-1',
-        sections: C6_SECTIONS, go: 'goC6' }
+        sections: C6_SECTIONS, go: 'goC6' },
+      // ★★ L2 从此**三章并列**（ch2 / ch6 / ch7）—— 全站首次；EXPECT_LAYER.L2 2 → 3
+      { ch: 7, name: '一部未经授权的潮流传记', hook: '微积分描绘了一个复杂到无法完整表达的现实',
+        // ★ kw 里**不写**本章放行的那个词：知识树卡在首页层，写进去就变成"章外 1 处"的例外，
+        //   跨章保护的正断言就没法写成干净的 0（第 6 章的章卡留了这么一个例外，第 7 章不再留）。
+        kw: '指数级增长 · 增速的顶点 · 饱和与上限', target: 'page-c7-1',
+        sections: C7_SECTIONS, go: 'goC7' }
     ]},
     { id: 'L1', name: 'L1 直觉与动机层', sub: '第 3、4、5、8、9、11、12、13 章', chapters: [
       { ch: 3, name: '黄油吐司', hook: '微积分俘获了一颗心',

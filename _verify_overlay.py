@@ -41,7 +41,8 @@ SEQ = {
                  + ['goC3(%d)' % n for n in [1, 2, 3, 4]]
                  + ['goC4(%d)' % n for n in [1, 2, 3, 4]]
                  + ['goC5(%d)' % n for n in [1, 2, 3, 4]]
-                 + ['goC6(%d)' % n for n in [1, 2, 3, 4]],
+                 + ['goC6(%d)' % n for n in [1, 2, 3, 4]]
+                 + ['goC7(%d)' % n for n in [1, 2, 3, 4]],
 }
 
 PROBE = """<script>
@@ -115,7 +116,11 @@ window.addEventListener('load', function(){
 
      2026-09-30：calculus1 加了第 5 章，序列涨到 23 步，async/await 依然全跑完
      2026-10-19：再加第 6 章，序列到 27 步，仍然全跑完（这条链的长度上限比递归
-     高得多，不必改每步的等待时间）。 */
+     高得多，不必改每步的等待时间）。
+     2026-10-28：再加第 7 章，序列到 31 步，仍然全跑完。
+     ★ 2026-10-28 注意：本次门户发布的是源仓库 **HEAD**（1–7 章），不是工作区 ——
+       工作区里还有第 8 章骨架（8.2/8.3 是「正在实现中」占位）。所以这里**不要**加
+       `goC7` 之外的 `goC8`，页面里根本没有 goC8，加了会整行 NAVERR。 */
   function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 
   (async function(){

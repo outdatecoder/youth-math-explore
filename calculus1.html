@@ -473,6 +473,14 @@
   #cv7-2 { width: 100%; height: auto; }
   #cv7-3 { width: 100%; height: auto; }
   #cv7-4 { width: 100%; height: auto; }
+  #cv8-1 { width: 100%; height: auto; }
+  #cv8-2 { width: 100%; height: auto; }
+  #cv8-3 { width: 100%; height: auto; }
+  #cv8-4 { width: 100%; height: auto; }
+  #cv9-1 { width: 100%; height: auto; }
+  #cv9-2 { width: 100%; height: auto; }
+  #cv9-3 { width: 100%; height: auto; }
+  #cv9-4 { width: 100%; height: auto; }
 
 </style>
 </head>
@@ -4083,7 +4091,7 @@
     <span class="back" onclick="goHome()">← 返回首页</span>
     <span class="divider">|</span>
     <span class="title">7.4　玩具飞机与真引擎</span>
-    <span class="nav-next" onclick="goHome()">第 7 章完 · 返回首页 →</span>
+    <span class="nav-next" onclick="goC8(1)">进入第 8 章 · 风留下了什么 →</span>
   </div>
   <div class="sec-tabs"></div>
   <div class="sub-container">
@@ -4164,7 +4172,7 @@
 
         <div class="hook-box">
           <h4>第 7 章完</h4>
-          <p>原书最后那句（p77 逐字）：<b>「数学模型描绘了一个复杂到无法完整表达的现实。对复杂的问题稍微简化一下是人类再正常不过的反应——只要我们在玩玩具之前先阅读一下细则就行。」</b><br>这一章从<b>加速</b>走到<b>拐点</b>，再到<b>饱和</b>，最后停在这句话上：<b>模型是玩具，不是答案</b>。它能把你看到的东西说清楚；能不能外推，要看它经没经过足够长的历史。<br><b>第 7 章完 —— 点右上角「第 7 章完 · 返回首页 →」回去，看看知识树上多了什么。</b></p>
+          <p>原书最后那句（p77 逐字）：<b>「数学模型描绘了一个复杂到无法完整表达的现实。对复杂的问题稍微简化一下是人类再正常不过的反应——只要我们在玩玩具之前先阅读一下细则就行。」</b><br>这一章从<b>加速</b>走到<b>拐点</b>，再到<b>饱和</b>，最后停在这句话上：<b>模型是玩具，不是答案</b>。它能把你看到的东西说清楚；能不能外推，要看它经没经过足够长的历史。<br><b>第 7 章完 —— 点右上角「进入第 8 章 · 风留下了什么 →」—— 那个不肯屈服的谜题，就在下一章等着。</b></p>
         </div>
       </div>
 
@@ -4186,6 +4194,1023 @@
           <p><b>别以为"多算几次就准了"。</b>错的是<b>看得太短</b>，不是算得不够多。</p>
           <p><b>别以为"曲线贴住点"就说明模型对。</b>贴住一段，可能只是因为那一段还没弯下来。</p>
           <p><b>别把玩具数据当历史数据。</b>这批点是页面造的；原书那两个数（2 亿 / 超出 1.2 亿）才是真事。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 第 8 章 风留下了什么：一个不肯屈服的谜题（4 节 · 骨架期）================= -->
+<!-- 本章 4 节（计划 §四）：8.1 三级台阶 / 8.2 两个目的地 / 8.3 被风吹走的东西 / 8.4 风留下了什么（章收口）。
+     ★ 原书书页 79–85 —— 全站**最短**的一章（正文只有 7 页，比第 6 章还少 1 页）。
+     ★★ 本章是**第三次放行封存词**（前两次在第 6 / 7 章，各放行一个词 —— 名字见 `_chapter_scope.js`）：
+        这次放行「极限」与「收敛」，原书 p82 自己给了定义、p84 用了「收敛」⇒ 放行才叫忠实。
+        `RELEASED` 里本章登记这两个词 + `withoutChapter(html, 8)` 内 0 命中的脚本级断言。
+        ★ 注释里**不写前两次放行的那两个词**：写了就会把第 6 / 7 章的跨章保护撞红（一字都不提才干净）。
+     ★★ 昨天打算放行的第二个词**已按回落条款撤回**（名字见计划 §二 与 `_build_c8_shell.py` 的 docstring）：
+        本章书页 79–85 里它一次都没出现 —— 那条决定的前提来自架构文档的**目录级推断**，逐页核对已证伪。
+        ★ 教训：这个注释里也**不写它的名字**，否则本章术语扫描会把自己扫成命中。
+     ⚠️ `precheck` 的 forbid 表里**本来就没有**「极限」「收敛」⇒ 不要照第 6 章的样子去加 scoped
+        （第 6 章 K20：那 5 组 scoped 是纯假阳性，已移除）；本章只留那一组图上比值的 scoped（见 `_chapter_scope.js`）。
+     ★ 继续封存的记号**一个都不写进本章**（清单见计划 §三.4）。★ 这不是洁癖：
+       把封存词列进注释，会被本章自己的术语扫描**当成命中**，所以这里只描述、不枚举。
+     ★ 数据来源：全章**无坐标刻度、无数据集**（原书亦然）⇒ 台阶、两条路、三角波都由页面**现算**：
+       台阶总长 = 横 + 竖（离散累加），波形高度按 `h / 2` 逐层减半；
+       ★ **不用以 e 为底的指数函数、也不用对数、不用乘方**（`Math` 里那几个函数本章禁用）。 -->
+
+<!-- ================= 8.1 三级台阶 ================= -->
+
+<div class="page" id="page-c8-1">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">8.1　三级台阶</span>
+    <span class="nav-next" onclick="goC8(2)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>风把树叶一片片吹落 —— 就像冬天抹去了秋天的装饰。这一章从一个「怎么走都走不到头」的谜题开始。<br>在纸上画一个 <b>4 宽、3 高</b>的长方形，从<b>左下角</b>走到<b>右上角</b>。有两条路：<br>① 直接<b>斜着走</b> —— 那条对角线；② 沿着<b>台阶</b>走 —— 横着走一点、竖着走一点、再横、再竖……<br>台阶可以越分越细：3 级、8 级、64 级、一辈子也分不完。可你盯着读数看：<b>总长度一动不动</b>。</div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" onclick="infC8S1()">无限次重复</button>
+          <button class="ctrl-btn primary" onclick="resetC8S1()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row8-1-n">
+          <label>台阶级数：<b id="lb8-1-n">3 级</b>　—— 拖一拖：<b>形状一直在变，总长一直不动</b></label>
+          <input type="range" id="s8-1-n" min="0" max="7" step="1" value="2" oninput="pickC8S1(parseInt(this.value, 10))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv8-1" width="620" height="380"></canvas>
+          <p class="canvas-caption">作图区是<b>等比例</b>的：横 4、竖 3，两轴共用一把尺（每单位 96 像素）—— 图上的长方形是<b>真的</b> 4 比 3，不是硬拉出来的。<br><b style="color:#3b82f6;">实线 = 台阶</b>（横着走 + 竖着走）；<b style="color:#ef4444;">虚线 = 对角线</b>（直接斜过去）。<br><span style="color:#94a3b8;">最左边那三档（1 / 2 / 3 级）就是本节标题里的「三级台阶」：先看清它，再一级一级往细里分。</span></p>
+        </div>
+
+        <div class="step-line" id="sl8-1"></div>
+
+        <div class="status-bar" id="st8-1-bar"><span class="status-dot" id="st8-1-dot"></span><span id="st8-1"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv8-1a-cell">
+            <div class="k">台阶级数</div>
+            <div class="v" id="kv8-1a-v">…</div>
+            <div class="k" id="kv8-1a-t">…</div>
+          </div>
+          <div class="kv" id="kv8-1b-cell">
+            <div class="k">台阶总长（横 + 竖）</div>
+            <div class="v" id="kv8-1b-v">…</div>
+            <div class="k" id="kv8-1b-t">…</div>
+          </div>
+          <div class="kv" id="kv8-1c-cell">
+            <div class="k">对角线长</div>
+            <div class="v" id="kv8-1c-v">…</div>
+            <div class="k" id="kv8-1c-t">…</div>
+          </div>
+          <div class="kv" id="kv8-1d-cell">
+            <div class="k">台阶离对角线最远（垂直量）</div>
+            <div class="v" id="kv8-1d-v">…</div>
+            <div class="k" id="kv8-1d-t">…</div>
+          </div>
+          <div class="kv" id="kv8-1e-cell">
+            <div class="k">形状像对角线的程度</div>
+            <div class="v" id="kv8-1e-v">…</div>
+            <div class="k" id="kv8-1e-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只讲一件事：台阶可以无限变细，总长却一步都没挪。</b><br>
+          为什么？因为每一级台阶都只是把「<b>横的那 4 段</b>」和「<b>竖的那 3 段</b>」切得更碎：<br>
+          3 级时，横的每段 <b>1.333</b>、竖的每段 <b>1</b>，加起来 4 + 3 = <b>7</b>；<br>
+          64 级时，横的每段 <b>0.0625</b>、竖的每段 <b>0.046875</b>，加起来还是 4 + 3 = <b>7</b>。<br>
+          <b>横着的加起来永远是 4，竖着的加起来永远是 3</b> —— 你切的是"怎么走"，不是"走多远"。<br>
+          原书 p80 那句话就是这件事：<b>「就算你把它们分成一段段的，也不会改变它们的总长度。」</b><br>
+          那形状呢？形状<b>真的在变</b>：台阶离对角线最远的距离从 <b>2.4</b>（1 级）一路减到 <b>0.037</b>（64 级），
+          越来越贴上去。原书 p81 把下一步推给你：<b>「如果我们无限次地重复这个步骤，最后创造出一个这样的形状呢？」</b><br>
+          <span style="color:#94a3b8;">诚实说明：本页把「无限次重复」画成 <b>512 级</b>（再细屏幕上就画不出来了），并且照样数一遍总长 ——
+          它还是 <b>7.000</b>，而那条对角线是 <b>5.000</b>。差的 2，不是画得不够细，是它们本来就是两条不同的路。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　从 3 级细到 64 级，形状肉眼可见地变了，那总长为啥一动不动？<br>A. 因为页面把图缩小了，读数跟着缩小了<br>B. 因为每一级只是把「横 4 + 竖 3」切得更碎：横的加起来还是 4、竖的还是 3<br>C. 因为对角线也跟着变长了，两边一起长</p>
+          <button class="quiz-btn" id="q81a-btn" onclick="toggleAnswer('q81a-ans','q81a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q81a-ans">答案是 <b>B</b>。变的只是<b>碎法</b>，不是<b>长度</b>。<br>你可以盯着读数格自己验：把滑块从头拖到尾，「台阶总长」那一格永远是 <b>7.000</b> —— 它连小数点后第三位都没抖过。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　「无限次重复」之后，台阶会变成对角线吗？<br>A. 会，而且长度也会跟着变成 5<br>B. 形状会越来越贴上去，但每一级的总长还是 7 —— 长度不会因此变成 5<br>C. 不会，形状永远差得很远</p>
+          <button class="quiz-btn" id="q81b-btn" onclick="toggleAnswer('q81b-ans','q81b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q81b-ans">答案是 <b>B</b>。<br>「越来越像」说的是<b>形状</b>：台阶离对角线最远的距离一路往下减。可<b>总长</b>是另一件事：它一直是 7。<br>★ 这正是本章那个「不肯屈服的谜题」：你可以让形状贴得无限近，但<b>7 没有变成 5</b>。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>先记住这两个数：台阶 <b>7</b>、对角线 <b>5</b>。<br>下一节不换装置，只换<b>问法</b>：一个问「怎么走过去」，一个问「从终点往回看有多远」。<br>两个问题都问得通 —— 可答案不一样。那就是谜题真正的形状。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>总长守恒</b>：把一条路切得更碎，<b>总长度不变</b>。本节里横着的永远是 4、竖着的永远是 3 ⇒ 台阶总长恒为 <b>7</b>，与级数无关。</p>
+          <p><b>台阶走法</b>：只能横着或竖着走。<b>n 级台阶</b> = 横着走 n 小段、竖着走 n 小段，一段一段加起来。</p>
+          <p><b>对角线</b>：直接斜着走过去，长度 √(4² + 3²) = <b>5</b>。它比台阶<b>短</b>，短 2。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先把图摆正：横 4、竖 3，<b>两轴共用一把尺</b>。比例一歪，「像不像」就全是错觉。</div>
+          <div class="rule-item"><b>第 2 步</b>　只数两件事：<b>横着的加起来</b>、<b>竖着的加起来</b>。别的都不用管。</div>
+          <div class="rule-item"><b>第 3 步</b>　拖滑块。级数只改「切几刀」，<b>不改「一共切多长」</b> —— 读数格会自己证明。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>变细 ≠ 变短。</b>级数从 1 加到 64，每一段短了，但段数也多了同样多倍。</p>
+          <p><b>看上去像 ≠ 就是。</b>台阶再细也还是"横一下、竖一下"，它从来没变成那条斜线。</p>
+          <p><b>「无限次重复」讲的是一个越来越近的过程</b>，不是"某一刻走完了"。页面上把它画成 512 级，就是为了提醒你：<b>画得出来的一定还没到</b>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 8.2 两个目的地 ================= -->
+
+<div class="page" id="page-c8-2">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">8.2　两个目的地</span>
+    <span class="nav-next" onclick="goC8(3)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>上一节留下两个数：</b>台阶走 <b>7</b>，斜着走 <b>5</b>。<br>这一节不换装置、不加台阶，只换一个<b>问法</b>。<br>原书 p82 把这件事说得很干脆：那条斜线<b>「以某种自相矛盾的方式，同时指向两个目的地」</b> ——<br><b>「如果一步一步地走，长度是 7；但是不知为何，如果从终点往回看，长度就变成了 5。」</b><br>下面两个键不是"对错开关"，是<b>两个视角</b>：按哪个，哪个数就被点亮 —— 可另一个数<b>不会消失</b>。</div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="b8-2-walk" onclick="viewC8S2(1)">① 走过去</button>
+          <button class="ctrl-btn" id="b8-2-look" onclick="viewC8S2(2)">② 从终点看</button>
+          <button class="ctrl-btn primary" onclick="resetC8S2()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row8-2-n">
+          <label>台阶级数：<b id="lb8-2-n">3 级</b>　—— 拖着玩：<b>只有样子会变，两个数都不动</b></label>
+          <input type="range" id="s8-2-n" min="0" max="7" step="1" value="2" oninput="pickC8S2(parseInt(this.value, 10))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv8-2" width="620" height="380"></canvas>
+          <p class="canvas-caption">两条横条<b>一样长</b>（都是 8 格，同一把尺）：上条按「走过去」的长度填色（<b>恒 7 格</b>），下条按「从终点看」的长度填色（<b>恒 5 格</b>）。<br>左上那幅小图只负责"样子"：它随滑块变细，但两条横条一格都不会少。<br><span style="color:#94a3b8;">差的 2 格画成了中间的虚线夹子 —— 它不叫"误差"，它叫"两种问法之间的距离"。</span></p>
+        </div>
+
+        <div class="step-line" id="sl8-2"></div>
+
+        <div class="status-bar" id="st8-2-bar"><span class="status-dot" id="st8-2-dot"></span><span id="st8-2"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv8-2a-cell">
+            <div class="k">台阶级数</div>
+            <div class="v" id="kv8-2a-v">…</div>
+            <div class="k" id="kv8-2a-t">…</div>
+          </div>
+          <div class="kv" id="kv8-2b-cell">
+            <div class="k">① 走过去（沿台阶）</div>
+            <div class="v" id="kv8-2b-v">…</div>
+            <div class="k" id="kv8-2b-t">…</div>
+          </div>
+          <div class="kv" id="kv8-2c-cell">
+            <div class="k">② 从终点看（直着量）</div>
+            <div class="v" id="kv8-2c-v">…</div>
+            <div class="k" id="kv8-2c-t">…</div>
+          </div>
+          <div class="kv" id="kv8-2d-cell">
+            <div class="k">两个答案差多少</div>
+            <div class="v" id="kv8-2d-v">…</div>
+            <div class="k" id="kv8-2d-t">…</div>
+          </div>
+          <div class="kv" id="kv8-2e-cell">
+            <div class="k">拖遍八档，变了的数</div>
+            <div class="v" id="kv8-2e-v">…</div>
+            <div class="k" id="kv8-2e-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>两个答案都对 —— 因为它们量的不是同一条线。</b><br>
+          ① <b>走过去</b>：你只能横着走或竖着走。横着的加起来 <b>4</b>、竖着的加起来 <b>3</b> ⇒ 一共 <b>7</b>。<br>
+          ② <b>从终点往回看</b>：只问"这两个点之间有多远"。横 4、竖 3 是两条直角边，直线是斜边 √(4² + 3²) = <b>5</b>。<br>
+          所以差 <b>2</b> 不是"谁算错了"，也不是"画得不够细"：一条是<b>折线</b>，一条是<b>线段</b>，长度本来就不同。<br>
+          把台阶分成 8 级、64 级？两条线都还在那儿，<b>7 还是 7，5 还是 5</b>。<br>
+          <b>这就是本章要讲的那个词第一次露面的地方。</b>原书 p82 的定义句：<b>「极限是无限过程的最终目的。你不一定会达到极限；你只是在不断地靠近它，越来越近，比文字或想象所能描绘出来的还要近。」</b><br>
+          <span style="color:#94a3b8;">读法提醒：极限是<b>目的地</b>，不是你到达的<b>某一站</b>。所以下面那个 5，不是"走到最后变成了 5"，而是"一直往那儿靠"。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　同一条路，为什么会有 7 和 5 两个答案？<br>A. 其中一个算错了，应该是 6<br>B. 两个问的不是同一件事：一个问"沿台阶走多远"，一个问"两点之间直着多远"<br>C. 因为台阶的级数不一样</p>
+          <button class="quiz-btn" id="q82a-btn" onclick="toggleAnswer('q82a-ans','q82a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q82a-ans">答案是 <b>B</b>。<br>① 量的是<b>折线</b>：横 4 + 竖 3 = 7。② 量的是<b>线段</b>：√(4² + 3²) = 5。<br>两条线不一样长，两个答案当然可以都对 —— 悖论不在算术里，在"你问的是哪个"。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　差恒为 2。把台阶分到无限细，这个差会变成 0 吗？<br>A. 会，差也会跟着变小<br>B. 不会：走一直是 7、看一直是 5，变的只是<b>样子</b><br>C. 会变成 1</p>
+          <button class="quiz-btn" id="q82b-btn" onclick="toggleAnswer('q82b-ans','q82b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q82b-ans">答案是 <b>B</b>。<br>拖遍八档（1 / 2 / 3 / 4 / 8 / 16 / 32 / 64），走的读数一次都没变、看的读数一次都没变 —— 变的是小图里的锯齿。<br>★ 这正是"两个目的地"的可怕之处：<b>你可以让形状无限接近，但两个长度各走各的</b>。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>到这里，悖论还是"两条线不一样长"。<br>下一节换一个形状：一条锯齿边，<b>每一层都比黑边长一倍</b> —— 可它的极限，长成了黑边的样子。<br>那时候要比的就不是"两条线"，而是<b>一整串比值</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>两个目的地</b>：同一条斜线，按"走"量是 <b>7</b>，按"看"量是 <b>5</b>。原书 p82：「它以某种自相矛盾的方式，同时指向两个目的地。」</p>
+          <p><b>极限</b>：原书 p82「无限过程的最终目的」。你不是走到它，你是<b>不断地靠近它</b> —— 这句话本节只露个面，8.3 / 8.4 才真正用。</p>
+          <p><b>差 2</b>：7 − 5。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先把"两条线"分开看：一条<b>折</b>、一条<b>直</b>。混着看就永远觉得哪里算错了。</div>
+          <div class="rule-item"><b>第 2 步</b>　两个键轮流按。你会发现：按哪个，另一个都<b>不会消失</b> —— 这才叫"两个目的地"。</div>
+          <div class="rule-item"><b>第 3 步</b>　拖滑块。小图的锯齿一直在变，两个读数<b>一格都没动</b>。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>两个答案都对 ≠ 有一个是错的。</b>它们回答的是两个不同的问题。</p>
+          <p><b>差 2 不是"误差"。</b>误差会随着分得越细而变小；它不会。</p>
+          <p><b>"无限次重复"不会让 7 变成 5。</b>变的是形状，不是长度 —— 这句话 8.1 已经证明过一遍。</p>
+          <p style="color:#64748b;">哲学家贝克莱在 1734 年就嘲讽过这种"既不是有限、又不是零"的量：<b>「难道我们要把它们当作数字去世后的亡灵？」</b>—— 这个嘲讽在数学里悬了两百年，最后是被一个词挡下来的：<b>「极限」</b>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 8.3 被风吹走的东西 ================= -->
+
+<div class="page" id="page-c8-3">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">8.3　被风吹走的东西</span>
+    <span class="nav-next" onclick="goC8(4)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>换一个形状，换一种悖论。</b>书页 83 从<b>一个等边三角形</b>开始：底边涂黑（<b>黑边</b>），两条腰涂红（<b>红边</b>）。<br>因为三条边一样长，所以 <b>红边 = 2 × 黑边</b>。<br>接下来只做一件事：把两条红边<b>各掰两半</b> —— 于是路线从"上去、下来"变成"先上、再下、再上、再下"。<br><b>长度没变，只是重新排列</b>。再掰、再排、再掰……每一层，红边之和都还是黑边的两倍。<br>可是层数一多，那串红色尖顶就<b>压到黑边上</b>去了。原书 p83 把问题留在那儿：<b>「但是，这样会使黑边的长度加倍吗？」</b></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" onclick="flatC8S3()">压平（k = 6）</button>
+          <button class="ctrl-btn primary" onclick="resetC8S3()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row8-3-k">
+          <label>层数 k：<b id="lb8-3-k">1 层</b>　—— 掰一次，齿数翻倍，长度一分不涨</label>
+          <input type="range" id="s8-3-k" min="0" max="5" step="1" value="0" oninput="pickC8S3(parseInt(this.value, 10))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv8-3" width="620" height="380"></canvas>
+          <p class="canvas-caption"><b>上栏是"数齿"</b>：峰值一律画成 40 px，倍率直接标在图上 —— k = 1 时其实是<b>压小</b>（0.46 倍），k = 6 时要放大十几倍才看得见。<br><b>下栏是"真实比例"</b>（纵向 100 px / 单位）：同一条红边，在这里一路压平 —— 到 k = 6 已经和 x 轴分不清了。<br><span style="color:#94a3b8;">两栏画的是同一个形状，只是纵向的尺不一样 —— 上面告诉你"齿还在"，下面告诉你"高度没了"。<b>倍率写出来，才不算骗人。</b></span></p>
+        </div>
+
+        <div class="step-line" id="sl8-3"></div>
+
+        <div class="status-bar" id="st8-3-bar"><span class="status-dot" id="st8-3-dot"></span><span id="st8-3"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv8-3a-cell">
+            <div class="k">层数 k</div>
+            <div class="v" id="kv8-3a-v">…</div>
+            <div class="k" id="kv8-3a-t">…</div>
+          </div>
+          <div class="kv" id="kv8-3b-cell">
+            <div class="k">红边总长</div>
+            <div class="v" id="kv8-3b-v">…</div>
+            <div class="k" id="kv8-3b-t">…</div>
+          </div>
+          <div class="kv" id="kv8-3c-cell">
+            <div class="k">红边 ÷ 黑边（这一层）</div>
+            <div class="v" id="kv8-3c-v">…</div>
+            <div class="k" id="kv8-3c-t">…</div>
+          </div>
+          <div class="kv" id="kv8-3d-cell">
+            <div class="k">取极限后（红边 ÷ 黑边）</div>
+            <div class="v" id="kv8-3d-v">…</div>
+            <div class="k" id="kv8-3d-t">…</div>
+          </div>
+          <div class="kv" id="kv8-3e-cell">
+            <div class="k">波形最高点 h</div>
+            <div class="v" id="kv8-3e-v">…</div>
+            <div class="k" id="kv8-3e-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>掰开、重排 —— 这两件事里，只有一件会改变长度。</b><br>
+          <b>掰开</b>：把一条红边分成两段，总长当然不变（两段加起来还是那一条）。<br>
+          <b>重排</b>：把这两段换个角度摆 —— 长度也不会变。<br>
+          所以 <b>每一层</b>都是"红边 = 2 × 黑边"，一层不落：k = 1 是 2.000，k = 6 还是 2.000。<br>
+          可是 <b>取极限</b>就不一样了：层数越多，红色尖顶越矮（h 每层减半，从 0.866 一路到 0.027），
+          最后<b>压到黑边上</b>。那时红边和黑边<b>重合</b> —— 比值 <b>1.000</b>。<br>
+          ★ 注意这里的落差：<b>每一层 2.000，极限 1.000</b>。它不是"慢慢变过去的"，而是在"取极限"这一步<b>跳过去</b>的。<br>
+          原书 p84 那句就是判决：<b>「并不是所有的东西都能在求极限的过程中幸存下来。」</b><br>
+          <span style="color:#94a3b8;">诚实说明：页面上的"压平"是 <b>k = 6</b> 的示意图（h = 0.027），不是真的到了极限 ——
+          它还差那么一点点高度。极限里那一步是"一直按下去"，页面上只能画出"按了很多次"。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　每一层红边都是黑边的 2 倍，为什么取极限后变成 1 倍？<br>A. 某一层算错了，应该是 1<br>B. 因为"每一层"和"取极限"是两个不同的东西：每层的长度恒为 2，但形状越来越压到黑边上<br>C. 因为黑边被拉长了</p>
+          <button class="quiz-btn" id="q83a-btn" onclick="toggleAnswer('q83a-ans','q83a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q83a-ans">答案是 <b>B</b>。<br>每一层都真的等于 2 —— 这不是近似。可"取极限"问的不是"某一层"，而是"一直掰下去之后，那个形状是什么样"。<br>形状压到黑边上 ⇒ 红边与黑边重合 ⇒ 比值 1。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　那个"2 倍"去哪了？<br>A. 被"压平"吞掉了：形状贴到黑边上，长度也就跟黑边一样<br>B. 还在，只是肉眼看不见<br>C. 变成 4 倍了</p>
+          <button class="quiz-btn" id="q83b-btn" onclick="toggleAnswer('q83b-ans','q83b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q83b-ans">答案是 <b>A</b>。<br>每层的 2 倍是<b>真的</b>，但它没能带进极限里 —— 极限拿到的是一条和黑边重合的线，长度就是黑边的长度。<br>★ 这就是"被风吹走"：<b>长度没变，可长度所属的那个形状没了</b>。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>这一节我们眼看着一个东西消失：<b>每一层都成立的"2 倍"，在极限里不成立</b>。<br>下一节把整章出现过的东西排成一张清单，一件一件判：<b>哪件挺住了，哪件被风吹走了</b> —— <br>而清单里最后剩下的那一条，就是这一章要送出的东西。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>掰开、重排</b>：把一条边分成两段、再换个角度摆。两件事都<b>不改长度</b> —— 所以每层的红边都是 2。</p>
+          <p><b>压平</b>：每层峰值减半：0.866 → 0.433 → … → 0.027。红色帐篷越来越贴向黑边。</p>
+          <p><b>幸存</b>：取极限后还在的东西。这一节里，<b>比值没幸存</b> —— 每层 2.000，极限 1.000。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先只看"长度"：每一层都数一遍，红边 2.000、黑边 1.000。</div>
+          <div class="rule-item"><b>第 2 步</b>　再看"高度"：下栏是真实比例，注意它每层减半。</div>
+          <div class="rule-item"><b>第 3 步</b>　最后按「压平」：齿还在（上栏看得到），高度没了（下栏压平）—— 这两句同时为真。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>长度不变 ≠ 形状不变。</b>每层都 2 倍，可形状一次比一次不像原来那个三角形。</p>
+          <p><b>"每层都是 2 倍"推不出"极限是 2 倍"。</b>这句话是本节的全部要害。</p>
+          <p><b>"压平"是越来越接近 0，不是等于 0。</b>k = 6 时 h = 0.027，仍然站得住。</p>
+          <p style="color:#64748b;">原书 p84 页边那行小字很传神：<b>红边 = ……… 黑边</b>，底下配一句 <b>「生活 = 2 × 想不通」</b>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 8.4 风留下了什么 ================= -->
+<div class="page" id="page-c8-4">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">8.4　风留下了什么</span>
+    <span class="nav-next" onclick="goC9(1)">进入第 9 章 · 如尘埃般漫天飞舞 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>风停了，清点一下。</b>这一章出现过的东西，现在一件一件摆出来，只问一句：<b>取极限之后，它还在吗？</b><br>六件东西各占一张卡：<b>原书的那个 7、那条对角线、那个 2 倍、三角波的高度、0.999… 的非整数身份、还有"一直在靠近"这件事本身</b>。<br>卡上的数<b>全是新算的</b> —— 但不是本节算的：前三件来自 8.1，中间两件来自 8.3，这里只负责<b>判</b>，不负责再算一遍。<br>原书 p85 把最后那件东西点了出来：<b>「你永远无法真正"到达"一个极限。」</b></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn primary" id="b8-4-1" onclick="pickC8S4(0)">① 台阶总长</button>
+          <button class="ctrl-btn" id="b8-4-2" onclick="pickC8S4(1)">② 对角线</button>
+          <button class="ctrl-btn" id="b8-4-3" onclick="pickC8S4(2)">③ 2 倍</button>
+          <button class="ctrl-btn" id="b8-4-4" onclick="pickC8S4(3)">④ 波高</button>
+          <button class="ctrl-btn" id="b8-4-5" onclick="pickC8S4(4)">⑤ 非整数</button>
+          <button class="ctrl-btn" id="b8-4-6" onclick="pickC8S4(5)">⑥ 一直在靠近</button>
+          <button class="ctrl-btn" onclick="resetC8S4()">重置</button>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv8-4" width="620" height="380"></canvas>
+          <p class="canvas-caption">六张卡就是本章的<b>清单</b>：每张只写三样 —— 名字、<b>取极限前 → 取极限后</b>、判决。<br>点一个键，那张卡被框出来，下面三格给出它的<b>前 / 后 / 判决</b>。六件里只有<b>两件</b>挺住。<br><span style="color:#94a3b8;">"被吹走"不是"算错了"：每一件在<b>过程里</b>都是真的成立 —— 它们只是在最后那一步没能跟过去。</span></p>
+        </div>
+
+        <div class="step-line" id="sl8-4"></div>
+
+        <div class="status-bar" id="st8-4-bar"><span class="status-dot" id="st8-4-dot"></span><span id="st8-4"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv8-4a-cell">
+            <div class="k">取极限前</div>
+            <div class="v" id="kv8-4a-v">…</div>
+            <div class="k" id="kv8-4a-t">…</div>
+          </div>
+          <div class="kv" id="kv8-4b-cell">
+            <div class="k">取极限后</div>
+            <div class="v" id="kv8-4b-v">…</div>
+            <div class="k" id="kv8-4b-t">…</div>
+          </div>
+          <div class="kv" id="kv8-4c-cell">
+            <div class="k">判决</div>
+            <div class="v" id="kv8-4c-v">…</div>
+            <div class="k" id="kv8-4c-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>判完了：四件被吹走，两件挺住。</b><br>
+          <b>被吹走的四件</b>：台阶总长（7.000 变成 5.000）、「红边 ÷ 黑边」（每层 2.000，极限里 1.000）、
+          三角波最高点（从 0.866 一路减半，极限是 0，压成 x 轴）、以及 0.999… 的<b>非整数身份</b>（极限是整数 1）。<br>
+          <b>挺住的两件</b>：<b>对角线 5.000</b> —— 它只认两个端点，不认中间走了多少步；
+          <b>「一直在靠近」这件事本身</b> —— 距离 0.000001、0.0000001 …… 越来越小，<b>可一个都不是 0</b>。<br>
+          p84 的两句判决在这里收口：<b>「令人困惑的事实是，并不是所有的东西都能在求极限的过程中幸存下来。」</b>
+          六张卡上写的就是"哪一件没撑住"；而<b>「在这条无穷远的求极限路上的某处，这个数列将收敛到 1。」</b>
+          说的是<b>收敛到</b>，不是<b>等于</b>。<br>
+          ★ 所以极限不是一个"到达"的数，是那个<b>目的地</b>：你可以靠近它 —— 近到闻得到它的味道、感觉得到它的疼痛 ——
+          <b>但你并没有到达</b>（p85）。<br>
+          <b>这门学问的两件工具都由极限定义，但它们没有在悖论中土崩瓦解，而是井井有条地工作着。</b>（p85 原句点了那两个名字，这里按本章的规矩不点名。）<br>
+          <span style="color:#94a3b8;">诚实说明：本节没有算任何新数 —— 六张卡上每个数都能在前两节找到出处；
+          "极限里是几"那几格，是按"无限重复下去之后剩下的形状"读出来的，<b>不是画到第 N 层就宣布到了</b>。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　为什么「对角线 5」挺住了，而「台阶总长 7」被吹走？<br>A. 因为 5 比 7 小<br>B. 因为 7 取决于"怎么走"（分成多少级），而 5 只取决于两个端点 —— 级数一多，走法就被风带走了<br>C. 因为台阶画错了</p>
+          <button class="quiz-btn" id="q84a-btn" onclick="toggleAnswer('q84a-ans','q84a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q84a-ans">答案是 <b>B</b>。<br>每一级都是"先横一点、再竖一点"，横的加起来 4、竖的加起来 3 ⇒ 7。可极限那条形状里<b>没有横竖之分</b>了，只剩"两点之间有多远" ⇒ 5。<br>★ 7 依赖<b>过程</b>，5 只依赖<b>端点</b> —— 过程被吹走，端点留下。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　极限吹走了这么多东西，凭什么还说它"有东西幸存"？<br>A. 因为还剩两个数没变<br>B. 因为"越来越近、却永不抵达"这件事本身挺住了 —— 它就是极限的定义<br>C. 因为极限其实什么都没带走</p>
+          <button class="quiz-btn" id="q84b-btn" onclick="toggleAnswer('q84b-ans','q84b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q84b-ans">答案是 <b>B</b>。<br>p85 那句说得很清楚：<b>「你永远无法真正"到达"一个极限。」</b>留下的是"靠近"这件事 —— 距离每走一步都更小，<b>但一步都不是 0</b>。<br>★ 注意别选 C：极限确实带走了形状、带走了身份（非整数）、带走了那个 2 倍。它不是什么都没做。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本章终点</h4>
+          <p>「有些故事如秋天的落叶消逝在风中，而有些则像冬天的松枝般苍翠挺拔、不畏风雪。」（p85）<br>这一章留下的不是一条公式，是一个判断力：<b>看一个过程的时候，先问"它的极限里还剩下什么"</b>。<br>下一章换一个场景，重新开始问"变化"。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>极限</b>：无限过程的最终目的。你不一定到达它，只是在不断靠近（p82 的定义句，8.2 已引）。</p>
+          <p><b>收敛</b>：一路靠近某个值。0.9, 0.99, 0.999 … 收敛到 1（p84）。</p>
+          <p><b>幸存</b>：取极限之后还在的东西。这一章里，<b>形状、比值、身份</b>都没撑住；<b>端点之间的距离</b>与<b>"一直在靠近"</b>撑住了。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先按顺序把六张卡点一遍：前 / 后 两个数都不动，只有判决在变。</div>
+          <div class="rule-item"><b>第 2 步</b>　盯住第 ③ 张：每层都是 2.000，极限里 1.000 —— 这就是"被风吹走"的现场。</div>
+          <div class="rule-item"><b>第 3 步</b>　最后看第 ⑥ 张：它的"后"不是某个数，是"还在靠近"这件事 —— 那才是这一章要送出的东西。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>极限不是"到达"。</b>「你永远无法真正"到达"一个极限」（p85）—— 它是目的地，不是某一站。</p>
+          <p><b>收敛到 1 不等于等于 1。</b>0.999… 与 1 的距离每一档都 > 0，只是越来越小。</p>
+          <p><b>也别把结论拧过头：</b>不是"什么都没留下" —— p85 的原话正相反：有那么多东西在致命一跳里<b>幸存</b>了下来。</p>
+          <p style="color:#64748b;">p84 那个比喻很值钱：<b>「终点看起来不一定就是通向终点的那条路的样子，就像木制楼梯可能会通向铺着地毯的楼层。」</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 第 9 章 如尘埃般漫天飞舞：一个算不动的瞬间（4 节 · 骨架期）================= -->
+<!-- 本章 4 节（计划 §四）：9.1 花粉的舞会 / 9.2 一个瞬间接着一个瞬间 / 9.3 尖角上没有速度 / 9.4 处处都是尖角（章收口）。
+     ★ 原书书页 87–95（9 页）；扉页 86 = 「第9个瞬间 / 一颗迎风飘扬的粒子」，下一章扉页 96。
+     ★★ 本章是**第四次放行封存词**（前三次在第 6 / 7 / 8 章）：
+        这次放行「不可微」与「随机」—— 原书 p89「既任性又随机」、p89/p92「不可微分的」自己就用了。
+        `RELEASED` 里本章登记这两个词 + `withoutChapter(html, 9)` 内 0 命中的脚本级断言。
+        ★ 注释里**不写前三次放行的那几个词**：写了就会把第 6/7/8 章的跨章保护撞红（一字都不提才干净）。
+     ★★ 还有一个**不进放行表**的常用词（名字见 `_chapter_scope.js` 的注释）：全站已有 108 处，
+        "章外 0"不可能成立 ⇒ 本章按**章节级纪律**用（书页 92 那句要逐字引），
+        同时保住「第 8 章块内仍为 0」那条保护性断言。
+     ★ 本章是**反向的一章**：布朗运动不是"用方程去描述随机"，而是"随机到让速度这个概念失效"
+        （p95 逐字「一种无速度的运动」「传统手法描述不了的运动」）⇒ 页面不写"建模/求解"，写"算不动"。
+     ⚠️ `precheck` 的 forbid 表里**本来就没有**这两个词 ⇒ **不加 scoped**（第 6 章 K20 的假阳性教训）；
+        本章沿用那条"按章 scoped"的既有写法（`_SCRIPTS.md` 的命令里已有 `#page-c9-\d+` 这一组）。
+     ★ 继续封存的记号**一个都不写进本章**（清单见计划 §三.3）。★ 这不是洁癖：
+       把封存词列进注释，会被本章自己的术语扫描**当成命中**，所以这里只描述、不枚举。
+       （★ 连那个"三个字、含封存词子串"的学科名都不写 —— 起名禁忌见计划 §三.3 ③。）
+     ★ 数据来源：全章**无坐标刻度、无数据集**（原书亦然）⇒ 抖动、弹珠、尖度、峰数全部由页面**现算**；
+       ★ **不用以 e 为底的指数函数、也不用对数、不用乘方**（`Math` 里那几个函数本章禁用）；
+       ★ 伪随机一律**固定种子**（进度可复现）—— 全章**不调用浏览器随机数生成器**。 -->
+
+<!-- ================= 9.1 花粉的舞会 ================= -->
+
+<div class="page" id="page-c9-1">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">9.1　花粉的舞会</span>
+    <span class="nav-next" onclick="goC9(2)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>1827 年，植物学家<b>罗伯特·布朗</b>在显微镜前蹲了一整天。载玻片上是一滴沾满野花花粉的水 —— 花粉粒碎了，可那些<b>碎屑</b>没有沉下去，它们<b>在抖</b>：晃、颤、扭，一刻不停。<br>布朗先猜：<b>是不是花粉还活着？</b>于是他把液体<b>封死在玻璃片里，整整一年</b>。一年后他再看：<b>还在抖。</b><br>他换样本：<b>玻璃颗粒</b>、<b>花岗岩颗粒</b>、<b>烟尘</b>，甚至托人从<b>吉萨的狮身人面像</b>带回一小块石头磨成的粉 —— <b>全都在抖。</b><br>这一节要做的，就是像布朗那样，<b>一条一条把解释排除掉</b>，最后只剩一个：<b>它不是在活着，它是在被撞。</b></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="sm9-1-0" onclick="pickC9S1(0)">花粉颗粒</button>
+          <button class="ctrl-btn" id="sm9-1-1" onclick="pickC9S1(1)">花岗岩颗粒</button>
+          <button class="ctrl-btn" id="sm9-1-2" onclick="pickC9S1(2)">烟尘</button>
+          <button class="ctrl-btn" id="sm9-1-3" onclick="pickC9S1(3)">狮身人面像的石块</button>
+          <button class="ctrl-btn" onclick="sealC9S1()">密封一整年</button>
+          <button class="ctrl-btn primary" onclick="resetC9S1()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row9-1-t">
+          <label>已经过了：<b id="lb9-1-t">30 秒</b>　—— 拖一拖：<b>路越来越乱</b></label>
+          <input type="range" id="s9-1-t" min="0" max="5" step="1" value="3" oninput="pickC9S1T(parseInt(this.value, 10))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv9-1" width="620" height="380"></canvas>
+          <p class="canvas-caption">左圆里是<b>显微镜的视野</b>（一个方格 = 5 微米）：9 个粒子，每条淡线是它<b>走过的路</b>，圆点是它<b>现在</b>在哪。<br>★ 换样本时<b>画面一个像素都不会变</b> —— 这是故意的：撞它的都是原子，与它自己是什么东西无关。<br><span style="color:#94a3b8;">★ 前 5 档（0 / 1 / 10 / 30 / 50 秒）画的是<b>真实步数</b>（每秒 30 步）；第 6 档"1 年"是 9.46 亿步，画面只画得下 1 500 步 —— 读数里的次数才是真的。</span></p>
+        </div>
+
+        <div class="step-line" id="sl9-1"></div>
+
+        <div class="status-bar" id="st9-1-bar"><span class="status-dot" id="st9-1-dot"></span><span id="st9-1"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv9-1a-cell">
+            <div class="k">样本</div>
+            <div class="v" id="kv9-1a-v">…</div>
+            <div class="k" id="kv9-1a-t">…</div>
+          </div>
+          <div class="kv" id="kv9-1b-cell">
+            <div class="k">有没有生命</div>
+            <div class="v" id="kv9-1b-v">…</div>
+            <div class="k" id="kv9-1b-t">…</div>
+          </div>
+          <div class="kv" id="kv9-1c-cell">
+            <div class="k">已经过了</div>
+            <div class="v" id="kv9-1c-v">…</div>
+            <div class="k" id="kv9-1c-t">…</div>
+          </div>
+          <div class="kv" id="kv9-1d-cell">
+            <div class="k">一共跳了几下</div>
+            <div class="v" id="kv9-1d-v">…</div>
+            <div class="k" id="kv9-1d-t">…</div>
+          </div>
+          <div class="kv" id="kv9-1e-cell">
+            <div class="k">每步挪多远</div>
+            <div class="v" id="kv9-1e-v">…</div>
+            <div class="k" id="kv9-1e-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只做一件事：把「它有生命」这个解释排除掉。</b><br>
+          布朗的排除法是<b>换样本</b>：花粉（<b>曾经是活的</b>）会抖，可花岗岩（<b>从来不是活的</b>）、烟尘（<b>从来不是活的</b>）、
+          狮身人面像的石块（<b>三千多岁的死石头</b>）<b>也照样抖</b>。生命的解释在这里就断了。<br>
+          第二个解释是"是不是水流在推它"：布朗把液体<b>封死在玻璃片里一整年</b> —— 水早就不动了，它<b>还在抖</b>。<br>
+          再往前还有两个人：<b>加恩·伊根霍兹</b>早就见过<b>煤粉在酒精里</b>颤动；两千年前罗马诗人<b>卢克莱修</b>写过阳光里飞舞的灰尘。<br>
+          把这些都排除之后，只剩下原书 p88 给出的那一条：<b>「世界由原子构成，这些原子都处于不断相互碰撞的运动中。」</b><br>
+          你看不见原子 —— 但你看得见<b>被原子撞的那个大粒子</b>。它每挪一小步，都是<b>某一边的撞击刚好比另一边多一点</b>。<br>
+          <span style="color:#94a3b8;">诚实说明：画面里是 <b>9 个</b>粒子、<b>固定种子</b>的伪随机（所以每次打开看到的路线都一样，方便你反复对照）；
+          真实的显微镜视野里有上亿个粒子，撞它的原子更是<b>数不清</b>。每秒 30 次、每步 0.370 微米是<b>本页的示意刻度</b>，
+          不是实测数据 —— 原书这里也没有给数。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　为什么"把液体密封一整年"能排除"花粉有生命所以会动"？<br>A. 因为密封以后花粉就死了，死了还会抖<br>B. 因为密封只挡住了外面的水和空气，抖却一点没停；而且花岗岩、烟尘、石块从来不是活的，也在抖<br>C. 因为一年太久了，显微镜已经看不清了</p>
+          <button class="quiz-btn" id="q91a-btn" onclick="toggleAnswer('q91a-ans','q91a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q91a-ans">答案是 <b>B</b>。<br>排除法要<b>一次只动一个条件</b>：密封动的是"外面进不进得来"，可抖动<b>没变</b>；换样本动的是"它是不是活的"，抖动<b>也没变</b>。<br>两个条件都动了、结果都一样 ⇒ 抖动<b>不来自它自己</b>。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　那它抖动的力气是<b>谁</b>给的？<br>A. 它自己，像小虫子在游<br>B. 周围看不见的<b>原子</b>在不停撞它：哪边撞得多，它就往哪边挪一小步<br>C. 显微镜的台子在震</p>
+          <button class="quiz-btn" id="q91b-btn" onclick="toggleAnswer('q91b-ans','q91b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q91b-ans">答案是 <b>B</b>。<br>原书 p89 把这台装置讲得很直白：一个巨大的球浮在万亿颗看不见的弹珠里，<b>哪一边的弹珠撞得多，球就往另一边偏一点</b>。<br>★ 注意：<b>你看得见的那个粒子不是原子</b> —— 原子小到看不见；你看见的是<b>被原子撞的那个大块头</b>。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>排除完，只剩一句话：<b>它被撞，所以它抖。</b><br>可"被撞"这件事有个后果，布朗当年没法回答：<b>下一步它往哪跳？</b><br>下一节把显微镜换成一颗巨大的球和一堆看不见的弹珠 —— 一个瞬间一颗、一个瞬间一颗，<b>一步一步数给你看</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>布朗运动</b>：1827 年布朗在显微镜下看到的花粉碎屑抖动；后来发现<b>玻璃、花岗岩、烟尘、石块</b>磨成的粉也一样抖。它<b>不是生命现象</b>。</p>
+          <p><b>抖动来自撞击</b>：周围看不见的原子不停撞它。<b>某一边撞得多一点</b>，它就往另一边挪一小步；下一次撞击又变了，方向又变了。</p>
+          <p><b>本页的两个刻度</b>：每秒 <b>30</b> 次、每步 <b>0.370</b> 微米 —— <b>示意值</b>，但<b>四个样本共用同一组</b>，所以"换样本读数不变"才是可查的。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　先看<b>花粉</b>：它在抖。记下读数（每秒 30 次 / 每步 0.370 微米）。</div>
+          <div class="rule-item"><b>第 2 步</b>　把样本换成<b>花岗岩、烟尘、石块</b>：画面不动、读数不动 —— <b>生命解释到此为止</b>。</div>
+          <div class="rule-item"><b>第 3 步</b>　按<b>密封一整年</b>：次数变成 9.46 亿，它<b>还在抖</b>。剩下的解释只有一个：<b>被撞</b>。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>「花粉是活的，所以会动」</b>—— 这是布朗自己的第一个猜想，也是被他自己否掉的。<b>死石头磨的粉照样抖。</b></p>
+          <p><b>「抖是因为水在流 / 台子在震」</b>—— 密封一年、水不动了，抖动<b>一点没少</b>。</p>
+          <p><b>「我看见的就是原子」</b>—— 不是。原子<b>看不见</b>；你看见的是<b>被原子撞的大粒子</b>。这个区别下一节要用。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= 9.2 一个瞬间接着一个瞬间 ================= -->
+
+<div class="page" id="page-c9-2">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">9.2　一个瞬间接着一个瞬间</span>
+    <span class="nav-next" onclick="goC9(3)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>上一节确定了：它在<b>被撞</b>。可"被撞"到底长什么样？<br>想象一个<b>巨大的球</b>浮在无数颗<b>看不见的弹珠</b>里。每一瞬间，都有弹珠从四面八方撞上来 —— <b>左边撞了 11 下、右边撞了 13 下</b>，那这一瞬间球就往<b>右边</b>挪一点点。<br>下一瞬间，位置变了、弹珠也换了，<b>左右又不一样了</b>，球就往另一个方向挪。<br>规则一直不变，可结果永远不重样。这一节就把它<b>一步一步数出来</b>。</div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn primary" onclick="oneC9S2()">下一个瞬间</button>
+          <button class="ctrl-btn" onclick="runC9S2(100)">走 100 步</button>
+          <button class="ctrl-btn" onclick="reseedC9S2()">换一颗种子</button>
+          <button class="ctrl-btn" onclick="resetC9S2()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row9-2-m">
+          <label>弹珠数：<b id="lb9-2-m">24 颗</b>　—— 拖一拖看变化</label>
+          <input type="range" id="s9-2-m" min="0" max="4" step="1" value="2" oninput="pickC9S2(parseInt(this.value, 10))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv9-2" width="620" height="380"></canvas>
+          <p class="canvas-caption">上半：<b>这一瞬间的撞击台</b> —— 大球四周是弹珠（<b>画出来只是为了让你看得见</b>，真实的原子小到看不见），右侧两条计数条在数<b>左边 / 右边</b>与<b>上边 / 下边</b>各撞了几下。<br>下半：它<b>走过的整条路</b>（<b>十字</b>是起点，<b>红点</b>是现在；<b>一格 = 10 像素</b>，图没有放大 —— 走得再多，它离起点也很近）。<br><span style="color:#94a3b8;">★ 路径随每一次撞击延长，图上不会有"回放" —— 想重看就按重置：种子是固定的，同一颗种子永远给同一条路。</span><br><span style="color:#94a3b8;">★ 为什么走 100 步：100 × 2.5 = 250 像素路程，可它离起点通常只有二三十像素 —— 差着十倍，"走了很久、其实很近"才看得出来。再长也行，上限 200 步（再长就走出这条带子了）。</span><br><span style="color:#94a3b8;">★ 换种子：上一条路会留成一条<b>灰线</b>，<b>挪到左边并排摆</b>（只挪位置，每格还是 10 像素，比例尺一点没变），蓝色是新的那一条 —— 两条一比，一步都不重合。</span></p>
+        </div>
+
+        <div class="step-line" id="sl9-2"></div>
+
+        <div class="status-bar" id="st9-2-bar"><span class="status-dot" id="st9-2-dot"></span><span id="st9-2"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv9-2a-cell">
+            <div class="k">第几个瞬间</div>
+            <div class="v" id="kv9-2a-v">…</div>
+            <div class="k" id="kv9-2a-t">…</div>
+          </div>
+          <div class="kv" id="kv9-2b-cell">
+            <div class="k">左边 / 右边撞</div>
+            <div class="v" id="kv9-2b-v">…</div>
+            <div class="k" id="kv9-2b-t">…</div>
+          </div>
+          <div class="kv" id="kv9-2c-cell">
+            <div class="k">上边 / 下边撞</div>
+            <div class="v" id="kv9-2c-v">…</div>
+            <div class="k" id="kv9-2c-t">…</div>
+          </div>
+          <div class="kv" id="kv9-2d-cell">
+            <div class="k">这一步的方向</div>
+            <div class="v" id="kv9-2d-v">…</div>
+            <div class="k" id="kv9-2d-t">…</div>
+          </div>
+          <div class="kv" id="kv9-2e-cell">
+            <div class="k">一共走了多远（路程）</div>
+            <div class="v" id="kv9-2e-v">…</div>
+            <div class="k" id="kv9-2e-t">…</div>
+          </div>
+          <div class="kv" id="kv9-2f-cell">
+            <div class="k">起点到现在的直线距离</div>
+            <div class="v" id="kv9-2f-v">…</div>
+            <div class="k" id="kv9-2f-t">…</div>
+          </div>
+          <div class="kv" id="kv9-2g-cell">
+            <div class="k">直线 ÷ 路程</div>
+            <div class="v" id="kv9-2g-v">…</div>
+            <div class="k" id="kv9-2g-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只讲一件事：方向是"数"出来的，不是它自己选的。</b><br>
+          每一瞬间，弹珠从四面八方撞上来。左边 11 下、右边 13 下 —— 右边多两下，它就往右挪一点；<br>
+          下一瞬间再数一次，可能变成左边多，它就拐回来。<b>规则从头到尾没变过，可它走过的路永远不重样。</b><br>
+          原书 p89 把这台装置写得很直白：<b>「就这样，一个瞬间接着一个瞬间，一直持续到天荒地老。」</b><br>
+          这种跳跃后来被命名为<b>布朗运动</b>。它的四个特征，本页都能一条条查：<br>
+          ① <b>既任性又随机</b> —— 每一步都重新数、每一步都可能换方向；<br>
+          ② <b>不偏向任何方向</b> —— 走得再久，也不会"越走越偏"，四个方向的账始终差不多；<br>
+          ③ <b>独立</b> —— 隔壁那颗怎么走，与它毫无关系（换一颗种子，两条路就完全不相干）；<br>
+          ④ <b>不可预测</b> —— 知道它前面 100 步，也推不出第 101 步往哪跳。<br>
+          而最奇怪的是<b>方向变化的性质</b>。原书 p89 那句话就是这一章的入口：<b>在数学模型中，它们是不可微分的。</b>
+          为什么？下一节拿一颗棒球来比。<br>
+          <span style="color:#94a3b8;">诚实说明：本页只用 <b>8–64 颗</b>弹珠，真实的一次撞击里有<b>数不清</b>的原子；
+          每一步 2.5 像素、最多 200 步，都是<b>示意刻度</b>；种子固定，所以同一条路随时能重看一遍。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　既然每一瞬间都在"数弹珠"，为什么还说它<b>不可预测</b>？<br>A. 因为数不清楚，所以随便乱走<br>B. 因为规则很简单、理由每步都有，但<b>下一步的理由与过去无关</b> —— 知道历史也推不出下一步<br>C. 因为弹珠自己也在乱动，没法数</p>
+          <button class="quiz-btn" id="q92a-btn" onclick="toggleAnswer('q92a-ans','q92a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q92a-ans">答案是 <b>B</b>。<br>"不可预测"不等于"没有理由"。每一瞬间的撞击都<b>实实在在</b>（左边几下、右边几下，数得出来），
+          可这几次撞击<b>与前面 100 步毫无关系</b> —— 所以你再了解它的过去，也猜不到下一步。<br>★ 这也正是"独立"那条特征的意思：粒子之间、瞬间之间，互相不打招呼。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　走了 100 步、路程 250 像素，它离起点有多远？<br>A. 也是 250 像素，走多少就离多远<br>B. 通常只有二三十像素，因为一步左一步右互相抵消<br>C. 一定是 0，走回来刚好</p>
+          <button class="quiz-btn" id="q92b-btn" onclick="toggleAnswer('q92b-ans','q92b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q92b-ans">答案是 <b>B</b>。<br>把鼠标拖起来看那两个数：<b>路程</b>一直涨（每一步都算），<b>直线距离</b>涨得慢得多 ——
+          因为它一半时间在往回走。<br>★ 这是布朗运动最反直觉的一条：<b>走的路可以很长，离起点却很近</b>。9.4 还会用到这一点。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>现在你手上有了一条<b>被数出来的路</b>：每一瞬间换一次方向，从不平滑。<br>下一节换一颗<b>棒球</b>上场 —— 它会上升到顶点、停住、再落下。<br>一个<b>平滑</b>，一个<b>处处拐弯</b>。差别在哪？就在<b>顶点那一瞬间有没有速度</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>布朗运动</b>：粒子被四面八方看不见的原子不停撞击，每一步都朝"撞得少"的那一边挪一点，一步接着一步。</p>
+          <p><b>四个特征</b>：既任性又<b>随机</b>、<b>不偏向任何方向</b>、粒子之间<b>独立</b>、从过去<b>不可预测</b>未来。</p>
+          <p><b>不可微分</b>：原书 p89 用这五个字给布朗运动定性 —— <b>每一处都在拐弯</b>，没有一处能算出一个"顺畅的速度"。下一节拿棒球来对照。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　按一次<b>下一个瞬间</b>：先看计数条 —— 左边几下、右边几下。</div>
+          <div class="rule-item"><b>第 2 步</b>　哪边多，它往哪边走？<b>往多的一边挪</b> —— 这就是全部规则。</div>
+          <div class="rule-item"><b>第 3 步</b>　按<b>走 100 步</b>，再看"路程"和"直线距离"：一个 250、一个二三十。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>「不可预测 = 乱来」</b> —— 不是。每一瞬间都有确凿的理由；只是这些理由<b>与历史无关</b>。</p>
+          <p><b>「走得越久离起点越远」</b> —— 路程确实一直涨，可直线距离涨得极慢（一步左一步右在互相抵消）。</p>
+          <p><b>「它自己在往某个方向用力」</b> —— 没有"它自己"。它只是被撞，撞得哪边少就往哪边让。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= 9.3 尖角上没有速度 ================= -->
+
+<div class="page" id="page-c9-3">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">9.3　尖角上没有速度</span>
+    <span class="nav-next" onclick="goC9(4)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>上一节落下一句狠话 —— 粒子的路<b>不可微分</b>。当时只给了结论，没给理由。<br>这一节把理由补上：<b>不可微分 = 顶点那一下没有速度</b>。先请一颗<b>棒球</b>上场。<br>它飞到<b>顶点</b>：<b>你停止了上升，但还没开始下降</b> —— 在短暂的停顿里，它是<b>静止的</b>，"运动"速度是每秒 0 米。<br>再把顶点换成一个<b>尖角</b>：左边每秒 10 米向上，右边每秒 10 米向下，中间<b>没有任何过渡</b>。<br>两个都停在顶点，一个说得出速度，一个说不出。差别不在"看得够不够近"—— 所以这一节只做一件事：<b>把时间窗一路缩到一万亿分之一秒，看谁让步</b>。</div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn on" id="c9-3-b0" onclick="pickC9S3(0)">棒球</button>
+          <button class="ctrl-btn" id="c9-3-b1" onclick="pickC9S3(1)">火箭助推</button>
+          <button class="ctrl-btn" id="c9-3-b2" onclick="pickC9S3(2)">尖角</button>
+          <button class="ctrl-btn primary" onclick="resetC9S3()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row9-3-n">
+          <label>看多近（时间窗）：<b id="lb9-3-w">0.1 秒</b>　—— 一直往右拖</label>
+          <input type="range" id="s9-3-n" min="1" max="12" step="1" value="1" oninput="pickC9S3W(parseInt(this.value, 10))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv9-3" width="620" height="380"></canvas>
+          <p class="canvas-caption">左：<b>三条曲线</b>（棒球 / 火箭助推 / 尖角）共用同一个顶点 —— 2.5 秒、25 米，两端落地，<b>只有顶点的尖度不同</b>。<br>图上那两条黄线之间 = <b>这一档的时间窗</b>；窗越窄，看的时间越短。窗边两个点连回顶点的虚线，就是"这一段平均速度"。<br>右边：从顶点往<b>左窗</b>看一个数、往<b>右窗</b>看一个数。箭头长度 = 这个数的大小（64 像素 = 10 米/秒）。<br><span style="color:#94a3b8;">★ 三条曲线是我们画给你的（原书 p90–92 那里是手绘的漫画，一个数都没有）；顶点 2.5 秒 / 25 米也只是示意刻度。读数一律用公式算 —— 一万亿分之一秒时，"取两点相减再除"会被计算的舍入吃掉。</span></p>
+        </div>
+
+        <div class="step-line" id="sl9-3"></div>
+
+        <div class="status-bar" id="st9-3-bar"><span class="status-dot" id="st9-3-dot"></span><span id="st9-3"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv9-3a-cell">
+            <div class="k">第几档</div>
+            <div class="v" id="kv9-3a-v">…</div>
+            <div class="k" id="kv9-3a-t">…</div>
+          </div>
+          <div class="kv" id="kv9-3b-cell">
+            <div class="k">时间窗有多宽</div>
+            <div class="v" id="kv9-3b-v">…</div>
+            <div class="k" id="kv9-3b-t">…</div>
+          </div>
+          <div class="kv" id="kv9-3c-cell">
+            <div class="k">左边平均速度</div>
+            <div class="v" id="kv9-3c-v">…</div>
+            <div class="k" id="kv9-3c-t">…</div>
+          </div>
+          <div class="kv" id="kv9-3d-cell">
+            <div class="k">右边平均速度</div>
+            <div class="v" id="kv9-3d-v">…</div>
+            <div class="k" id="kv9-3d-t">…</div>
+          </div>
+          <div class="kv" id="kv9-3e-cell">
+            <div class="k">两者之差</div>
+            <div class="v" id="kv9-3e-v">…</div>
+            <div class="k" id="kv9-3e-t">…</div>
+          </div>
+          <div class="kv" id="kv9-3f-cell">
+            <div class="k">顶点有没有速度</div>
+            <div class="v" id="kv9-3f-v">…</div>
+            <div class="k" id="kv9-3f-t">…</div>
+          </div>
+          <div class="kv" id="kv9-3g-cell">
+            <div class="k">窗口再缩 10 倍</div>
+            <div class="v" id="kv9-3g-v">…</div>
+            <div class="k" id="kv9-3g-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只判一件事：顶点那一瞬间，到底有没有"一个"速度。</b><br>
+          速度不是一个数，是<b>两个数说同一个</b>：从左边看过去给一个，从右边看过去给一个 —— 一样，才有速度。<br>
+          <b>棒球</b>：窗口从 0.1 秒缩到一万亿分之一秒，差从 0.800000 掉到 8 × 10⁻¹²，两边<b>一起靠近 0</b>。所以顶点那一下有速度，就是每秒 0 米。<br>
+          <b>火箭助推</b>：差也在掉，只是掉得慢 —— 窗口缩 10 倍，它只缩到 1/3.162。<b>慢，可它还是在缩</b>。<br>
+          <b>尖角</b>：差<b>一直是 20.000000</b>，12 档一格都没动。左边永远 +10、右边永远 −10 —— 两个数讲不拢，<b>没有速度</b>。<br>
+          原书 p92 就是这么判的：<b>「这种运动是如此畸形，以至于速度的概念失去了意义。在那一瞬间，棒球是没有速度的。用微积分的术语来说，它的位置函数是不可微分的。」</b><br>
+          同一页的图上，作者在顶点直接写了五个红字：<b>「根本没有导数」</b>；左边标「导数 = 10 米/秒」，右边标「导数 = -10 米/秒」——
+          <b>同一个顶点上摆着两个数</b>，这就是"没有"的全部意思。<br>
+          现在把这句话还给布朗粒子：棒球做不到的事，粒子<b>每一刻都在做</b> —— 每一处都是尖角。下一节把它推到"处处"。<br>
+          <span style="color:#94a3b8;">诚实说明：原书这一段是手绘漫画；三条曲线是<b>我们造的同一族示意</b>（只有顶点的尖度不同，2.5 秒 / 25 米也是示意刻度）。读数一律用公式算，不用"取两点相减再除"——后者在一万亿分之一秒时会算成 0。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　为什么顶点处左右两边的"平均速度"不一样，就说明<b>没有</b>速度？<br>A. 因为有一边肯定算错了<br>B. 因为"速度"必须是<b>唯一的一个数</b>；两边各说一个数，就没有一个数能代表这一点<br>C. 因为尖角那里画不出曲线</p>
+          <button class="quiz-btn" id="q93a-btn" onclick="toggleAnswer('q93a-ans','q93a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q93a-ans">答案是 <b>B</b>。<br>说"这一点的速度"时，你说的必须是<b>一个</b>数。左边看给你 +10、右边看给你 −10，
+          这不是"两个答案都差不多"，而是<b>根本没有一个共同的答案</b>。<br>★ 棒球顶点正好相反：左边 +0.4、右边 −0.4，窗口再缩，两边一起靠近 0 —— 那个<b>共同的数就是 0</b>，所以说它有速度。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　把时间窗缩到一万亿分之一秒，尖角<b>变平</b>了吗？<br>A. 变平了 —— 缩到那么小，看着当然是平的<br>B. 没变。图上那个窗口已经窄到画不出来，可两个数<b>一步不让</b><br>C. 变成了每秒 0 米</p>
+          <button class="quiz-btn" id="q93b-btn" onclick="toggleAnswer('q93b-ans','q93b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q93b-ans">答案是 <b>B</b>。<br>原书 p92 的话："<b>一万亿分之一秒之前，棒球以每秒 10 米的速度向上运动；一万亿分之一秒之后，它以每秒 10 米的速度向下移动。</b>"
+          <br>窗口缩了一万亿倍，两边的数<b>一个都没改</b>。图上看不见窗口，是因为它窄到 1 像素以下了 —— 不是因为它变平。<br>★ 这也是"不可微"的真相：<b>不是看不出，是真的没有</b>。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>现在你有了判决的第一块：<b>一个尖角，就够让"速度"失效</b>。<br>可布朗粒子不是只有几个尖角 —— 它<b>每一刻</b>都在拐。<br>下一节把它放大、再放大：一个峰里<b>还藏着 21 个峰</b>。看得见的峰越来越多，起伏却越来越小 —— 于是<b>每一处都是尖角</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>不可微分</b>：不是"没定义"，也不是"图没画好" —— 是<b>没有一个共同的速度</b>：从左边看给 +10，从右边看给 −10，两个数讲不拢。换个说法：这里<b>根本没有导数</b>。</p>
+          <p><b>速度</b>：要在一点上得到<b>唯一的一个数</b>。左边和右边给的数一样，才叫有速度。（棒球顶点：两边都靠近 0 ⇒ 速度 = 每秒 0 米。）</p>
+          <p><b>放大也救不了</b>：时间窗缩到一万亿分之一秒，尖角那里还是 +10 / −10 —— 不是看不出，是<b>真的没有</b>。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　选<b>棒球</b>，把"看多近"从 0.1 秒一直拖到一万亿分之一秒：看差怎么从 0.800000 缩到 8 × 10⁻¹²。</div>
+          <div class="rule-item"><b>第 2 步</b>　换成<b>尖角</b>，再拖一遍：差<b>一直是 20.000000</b>，12 档一格都不动。</div>
+          <div class="rule-item"><b>第 3 步</b>　换成<b>火箭助推</b>：差在缩，但缩得<b>很慢</b>（每档 ÷3.162）—— 慢不等于不变。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>「不可微 = 图没画好 / 没定义」</b> —— 不是。左右两边都有确切的数，只是<b>这两个数不一样</b>。</p>
+          <p><b>「放大到一万亿分之一秒就能看出速度」</b> —— 刚好相反：越放大，棒球那栏越靠近 0（<b>有</b>速度），尖角那栏一步不让（<b>没有</b>）。</p>
+          <p><b>「顶点那一下是"停住了"」</b> —— 只有棒球和火箭是。尖角没有停：它从上一刻的向上，直接变成下一刻的向下，<b>中间没有任何过渡</b>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= 9.4 处处都是尖角 ================= -->
+
+<div class="page" id="page-c9-4">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">9.4　处处都是尖角</span>
+    <span class="nav-next" onclick="goHome()">第 9 章完 · 返回首页 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>上一节只判了<b>一个</b>尖角。这一节请出那个"怪物"：布朗的显微镜过去半个世纪后，德国数学家魏尔施特拉斯把<b>越来越细、越来越快</b>的波浪一层层叠在一起。<br>每叠一层，<b>峰数乘 21</b>、<b>最陡的地方乘 7</b> —— 可<b>起伏只多了一点点</b>。叠到第三层，屏幕上一个像素已经塞不下一个峰。<br>原书 p93 只有一句话：<b>「在魏尔施特拉斯的怪物函数图上，每一个点都是一个尖角。」</b><br>这一节就用三个数，把这句话叠出来。</div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn primary" id="c9-4-zoom" onclick="zoomC9S4()">放大 21 倍</button>
+          <button class="ctrl-btn" id="c9-4-all" onclick="zoomAllC9S4()">回到全图</button>
+          <button class="ctrl-btn" onclick="resetC9S4()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row9-4-k">
+          <label>叠了几层：<b id="lb9-4-k">第 2 层</b>　—— 一直往右拖</label>
+          <input type="range" id="s9-4-k" min="1" max="4" step="1" value="2" oninput="pickC9S4K(parseInt(this.value, 10))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv9-4" width="620" height="380"></canvas>
+          <p class="canvas-caption">上半：<b>叠起来的那条线</b>（横轴 0 到 2）。层数越多，线越"毛"—— 不是画糊了，是<b>峰真的变多了</b>。<br>下半：<b>放大窗</b>。按一次「放大 21 倍」，窗口缩到原来的 1/21，窗里的起伏数也跟着除以 21。<br>缩到窗里正好剩 <b>21 次起伏</b>时，原书 p93 那句图注就成立了：<b>每一个肉眼可见的"峰"实际上是 21 个峰</b>。<br><span style="color:#94a3b8;">★ 诚实说明：图上这几条<b>都还是光滑的曲线</b> —— 它们只叠了有限层。"每一处都是尖角"属于<b>一直叠下去</b>的那一条，不属于任何一层。屏幕只有 620 像素：第 3 层起已经数不清（画布上标了每像素几个峰），画出来的是<b>轮廓</b>，不是它的真样子。</span></p>
+        </div>
+
+        <div class="step-line" id="sl9-4"></div>
+
+        <div class="status-bar" id="st9-4-bar"><span class="status-dot" id="st9-4-dot"></span><span id="st9-4"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv9-4a-cell">
+            <div class="k">叠了几层</div>
+            <div class="v" id="kv9-4a-v">…</div>
+            <div class="k" id="kv9-4a-t">…</div>
+          </div>
+          <div class="kv" id="kv9-4b-cell">
+            <div class="k">峰数（这一层）</div>
+            <div class="v" id="kv9-4b-v">…</div>
+            <div class="k" id="kv9-4b-t">…</div>
+          </div>
+          <div class="kv" id="kv9-4c-cell">
+            <div class="k">最陡的地方</div>
+            <div class="v" id="kv9-4c-v">…</div>
+            <div class="k" id="kv9-4c-t">…</div>
+          </div>
+          <div class="kv" id="kv9-4d-cell">
+            <div class="k">起伏有多大</div>
+            <div class="v" id="kv9-4d-v">…</div>
+            <div class="k" id="kv9-4d-t">…</div>
+          </div>
+          <div class="kv" id="kv9-4e-cell">
+            <div class="k">窗里剩几次起伏</div>
+            <div class="v" id="kv9-4e-v">…</div>
+            <div class="k" id="kv9-4e-t">…</div>
+          </div>
+          <div class="kv" id="kv9-4f-cell">
+            <div class="k">屏幕画得下吗</div>
+            <div class="v" id="kv9-4f-v">…</div>
+            <div class="k" id="kv9-4f-t">…</div>
+          </div>
+          <div class="kv" id="kv9-4g-cell">
+            <div class="k">再加一层</div>
+            <div class="v" id="kv9-4g-v">…</div>
+            <div class="k" id="kv9-4g-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只算三个数，别的都不算。</b><br>
+          ① <b>峰数</b>：第 k 层有 21^(k−1) 个峰 —— 1 / 21 / 441 / 9 261。每加一层，<b>乘 21</b>。<br>
+          ② <b>最陡的地方</b>：新加的那一项，最陡正好是上一层那一项的 <b>7 倍</b>（分毫不差）。整条线的上界 L(k) = π(7^k − 1)/6，
+          逐级 <b>×8.000 → ×7.125 → ×7.018</b> —— 越来越贴近 7。<br>
+          ③ <b>起伏多大</b>：所有层加起来也超不过 <b>1.5</b>；第 k 层添的是 1/3^(k−1)（1 → 0.333 → 0.111 → 0.037）。<br>
+          把三个数摆在一起，就是本章的收口：<b>峰多得数不清、坡陡得画不出，可起伏越来越小</b> ——
+          一直叠下去，任何一小段里都还藏着下一层，任何一层的折角都<b>没有被磨平</b>。所以<b>没有哪一处是平的</b>。<br>
+          原书 p95：<b>「在布朗运动中，粒子的路径并不是只有几个尖角，它的一生都是尖角。」</b><br>
+          <b>「由于导数只是一种速度，所以布朗运动是一种无速度的运动，一种传统微积分无法描述的、只说得出一"哇""哇哦"和"什么"的嗡嗡声。」</b><br>
+          <span style="color:#94a3b8;">诚实说明：这几条曲线是<b>我们自己叠的示意</b>（原书 p93 的图是手绘的，只画到第三步）；有限层的曲线仍然光滑，"处处是尖角"只属于一直叠下去的那一条 —— 第 5 层有 194 481 个峰，屏幕画不出，所以本节只到第 4 层。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　加了第 4 层以后，<b>每一个</b>肉眼可见的峰里藏着几个峰？<br>A. 4 个<br>B. 21 个<br>C. 9 261 个</p>
+          <button class="quiz-btn" id="q94a-btn" onclick="toggleAnswer('q94a-ans','q94a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q94a-ans">答案是 <b>B</b>。<br>每加一层，峰数<b>乘 21</b> —— 所以上一层<b>一个</b>峰，在这一层里被劈成 <b>21 个</b>。<br>
+          C 那个 9 261 是"第 4 层<b>所有</b>峰加起来"的数，不是"一个峰里有几个"。两个数差着一层，别混。<br>
+          ★ 想亲眼数：把层数调到第 4 层，然后按<b>两次</b>「放大 21 倍」—— 窗里正好剩 21 次起伏，就是它。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　"起伏越来越小"和"坡度越来越大"，这两件事怎么能在同一条线上同时成立？<br>A. 不可能同时成立 —— 起伏小就该平<br>B. 因为起伏每层只加 1/3^k（越来越小），可最陡每层乘 7（越来越大）：加进来的是<b>又细又陡又浅</b>的小锯齿<br>C. 因为横轴被拉长了，看着才陡</p>
+          <button class="quiz-btn" id="q94b-btn" onclick="toggleAnswer('q94b-ans','q94b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q94b-ans">答案是 <b>B</b>。<br>一层层加起来：第 1 层起伏 1、第 2 层只加 0.111、第 3 层只加 0.037 —— <b>越来越浅</b>；
+          可它们的<b>陡度</b>是 3.14 → 21.99 → 153.94 → 1 077.57，<b>每层 ×7</b>。<br>
+          又浅又陡 = 越叠越像<b>锯齿</b>，而不是越叠越像波浪。<br>★ 这就是"处处是尖角"的机制：<b>起伏小到看不见，可"拐"一次都没消失</b>。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>第 9 章完 → 回到"算不动"</h4>
+          <p>这条怪物曲线当年把一整代数学家吓到了：埃尔米特说它<b>「既可悲又邪恶，让我感到不寒而栗」</b>，邓纳姆说它<b>「给直观几何的棺材钉上了最后一颗钉子」</b>（都在 p94）。<br>
+          可它并不"坏"：p95 说，它正是布朗运动模型的工作原理 —— 花粉的路径<b>不是只有几个尖角，它的一生都是尖角</b>。<br>
+          回到这一章的起点：一颗被原子撞来撞去的粒子。<b>「那是用手无法画出的路径，用速度无法描述的运动。」</b>（p95）<br>
+          微积分能算的东西 —— 棒球、火箭、抛物线 —— 它一样都不占。不是算错了，是<b>根本没有那一个数可算</b>。<br>
+          <b>这一章没有教你一个新公式，只让你看清一件事：「每一处都有速度」不是天经地义的，它是一个要求。</b></p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>魏尔施特拉斯函数</b>：把 cos(πx)、cos(21πx)/3、cos(441πx)/9 …… 一层层叠上去。层数越多，峰越密、坡越陡、起伏越小。</p>
+          <p><b>每叠一层加三件事</b>：峰数 <b>×21</b>、新加那一项的最陡 <b>×7</b>、起伏只加 <b>1/3^k</b>（越来越小）。</p>
+          <p><b>"处处"不是四层能看到的</b>：图上这几条都还光滑。"每一处都是尖角"属于<b>一直叠下去</b>的那一条 —— 它没有"最后一层"。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　拖 k 从 1 到 4：数峰 —— 1 → 21 → 441 → 9 261（每层 ×21）。</div>
+          <div class="rule-item"><b>第 2 步</b>　按「放大 21 倍」：窗口缩 21 倍，窗里的起伏也跟着 ÷21。缩到 <b>21 次</b>时停一下 —— 那正是 p93 的图注。</div>
+          <div class="rule-item"><b>第 3 步</b>　看两个方向：峰数涨得飞快，起伏（1.5 那个上界）几乎不动。<b>"处处是尖角"就是这么来的。</b></div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>「叠够层数就是处处是尖角」</b> —— 不是。有限层<b>永远是光滑曲线</b>；尖属于一直叠下去的那一条。</p>
+          <p><b>「起伏这么小，等于平的」</b> —— 起伏小 ≠ 平。一层层的折角一个都没被磨掉，只是越叠越小。</p>
+          <p><b>「画不出来 = 这函数有问题」</b> —— p94 的原话：它是一个<b>不间断、没有跳跃也没有间隙</b>的曲线，只是粗糙到任何画图工具都描不出轮廓。</p>
         </div>
       </div>
     </div>
@@ -4240,7 +5265,19 @@
     'page-c7-1': function () { stopC7S1(); },
     'page-c7-2': function () { stopC7S2(); },
     'page-c7-3': function () { stopC7S3(); },
-    'page-c7-4': function () { stopC7S4(); }
+    'page-c7-4': function () { stopC7S4(); },
+    // 第 8 章 4 节：★ D7 全章无播放键（拨一下就重绘）⇒ 四节的停止钩子都是空实现；
+    // ★ 但**四节一律登记** —— 切走时要清干净运行态（与第 6 / 7 章同口径）。
+    'page-c8-1': function () { stopC8S1(); },
+    'page-c8-2': function () { stopC8S2(); },
+    'page-c8-3': function () { stopC8S3(); },
+    'page-c8-4': function () { stopC8S4(); },
+    // 第 9 章 4 节：★ D6 全章无播放键（拨一下就重绘）⇒ 四节的停止钩子都是空实现；
+    // ★ 但**四节一律登记** —— 切走时要清干净运行态（与第 6 / 7 / 8 章同口径）。
+    'page-c9-1': function () { stopC9S1(); },
+    'page-c9-2': function () { stopC9S2(); },
+    'page-c9-3': function () { stopC9S3(); },
+    'page-c9-4': function () { stopC9S4(); }
   };
   function switchPage(id) {
     var i, key, el;
@@ -11255,7 +12292,7 @@
   //      ★ 顺带正好强化 6.4：不管车多长，它**一路上都不变**。
   //
   // ★ 术语：本章放行「切线」，但**本节不讲**它（那是 6.2 的事，这里只在钩子里点一句）；
-  //   另外三个"切"字头的几何词、"陡不陡"那个词、讲快慢的那三个词，以及"走向极限"那个三字母记号，
+  //   另外三个"切"字头的几何词、"陡不陡"那个词、讲快慢的那三个词，以及那个三字母记号，
   //   一律不出现 —— ★ 而这句话本身**也不能把那个记号写出来**（红线是源码级扫描，含注释）。
   var L_DEF_C6S1 = 1.00;
   var L_MIN_C6S1 = 0.70, L_MAX_C6S1 = 1.80, L_STEP_C6S1 = 0.05;
@@ -11478,7 +12515,7 @@
   //   K29 —— ▶ 播放 24 帧（p 从 0.20 到 0.015）：夹角 20.53° → 1.66°，**单调减**，12.4 倍。
   //
   // ★ 术语：本章放行「切线」；**不讲**"陡不陡"那个封存词（本节只说"方向"），
-  //   另外三个"切"字头的几何词、讲快慢的那三个词、以及"走向极限"那个三字母记号一律不出现
+  //   另外三个"切"字头的几何词、讲快慢的那三个词、以及那个三字母记号一律不出现
   //   —— ★ 这句话本身也不许把那些字形写出来（红线是源码级扫描，含注释）。
   var AMP_C6S2 = 2.2, OMG_C6S2 = 0.5589;     // 由像素框宽高比反推（见下）
   var W_C6S2 = Math.PI / OMG_C6S2;           // 窗口宽 = 半个起伏 ≈ 5.6209
@@ -11685,7 +12722,7 @@
   //   K33 —— 等比映射：SPANY 由 SPANX 反推（车辙是"长度"）；两条车辙 + 切线都落在作图区内。
   //
   // ★ 术语：本章放行「切线」；那三个"切"字头的几何词、讲"陡不陡"的那个词、讲快慢的那三个词，
-  //   以及"走向极限"那个三字母记号一律不出现 —— ★ 这句话本身也不能把它们的字形写出来。
+  //   以及那个三字母记号一律不出现 —— ★ 这句话本身也不能把它们的字形写出来。
   var AMP_C6S3 = 2.20, OMG_C6S3 = 1.30, L_C6S3 = 1.40;   // 前轮曲线 / 车长（车架刚性）
   var T_END_C6S3 = 12.0;                                  // t ∈ [0, 12]
   var NINT_C6S3 = 4000;                                   // 内积分步数（朝外判别对精度不敏感）
@@ -13164,6 +14201,1652 @@
 
   // ================= 第 7 章 JS 区 · 终点 =================
 
+  // ================= 第 8 章 JS 区 · 起点（4 节的实现都插在这条线之后）=================
+  // 两条哨兵注释把「第 8 章新增的一切」框起来 —— 验证脚本与 _chapter_scope.js 据此做 scoped 扫描。
+  // ★ 本章放行两个词：极限 / 收敛（原书自己用了 + 给了定义）。其余封存记号一个都不写。
+  //   ★ 全章**不用以 e 为底的指数函数、不用对数、不用乘方**：台阶总长离散累加，
+  //     波形高度逐层减半（`h / 2`）—— 封存的那三个函数名**连注释里也别写**（本章不变量会连注释一起扫）。
+  // ★ 本章 4 节全部"拨一下就重绘"⇒ **不设播放键**，四节的停止钩子都是空实现（计划 §九 D7）。
+  var C8_SECTIONS = [
+    { n: 1, label: '三级台阶' },
+    { n: 2, label: '两个目的地' },
+    { n: 3, label: '被风吹走的东西' },
+    { n: 4, label: '风留下了什么' }
+  ];
+  function goC8(n) { switchPage('page-c8-' + n); }    // 第 8 章内部导航
+
+  // 8.1 三级台阶
+  // ★ 本节要送出的原语：**总长守恒**（原书 p79–81，布里安娜的谜题）。
+  //   4 宽 3 高的长方框，从一角到它的对角：台阶走 = 横 4 + 竖 3 = 7（**与级数无关**）；
+  //   对角线 = √(4² + 3²) = 5（**现算**，不写死 5）。
+  // ★ 级数越细，台阶离对角线**最远的那一点**（垂直于对角线量的距离）越小：
+  //   (4 × 3 / n) ÷ 5 = 2.4 / n ⇒ 单调递减；而 7 一动不动。这就是"形状变了、长度没变"。
+  // ★ 禁：以 e 为底的指数函数 / 对数 / 乘方 —— **连函数名都不写**（本章不变量含注释一起扫）；
+  //   ★ 那个三字母记号与箭头写法也一并不写 —— **连这条注释里都不写**：
+  //     本节的术语扫描是**含注释**的（第 7 章 7.1 就在注释里写过一次，当场被自己抓到）。
+  // ★ 不设播放键（D7）：滑块 + 一个「无限次重复」按钮，全是"拨一下就重绘"。
+  var NV_C8S1 = [1, 2, 3, 4, 8, 16, 32, 64];   // ★ 滑块的**全部**档位：1…64（每格都是真实级数）
+  var IDX_DEF_C8S1 = 2;                 // 默认第 3 档 = 3 级（本节标题）
+  var IDX_LAST_C8S1 = 7;                // 滑块顶端 = 64 级
+  var N_INF_C8S1 = 512;                 // 「无限次重复」只画到 512 级（再细画不出来）
+  var W_C8S1 = 4, H_C8S1 = 3;           // 4 宽 3 高（3-4-5 直角三角形）
+  var BOX_C8S1 = [56, 44, 440, 332];    // 96 px / 单位：宽 384、高 288 ⇒ 4 : 3，等比例
+  var COL_STAIR_C8S1 = '#3b82f6', COL_DIAG_C8S1 = '#ef4444';
+  var g8_1 = { idx: IDX_DEF_C8S1, inf: false };   // ★ inf 是**状态位**，不是滑块的第九格
+
+  function setTxtC8S1(id, html) { var e = document.getElementById(id); if (e) { e.innerHTML = html; } }
+  function xC8S1(v) { return BOX_C8S1[0] + (BOX_C8S1[2] - BOX_C8S1[0]) * v / W_C8S1; }
+  function yC8S1(v) { return BOX_C8S1[3] - (BOX_C8S1[3] - BOX_C8S1[1]) * v / H_C8S1; }
+  function nOfC8S1(idx) { return NV_C8S1[idx]; }            // 滑块档 → 级数（1…64）
+  function curNC8S1() { return g8_1.inf ? N_INF_C8S1 : nOfC8S1(g8_1.idx); }   // 画面上的级数
+  function isInfC8S1() { return g8_1.inf; }                 // 「无限」是状态，不是档位
+  // 台阶总长：**逐级求和**（不是写 7）—— n 段横 + n 段竖各自加起来
+  function stairLenC8S1(n) {
+    var dx = W_C8S1 / n, dy = H_C8S1 / n, sum = 0, k;
+    for (k = 0; k < n; k++) { sum += dx + dy; }
+    return sum;
+  }
+  // 对角线：现算 √(4² + 3²)
+  function diagC8S1() { return Math.sqrt(W_C8S1 * W_C8S1 + H_C8S1 * H_C8S1); }
+  // 台阶离对角线最远的那一点（每级的"外拐角"），到对角线的垂直距离 = (4 × 3 / n) ÷ 5
+  function devC8S1(n) { return (W_C8S1 * H_C8S1 / n) / diagC8S1(); }
+  // 「像对角线的程度」：以 1 级的偏离为满格，减到 0 就是"完全贴合"
+  function likeC8S1(n) { return 1 - devC8S1(n) / devC8S1(1); }
+  function nTxtC8S1() { return g8_1.inf ? '无限' : NV_C8S1[g8_1.idx] + ' 级'; }
+  function devTxtC8S1(n) {
+    var d = devC8S1(n);
+    if (d < 0.001) { return '< 0.001'; }
+    return d.toFixed(3);
+  }
+  function msgC8S1() {
+    var n = curNC8S1();
+    if (g8_1.inf) {
+      return '级数已经细到画不出来 —— 台阶<b>贴着</b>对角线，可总长还是 <b>7.000</b>、对角线还是 <b>5.000</b>。' +
+        '差的 2，不是画得不够细。';
+    }
+    if (n <= 3) {
+      return '级数少：锯齿看得清清楚楚 —— 台阶<b>绕了远路</b>（7 对 5）。' +
+        '这一段请自己数一遍：横 4 段 + 竖 3 段。';
+    }
+    return '级数多了：锯齿越来越小，形状越来越<b>贴</b>上去 —— 可总长一个数都没少（' +
+      stairLenC8S1(n).toFixed(3) + '）。';
+  }
+  function stepTxtC8S1() {
+    return '每一级台阶都是「<b>先横着走一点、再竖着走一点</b>」。<br>' +
+      '横着的加起来永远是 <b>4</b>，竖着的加起来永远是 <b>3</b> ⇒ 不管分成几级，总长都是 4 + 3 = <b>7</b>。';
+  }
+  function drawC8S1() {
+    var cv = document.getElementById('cv8-1');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var n = curNC8S1();
+    var i, dx = W_C8S1 / n, dy = H_C8S1 / n, x, y;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 作图区（等比例：96 px / 单位）----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(BOX_C8S1[0], BOX_C8S1[1], BOX_C8S1[2] - BOX_C8S1[0], BOX_C8S1[3] - BOX_C8S1[1]);
+    // ---- 网格（每 1 单位一格）+ 刻度 ----
+    for (i = 1; i <= W_C8S1; i++) {
+      x = xC8S1(i);
+      c.strokeStyle = '#f1f5f9'; c.beginPath(); c.moveTo(x, BOX_C8S1[1]); c.lineTo(x, BOX_C8S1[3]); c.stroke();
+      label(c, String(i), x, BOX_C8S1[3] + 15, '#cbd5e1', 10.5, 'center');
+    }
+    for (i = 1; i <= H_C8S1; i++) {
+      y = yC8S1(i);
+      c.strokeStyle = '#f1f5f9'; c.beginPath(); c.moveTo(BOX_C8S1[0], y); c.lineTo(BOX_C8S1[2], y); c.stroke();
+      label(c, String(i), BOX_C8S1[0] - 8, y + 4, '#cbd5e1', 10.5, 'right');
+    }
+    label(c, '0', BOX_C8S1[0] - 8, BOX_C8S1[3] + 15, '#cbd5e1', 10.5, 'right');
+    // ---- 台阶（★ for 循环画折线，不用 div）----
+    c.strokeStyle = COL_STAIR_C8S1; c.lineWidth = 2.2;
+    c.beginPath(); c.moveTo(xC8S1(0), yC8S1(0));
+    for (i = 0; i < n; i++) {
+      c.lineTo(xC8S1((i + 1) * dx), yC8S1(i * dy));
+      c.lineTo(xC8S1((i + 1) * dx), yC8S1((i + 1) * dy));
+    }
+    c.stroke();
+    // ---- 对角线（虚线）----
+    c.setLineDash([6, 5]); c.strokeStyle = COL_DIAG_C8S1; c.lineWidth = 2.2;
+    c.beginPath(); c.moveTo(xC8S1(0), yC8S1(0)); c.lineTo(xC8S1(W_C8S1), yC8S1(H_C8S1)); c.stroke();
+    c.setLineDash([]);
+    dot(c, xC8S1(0), yC8S1(0), 4, '#334155');
+    dot(c, xC8S1(W_C8S1), yC8S1(H_C8S1), 4, '#334155');
+    // ---- 右上角读数（短版本，防出界 K26）----
+    labelChip(c, '台阶 ' + stairLenC8S1(n).toFixed(3), 448, 62, COL_STAIR_C8S1, 11, 'left', 3);
+    labelChip(c, '对角线 ' + diagC8S1().toFixed(3), 448, 84, COL_DIAG_C8S1, 11, 'left', 3);
+    labelChip(c, '最远 ' + devTxtC8S1(n), 448, 106, '#64748b', 11, 'left', 3);
+    if (g8_1.inf) {
+      labelChip(c, '↑ 画的是 512 级', 448, 128, '#94a3b8', 10.5, 'left', 3);
+    }
+    // ---- 标题行（作图区上方那一条空白）----
+    label(c, '4 宽 × 3 高：台阶走 7，斜着走 5', BOX_C8S1[0], 26, '#334155', 12, 'left');
+    label(c, nTxtC8S1(), BOX_C8S1[2], 26, COL_STAIR_C8S1, 12, 'right');
+    // ---- 刹车话（★ 恒印在画布上，不由状态决定）----
+    label(c, '台阶一直在变细，总长一直是 7 —— 变的不是长度，是形状。',
+      BOX_C8S1[0], 364, '#64748b', 11, 'left');
+  }
+  function updC8S1() {
+    var idx = g8_1.idx, n = curNC8S1(), inf = g8_1.inf;
+    var sl = document.getElementById('s8-1-n');
+    // ★ 「无限」态下滑块停在**自己的顶端 64**（一个真实的档），不是被推到"第 9 格"
+    if (sl && sl.value !== String(idx)) { sl.value = String(idx); }
+    setTxtC8S1('lb8-1-n', nTxtC8S1());
+    setTxtC8S1('kv8-1a-v', inf ? '无限次重复' : n + ' 级');
+    setTxtC8S1('kv8-1a-t', inf
+      ? '滑块停在 64 级（能画出的最细）；画面画到 512 级'
+      : '每一级：横 ' + (W_C8S1 / n).toFixed(3) + ' + 竖 ' + (H_C8S1 / n).toFixed(3));
+    setTxtC8S1('kv8-1b-v', stairLenC8S1(n).toFixed(3));
+    setTxtC8S1('kv8-1b-t', '横 4 + 竖 3 —— 与级数无关（分到 ' + n + ' 级也是 7）');
+    setTxtC8S1('kv8-1c-v', diagC8S1().toFixed(3));
+    setTxtC8S1('kv8-1c-t', '√(4² + 3²) —— 直接斜着走');
+    setTxtC8S1('kv8-1d-v', devTxtC8S1(n));
+    setTxtC8S1('kv8-1d-t', inf ? '已经不到 0.005 —— 但没到 0' : '2.4 ÷ ' + n + '（级数越多越贴）');
+    setTxtC8S1('kv8-1e-v', (likeC8S1(n) * 100).toFixed(1) + '%');
+    setTxtC8S1('kv8-1e-t', '1 级 = 0%，越细越接近 100%（但总长不变）');
+    setTxtC8S1('st8-1', msgC8S1());
+    setTxtC8S1('sl8-1', stepTxtC8S1());
+    var dt = document.getElementById('st8-1-dot');
+    if (dt) { dt.style.background = COL_STAIR_C8S1; }
+    var ln = document.getElementById('sl8-1');
+    if (ln) { ln.className = 'step-line on'; }
+  }
+  function pickC8S1(idx) {
+    var k = parseInt(idx, 10);
+    if (!isFinite(k)) { k = IDX_DEF_C8S1; }
+    g8_1.idx = Math.min(IDX_LAST_C8S1, Math.max(0, k));
+    g8_1.inf = false;      // ★ 一拖滑块就离开「无限」态 —— 滑块永远代表"现在分几级"
+    updC8S1(); drawC8S1();
+  }
+  function infC8S1() {
+    // ★ 滑块推到**它自己的顶端 64**（一个真实的档）；「无限」另用状态位表示，
+    //   因为"无穷"不是一个级数，不该混进"分几级"的刻度里。
+    g8_1.idx = IDX_LAST_C8S1;
+    g8_1.inf = true;
+    updC8S1(); drawC8S1();
+    toast('64 级之上再分 8 次 —— 画到 512 级，总长还是 7.000');
+  }
+  function resetC8S1() {
+    g8_1.idx = IDX_DEF_C8S1;
+    g8_1.inf = false;
+    updC8S1(); drawC8S1();
+    toast('回到 3 级台阶 —— 然后自己拖一拖，看形状怎么贴上去、总长怎么不动');
+  }
+  // 停止钩子：本节**没有运行态**（拨一下就重绘，D7 也不设播放键），
+  //   但必须登记 —— STOPPERS 的约定是「切走时把上一页的运行态清干净」。
+  function stopC8S1() { }
+
+  // 落地即默认档（并显示讲解行，页面永不「内容为空」）
+  updC8S1(); drawC8S1();
+
+  // 8.2 两个目的地
+  // ★ 本节送出的：**悖论的形状** —— 同一幅 4×3 的图，两个问法同时成立：
+  //   ①「走过去」（沿台阶）逐级累加 = 横 4 + 竖 3 = 7；
+  //   ②「从终点看」（两点直线）先把 n 级的横、竖各自汇总，再量斜边 = √(4² + 3²) = 5；
+  //   差 = 7 − 5 = 2，**与级数无关** ⇒ 自相矛盾是结构性的，不是算错。
+  // ★ 两个量都**吃 n**（都按 n 级逐级算），所以"不随 n 变"是算出来的结论，不是写死的常量。
+  // ★ 本节第一次把放行词「极限」放到屏上（书页 82 给了定义），引文按 book082 逐字核对。
+  // ★ 禁：以 e 为底的指数函数 / 对数 / 乘方（连函数名都不写，本章扫描含注释）；
+  //   那个三字母记号、箭头写法、"越来越靠近"以外的说法也一并不写。
+  // ★ 与 8.1 **不共享状态**（计划 §5.2）：`g8_2` 独立，默认 3 级 + 「走过去」。
+  var NV_C8S2 = [1, 2, 3, 4, 8, 16, 32, 64];
+  var IDX_DEF_C8S2 = 2;                  // 默认 3 级（与 8.1 同一个开场）
+  var W_C8S2 = 4, H_C8S2 = 3;            // 4 宽 3 高
+  var BAR_U_C8S2 = 8, BAR_S_C8S2 = 58;   // 横条：8 格，每格 58 px ⇒ 464 px
+  var BOX_C8S2 = [56, 240, 520, 272];    // 上条（走）
+  var BOX2_C8S2 = [56, 300, 520, 332];   // 下条（看）
+  var INS_C8S2 = [56, 48, 256, 198];     // 左上小图：200 × 150 = 4 : 3（50 px / 单位）
+  var COL_WALK_C8S2 = '#3b82f6', COL_LOOK_C8S2 = '#ef4444';
+  var g8_2 = { idx: IDX_DEF_C8S2, view: 1 };
+
+  function setTxtC8S2(id, html) { var e = document.getElementById(id); if (e) { e.innerHTML = html; } }
+  function nOfC8S2(idx) { return NV_C8S2[idx]; }
+  function curNC8S2() { return NV_C8S2[g8_2.idx]; }
+  // ① 走过去：n 级，每级横 W/n + 竖 H/n，逐级累加
+  function walkC8S2(n) {
+    var dx = W_C8S2 / n, dy = H_C8S2 / n, sum = 0, k;
+    for (k = 0; k < n; k++) { sum += dx + dy; }
+    return sum;
+  }
+  // ② 从终点看：n 级的横、竖各自汇总成一个点，再量两点之间的直线
+  function lookC8S2(n) {
+    var dx = W_C8S2 / n, dy = H_C8S2 / n, sx = 0, sy = 0, k;
+    for (k = 0; k < n; k++) { sx += dx; sy += dy; }
+    return Math.sqrt(sx * sx + sy * sy);
+  }
+  function diffC8S2(n) { return walkC8S2(n) - lookC8S2(n); }
+  // ④ 八档扫一遍，看"变了的数"有几个（本节应为 0）
+  function changedC8S2() {
+    var seen = {}, k, key, cnt = 0;
+    for (k = 0; k < NV_C8S2.length; k++) {
+      key = walkC8S2(NV_C8S2[k]).toFixed(6) + '|' + lookC8S2(NV_C8S2[k]).toFixed(6)
+        + '|' + diffC8S2(NV_C8S2[k]).toFixed(6);
+      if (!seen[key]) { seen[key] = 1; cnt++; }
+    }
+    return cnt - 1;
+  }
+  function xIC8S2(v) { return INS_C8S2[0] + (INS_C8S2[2] - INS_C8S2[0]) * v / W_C8S2; }
+  function yIC8S2(v) { return INS_C8S2[3] - (INS_C8S2[3] - INS_C8S2[1]) * v / H_C8S2; }
+  function msgC8S2() {
+    var n = curNC8S2();
+    if (g8_2.view === 2) {
+      return '你选的是<b>从终点往回看</b>：只量两个点之间的直线 —— <b>' + lookC8S2(n).toFixed(0) +
+        '</b>。可那条路没变，走起来还是 <b>' + walkC8S2(n).toFixed(0) + '</b>。';
+    }
+    return '你选的是<b>走过去</b>：沿台阶一步步量，走多远就是多远 —— <b>' + walkC8S2(n).toFixed(0) +
+      '</b>。可下面那条还在，它说 <b>' + lookC8S2(n).toFixed(0) + '</b>。';
+  }
+  function stepTxtC8S2() {
+    return '同一个长方框，两条不同的线：<b>折线</b>（横 4 + 竖 3 = 7）和<b>线段</b>（√(4² + 3²) = 5）。<br>' +
+      '它们量的不是同一条线 ⇒ 差 <b>2</b> 不会因为台阶变细而消失。';
+  }
+  function drawC8S2() {
+    var cv = document.getElementById('cv8-2');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var n = curNC8S2(), i, dx = W_C8S2 / n, dy = H_C8S2 / n;
+    var walk = walkC8S2(n), look = lookC8S2(n);
+    var dim = 0.32;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 标题 ----
+    label(c, '同一幅 4 × 3 的图，两个问法', BOX_C8S2[0], 26, '#334155', 12, 'left');
+    // ---- 左上小图：n 级台阶 + 对角线（只影响"样子"）----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(INS_C8S2[0], INS_C8S2[1], INS_C8S2[2] - INS_C8S2[0], INS_C8S2[3] - INS_C8S2[1]);
+    c.strokeStyle = COL_WALK_C8S2; c.lineWidth = 1.6;
+    c.beginPath(); c.moveTo(xIC8S2(0), yIC8S2(0));
+    for (i = 0; i < n; i++) {
+      c.lineTo(xIC8S2((i + 1) * dx), yIC8S2(i * dy));
+      c.lineTo(xIC8S2((i + 1) * dx), yIC8S2((i + 1) * dy));
+    }
+    c.stroke();
+    c.setLineDash([4, 4]); c.strokeStyle = COL_LOOK_C8S2; c.lineWidth = 1.6;
+    c.beginPath(); c.moveTo(xIC8S2(0), yIC8S2(0)); c.lineTo(xIC8S2(W_C8S2), yIC8S2(H_C8S2)); c.stroke();
+    c.setLineDash([]);
+    dot(c, xIC8S2(0), yIC8S2(0), 2.6, '#334155');
+    dot(c, xIC8S2(W_C8S2), yIC8S2(H_C8S2), 2.6, '#334155');
+    label(c, n + ' 级台阶（只影响样子）', INS_C8S2[0], INS_C8S2[3] + 16, '#94a3b8', 10, 'left');
+    // ---- 右上三行读数 ----
+    labelChip(c, '① 走过去  ' + walk.toFixed(3), 280, 62, COL_WALK_C8S2, 11, 'left', 3);
+    labelChip(c, '② 从终点看 ' + look.toFixed(3), 280, 86, COL_LOOK_C8S2, 11, 'left', 3);
+    labelChip(c, '差        ' + diffC8S2(n).toFixed(3), 280, 110, '#64748b', 11, 'left', 3);
+    label(c, '三个数都跟级数无关', 280, 138, '#94a3b8', 10.5, 'left');
+    // ---- 两条横条（同一把尺：8 格）----
+    function bar(box, units, col, name, dimmed) {
+      var x0 = box[0], y0 = box[1], w = BAR_U_C8S2 * BAR_S_C8S2, h = box[3] - box[1];
+      c.fillStyle = '#f1f5f9'; c.fillRect(x0, y0, w, h);
+      c.fillStyle = dimmed ? 'rgba(148,163,184,0.35)' : col;
+      c.fillRect(x0, y0, units * BAR_S_C8S2, h);
+      c.strokeStyle = dimmed ? '#cbd5e1' : col; c.lineWidth = dimmed ? 1 : 1.6;
+      c.strokeRect(x0, y0, w, h);
+      // 每格的刻度（细线）
+      c.strokeStyle = 'rgba(255,255,255,0.85)'; c.lineWidth = 1;
+      for (var k = 1; k < BAR_U_C8S2; k++) {
+        c.beginPath(); c.moveTo(x0 + k * BAR_S_C8S2, y0); c.lineTo(x0 + k * BAR_S_C8S2, y0 + h); c.stroke();
+      }
+      label(c, name, x0, y0 - 7, '#334155', 11, 'left');
+      label(c, units.toFixed(0), x0 + units * BAR_S_C8S2 + 8, y0 + h / 2 + 4, col, 12, 'left');
+      return x0 + units * BAR_S_C8S2;
+    }
+    var e1 = bar(BOX_C8S2, walk, COL_WALK_C8S2, '① 一步一步地走：横 4 + 竖 3', g8_2.view === 2);
+    var e2 = bar(BOX2_C8S2, look, COL_LOOK_C8S2, '② 从终点往回看：两点之间直着量', g8_2.view === 1);
+    // ---- 差 2 的夹子 ----
+    var yb = BOX_C8S2[3], yb2 = BOX2_C8S2[1];
+    c.strokeStyle = '#94a3b8'; c.lineWidth = 1; c.setLineDash([3, 3]);
+    c.beginPath(); c.moveTo(e2, yb); c.lineTo(e2, yb2); c.stroke();
+    c.beginPath(); c.moveTo(e1, yb); c.lineTo(e1, yb2); c.stroke();
+    c.setLineDash([]);
+    c.beginPath(); c.moveTo(e2, (yb + yb2) / 2); c.lineTo(e1, (yb + yb2) / 2); c.stroke();
+    labelChip(c, '差 2', (e1 + e2) / 2, (yb + yb2) / 2 + 2, '#64748b', 10.5, 'center', 3);
+    // ---- 满格刻度（只在下条下面标一次）----
+    for (i = 0; i <= BAR_U_C8S2; i++) {
+      label(c, String(i), BOX2_C8S2[0] + i * BAR_S_C8S2, BOX2_C8S2[3] + 16, '#cbd5e1', 9.5, 'center');
+    }
+    // ---- 刹车话（恒印）----
+    label(c, '两个答案都对。它们回答的不是同一个问题。', BOX_C8S2[0], 368, '#64748b', 11, 'left');
+  }
+  function updC8S2() {
+    var idx = g8_2.idx, n = curNC8S2(), walk = walkC8S2(n), look = lookC8S2(n);
+    var sl = document.getElementById('s8-2-n');
+    if (sl && sl.value !== String(idx)) { sl.value = String(idx); }
+    setTxtC8S2('lb8-2-n', n + ' 级');
+    setTxtC8S2('kv8-2a-v', n + ' 级');
+    setTxtC8S2('kv8-2a-t', '每一级：横 ' + (W_C8S2 / n).toFixed(3) + ' + 竖 ' + (H_C8S2 / n).toFixed(3));
+    setTxtC8S2('kv8-2b-v', walk.toFixed(3));
+    setTxtC8S2('kv8-2b-t', '横 4 + 竖 3 —— 八档全是 7');
+    setTxtC8S2('kv8-2c-v', look.toFixed(3));
+    setTxtC8S2('kv8-2c-t', '√(4² + 3²) —— 八档全是 5');
+    setTxtC8S2('kv8-2d-v', diffC8S2(n).toFixed(3));
+    setTxtC8S2('kv8-2d-t', '7 − 5 —— 与级数无关');
+    setTxtC8S2('kv8-2e-v', changedC8S2() + ' 个');
+    setTxtC8S2('kv8-2e-t', '八档扫一遍，走的数一个都没变');
+    setTxtC8S2('st8-2', msgC8S2());
+    setTxtC8S2('sl8-2', stepTxtC8S2());
+    var dt = document.getElementById('st8-2-dot');
+    if (dt) { dt.style.background = g8_2.view === 2 ? COL_LOOK_C8S2 : COL_WALK_C8S2; }
+    var ln = document.getElementById('sl8-2');
+    if (ln) { ln.className = 'step-line on'; }
+    var bw = document.getElementById('b8-2-walk'), bl = document.getElementById('b8-2-look');
+    if (bw) { bw.className = g8_2.view === 1 ? 'ctrl-btn primary' : 'ctrl-btn'; }
+    if (bl) { bl.className = g8_2.view === 2 ? 'ctrl-btn primary' : 'ctrl-btn'; }
+  }
+  function viewC8S2(v) {
+    g8_2.view = (v === 2) ? 2 : 1;
+    updC8S2(); drawC8S2();
+  }
+  function pickC8S2(idx) {
+    var k = parseInt(idx, 10);
+    if (!isFinite(k)) { k = IDX_DEF_C8S2; }
+    g8_2.idx = Math.min(NV_C8S2.length - 1, Math.max(0, k));
+    updC8S2(); drawC8S2();
+  }
+  function resetC8S2() {
+    g8_2.idx = IDX_DEF_C8S2;
+    g8_2.view = 1;
+    updC8S2(); drawC8S2();
+    toast('回到 3 级 + 「走过去」—— 再按「从终点看」，看那个 5 一直就在那儿');
+  }
+  // 停止钩子：本节无运行态（拨一下就重绘，D7 无播放键），但按约定登记。
+  function stopC8S2() { }
+
+  updC8S2(); drawC8S2();
+
+  // 8.3 被风吹走的东西
+  // ★ 书页 83 的装置：等边三角形，红边 = 2 × 黑边；每次把每条红边"掰两半、重排"（先上后下），
+  //   长度不变、只换排列 ⇒ **每一层** 红边之和都还是黑边的两倍。
+  // ★ 本节的现算（全都吃 k，不是常量）：
+  //   段数 = 2^k（循环乘 2），每段长 = 2 / 段数 ⇒ 红边总长 = 2（逐段累加）
+  //   波形最高点 h_k = (√3 / 2) · 2^{1−k}（每层减半；同样不用乘方，用循环除以 2）
+  //   每层比值 = 2.000；取极限后红边压到黑边上 ⇒ 比值 = 1.000 ⇒ ★ 比值没有幸存
+  // ★ 两栏的分工（本节的诚实）：上栏纵向拉伸到等高（看得见齿数翻倍），下栏真实比例（看得见压平）。
+  // ★ 禁：以 e 为底的指数函数 / 对数 / 乘方（连函数名都不写；2^k 一律循环实现）；
+  //   那个三字母记号、箭头写法、"越来越接近"以外的说法也一并不写。
+  var NV_C8S3 = [1, 2, 3, 4, 5, 6];
+  var IDX_DEF_C8S3 = 0;                  // 默认 1 层（书页 83 的第一张图）
+  var BLACK_C8S3 = 1;                    // 黑边长度 = 1（单位）
+  var H0_C8S3 = Math.sqrt(3) / 2;        // 等边三角形的高 = (√3/2) × 边长
+  var X0_C8S3 = 60, X1_C8S3 = 480;       // 横向：1 单位 = 420 px（两栏共用同一把横尺）
+  var BASE1_C8S3 = 150, BASE2_C8S3 = 320;// 上栏基线 / 下栏基线
+  var LIFT_C8S3 = 40;                    // 上栏：峰值固定 40 px —— ★ 倍率必须标在图上（k=1 时其实是压小）
+  var VTRUE_C8S3 = 100;                  // 下栏：纵向真实比例 100 px / 单位
+  var COL_RED_C8S3 = '#ef4444';
+  var g8_3 = { k: 1 };
+
+  function setTxtC8S3(id, html) { var e = document.getElementById(id); if (e) { e.innerHTML = html; } }
+  function xC8S3(v) { return X0_C8S3 + (X1_C8S3 - X0_C8S3) * v; }
+  // ★ 上栏的尺子按"当前这一层的最高点"归一化：v = h 时正好落在 40 px 上。
+  //   之前这里漏了 k，heightC8S3() 拿到 undefined 退化成 h₀，
+  //   于是上栏其实一直是"真实高度 × 0.46"，k = 6 时只剩 2.7 px —— 两栏就白分开了。
+  function yTopC8S3(v) { return BASE1_C8S3 - v * LIFT_C8S3 / heightC8S3(g8_3.k); }
+  function yTrueC8S3(v) { return BASE2_C8S3 - v * VTRUE_C8S3; }
+  // 段数 2^k：循环乘 2（不用乘方）
+  function segCountC8S3(k) {
+    var n = 1, i;
+    for (i = 0; i < k; i++) { n = n * 2; }
+    return n;
+  }
+  // 红边总长：逐段累加（每段 = 2 / 段数）
+  function redLenC8S3(k) {
+    var n = segCountC8S3(k), seg = 2 / n, sum = 0, i;
+    for (i = 0; i < n; i++) { sum += seg; }
+    return sum;
+  }
+  function ratioC8S3(k) { return redLenC8S3(k) / BLACK_C8S3; }
+  // 波形最高点：h₀ 每层减半（循环除以 2，不用乘方）
+  function heightC8S3(k) {
+    var h = H0_C8S3, i;
+    for (i = 1; i < k; i++) { h = h / 2; }
+    return h;
+  }
+  // 取极限后：红色帐篷压到黑边上 ⇒ 红边与黑边重合 ⇒ 比值 = 1
+  function flatRatioC8S3() { return BLACK_C8S3 / BLACK_C8S3; }
+  function msgC8S3() {
+    var k = g8_3.k;
+    if (k === 1) {
+      return '第 1 层：一个等边三角形，红边 <b>2.000</b>、黑边 <b>1.000</b> —— 比值 <b>2.000</b>。' +
+        '把红边掰开、重排，看它怎么翻倍。';
+    }
+    if (k === 6) {
+      return '第 6 层：<b>' + segCountC8S3(k) + ' 段</b>红边，加起来还是 <b>2.000</b>；' +
+        '可最高点只剩 <b>' + heightC8S3(k).toFixed(3) + '</b> —— 下栏已经压成一条线。';
+    }
+    return '第 ' + k + ' 层：<b>' + segCountC8S3(k) + ' 段</b>红边，加起来还是 <b>2.000</b>；' +
+      '最高点减半到 <b>' + heightC8S3(k).toFixed(3) + '</b>。';
+  }
+  function stepTxtC8S3() {
+    return '每一层：<b>红边 = 2 × 黑边</b>（掰开不改长度，重排也不改）。<br>' +
+      '取极限后：红色帐篷压到黑边上 ⇒ <b>红边 ÷ 黑边 = 1.000</b>。';
+  }
+  function drawC8S3() {
+    var cv = document.getElementById('cv8-3');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var k = g8_3.k, n = segCountC8S3(k), h = heightC8S3(k), a = 1 / n, j;
+    var red = redLenC8S3(k), ratio = ratioC8S3(k);
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 标题 ----
+    label(c, '掰开、重排：长度不变，高度减半', X0_C8S3, 26, '#334155', 12, 'left');
+    // ---- 上栏：黑边 + 红边（纵向拉伸到等高）----
+    // ★ 倍率必须写出来：k 小的时候这一栏其实是"压小"，写成"拉伸"就是骗人
+    label(c, '上：k = ' + k + '，' + n + ' 段红边（峰值 40 px = ' +
+      (LIFT_C8S3 / (h * VTRUE_C8S3)).toFixed(2) + ' × 真实）', X0_C8S3, 60, '#64748b', 10.5, 'left');
+    c.strokeStyle = '#111827'; c.lineWidth = 3;
+    c.beginPath(); c.moveTo(xC8S3(0), BASE1_C8S3); c.lineTo(xC8S3(1), BASE1_C8S3); c.stroke();
+    c.strokeStyle = COL_RED_C8S3; c.lineWidth = 1.8;
+    c.beginPath(); c.moveTo(xC8S3(0), yTopC8S3(0));
+    for (j = 1; j <= n; j++) { c.lineTo(xC8S3(j * a), yTopC8S3((j % 2 === 1) ? h : 0)); }
+    c.stroke();
+    label(c, '（真实比例下会画成 ' + (h * VTRUE_C8S3).toFixed(1) + ' px）',
+      X0_C8S3, BASE1_C8S3 + 16, '#cbd5e1', 9.5, 'left');
+    // ---- 下栏：真实比例（同一把横尺，纵向 100 px / 单位）----
+    label(c, '下：真实比例（纵向 100 px / 单位）', X0_C8S3, 212, '#64748b', 10.5, 'left');
+    c.strokeStyle = '#111827'; c.lineWidth = 3;
+    c.beginPath(); c.moveTo(xC8S3(0), BASE2_C8S3); c.lineTo(xC8S3(1), BASE2_C8S3); c.stroke();
+    c.strokeStyle = COL_RED_C8S3; c.lineWidth = 1.4;
+    c.beginPath(); c.moveTo(xC8S3(0), yTrueC8S3(0));
+    for (j = 1; j <= n; j++) { c.lineTo(xC8S3(j * a), yTrueC8S3((j % 2 === 1) ? h : 0)); }
+    c.stroke();
+    label(c, '最高点 ' + h.toFixed(3), X0_C8S3, BASE2_C8S3 + 16, '#94a3b8', 9.5, 'left');
+    if (k >= 5) {
+      label(c, '波兄，你去哪里了？', X0_C8S3 + 250, BASE2_C8S3 - 14, '#94a3b8', 10.5, 'left');
+    }
+    // ---- 右侧读数（两栏各一行）----
+    labelChip(c, '红边 ' + red.toFixed(3), 488, 118, COL_RED_C8S3, 10.5, 'left', 3);
+    labelChip(c, '黑边 ' + BLACK_C8S3.toFixed(3), 488, 140, '#111827', 10.5, 'left', 3);
+    labelChip(c, '比值 ' + ratio.toFixed(3), 488, 162, '#334155', 10.5, 'left', 3);
+    labelChip(c, '极限 ' + flatRatioC8S3().toFixed(3), 488, 268, '#0f766e', 10.5, 'left', 3);
+    label(c, '（红边压到黑边上）', 488, 288, '#94a3b8', 9, 'left');
+    // ---- 刹车话（恒印）----
+    label(c, '每一层都是 2 倍，极限里变成 1 倍 —— 有东西被风吹走了。', X0_C8S3, 368, '#64748b', 11, 'left');
+  }
+  function updC8S3() {
+    var k = g8_3.k, idx = k - 1, red = redLenC8S3(k), h = heightC8S3(k);
+    var sl = document.getElementById('s8-3-k');
+    if (sl && sl.value !== String(idx)) { sl.value = String(idx); }
+    setTxtC8S3('lb8-3-k', k + ' 层');
+    setTxtC8S3('kv8-3a-v', k + ' 层');
+    setTxtC8S3('kv8-3a-t', segCountC8S3(k) + ' 段红边（每段 ' + (2 / segCountC8S3(k)).toFixed(4) + '）');
+    setTxtC8S3('kv8-3b-v', red.toFixed(3));
+    setTxtC8S3('kv8-3b-t', '掰开 + 重排 —— 六层全是 2.000');
+    setTxtC8S3('kv8-3c-v', ratioC8S3(k).toFixed(3));
+    setTxtC8S3('kv8-3c-t', '这一层的红边 ÷ 黑边');
+    setTxtC8S3('kv8-3d-v', flatRatioC8S3().toFixed(3));
+    setTxtC8S3('kv8-3d-t', '红边压到黑边上 ⇒ 与黑边重合');
+    setTxtC8S3('kv8-3e-v', h.toFixed(3));
+    setTxtC8S3('kv8-3e-t', k === 1 ? '= √3 / 2（等边三角形的高）' : '每加一层减半');
+    setTxtC8S3('st8-3', msgC8S3());
+    setTxtC8S3('sl8-3', stepTxtC8S3());
+    var dt = document.getElementById('st8-3-dot');
+    if (dt) { dt.style.background = COL_RED_C8S3; }
+    var ln = document.getElementById('sl8-3');
+    if (ln) { ln.className = 'step-line on'; }
+  }
+  function pickC8S3(idx) {
+    var i = parseInt(idx, 10);
+    if (!isFinite(i)) { i = IDX_DEF_C8S3; }
+    i = Math.min(NV_C8S3.length - 1, Math.max(0, i));
+    g8_3.k = NV_C8S3[i];
+    updC8S3(); drawC8S3();
+  }
+  function flatC8S3() {
+    g8_3.k = 6;
+    updC8S3(); drawC8S3();
+    toast('压到 6 层：齿有 64 个，红边还是 2.000，最高点只剩 0.027');
+  }
+  function resetC8S3() {
+    g8_3.k = 1;
+    updC8S3(); drawC8S3();
+    toast('回到第 1 层 —— 再一层层掰，看 2 倍怎么一分不涨、高度怎么一路减半');
+  }
+  // 停止钩子：本节无运行态（拨一下就重绘，D7 无播放键），但按约定登记。
+  function stopC8S3() { }
+
+  updC8S3(); drawC8S3();
+
+  // 8.4 风留下了什么（章收口 · 书页 84–85）
+  // ★ 本节**不算新东西**（计划 §九 D6 单一真源）：六张卡上的数全从这里来 ——
+  //   台阶总长 / 对角线 ← 8.1（stairLenC8S1 / diagC8S1）
+  //   红边 ÷ 黑边（每层 / 极限）← 8.3（ratioC8S3 / flatRatioC8S3）
+  //   三角波最高点 ← 8.3（heightC8S3）
+  //   只有「0.9, 0.99, …」这一件没有前节可借，所以在本节现算：
+  //   与 1 的距离 = 1 / 10^k（循环乘 10）—— **每一档都 > 0**，这就是"没到"。
+  // ★ 判决只有两种：**挺住** / **被吹走**。六件里两件挺住 —— 其中一件叫"一直在靠近"。
+  // ★ 本章禁：以 e 为底的指数函数 / 对数 / 乘方（连函数名都不写，含注释）；
+  //   那一组记号、箭头指零的写法、以及"越来越接近"以外的说法也一并不写
+  //   （★ 这条注释自己就踩过一次：把那个两字说法写进来，术语扫描当场红）。
+  // ★ 不设播放键（D7）：六个卡片键 + 重置，全是"点一下就重绘"。
+  var NCARD_C8S4 = 6;
+  var IDX_DEF_C8S4 = 0;                  // 默认停在第一张（台阶总长 —— 全章的钩子）
+  var K_SEQ_C8S4 = 6;                    // 「0.9, 0.99, …」取到第 6 位（与 1 差 0.000001）
+  var g8_4 = { pick: IDX_DEF_C8S4 };
+
+  function setTxtC8S4(id, html) { var e = document.getElementById(id); if (e) { e.innerHTML = html; } }
+  // 10 的正整数次：循环乘 10（不用乘方）
+  function pow10C8S4(k) {
+    var v = 1, i;
+    for (i = 0; i < k; i++) { v = v * 10; }
+    return v;
+  }
+  // 「0.999…」与 1 的距离：1 / 10^k —— 每一档都 > 0，一档都不是 0
+  function distC8S4(k) { return 1 / pow10C8S4(k); }
+  // 0.9 / 0.99 / 0.999 …：按位数拼字符串（不碰乘方，也不碰对数）
+  function seqTxtC8S4(k) {
+    var t = '0.', i;
+    for (i = 0; i < k; i++) { t = t + '9'; }
+    return t;
+  }
+  // ★ 六张卡：每次调用都现算一遍（不缓存、不写死）；"判决"由数值本身给出
+  function cardsC8S4() {
+    var nTop = NV_C8S1[NV_C8S1.length - 1];      // 64 级：最细的台阶
+    var stair = stairLenC8S1(nTop);
+    var diag = diagC8S1();
+    var ratio = ratioC8S3(6);
+    var flatR = flatRatioC8S3();
+    var h1 = heightC8S3(1), h6 = heightC8S3(6);
+    var d = distC8S4(K_SEQ_C8S4);
+    return [
+      { name: '① 台阶总长', before: stair.toFixed(3), after: diag.toFixed(3), keep: false,
+        note: '差 ' + (stair - diag).toFixed(3) + '，一级一级数出来的' },
+      { name: '② 对角线长', before: diag.toFixed(3), after: diag.toFixed(3), keep: true,
+        note: '只认两个端点，不认中间走了多少步' },
+      { name: '③ 红边 ÷ 黑边', before: ratio.toFixed(3), after: flatR.toFixed(3), keep: false,
+        note: '每层都是 2.000，极限里 1.000 —— 跳过去的' },
+      { name: '④ 三角波最高点', before: h6.toFixed(3), after: '0.000', keep: false,
+        note: '从 ' + h1.toFixed(3) + ' 一路减半到 0，最后压成 x 轴' },
+      { name: '⑤ 「非整数」身份', before: seqTxtC8S4(K_SEQ_C8S4), after: '1', keep: false,
+        note: '每前进一步都是一个分数，极限是整数 1' },
+      { name: '⑥ 「一直在靠近」', before: '差 ' + d.toFixed(6), after: '差 0', keep: true,
+        note: '越来越近、永不抵达 —— 这就是极限' }
+    ];
+  }
+  function keepCountC8S4() {
+    var cs = cardsC8S4(), i, n = 0;
+    for (i = 0; i < cs.length; i++) { if (cs[i].keep) { n++; } }
+    return n;
+  }
+  function curCardC8S4() { return cardsC8S4()[g8_4.pick]; }
+  function msgC8S4() {
+    var c = curCardC8S4(), cs = cardsC8S4();
+    if (c.keep) {
+      return c.name + '：<b>' + c.before + '</b> —— 取极限后还是 <b>' + c.after + '</b>，<b>挺住了</b>。' +
+        '（六件里 ' + keepCountC8S4() + ' 件挺住）';
+    }
+    return c.name + '：<b>' + c.before + '</b> —— 取极限后<b>' + c.after +
+      '</b>，<b>被风吹走了</b>。';
+  }
+  function stepTxtC8S4() { return curCardC8S4().note + '。'; }
+
+  function drawC8S4() {
+    var cv = document.getElementById('cv8-4');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var cs = cardsC8S4(), i, x, y, card, on;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 标题 ----
+    label(c, '幸存清单：六件东西，过一遍风', 56, 26, '#334155', 12, 'left');
+    label(c, '每张卡：名字 · 取极限前 → 取极限后 · 判决', 56, 46, '#94a3b8', 10, 'left');
+    // ---- 六张卡（两列三行，for 循环画，不用 div 摆）----
+    for (i = 0; i < cs.length; i++) {
+      x = (i % 2 === 0) ? 56 : 314;
+      y = 60 + Math.floor(i / 2) * 88;
+      card = cs[i];
+      on = (i === g8_4.pick);
+      c.fillStyle = on ? '#f0fdfa' : '#fff';
+      c.strokeStyle = on ? '#0f766e' : '#e2e8f0';
+      c.lineWidth = on ? 2 : 1;
+      c.beginPath(); c.rect(x, y, 250, 76); c.fill(); c.stroke();
+      label(c, card.name, x + 10, y + 16, on ? '#0f766e' : '#334155', 11, 'left');
+      label(c, card.before + ' → ' + card.after, x + 10, y + 39, '#1e293b', 12, 'left');
+      label(c, card.keep ? '✔ 挺住' : '✘ 被吹走', x + 10, y + 61,
+        card.keep ? '#0f766e' : '#dc2626', 10.5, 'left');
+    }
+    // ---- 清点 ----
+    label(c, '六件里 ' + keepCountC8S4() + ' 件挺住、' + (cs.length - keepCountC8S4()) + ' 件被吹走',
+      56, 336, '#334155', 11, 'left');
+    // ---- 刹车话（恒印）----
+    label(c, '风带走了形状，留下了能被算的东西。', 56, 360, '#64748b', 11, 'left');
+  }
+  function updC8S4() {
+    var c = curCardC8S4(), cs = cardsC8S4(), i, b, keep = keepCountC8S4();
+    setTxtC8S4('kv8-4a-v', c.before);
+    setTxtC8S4('kv8-4a-t', c.name + '（取极限前）');
+    setTxtC8S4('kv8-4b-v', c.after);
+    setTxtC8S4('kv8-4b-t', '取极限后的值');
+    setTxtC8S4('kv8-4c-v', c.keep ? '挺住' : '被吹走');
+    setTxtC8S4('kv8-4c-t', keep + ' 件挺住 / ' + (cs.length - keep) + ' 件被吹走');
+    setTxtC8S4('st8-4', msgC8S4());
+    setTxtC8S4('sl8-4', stepTxtC8S4());
+    var dt = document.getElementById('st8-4-dot');
+    if (dt) { dt.style.background = c.keep ? '#0f766e' : '#dc2626'; }
+    var ln = document.getElementById('sl8-4');
+    if (ln) { ln.className = 'step-line on'; }
+    for (i = 0; i < NCARD_C8S4; i++) {
+      b = document.getElementById('b8-4-' + (i + 1));
+      if (b) { b.className = (i === g8_4.pick) ? 'ctrl-btn primary' : 'ctrl-btn'; }
+    }
+  }
+  function pickC8S4(i) {
+    var k = parseInt(i, 10);
+    if (!isFinite(k)) { k = IDX_DEF_C8S4; }
+    g8_4.pick = Math.min(NCARD_C8S4 - 1, Math.max(0, k));
+    updC8S4(); drawC8S4();
+  }
+  function resetC8S4() {
+    g8_4.pick = IDX_DEF_C8S4;
+    updC8S4(); drawC8S4();
+    toast('回到第 ① 张 —— 从最不肯屈服的那一个开始清点');
+  }
+  // 停止钩子：本节无运行态（点一下就重绘，D7 无播放键），但按约定登记。
+  function stopC8S4() { }
+
+  updC8S4(); drawC8S4();
+
+  // ================= 第 8 章 JS 区 · 终点 =================
+
+  // ================= 第 9 章 JS 区 · 起点（4 节的实现都插在这条线之后）=================
+  // 两条哨兵注释把「第 9 章新增的一切」框起来 —— 验证脚本与 _chapter_scope.js 据此做 scoped 扫描。
+  // ★ 本章放行的两个词：见 `_chapter_scope.js` 的 RELEASED[9]（此处**不写它们的字形**，避免自扫命中）。
+  //   ★ 全章**不用以 e 为底的指数函数、不用对数、不用乘方**：抖动用固定种子的线性同余（乘加取模），
+  //     峰数用循环累乘 —— 封存的那三个函数名**连注释里也别写**（本章不变量会连注释一起扫）。
+  // ★ 本章 4 节全部"拨一下就重绘"⇒ **不设播放键**，四节的停止钩子都是空实现（计划 §九 D6）。
+  // ★ 伪随机一律走 `lcgC9(seed)`：全章**不调用浏览器随机数生成器**（否则断言不可复现）。
+  var C9_SECTIONS = [
+    { n: 1, label: '花粉的舞会' },
+    { n: 2, label: '一个瞬间接着一个瞬间' },
+    { n: 3, label: '尖角上没有速度' },
+    { n: 4, label: '处处都是尖角' }
+  ];
+  function goC9(n) { switchPage('page-c9-' + n); }    // 第 9 章内部导航
+
+  // 9.1 花粉的舞会
+  // ★ 本节要送出的原语：**排除法**（原书 p87–88）。布朗的花粉、花岗岩、烟尘、狮身人面像石块
+  //   **都在抖**；密封一整年**还在抖** ⇒ 抖动不来自"生命"，来自**看不见的原子不停撞它**。
+  // ★ 本节的可算判据（计划 §八 #1）：
+  //     ① 四个样本共用**同一条伪随机流**（同一颗种子）⇒ 换样本时粒子位置**逐个相等**；
+  //     ② 每步位移恒 0.370 微米、每秒恒 30 次（不是随手估的，是本节的两个刻度）；
+  //     ③ 密封一年 = 365 × 86400 × 30 = 946 080 000 次，读数不为 0。
+  // ★ 禁：以 e 为底的指数函数 / 对数 / 乘方 —— 连函数名都不写（本章不变量含注释一起扫）。
+  // ★ 本节**不提前用**章内放行的两个词（它们在 9.2 才登场）—— 连注释里都不写。
+  // ★ 不设播放键（D6）：滑块 + 5 个按钮，全是"拨一下就重绘"。
+  var SAMP_C9S1 = [
+    { name: '花粉颗粒', life: '曾经是活的', note: '1827 年布朗看到的就是它' },
+    { name: '花岗岩颗粒', life: '从来不是活的', note: '石头磨成的粉' },
+    { name: '烟尘', life: '从来不是活的', note: '烟里飘的细灰' },
+    { name: '狮身人面像的石块', life: '三千多岁的死石头', note: '布朗托人从吉萨带回来的' }
+  ];
+  var STEP_C9S1 = 0.37;         // 每步位移（微米）—— 四个样本共用
+  var HZ_C9S1 = 30;             // 每秒跳 30 次
+  var LV_C9S1 = [0, 30, 300, 900, 1500, 946080000];   // 6 档步数：0/1/10/30/50 秒 + 1 年
+  var LVT_C9S1 = ['0 秒', '1 秒', '10 秒', '30 秒', '50 秒', '1 年'];
+  var LVS_C9S1 = [0, 1, 10, 30, 50, 31536000];        // 对应的秒数（★ 第 6 档 = 365 天）
+  var PX_C9S1 = 4.8;            // 1 微米 = 4.8 像素（视野直径 316 px ≈ 66 微米）
+  // ★ 为什么是 4.8 而不是 6：6 的时候最远的一条路走到 176.5 px，超出 148 px 的视野半径，
+  //   9 个粒子会有 2 个被裁掉（"走到一半消失"）。4.8 时最远 141.2 px，全部留在视野内。
+  //   顺带：24 px 的方格 ÷ 4.8 = **5 微米**，与画布上「一个方格 = 5 微米」严格一致。
+  var NPT_C9S1 = 9;             // 视野里 9 个粒子
+  var CX_C9S1 = 200, CY_C9S1 = 192, CR_C9S1 = 158;   // 视野圆（左侧）；半径 158 = 最远那条路 146.2 px + 12 px 余量
+  var g9_1 = { s: 0, t: 3 };    // s = 样本序号，t = 时间档（默认 30 秒：10 秒那团太小，看不出在抖）
+
+  // ★ 固定种子的线性同余（Park–Miller）：同一个种子永远给同一串数
+  //   ⇒ 「换样本画面一个像素都不动」这条判据才证明得了（换了样本也不换种子）。
+  function lcgC9S1(seed) { this.v = seed % 2147483647; if (this.v <= 0) { this.v += 2147483646; } }
+  lcgC9S1.prototype.next = function () {
+    this.v = (this.v * 48271) % 2147483647;
+    return this.v / 2147483647;
+  };
+  function setTxtC9S1(id, h) { var e = document.getElementById(id); if (e) { e.innerHTML = h; } }
+
+  // 某个粒子走 n 步的整条路（★ 起点按 9 个方向散开，避免全叠在圆心）
+  function pathC9S1(p, n) {
+    var r = new lcgC9S1(9101 + p * 37), ang = 2 * 3.141592653589793 * p / NPT_C9S1;
+    var x = CX_C9S1 + 26 * Math.cos(ang), y = CY_C9S1 + 26 * Math.sin(ang);
+    var pts = [[x, y]], i, a;
+    for (i = 0; i < n; i++) {
+      a = r.next() * 2 * 3.141592653589793;
+      x += STEP_C9S1 * PX_C9S1 * Math.cos(a);
+      y += STEP_C9S1 * PX_C9S1 * Math.sin(a);
+      pts.push([x, y]);
+    }
+    return pts;
+  }
+  function stepsC9S1() { return LV_C9S1[g9_1.t]; }         // 读数用：真实步数
+  function drawN9S1() { return Math.min(stepsC9S1(), 1500); }  // 画面用：最多 1 500 步
+  function secsC9S1() { return LVS_C9S1[g9_1.t]; }
+  function fmtC9S1(n) {
+    var s = String(n), out = '', k = 0, i;
+    for (i = s.length - 1; i >= 0; i--) {
+      out = s.charAt(i) + out; k++;
+      if (k % 3 === 0 && i > 0) { out = ' ' + out; }
+    }
+    return out;
+  }
+  function msgC9S1() {
+    var sm = SAMP_C9S1[g9_1.s];
+    if (g9_1.t === 5) {
+      return '密封 <b>365 天</b>、跳了 <b>' + fmtC9S1(stepsC9S1()) + '</b> 次 —— 它<b>还在抖</b>，' +
+        '每步还是 <b>0.370</b> 微米。生命这个解释，到此为止。';
+    }
+    if (g9_1.s === 0) {
+      return '花粉颗粒在抖 —— 布朗的第一反应是"它还活着？"。' +
+        '记下读数：每秒 <b>30</b> 次、每步 <b>0.370</b> 微米。';
+    }
+    return '换成<b>' + sm.name + '</b>（' + sm.life + '）—— 画面<b>一个像素都没挪</b>，' +
+      '读数<b>一个数都没变</b>。撞它的还是原子。';
+  }
+  function stepTxtC9S1() {
+    return '你看到的抖动，不是它<b>自己在动</b> —— 是周围<b>看不见的原子</b>在撞它。<br>' +
+      '撞一次，挪一小步（<b>0.370 微米</b>）；一秒撞 <b>30</b> 次；撞一年，就是 <b>9.46 亿</b> 次。';
+  }
+  function drawC9S1() {
+    var cv = document.getElementById('cv9-1');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var i, x, y, n = drawN9S1(), pts;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 方格纸（一个方格 = 5 微米 = 24 像素；与画布标签、说明文案三处严格一致）----
+    c.strokeStyle = '#f1f5f9'; c.lineWidth = 1;
+    for (x = 0; x <= 620; x += 24) {
+      c.beginPath(); c.moveTo(x, 0); c.lineTo(x, 380); c.stroke();
+    }
+    for (y = 0; y <= 380; y += 24) {
+      c.beginPath(); c.moveTo(0, y); c.lineTo(620, y); c.stroke();
+    }
+    // ---- 视野圆 + 裁剪（防止粒子跑到读数区，K26）----
+    c.save();
+    c.beginPath(); c.arc(CX_C9S1, CY_C9S1, CR_C9S1, 0, 2 * 3.141592653589793); c.clip();
+    c.fillStyle = '#fbfdff';
+    c.fillRect(CX_C9S1 - CR_C9S1, CY_C9S1 - CR_C9S1, CR_C9S1 * 2, CR_C9S1 * 2);
+    for (i = 0; i < NPT_C9S1; i++) {
+      pts = pathC9S1(i, n);
+      // 走过的路（淡线，最近 90 步）
+      c.strokeStyle = 'rgba(59,130,246,0.30)'; c.lineWidth = 1.1;
+      c.beginPath();
+      var st = Math.max(0, pts.length - 90);
+      c.moveTo(pts[st][0], pts[st][1]);
+      for (x = st + 1; x < pts.length; x++) { c.lineTo(pts[x][0], pts[x][1]); }
+      c.stroke();
+      // 现在在哪
+      dot(c, pts[pts.length - 1][0], pts[pts.length - 1][1], 3.4, '#3b82f6');
+    }
+    c.restore();
+    c.strokeStyle = '#cbd5e1'; c.lineWidth = 1.4;
+    c.beginPath(); c.arc(CX_C9S1, CY_C9S1, CR_C9S1, 0, 2 * 3.141592653589793); c.stroke();
+    dot(c, CX_C9S1, CY_C9S1, 1.8, '#cbd5e1');
+    // ---- 右侧读数（短版本，防出界）----
+    labelChip(c, SAMP_C9S1[g9_1.s].name, 366, 62, '#3b82f6', 11, 'left', 3);
+    labelChip(c, '已经过了 ' + LVT_C9S1[g9_1.t], 366, 86, '#64748b', 11, 'left', 3);
+    labelChip(c, '跳了 ' + fmtC9S1(stepsC9S1()) + ' 次', 366, 110, '#64748b', 11, 'left', 3);
+    labelChip(c, '每步 0.370 微米', 366, 134, '#10b981', 11, 'left', 3);
+    label(c, '视野：9 个粒子（一个方格 = 5 微米）', 366, 30, '#94a3b8', 10.5, 'left');
+    label(c, '换样本 / 密封一年，读数都不动', 366, 168, '#ef4444', 10.5, 'left');
+    if (g9_1.t === 5) {
+      label(c, '★ 画面只画得下 1 500 步', 366, 190, '#94a3b8', 10, 'left');
+      label(c, '（9.46 亿步在心里数）', 366, 206, '#94a3b8', 10, 'left');
+    }
+    // ---- 刹车话（恒印）----
+    label(c, '它不是在活着 —— 它是在被撞。', 24, 366, '#64748b', 11, 'left');
+  }
+  function updC9S1() {
+    var sm = SAMP_C9S1[g9_1.s], sl = document.getElementById('s9-1-t');
+    if (sl && sl.value !== String(g9_1.t)) { sl.value = String(g9_1.t); }
+    setTxtC9S1('lb9-1-t', LVT_C9S1[g9_1.t]);
+    setTxtC9S1('kv9-1a-v', sm.name);
+    setTxtC9S1('kv9-1a-t', '第 ' + (g9_1.s + 1) + ' 个样本 / 共 4 个');
+    setTxtC9S1('kv9-1b-v', '没有');
+    setTxtC9S1('kv9-1b-t', sm.life + ' —— ' + sm.note);
+    setTxtC9S1('kv9-1c-v', LVT_C9S1[g9_1.t]);
+    setTxtC9S1('kv9-1c-t', g9_1.t === 5
+      ? '365 天 = 31 536 000 秒（密封）'
+      : fmtC9S1(secsC9S1()) + ' 秒 × 每秒 30 次');
+    setTxtC9S1('kv9-1d-v', fmtC9S1(stepsC9S1()));
+    setTxtC9S1('kv9-1d-t', '每秒 30 次 —— 与样本无关');
+    setTxtC9S1('kv9-1e-v', STEP_C9S1.toFixed(3) + ' 微米');
+    setTxtC9S1('kv9-1e-t', '四个样本完全一样（同一步长）');
+    setTxtC9S1('st9-1', msgC9S1());
+    setTxtC9S1('sl9-1', stepTxtC9S1());
+    var dt = document.getElementById('st9-1-dot');
+    if (dt) { dt.style.background = g9_1.t === 5 ? '#ef4444' : '#3b82f6'; }
+    var ln = document.getElementById('sl9-1');
+    if (ln) { ln.className = 'step-line on'; }
+  }
+  function pickC9S1(k) {
+    var i = parseInt(k, 10);
+    if (!isFinite(i)) { i = 0; }
+    g9_1.s = Math.min(SAMP_C9S1.length - 1, Math.max(0, i));
+    updC9S1(); drawC9S1();
+    toast(g9_1.s === 0
+      ? '回到花粉颗粒 —— 读数和刚才那三样完全一样'
+      : '换成「' + SAMP_C9S1[g9_1.s].name + '」：画面一个像素都没挪，读数一个数都没变');
+  }
+  function pickC9S1T(v) {
+    var i = parseInt(v, 10);
+    if (!isFinite(i)) { i = 2; }
+    g9_1.t = Math.min(LV_C9S1.length - 1, Math.max(0, i));
+    updC9S1(); drawC9S1();
+  }
+  function sealC9S1() {
+    g9_1.t = LV_C9S1.length - 1;
+    updC9S1(); drawC9S1();
+    toast('密封 365 天：跳了 9.46 亿次，它还在抖 —— 每步还是 0.370 微米');
+  }
+  function resetC9S1() {
+    g9_1.s = 0; g9_1.t = 3;
+    updC9S1(); drawC9S1();
+    toast('回到 1827 年那滴花粉水（30 秒）—— 然后换上花岗岩试试');
+  }
+  // 停止钩子：本节没有运行态（拨一下就重绘，D6 也不设播放键），但必须登记
+  function stopC9S1() { }
+
+  updC9S1(); drawC9S1();
+  // 9.2 一个瞬间接着一个瞬间
+  // ★ 本节要送出的原语：**方向是数出来的**（原书 p89）。
+  //   每一瞬间：N 颗弹珠各撞一次，数左边/右边、上边/下边；哪边多，就往少的那边挪（= 往多的一边推）。
+  // ★ 判据（计划 §八 #2）：
+  //     ① 方向 = (sign(右−左), sign(下−上))，两个分量都 0 记"停"；
+  //     ② 左 + 右 = N（每一步可复算）；③ 路程 = 移动步数 × 2.5 像素（恒等）；
+  //     ④ 200 步时 直线 ÷ 路程 < 0.5；换种子 ⇒ 完全另一条路（"不可预测"）。
+  // ★ 本节是章内两个放行词**首次上屏**的地方：原句分别在 p89 的两处（见 HTML 讲解框）。
+  //   ★ 但**不提前用** 9.3 的判决词（那个"导"字打头的两字词）。
+  // ★ 禁：以 e 为底的指数函数 / 对数 / 乘方 —— 连函数名都不写。
+  // ★ 不设播放键（D6）：三个瞬时按钮 + 一个滑块。
+  var MARB_C9S2 = [8, 16, 24, 48, 64];     // 弹珠数五档
+  var STEP_C9S2 = 2.5;                     // 每步位移（像素）
+  var MAXS_C9S2 = 200;                     // 最多走 200 步（再走就出画）
+  var BX_C9S2 = 320, BY_C9S2 = 308;        // 路径区起点（画布下半的中间）
+  // ★ ghost = 换种子之前那条路（灰影）；ghostSteps = 它走了几步 —— 有参照物，"另一条"才看得见
+  var g9_2 = { m: 2, seed: 9201, steps: 0, moves: 0, stops: 0, L: 0, R: 0, U: 0, D: 0, dx: 0, dy: 0, path: [[BX_C9S2, BY_C9S2]], v: 9201, ghost: null, ghostSteps: 0 };
+
+  function setTxtC9S2(id, h) { var e = document.getElementById(id); if (e) { e.innerHTML = h; } }
+  function nextC9S2() {                    // Park–Miller：同一个种子永远给同一串数
+    g9_2.v = (g9_2.v * 48271) % 2147483647;
+    return g9_2.v / 2147483647;
+  }
+  function mOfC9S2() { return MARB_C9S2[g9_2.m]; }
+  // 走一步：先数，再挪
+  function oneC9S2() {
+    if (g9_2.steps >= MAXS_C9S2) { toast('已经走了 200 步 —— 按重置可以重看一遍（种子固定，路完全一样）'); return; }
+    var n = mOfC9S2(), i, L = 0, R = 0, U = 0, D = 0, dx, dy, len, last;
+    for (i = 0; i < n; i++) {
+      if (nextC9S2() < 0.5) { L++; } else { R++; }
+      if (nextC9S2() < 0.5) { U++; } else { D++; }
+    }
+    g9_2.L = L; g9_2.R = R; g9_2.U = U; g9_2.D = D;
+    dx = (R > L) ? 1 : ((L > R) ? -1 : 0);
+    dy = (D > U) ? 1 : ((U > D) ? -1 : 0);
+    g9_2.dx = dx; g9_2.dy = dy;
+    g9_2.steps++;
+    if (dx === 0 && dy === 0) {
+      g9_2.stops++;
+    } else {
+      len = Math.sqrt(dx * dx + dy * dy);
+      last = g9_2.path[g9_2.path.length - 1];
+      g9_2.path.push([last[0] + STEP_C9S2 * dx / len, last[1] + STEP_C9S2 * dy / len]);
+      g9_2.moves++;
+    }
+    updC9S2(); drawC9S2();
+  }
+  function runC9S2(k) {
+    var i, n = parseInt(k, 10), s0 = g9_2.steps;
+    if (!isFinite(n)) { n = 1; }
+    for (i = 0; i < n; i++) { oneC9S2(); }
+    toast('走了 ' + (g9_2.steps - s0) + ' 步：路程 ' + travelC9S2().toFixed(1) +
+      ' 像素，可离起点只有 ' + distC9S2().toFixed(1) + ' 像素 —— 走得多，不一定走得远');
+  }
+  function travelC9S2() { return g9_2.moves * STEP_C9S2; }
+  function distC9S2() {
+    var p = g9_2.path[g9_2.path.length - 1];
+    return Math.sqrt((p[0] - BX_C9S2) * (p[0] - BX_C9S2) + (p[1] - BY_C9S2) * (p[1] - BY_C9S2));
+  }
+  function dirTxtC9S2() {
+    if (g9_2.dx === 0 && g9_2.dy === 0) { return '停（两边一样多）'; }
+    var v = g9_2.dy > 0 ? '下' : (g9_2.dy < 0 ? '上' : ''), h = g9_2.dx > 0 ? '右' : (g9_2.dx < 0 ? '左' : '');
+    return v + h;
+  }
+  function msgC9S2() {
+    if (g9_2.steps === 0) {
+      return '还没开始 —— 按<b>下一个瞬间</b>：先数四个方向各撞了几下，再看它往哪边让。';
+    }
+    if (g9_2.L === g9_2.R && g9_2.U === g9_2.D) {
+      return '这一瞬间两边撞得<b>一样多</b> —— 它原地不动。这也会发生，也是规则的一部分。';
+    }
+    return '左边 <b>' + g9_2.L + '</b> / 右边 <b>' + g9_2.R + '</b> ⇒ 往<b>' +
+      (g9_2.R > g9_2.L ? '右' : (g9_2.L > g9_2.R ? '左' : '原处')) + '</b>让一点；' +
+      '上边 <b>' + g9_2.U + '</b> / 下边 <b>' + g9_2.D + '</b> ⇒ 往<b>' +
+      (g9_2.D > g9_2.U ? '下' : (g9_2.U > g9_2.D ? '上' : '原处')) +
+      '</b>让一点。下一步？<b>重新数</b>，不参考刚才。';
+  }
+  function stepTxtC9S2() {
+    return '规则只有一条：<b>数四个方向，往撞得少的那边让一小步</b>。<br>' +
+      '一个瞬间接着一个瞬间，一直持续到天荒地老 —— 而<b>每一次都从头数起</b>。';
+  }
+  function drawC9S2() {
+    var cv = document.getElementById('cv9-2');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var i, a, x, y, n = mOfC9S2(), p, last;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 上：撞击台 ----
+    var CX = 150, CY = 128, RR = 84;
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.beginPath(); c.arc(CX, CY, RR, 0, 2 * 3.141592653589793); c.stroke();
+    for (i = 0; i < n; i++) {
+      a = 2 * 3.141592653589793 * i / n;
+      x = CX + RR * Math.cos(a); y = CY + RR * Math.sin(a);
+      c.fillStyle = '#94a3b8'; c.beginPath(); c.arc(x, y, 3.2, 0, 2 * 3.141592653589793); c.fill();
+    }
+    // 大球（被撞的那个）
+    c.fillStyle = '#3b82f6'; c.beginPath(); c.arc(CX, CY, 9, 0, 2 * 3.141592653589793); c.fill();
+    // 这一步的箭头（往撞得少的那边）
+    if (g9_2.steps > 0 && (g9_2.dx !== 0 || g9_2.dy !== 0)) {
+      var ln = Math.sqrt(g9_2.dx * g9_2.dx + g9_2.dy * g9_2.dy);
+      var ax = CX + 26 * g9_2.dx / ln, ay = CY + 26 * g9_2.dy / ln;
+      c.strokeStyle = '#ef4444'; c.lineWidth = 2;
+      c.beginPath(); c.moveTo(CX, CY); c.lineTo(ax, ay); c.stroke();
+      dot(c, ax, ay, 3, '#ef4444');
+    }
+    // ---- 右上：四条计数条 ----
+    var barX = 300, barW = 250;
+    function bar(y, lab, val, other, col) {
+      var frac = (val + other) > 0 ? val / (val + other) : 0.5;
+      c.fillStyle = '#f1f5f9'; c.fillRect(barX, y, barW, 10);
+      c.fillStyle = col; c.fillRect(barX, y, barW * frac, 10);
+      label(c, lab + ' ' + val, barX, y - 5, '#64748b', 10.5, 'left');
+    }
+    bar(58, '左边撞', g9_2.L, g9_2.R, '#60a5fa');
+    bar(96, '右边撞', g9_2.R, g9_2.L, '#f87171');
+    bar(146, '上边撞', g9_2.U, g9_2.D, '#a78bfa');
+    bar(184, '下边撞', g9_2.D, g9_2.U, '#34d399');
+    label(c, '弹珠 ' + n + ' 颗（真实的原子看不见）', barX, 30, '#94a3b8', 10.5, 'left');
+    // ---- 下：整条路 ----
+    c.save();
+    c.beginPath(); c.rect(20, 242, 580, 130); c.clip();
+    c.fillStyle = '#fbfdff'; c.fillRect(20, 242, 580, 130);
+    // ★ 比例尺：一格 = 10 像素（1:1，不放大 —— 路径小，正是因为"走得多、离得近"）
+    var gx, gy;
+    c.strokeStyle = '#eef2f7'; c.lineWidth = 1;
+    for (gx = 20; gx <= 600; gx += 10) { c.beginPath(); c.moveTo(gx, 242); c.lineTo(gx, 372); c.stroke(); }
+    for (gy = 242; gy <= 372; gy += 10) { c.beginPath(); c.moveTo(20, gy); c.lineTo(600, gy); c.stroke(); }
+    // ★ 灰影 = 换种子之前那条路。★ 两条随机游走都只有四五十像素宽，叠在原处必然互相压 ——
+    //   所以**平移**到左边并排摆（只挪位置，不缩放：每格还是 10 像素）。
+    var GHX_C9S2 = BX_C9S2 - 190;
+    if (g9_2.ghost && g9_2.ghost.length > 1) {
+      var off = GHX_C9S2 - BX_C9S2, gp = g9_2.ghost[g9_2.ghost.length - 1];
+      c.strokeStyle = 'rgba(148,163,184,0.8)'; c.lineWidth = 1.1;
+      c.beginPath();
+      for (i = 0; i < g9_2.ghost.length; i++) {
+        p = g9_2.ghost[i];
+        if (i === 0) { c.moveTo(p[0] + off, p[1]); } else { c.lineTo(p[0] + off, p[1]); }
+      }
+      c.stroke();
+      // 灰影自己的起点十字（白缝 2.4：把身下的灰线擦开）
+      c.strokeStyle = '#ffffff'; c.lineWidth = 2.4;
+      c.beginPath();
+      c.moveTo(GHX_C9S2 - 7, BY_C9S2); c.lineTo(GHX_C9S2 + 7, BY_C9S2);
+      c.moveTo(GHX_C9S2, BY_C9S2 - 7); c.lineTo(GHX_C9S2, BY_C9S2 + 7);
+      c.stroke();
+      c.strokeStyle = '#94a3b8'; c.lineWidth = 1.4;
+      c.beginPath();
+      c.moveTo(GHX_C9S2 - 7, BY_C9S2); c.lineTo(GHX_C9S2 + 7, BY_C9S2);
+      c.moveTo(GHX_C9S2, BY_C9S2 - 7); c.lineTo(GHX_C9S2, BY_C9S2 + 7);
+      c.stroke();
+      dot(c, gp[0] + off, gp[1], 3.2, '#94a3b8');  // 上一条的落点
+    }
+    // 线宽 1.1 px + 透明度 0.9：挤在一起的地方自然变深，疏的地方还看得出"一步一折"
+    c.strokeStyle = 'rgba(59,130,246,0.9)'; c.lineWidth = 1.1;
+    c.beginPath();
+    for (i = 0; i < g9_2.path.length; i++) {
+      p = g9_2.path[i];
+      if (i === 0) { c.moveTo(p[0], p[1]); } else { c.lineTo(p[0], p[1]); }
+    }
+    c.stroke();
+    // 起点：十字。★ 按"走没走出第一步"分两种画法 —— 0 步时起点和现在本来就是一个点，
+    //   红点又是后画的，一层白底（6.4）就把 7 px 的十字整个吃掉了。
+    last = g9_2.path[g9_2.path.length - 1];
+    var walked = g9_2.path.length > 1;
+    if (!walked) { dot(c, last[0], last[1], 4.2, '#ef4444'); }   // 0 步：现在 = 起点，红点先落
+    // 白缝：走了（3.4）是为了把身下的蓝线擦开一圈；没走（2.4）只是让十字从红点里显出来
+    c.strokeStyle = '#ffffff'; c.lineWidth = walked ? 3.4 : 2.4;
+    c.beginPath();
+    c.moveTo(BX_C9S2 - 7, BY_C9S2); c.lineTo(BX_C9S2 + 7, BY_C9S2);
+    c.moveTo(BX_C9S2, BY_C9S2 - 7); c.lineTo(BX_C9S2, BY_C9S2 + 7);
+    c.stroke();
+    c.strokeStyle = '#64748b'; c.lineWidth = 1.4;
+    c.beginPath();
+    c.moveTo(BX_C9S2 - 7, BY_C9S2); c.lineTo(BX_C9S2 + 7, BY_C9S2);
+    c.moveTo(BX_C9S2, BY_C9S2 - 7); c.lineTo(BX_C9S2, BY_C9S2 + 7);
+    c.stroke();
+    if (walked) {
+      dot(c, last[0], last[1], 6.4, '#ffffff');    // 留白：别和蓝路径粘在一起
+      dot(c, last[0], last[1], 4.2, '#ef4444');    // 现在在哪
+    }
+    c.strokeStyle = 'rgba(239,68,68,0.55)'; c.setLineDash([3, 3]); c.lineWidth = 1.2;
+    c.beginPath(); c.moveTo(BX_C9S2, BY_C9S2); c.lineTo(last[0], last[1]); c.stroke();
+    c.setLineDash([]);
+    c.restore();
+    label(c, '这条路（十字 = 起点，红点 = 现在）', 24, 236, '#94a3b8', 10.5, 'left');
+    label(c, '一格 = 10 像素（1:1，没有放大）', 600, 236, '#94a3b8', 10, 'right');
+    if (g9_2.ghost && g9_2.ghost.length > 1) {
+      label(c, '灰线 = 上一条（' + g9_2.ghostSteps + ' 步，挪到左边并排看）', 24, 364, '#94a3b8', 9.5, 'left');
+    }
+    // ---- 刹车话（恒印）----
+    label(c, '一个瞬间接着一个瞬间，一直持续到天荒地老。', 24, 16, '#64748b', 11, 'left');
+  }
+  function updC9S2() {
+    var sl = document.getElementById('s9-2-m');
+    if (sl && sl.value !== String(g9_2.m)) { sl.value = String(g9_2.m); }
+    setTxtC9S2('lb9-2-m', mOfC9S2() + ' 颗');
+    setTxtC9S2('kv9-2a-v', String(g9_2.steps));
+    setTxtC9S2('kv9-2a-t', '最多 200 步（画得下）');
+    setTxtC9S2('kv9-2b-v', g9_2.L + ' / ' + g9_2.R);
+    setTxtC9S2('kv9-2b-t', '加起来 = 弹珠数 ' + mOfC9S2() + ' 颗');
+    setTxtC9S2('kv9-2c-v', g9_2.U + ' / ' + g9_2.D);
+    setTxtC9S2('kv9-2c-t', '同上：上 + 下 = ' + mOfC9S2());
+    setTxtC9S2('kv9-2d-v', g9_2.steps === 0 ? '—' : dirTxtC9S2());
+    setTxtC9S2('kv9-2d-t', '哪边撞得少，就往哪边让');
+    setTxtC9S2('kv9-2e-v', travelC9S2().toFixed(1) + ' 像素');
+    setTxtC9S2('kv9-2e-t', '移动 ' + g9_2.moves + ' 步 × 2.5（停 ' + g9_2.stops + ' 次不算）');
+    setTxtC9S2('kv9-2f-v', distC9S2().toFixed(1) + ' 像素');
+    setTxtC9S2('kv9-2f-t', '起点到现在的直线');
+    setTxtC9S2('kv9-2g-v', travelC9S2() > 0 ? (distC9S2() / travelC9S2()).toFixed(3) : '—');
+    setTxtC9S2('kv9-2g-t', '走得越久，这个数越小');
+    setTxtC9S2('st9-2', msgC9S2());
+    setTxtC9S2('sl9-2', stepTxtC9S2());
+    var dt = document.getElementById('st9-2-dot');
+    if (dt) { dt.style.background = '#3b82f6'; }
+    var ln = document.getElementById('sl9-2');
+    if (ln) { ln.className = 'step-line on'; }
+  }
+  function pickC9S2(k) {
+    var i = parseInt(k, 10);
+    if (!isFinite(i)) { i = 2; }
+    g9_2.m = Math.min(MARB_C9S2.length - 1, Math.max(0, i));
+    updC9S2(); drawC9S2();
+    toast('弹珠改成 ' + mOfC9S2() + ' 颗 —— 路已经走出来的部分不变，从这里接着数');
+  }
+  function reseedC9S2() {
+    // ★ 换种子 = 换一条完全不同的路。可"不同"得让眼睛看得出来：
+    //   ① 上一条路留成**灰影**（同一个起点、同一把比例尺，只变淡）—— 有参照物；
+    //   ② 换完立刻走**同样 100 步** —— 否则屏幕上只剩一个十字，看着像"被清空了"。
+    var keep = g9_2.path.slice(), keepDist = distC9S2(), had = g9_2.path.length > 1;
+    g9_2.seed = g9_2.seed + 1;
+    g9_2.v = g9_2.seed;
+    g9_2.ghost = had ? keep : null;
+    g9_2.ghostSteps = had ? g9_2.steps : 0;
+    g9_2.steps = 0; g9_2.moves = 0; g9_2.stops = 0;
+    g9_2.L = 0; g9_2.R = 0; g9_2.U = 0; g9_2.D = 0; g9_2.dx = 0; g9_2.dy = 0;
+    g9_2.path = [[BX_C9S2, BY_C9S2]];
+    runC9S2(100);                                  // 立刻走同样 100 步（里面的 toast 会被下面盖掉）
+    toast(had
+      ? '第 ' + (g9_2.seed - 9200) + ' 颗种子，同样走 100 步：上一条落在离起点 ' + keepDist.toFixed(1) +
+        ' 像素，这一条落在 ' + distC9S2().toFixed(1) + ' 像素 —— 灰线和蓝线一步都不重合'
+      : '换了一颗种子，先走 100 步 —— 再换一次，就能看见两条路差多远');
+  }
+  function resetC9S2() {
+    g9_2.m = 2; g9_2.seed = 9201; g9_2.v = 9201;
+    g9_2.ghost = null; g9_2.ghostSteps = 0;        // 重置 = 回到干干净净的第 0 个瞬间
+    g9_2.steps = 0; g9_2.moves = 0; g9_2.stops = 0;
+    g9_2.L = 0; g9_2.R = 0; g9_2.U = 0; g9_2.D = 0; g9_2.dx = 0; g9_2.dy = 0;
+    g9_2.path = [[BX_C9S2, BY_C9S2]];
+    updC9S2(); drawC9S2();
+    toast('回到第 0 个瞬间 —— 按"下一个瞬间"一步一步数');
+  }
+  // 停止钩子：本节没有运行态（拨一下就重绘，D6 不设播放键），但必须登记
+  function stopC9S2() { }
+
+  updC9S2(); drawC9S2();
+  // 9.3 尖角上没有速度
+  // ★ 本节要送出的原语：**不可微分 = 顶点那一下没有"一个"速度**（原书 p92 的判决）。
+  //   速度要在一点上得到唯一的一个数：从左边看一个、从右边看一个，一样才有。
+  // ★ 判据（计划 §八 #3）：
+  //     ① 三档共用顶点 (2.5 s, 25 m)、两端 (0,0)/(5,0)；
+  //     ② 窗口 h = 10^-1 … 10^-12 秒；左右平均速度 = ±k·h^(p−1) ⇒ 差 = 2k·h^(p−1)
+  //        —— 棒球 p=2 差 = 8h（相邻档 ÷10）；火箭 p=1.5 差 = 12.649√h（÷3.162）；
+  //        尖角 p=1 差 = 20 恒定（12 档一个字节都不变）。
+  //     ③ 交叉核对：h ≥ 10^-6 的 7 档，解析式与"直接取两点相减再除"的差 < 1e-9。
+  // ★ P0 陷阱（计划 §五.3）：h = 10^-12 时，"取两点相减再除"会被浮点舍入吃掉
+  //   （25 − 1e-11 与 25 的可表示间距只有约 7.1e-15）⇒ **读数一律走解析式**，差分只做核对。
+  // ★ 禁：不以 e 为底的指数函数 / 对数 / 乘方（10 的幂用循环累乘）。
+  // ★ 不设播放键（D6）：三档键 + 一个 12 档滑块 + 重置。
+  var TIP_C9S3 = { t: 2.5, h: 25 };            // 三档共用的顶点（示意刻度）
+  var CURVES_C9S3 = [
+    { name: '棒球',     p: 2,   k: 4,                  color: '#3b82f6', light: '#bfdbfe' },
+    { name: '火箭助推', p: 1.5, k: 6.324555320336759,  color: '#8b5cf6', light: '#ddd6fe' },
+    { name: '尖角',     p: 1,   k: 10,                 color: '#ef4444', light: '#fecaca' }
+  ];
+  var MAXN_C9S3 = 12;                          // 12 档：10^-1 … 10^-12 秒
+  var g9_3 = { c: 0, n: 1 };                   // 默认：棒球 + 0.1 秒
+
+  function setTxtC9S3(id, h) { var e = document.getElementById(id); if (e) { e.innerHTML = h; } }
+  function pow10C9S3(k) { var r = 1, i; for (i = 0; i < k; i++) { r = r * 10; } return r; }
+  function winC9S3(n) { return 1 / pow10C9S3(n); }
+  // 曲线：h(t) = 25 − k·|t − 2.5|^p（只有 p 不同 ⇒ 同一件事，只有顶点的尖度不同）
+  function hOfC9S3(cv, t) {
+    var d = Math.abs(t - TIP_C9S3.t);
+    if (cv.p === 2) { return TIP_C9S3.h - cv.k * d * d; }
+    if (cv.p === 1.5) { return TIP_C9S3.h - cv.k * d * Math.sqrt(d); }
+    return TIP_C9S3.h - cv.k * d;
+  }
+  // 从顶点往左窗口边缘看的那段平均速度（米/秒）；往右是它的相反数
+  function vAvgC9S3(cv, w) {
+    if (cv.p === 1) { return cv.k; }
+    if (cv.p === 1.5) { return cv.k * Math.sqrt(w); }
+    return cv.k * w;
+  }
+  function diffAtC9S3(n) { return 2 * vAvgC9S3(CURVES_C9S3[g9_3.c], winC9S3(n)); }
+  // 窗口再缩 10 倍，差缩成多少（< 1 在缩 = 两边在靠拢；= 1 一步不让）
+  function ratioC9S3() {
+    var n = g9_3.n;
+    return n < MAXN_C9S3 ? diffAtC9S3(n + 1) / diffAtC9S3(n) : diffAtC9S3(n) / diffAtC9S3(n - 1);
+  }
+  var SUP_C9S3 = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+  function supC9S3(k) {
+    var t = String(k), r = '', i;
+    for (i = 0; i < t.length; i++) { r = r + SUP_C9S3[parseInt(t.charAt(i), 10)]; }
+    return r;
+  }
+  function smallC9S3(a) {                      // 0 < a < 0.001 ⇒ "8.000 × 10⁻¹²"
+    var m = a, k = 0;
+    while (m < 1 && k < 30) { m = m * 10; k++; }
+    return m.toFixed(3) + ' × 10⁻' + supC9S3(k);
+  }
+  function fmtNumC9S3(a, dg) { return a < 0.001 ? smallC9S3(a) : a.toFixed(dg); }
+  function fmtSpdC9S3(x) {                     // 带符号：+0.400 / −10.000 / +8.000 × 10⁻¹²
+    var a = Math.abs(x);
+    if (a === 0) { return '0.000'; }
+    return (x < 0 ? '−' : '+') + fmtNumC9S3(a, 3);
+  }
+  function fmtDiffC9S3(x) { return fmtNumC9S3(x, 6); }
+  function winTxtC9S3(n) {
+    var W = ['', '0.1 秒', '0.01 秒', '0.001 秒', '万分之一秒', '十万分之一秒',
+             '百万分之一秒', '千万分之一秒', '亿分之一秒', '十亿分之一秒',
+             '百亿分之一秒', '千亿分之一秒', '一万亿分之一秒'];
+    return W[n];
+  }
+  function winNumC9S3(n) {
+    var t = '0.', i;
+    for (i = 1; i < n; i++) { t = t + '0'; }
+    return t + '1';
+  }
+  function ratioTxtC9S3(r) { return r < 0.999 ? '÷' + (1 / r).toFixed(3) : '×' + r.toFixed(3); }
+  // ★ 单一真源：kv / status / step-line / 画布标注全部读这一个返回值
+  function readC9S3() {
+    var cv = CURVES_C9S3[g9_3.c], n = g9_3.n, w = winC9S3(n);
+    var vL = vAvgC9S3(cv, w), vR = -vL, r = ratioC9S3(), d = vL - vR;
+    return {
+      cv: cv, n: n, w: w, wTxt: winTxtC9S3(n), wNum: winNumC9S3(n),
+      vL: vL, vR: vR, diff: d, ratio: r, ratioTxt: ratioTxtC9S3(r),
+      vLTxt: fmtSpdC9S3(vL), vRTxt: fmtSpdC9S3(vR), diffTxt: fmtDiffC9S3(d),
+      hasSpeed: r < 0.5
+    };
+  }
+  function msgC9S3(R) {
+    R = R || readC9S3();
+    if (R.hasSpeed) {
+      return '窗口缩到 <b>' + R.wTxt + '</b>：左边 <b>' + R.vLTxt + '</b>、右边 <b>' + R.vRTxt +
+        '</b> —— 两个数<b>越来越靠拢</b>，一起靠近 0。所以顶点那一下<b>有速度</b>，就是每秒 0 米。';
+    }
+    return '窗口缩到 <b>' + R.wTxt + '</b>：左边 <b>' + R.vLTxt + '</b>、右边 <b>' + R.vRTxt +
+      '</b> —— 缩了多少倍都<b>一步不让</b>。两个数永远讲不拢 ⇒ <b>顶点那一下没有速度</b>。';
+  }
+  function stepTxtC9S3() {
+    return '判据只有一条：<b>左边一个数、右边一个数，一样才有速度</b>。<br>' +
+      '把时间窗一路缩到一万亿分之一秒 —— <b>会靠拢的，是有速度；不动的，是没有</b>。';
+  }
+  function drawC9S3() {
+    var cvEl = document.getElementById('cv9-3');
+    if (!cvEl || !cvEl.getContext) { return; }
+    var c = cvEl.getContext('2d');
+    var R = readC9S3(), i, cu, t, x, y, hL, hR;
+    var XL = 56, XR = 372, YT = 76, YB = 286;
+    var APX = XL + (XR - XL) * 0.5, APY = YT;           // 顶点在 t = 2.5 秒
+    var PXS = (XR - XL) / 5, PYS = (YB - YT) / 25;      // 1 秒 = 63.2 像素 / 1 米 = 8.4 像素
+    var winPx = R.w * PXS;                              // 时间窗在图上有多宽（像素）
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 刹车话（恒印）----
+    label(c, '尖角上没有速度：左边说 +10，右边说 −10。', 24, 16, '#64748b', 11.5, 'left');
+    label(c, '三条曲线共用同一个顶点（2.5 秒、25 米）—— 只有"顶点尖不尖"不同', 24, 38, '#94a3b8', 10.5, 'left');
+    // ---- 时间窗：黄色窄带（画在曲线下面）----
+    if (winPx >= 1.2) {
+      c.fillStyle = 'rgba(250,204,21,0.20)';
+      c.fillRect(APX - winPx, YT - 4, winPx * 2, YB - YT + 4);
+    }
+    // ---- 坐标轴 ----
+    c.strokeStyle = '#cbd5e1'; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(XL, YT - 10); c.lineTo(XL, YB); c.lineTo(XR + 8, YB); c.stroke();
+    for (i = 0; i <= 5; i++) {
+      x = XL + PXS * i;
+      c.beginPath(); c.moveTo(x, YB); c.lineTo(x, YB + 4); c.stroke();
+      label(c, String(i), x, YB + 14, '#94a3b8', 10, 'center');
+    }
+    for (i = 0; i <= 25; i += 5) {
+      y = YB - PYS * i;
+      c.beginPath(); c.moveTo(XL - 4, y); c.lineTo(XL, y); c.stroke();
+      label(c, String(i), XL - 8, y, '#94a3b8', 10, 'right');
+    }
+    label(c, '米', XL - 8, YT - 16, '#94a3b8', 10, 'right');
+    label(c, '秒', XR + 14, YB + 14, '#94a3b8', 10, 'left');
+    // ---- 三条曲线：另外两条淡、现在这条粗 ----
+    for (i = 0; i < CURVES_C9S3.length; i++) {
+      cu = CURVES_C9S3[i];
+      if (i === g9_3.c) { continue; }
+      c.strokeStyle = cu.light; c.lineWidth = 1.2;
+      c.beginPath();
+      for (t = 0; t <= 5.001; t += 0.05) {
+        x = XL + PXS * t; y = YB - PYS * hOfC9S3(cu, t);
+        if (t === 0) { c.moveTo(x, y); } else { c.lineTo(x, y); }
+      }
+      c.stroke();
+    }
+    c.strokeStyle = R.cv.color; c.lineWidth = 2.2;
+    c.beginPath();
+    for (t = 0; t <= 5.001; t += 0.05) {
+      x = XL + PXS * t; y = YB - PYS * hOfC9S3(R.cv, t);
+      if (t === 0) { c.moveTo(x, y); } else { c.lineTo(x, y); }
+    }
+    c.stroke();
+    // ---- 顶点：竖虚线 + 一个点 ----
+    c.strokeStyle = 'rgba(148,163,184,0.6)'; c.lineWidth = 1; c.setLineDash([3, 3]);
+    c.beginPath(); c.moveTo(APX, APY - 10); c.lineTo(APX, YB); c.stroke();
+    c.setLineDash([]);
+    dot(c, APX, APY, 4.2, R.cv.color);
+    // ---- 时间窗：两条边 + 顶点到窗边的两条虚线（= 这一段的平均速度）----
+    if (winPx >= 1.2) {
+      c.strokeStyle = '#f59e0b'; c.lineWidth = 1.2;
+      c.beginPath(); c.moveTo(APX - winPx, YT - 4); c.lineTo(APX - winPx, YB); c.stroke();
+      c.beginPath(); c.moveTo(APX + winPx, YT - 4); c.lineTo(APX + winPx, YB); c.stroke();
+      hL = hOfC9S3(R.cv, TIP_C9S3.t - R.w);
+      hR = hOfC9S3(R.cv, TIP_C9S3.t + R.w);
+      c.strokeStyle = 'rgba(245,158,11,0.9)'; c.setLineDash([4, 3]);
+      c.beginPath(); c.moveTo(APX, APY); c.lineTo(APX - winPx, YB - PYS * hL); c.stroke();
+      c.beginPath(); c.moveTo(APX, APY); c.lineTo(APX + winPx, YB - PYS * hR); c.stroke();
+      c.setLineDash([]);
+      dot(c, APX - winPx, YB - PYS * hL, 3, '#f59e0b');
+      dot(c, APX + winPx, YB - PYS * hR, 3, '#f59e0b');
+    }
+    // ---- 右：顶点那一下的两支箭头（长度 = 平均速度，比例写死 64 像素 = 10 米/秒）----
+    var PX = 500, PY = 184, MAXA = 64, SC = 6.4;
+    var lUp = Math.abs(R.vL) * SC, lDn = Math.abs(R.vR) * SC;
+    if (lUp > MAXA) { lUp = MAXA; }
+    if (lDn > MAXA) { lDn = MAXA; }
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(396, 66, 208, 230);
+    label(c, '顶点那一下（2.5 秒）', PX, 82, '#64748b', 10.5, 'center');
+    label(c, '左边 ' + R.vLTxt, PX, 100, '#10b981', 11.5, 'center');
+    label(c, '右边 ' + R.vRTxt, PX, 268, '#ef4444', 11.5, 'center');
+    label(c, '差 = ' + R.diffTxt, PX, 288, '#334155', 11.5, 'center');
+    // ★ 顶点圆点**先画**，箭头压在上面 —— 否则 0.4 米/秒 那 2.6 像素的箭头会被它整根盖住
+    dot(c, PX, PY, 4.2, R.cv.color);
+    c.strokeStyle = '#10b981'; c.lineWidth = 2.4;
+    c.beginPath(); c.moveTo(PX, PY - 5); c.lineTo(PX, PY - 5 - lUp); c.stroke();
+    if (lUp > 12) {
+      c.beginPath();
+      c.moveTo(PX - 4, PY - 5 - lUp + 6); c.lineTo(PX, PY - 5 - lUp); c.lineTo(PX + 4, PY - 5 - lUp + 6);
+      c.stroke();
+    }
+    // ★ 端点永远补一个小圆点：再短也看得出"很小，但不是零"（比例没动，只是把端点画出来）
+    dot(c, PX, PY - 5 - lUp, 2.4, '#10b981');
+    c.strokeStyle = '#ef4444';
+    c.beginPath(); c.moveTo(PX, PY + 5); c.lineTo(PX, PY + 5 + lDn); c.stroke();
+    if (lDn > 12) {
+      c.beginPath();
+      c.moveTo(PX - 4, PY + 5 + lDn - 6); c.lineTo(PX, PY + 5 + lDn); c.lineTo(PX + 4, PY + 5 + lDn - 6);
+      c.stroke();
+    }
+    dot(c, PX, PY + 5 + lDn, 2.4, '#ef4444');
+    // ---- 底部：三档图例 + 窗口说明 ----
+    for (i = 0; i < CURVES_C9S3.length; i++) {
+      cu = CURVES_C9S3[i];
+      x = 56 + i * 110;
+      c.strokeStyle = cu.color; c.lineWidth = i === g9_3.c ? 2.6 : 1.2;
+      c.beginPath(); c.moveTo(x, 322); c.lineTo(x + 20, 322); c.stroke();
+      label(c, cu.name, x + 26, 322, i === g9_3.c ? '#334155' : '#94a3b8', 10.5, 'left');
+    }
+    label(c, winPx >= 1.2
+      ? '两条黄线之间 = 这一档的时间窗（' + R.wTxt + '，图上 ' + winPx.toFixed(1) + ' 像素宽）'
+      : '窗口 ' + R.wTxt + '：窄到 1 像素以下 —— 图上就是顶点那条线，可两个数一步不让',
+      56, 348, '#f59e0b', 10, 'left');
+  }
+  function updC9S3() {
+    var R = readC9S3(), i, b;
+    var sl = document.getElementById('s9-3-n');
+    if (sl && sl.value !== String(g9_3.n)) { sl.value = String(g9_3.n); }
+    setTxtC9S3('lb9-3-w', R.wTxt);
+    setTxtC9S3('kv9-3a-v', '第 ' + R.n + ' 档');
+    setTxtC9S3('kv9-3a-t', '共 12 档：0.1 秒 → 一万亿分之一秒');
+    setTxtC9S3('kv9-3b-v', R.wTxt);
+    setTxtC9S3('kv9-3b-t', '= ' + R.wNum + ' 秒（顶点左右各一段）');
+    setTxtC9S3('kv9-3c-v', R.vLTxt + ' 米/秒');
+    setTxtC9S3('kv9-3c-t', '从顶点往左窗边看');
+    setTxtC9S3('kv9-3d-v', R.vRTxt + ' 米/秒');
+    setTxtC9S3('kv9-3d-t', '从顶点往右窗边看');
+    setTxtC9S3('kv9-3e-v', R.diffTxt);
+    setTxtC9S3('kv9-3e-t', R.hasSpeed ? '左右两个数越来越靠拢' : '缩多少倍都一步不让');
+    setTxtC9S3('kv9-3f-v', R.hasSpeed ? '有：每秒 0 米' : '没有');
+    setTxtC9S3('kv9-3f-t', R.hasSpeed ? '左边和右边给的是同一个数' : '左边和右边各说各的');
+    setTxtC9S3('kv9-3g-v', R.ratioTxt);
+    setTxtC9S3('kv9-3g-t', R.hasSpeed ? '差在缩 ⇒ 两边在靠拢' : '差不动 ⇒ 两边讲不拢');
+    for (i = 0; i < CURVES_C9S3.length; i++) {
+      b = document.getElementById('c9-3-b' + i);
+      if (b) { b.className = 'ctrl-btn' + (i === g9_3.c ? ' on' : ''); }
+    }
+    setTxtC9S3('st9-3', msgC9S3(R));
+    setTxtC9S3('sl9-3', stepTxtC9S3());
+    var dt = document.getElementById('st9-3-dot');
+    if (dt) { dt.style.background = R.hasSpeed ? '#3b82f6' : '#ef4444'; }
+    var ln = document.getElementById('sl9-3');
+    if (ln) { ln.className = 'step-line on'; }
+  }
+  function pickC9S3(k) {
+    var i = parseInt(k, 10);
+    if (!isFinite(i)) { i = 0; }
+    g9_3.c = Math.min(CURVES_C9S3.length - 1, Math.max(0, i));
+    updC9S3(); drawC9S3();
+    var R = readC9S3();
+    toast(g9_3.c === 2
+      ? '换成「尖角」—— 差一直是 20.000000，缩多少倍都不动'
+      : '换成「' + R.cv.name + '」—— 差随着窗口缩：现在 ' + R.diffTxt + '（' + R.ratioTxt + '）');
+  }
+  function pickC9S3W(v) {
+    var i = parseInt(v, 10);
+    if (!isFinite(i)) { i = 1; }
+    g9_3.n = Math.min(MAXN_C9S3, Math.max(1, i));
+    updC9S3(); drawC9S3();
+    var R = readC9S3();
+    toast(g9_3.n === MAXN_C9S3
+      ? '窗口 = ' + R.wNum + ' 秒（一万亿分之一秒）：' + R.cv.name + '的差是 ' + R.diffTxt
+      : '窗口缩到 ' + R.wTxt + '：差 = ' + R.diffTxt);
+  }
+  function resetC9S3() {
+    g9_3.c = 0; g9_3.n = 1;
+    updC9S3(); drawC9S3();
+    toast('回到棒球 + 0.1 秒 —— 把滑块一路往右拖，看差怎么缩');
+  }
+  // 停止钩子：本节没有运行态（拨一下就重绘，D6 不设播放键），但必须登记
+  function stopC9S3() { }
+
+  updC9S3(); drawC9S3();
+  // 9.4 处处都是尖角（章收口 · 书页 93–95）
+  // ★ 本节要送出的原语：**一层层叠上去 —— 峰数 ×21、最陡 ×7、起伏只多一点点 ⇒ 每一处都是尖角**。
+  // ★ 判据（计划 §八 #4，全部现算、不写死）：
+  //     ① 峰数 peak(k) = 21^(k−1) → 1 / 21 / 441 / 9 261，逐级 ×21（精确）；
+  //     ② 最陡上界 L(k) = π(7^k−1)/6 → 3.141593 / 25.132741 / 179.070781 / 1 256.637 061；
+  //        新加那一项的最陡 = π·7^j ⇒ 相邻两项**精确 ×7**；整条线的上界逐级 ×8.000 / ×7.125 / ×7.018；
+  //     ③ 起伏上界 A(k) = 1.5(1−3^−k)，增量 = 3^−k（0.333 → 0.111 → 0.037 → 0.012）；
+  //     ④ 放大窗 W = 2/21^z，窗内起伏数 = 21^(k−1−z)（窗内局部极大独立重算 = 起伏数 − 1）；
+  //     ⑤ 相邻采样差 ≤ L(k)·采样间距（不间断 —— p94 的原话是"没有跳跃或间隙"）。
+  // ★ 诚实边界（计划 §七.3）：有限层的 f_k **仍然光滑**；"每一处都是尖角"只属于一直叠下去的那一条。
+  // ★ 尺度诚实：屏幕 620 像素、图区 508 像素；一个起伏不足 2 像素就数不清了
+  //   ⇒ 第 3 层起画的是**轮廓**，画布上直接标"每像素几个峰"（不许把糊掉的样子说成真样子）。
+  // ★ 禁：不以 e 为底的指数 / 对数 / 乘方 —— 21^k / 7^k / 3^k 一律循环累乘；不设播放键（D6）。
+  var KMAX_C9S4 = 4;              // 只到第 4 层（第 5 层 194 481 个峰，屏幕画不出 —— 计划 D7）
+  var AMP_C9S4 = 1.5;             // 起伏上界 = 1.5(1 − 3^−k)，永远够不到 1.5
+  var WID_C9S4 = 508;             // 放大窗在画布上的可用宽度（像素）
+  var g9_4 = { k: 2, z: 0 };      // 默认第 2 层 + 全图：正好 21 个峰（p93 那张图的中间一格）
+
+  function setTxtC9S4(id, h) { var e = document.getElementById(id); if (e) { e.innerHTML = h; } }
+  function ipowC9S4(b, n) { var r = 1, i; for (i = 0; i < n; i++) { r = r * b; } return r; }
+  function peakC9S4(k) { return ipowC9S4(21, k - 1); }                    // 峰数 21^(k−1)
+  function slopeC9S4(k) { return Math.PI * (ipowC9S4(7, k) - 1) / 6; }    // 最陡上界 L(k)
+  function termSlopeC9S4(j) { return Math.PI * ipowC9S4(7, j); }          // 第 j 项的最陡（j 从 0 起）
+  function ampC9S4(k) { return AMP_C9S4 * (1 - 1 / ipowC9S4(3, k)); }     // 起伏上界 A(k)
+  // ★ 第 k 层添的是 **3^−(k−1)**（= A(k) − A(k−1)，k=1 时正好是 1.0），不是 3^−k
+  function ampStepC9S4(k) { return 3 / ipowC9S4(3, k); }
+  function winW9S4(z) { return 2 / ipowC9S4(21, z); }                     // 放大窗的宽度
+  function ripC9S4(k, z) {                                                // 窗里还剩几次起伏
+    var e = k - 1 - z;
+    return e < 0 ? 0 : ipowC9S4(21, e);
+  }
+  // 叠出来的那条线：f_k(x) = Σ_{j<k} cos(21^j πx)/3^j（与 p93 的三步同一个式子）
+  function fC9S4(x, k) {
+    var s = 0, j;
+    for (j = 0; j < k; j++) { s = s + Math.cos(ipowC9S4(21, j) * Math.PI * x) / ipowC9S4(3, j); }
+    return s;
+  }
+  function fmtC9S4(n) {                       // 千位分隔：9 261
+    var t = String(n), out = '', k = 0, i;
+    for (i = t.length - 1; i >= 0; i--) {
+      out = t.charAt(i) + out; k++;
+      if (k % 3 === 0 && i > 0) { out = ' ' + out; }
+    }
+    return out;
+  }
+  function fix1C9S4(v) { return v < 1 ? v.toFixed(2) : v.toFixed(1); }
+  // ★ 全图的密度只有这一种说法（画布与读数格共用；< 1 个/像素 时改说"每个起伏只有 X 像素"）
+  function denseTxtC9S4(R) {
+    if (R.canFull) { return '每个起伏 ' + fix1C9S4(R.fullPx) + ' 像素'; }
+    if (R.peak <= WID_C9S4) { return '每个起伏只有 ' + fix1C9S4(R.fullPx) + ' 像素'; }
+    return '每像素 ' + R.fullPerPx.toFixed(1) + ' 个峰';
+  }
+  function ratioC9S4(k) { return k <= 1 ? 1 : slopeC9S4(k) / slopeC9S4(k - 1); }
+  // ★ 单一真源：kv / status / step-line / 画布标注全部读这一个返回值
+  function readC9S4() {
+    var k = g9_4.k, z = g9_4.z, W = winW9S4(z), rip = ripC9S4(k, z);
+    var NS = WID_C9S4, lo = 1e9, hi = -1e9, i, v, x;
+    for (i = 0; i <= NS; i++) {                       // 放大窗的纵轴范围（图上标出来，不许悄悄拉伸）
+      x = W * i / NS; v = fC9S4(x, k);
+      if (v < lo) { lo = v; }
+      if (v > hi) { hi = v; }
+    }
+    var span = hi - lo;
+    if (span < 1e-9) { span = 1e-9; }
+    var DX = 2 / 620, jump = 0, prev = fC9S4(0, k), cur;   // 相邻采样差（证明"不间断"）
+    for (i = 1; i <= 620; i++) {
+      cur = fC9S4(DX * i, k);
+      if (Math.abs(cur - prev) > jump) { jump = Math.abs(cur - prev); }
+      prev = cur;
+    }
+    var L = slopeC9S4(k), A = ampC9S4(k);
+    return {
+      k: k, z: z, w: W, rip: rip, peak: peakC9S4(k), L: L, A: A,
+      Lr: ratioC9S4(k), dA: ampStepC9S4(k), nextPeak: peakC9S4(k + 1),
+      nextLr: ratioC9S4(k + 1),
+      px: rip > 0 ? WID_C9S4 / rip : 0,               // 放大窗：每个起伏占几个像素
+      fullPx: WID_C9S4 / peakC9S4(k),                  // 全图：每个起伏占几个像素
+      fullPerPx: peakC9S4(k) / WID_C9S4,               // 全图：每像素塞几个峰
+      canCount: rip > 0 && rip <= WID_C9S4 / 2,        // 放大窗：一个起伏 ≥ 2 像素才算数得清
+      canFull: peakC9S4(k) <= WID_C9S4 / 2,            // 全图：同一个尺子（508 ÷ 2 = 254）
+      lo: lo, hi: hi, zoomY: (2 * A) / span,           // 纵轴被放大了几倍
+      jump: jump, jumpMax: L * DX,
+      zTimes: ipowC9S4(21, z)
+    };
+  }
+  function msgC9S4(R) {
+    R = R || readC9S4();
+    if (!R.canCount) {
+      return '窗里塞了 <b>' + fmtC9S4(R.rip) + '</b> 次起伏 ⇒ 每个起伏只有 <b>' +
+        fix1C9S4(R.px) + '</b> 像素 —— 屏幕<b>画不出</b>，画出来的是轮廓。按「放大 21 倍」再看。';
+    }
+    if (R.rip === 21) {
+      return '窗里正好 <b>21</b> 次起伏 —— 原书 p93 的图注说的就是这件事：<b>每一个肉眼可见的"峰"实际上是 21 个峰</b>。';
+    }
+    if (R.rip === 1) {
+      return '窗里只剩 <b>1</b> 次起伏：这一段<b>是光滑的</b> —— 因为它只叠了 ' + R.k +
+        ' 层。<b>再加一层，这 1 次里就会裂成 21 次。</b>';
+    }
+    return '窗里有 <b>' + fmtC9S4(R.rip) + '</b> 次起伏，数得清。';
+  }
+  function stepTxtC9S4() {
+    return '判据只有两条：<b>峰数每层 ×21</b>、<b>最陡每层 ×7</b> —— 可<b>起伏只多一点点</b>。<br>' +
+      '越叠越密、越叠越陡、越叠越没起伏：一直叠下去，<b>每一处都是尖角</b>。';
+  }
+  function drawC9S4() {
+    var cvEl = document.getElementById('cv9-4');
+    if (!cvEl || !cvEl.getContext) { return; }
+    var c = cvEl.getContext('2d');
+    var R = readC9S4(), i, x, y, v, span, Y0, Y1, xa, xb, lo2, hi2, ss;
+    var XL = 56, XR = 564, YM = 110, PU = 28;          // 全图：基线 110，1 个单位 = 28 像素
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 刹车话（恒印）----
+    label(c, '每一处都是尖角 —— 放大多少倍都一样。', 24, 16, '#64748b', 11.5, 'left');
+    label(c, '第 ' + R.k + ' 层：' + fmtC9S4(R.peak) + ' 个峰（每加一层 ×21）｜最陡上界 ' +
+      R.L.toFixed(3) + '（新加那层 ×7）', 24, 38, '#94a3b8', 10.5, 'left');
+    // ---- 全图：坐标轴 ----
+    c.strokeStyle = '#cbd5e1'; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(XL, YM); c.lineTo(XR + 6, YM); c.stroke();
+    c.beginPath(); c.moveTo(XL, YM - PU * 1.7); c.lineTo(XL, YM + PU * 1.7); c.stroke();
+    for (i = 0; i <= 4; i++) {
+      x = XL + (XR - XL) * i / 4;
+      c.beginPath(); c.moveTo(x, YM); c.lineTo(x, YM + 4); c.stroke();
+      label(c, (i * 0.5).toFixed(1), x, YM + 60, '#94a3b8', 9.5, 'center');
+    }
+    label(c, 'x', XR + 14, YM + 60, '#94a3b8', 10, 'left');
+    // ---- 起伏上界（±1.5 那条带的两条边）----
+    c.strokeStyle = 'rgba(148,163,184,0.75)'; c.setLineDash([4, 3]); c.lineWidth = 1;
+    c.beginPath(); c.moveTo(XL, YM - PU * R.A); c.lineTo(XR, YM - PU * R.A); c.stroke();
+    c.beginPath(); c.moveTo(XL, YM + PU * R.A); c.lineTo(XR, YM + PU * R.A); c.stroke();
+    c.setLineDash([]);
+    label(c, '起伏上界 ±' + R.A.toFixed(4), XR - 2, YM - PU * R.A - 8, '#94a3b8', 9.5, 'right');
+    // ---- 全图：数得清就画线；数不清就画"每一列的上下界"----
+    // ★ 为什么不能照样画线：k=4 时一列像素里塞了 15 个峰，折线连出来的是**摩尔纹**
+    //   （看着像两三个宽峰 —— 那是采样打架，不是函数的样子）。竖线带才是诚实的：
+    //   "这一列里的值全落在这段里"。
+    if (R.canFull) {
+      c.strokeStyle = '#ef4444'; c.lineWidth = 1.8;
+      c.beginPath();
+      for (i = 0; i <= 1600; i++) {
+        x = XL + (XR - XL) * i / 1600; v = fC9S4(2 * i / 1600, R.k);
+        y = YM - PU * v;
+        if (i === 0) { c.moveTo(x, y); } else { c.lineTo(x, y); }
+      }
+      c.stroke();
+    } else {
+      c.strokeStyle = 'rgba(239,68,68,0.55)'; c.lineWidth = 1;
+      for (i = 0; i < 620; i++) {
+        xa = 2 * i / 620; xb = 2 * (i + 1) / 620; lo2 = 9e9; hi2 = -9e9;
+        for (ss = 0; ss <= 16; ss++) {
+          v = fC9S4(xa + (xb - xa) * ss / 16, R.k);
+          if (v < lo2) { lo2 = v; }
+          if (v > hi2) { hi2 = v; }
+        }
+        x = XL + i;
+        c.beginPath(); c.moveTo(x, YM - PU * hi2); c.lineTo(x, YM - PU * lo2); c.stroke();
+      }
+    }
+    // ---- 全图下方：尺度诚实 ----
+    label(c, R.canFull
+      ? '数得清：全图 ' + fmtC9S4(R.peak) + ' 个峰，' + denseTxtC9S4(R)
+      : '数不清：画的是每一列的上下界，不是一条线（' + fmtC9S4(R.peak) + ' 个峰，' +
+        denseTxtC9S4(R) + '）',
+      56, 190, R.canFull ? '#10b981' : '#f59e0b', 10, 'left');
+    // ---- 放大窗 ----
+    c.strokeStyle = '#e2e8f0'; c.lineWidth = 1;
+    c.strokeRect(XL, 202, WID_C9S4, 120);
+    label(c, '放大窗：x 从 0 到 ' + R.w.toFixed(6) + '（整幅的 1/' + R.zTimes + '）',
+      64, 214, '#64748b', 10, 'left');
+    label(c, '窗里 ' + fmtC9S4(R.rip) + ' 次起伏 ｜ 纵轴只画 ' + R.lo.toFixed(4) + ' → ' +
+      R.hi.toFixed(4) + '（放大 ' + R.zoomY.toFixed(1) + ' 倍）', 64, 230, '#94a3b8', 10, 'left');
+    span = R.hi - R.lo; if (span < 1e-9) { span = 1e-9; }
+    Y0 = 314; Y1 = 244;                                  // 窗内曲线区：244（高）… 314（低）
+    c.strokeStyle = '#ef4444'; c.lineWidth = 1.8;
+    c.beginPath();
+    for (i = 0; i <= WID_C9S4; i++) {
+      x = XL + i; v = fC9S4(R.w * i / WID_C9S4, R.k);
+      y = Y1 + (R.hi - v) / span * (Y0 - Y1);
+      if (i === 0) { c.moveTo(x, y); } else { c.lineTo(x, y); }
+    }
+    c.stroke();
+    // ---- 数得清时把每一次起伏的顶打个点（21 次 = 21 个点，肉眼可数）----
+    if (R.canCount && R.rip <= 21) {
+      var N = 1200, a = fC9S4(0, R.k), b2 = fC9S4(R.w / N, R.k), cc, px2, py2;
+      for (i = 2; i <= N; i++) {
+        cc = fC9S4(R.w * i / N, R.k);
+        if (b2 > a && b2 >= cc) {
+          px2 = XL + WID_C9S4 * (i - 1) / N;
+          py2 = Y1 + (R.hi - b2) / span * (Y0 - Y1);
+          dot(c, px2, py2, 2.6, '#f59e0b');
+        }
+        a = b2; b2 = cc;
+      }
+    }
+    // ---- 底部：两个倍率 + "不间断"的证据 ----
+    label(c, R.k === 1
+      ? '基线（第 1 层）：1 个峰、最陡 ' + R.L.toFixed(3) + '、起伏 1.0000 —— 再叠一层就是 ×21 / ×7'
+      : '峰数 ×21 ｜ 最陡（新加那层）×7 ｜ 起伏只多 ' + R.dA.toFixed(4),
+      56, 340, '#334155', 10.5, 'left');
+    label(c, (R.canFull ? '折线连着的，没有断开' : '采样追不上它，可上界证明没有断开') +
+      '（相邻采样最大跳 ' + R.jump.toFixed(4) + ' ≤ 上界 ' + R.jumpMax.toFixed(4) + '）',
+      56, 360, '#94a3b8', 9.5, 'left');
+  }
+  function updC9S4() {
+    var R = readC9S4();
+    var sl = document.getElementById('s9-4-k');
+    if (sl && sl.value !== String(g9_4.k)) { sl.value = String(g9_4.k); }
+    setTxtC9S4('lb9-4-k', '第 ' + R.k + ' 层');
+    setTxtC9S4('kv9-4a-v', '第 ' + R.k + ' 层');
+    setTxtC9S4('kv9-4a-t', '共 4 层：1 → 21 → 441 → 9 261 个峰');
+    setTxtC9S4('kv9-4b-v', fmtC9S4(R.peak) + ' 个');
+    setTxtC9S4('kv9-4b-t', R.k === 1 ? '基线：cos(πx) 起伏一次' : '比上一层 ×21');
+    setTxtC9S4('kv9-4c-v', R.L.toFixed(3));
+    setTxtC9S4('kv9-4c-t', R.k === 1
+      ? 'π(7¹−1)/6 = π —— 也就是那一项的陡度'
+      : '比上一层 ×' + R.Lr.toFixed(3) + '（越来越贴近 ×7）');
+    setTxtC9S4('kv9-4d-v', R.A.toFixed(4));
+    setTxtC9S4('kv9-4d-t', '1.5(1−3^−' + R.k + ')；第 ' + R.k + ' 层只添了 ' + R.dA.toFixed(4));
+    setTxtC9S4('kv9-4e-v', fmtC9S4(R.rip) + ' 次');
+    setTxtC9S4('kv9-4e-t', '窗口宽 ' + R.w.toFixed(6) + '（= 2 ÷ 21^' + R.z + '）');
+    setTxtC9S4('kv9-4f-v', R.canFull ? '数得清' : '数不清');
+    setTxtC9S4('kv9-4f-t', R.canFull
+      ? '全图' + denseTxtC9S4(R) + '（≥ 2 才算数得清）'
+      : '全图' + denseTxtC9S4(R) + ' —— 画的是上下界');
+    setTxtC9S4('kv9-4g-v', R.k >= KMAX_C9S4 ? '没有第 5 层' : '峰 ' + fmtC9S4(R.nextPeak) + ' 个');
+    setTxtC9S4('kv9-4g-t', R.k >= KMAX_C9S4
+      ? '第 5 层要 194 481 个峰，屏幕画不出（本节只到第 4 层）'
+      : '峰数 ×21、最陡 ×' + R.nextLr.toFixed(3) + '、起伏只多 ' + (1 / ipowC9S4(3, R.k)).toFixed(4));
+    setTxtC9S4('st9-4', msgC9S4(R));
+    setTxtC9S4('sl9-4', stepTxtC9S4());
+    var dt = document.getElementById('st9-4-dot');
+    if (dt) { dt.style.background = R.canCount ? '#10b981' : '#f59e0b'; }
+    var ln = document.getElementById('sl9-4');
+    if (ln) { ln.className = 'step-line on'; }
+    var bz = document.getElementById('c9-4-zoom');
+    if (bz) { bz.className = 'ctrl-btn' + (R.rip > 1 ? ' primary' : ''); }
+  }
+  function zoomC9S4() {
+    var R = readC9S4();
+    if (g9_4.z >= g9_4.k - 1) {
+      toast('已经放大到底：只剩 1 次起伏。它现在是光滑的 —— 再加一层，这 1 次里就有 21 次');
+      return;
+    }
+    g9_4.z = g9_4.z + 1;
+    updC9S4(); drawC9S4();
+    R = readC9S4();
+    toast('放大 21 倍：窗里从 ' + fmtC9S4(R.rip * 21) + ' 次起伏缩到 ' + fmtC9S4(R.rip) + ' 次');
+  }
+  function zoomAllC9S4() {
+    g9_4.z = 0;
+    updC9S4(); drawC9S4();
+    toast('回到全图：这一层 ' + fmtC9S4(readC9S4().peak) + ' 个峰');
+  }
+  function pickC9S4K(k) {
+    var i = parseInt(k, 10);
+    if (!isFinite(i)) { i = 1; }
+    g9_4.k = Math.min(KMAX_C9S4, Math.max(1, i));
+    if (g9_4.z > g9_4.k - 1) { g9_4.z = g9_4.k - 1; }   // 层数变少 ⇒ 放大倍数跟着收回
+    updC9S4(); drawC9S4();
+    var R = readC9S4();
+    toast('第 ' + R.k + ' 层：' + fmtC9S4(R.peak) + ' 个峰，最陡上界 ' + R.L.toFixed(3) +
+      '，起伏上界 ' + R.A.toFixed(4));
+  }
+  function resetC9S4() {
+    g9_4.k = 2; g9_4.z = 0;
+    updC9S4(); drawC9S4();
+    toast('回到第 2 层 + 全图：21 个峰 —— 正好是 p93 那张图的中间一格');
+  }
+  // 停止钩子：本节没有运行态（拨一下就重绘，D6 不设播放键），但必须登记
+  function stopC9S4() { }
+
+  updC9S4(); drawC9S4();
+  // ================= 第 9 章 JS 区 · 终点 =================
+
+
+
 
 
   // ================= 知识树渲染（数据驱动 · a 阶段只渲染有内容的层）=================
@@ -13207,7 +15890,21 @@
       //    （那是上游文档的目录级推断，逐页核对已证伪，见计划 §〇附 #1 / #2）。
       { ch: 5, name: '当密西西比河绵延万里', hook: '一条河教我们别把局部当成整体',
         kw: '局部线性化 · 局部 ≠ 整体 · 导数的局部性', target: 'page-c5-1',
-        sections: C5_SECTIONS, go: 'goC5' }
+        sections: C5_SECTIONS, go: 'goC5' },
+      // ★★ 2026-10-28：L1 层第一次有**四**张章卡（第 1 / 3 / 4 / 8 章）—— 全站第二次「一层多章」，
+      //    但第一次是**四张**（L2 是三张）。EXPECT_LAYER.L1 3 → 4。
+      //    ★ 章卡在**首页层**：本章放行的两个词一个都不写进 kw ——
+      //      写进去就变成"章外 1 处"的例外，跨章保护就得开口子（第 7 章就是这么守住的）。
+      { ch: 8, name: '风留下了什么', hook: '一个不肯屈服的谜题，逼出了微积分最核心的那个动作',
+        kw: '阶梯悖论 · 无限次重复 · 形状变了而总长没变', target: 'page-c8-1',
+        sections: C8_SECTIONS, go: 'goC8' },
+      // ★★ 2026-10-30：L1 层第一次有**五**张章卡（第 1 / 3 / 4 / 8 / 9 章 —— 全站首次五卡并列），
+      //    EXPECT_LAYER.L1 4 → 5。★ L1 的 `sub` 文案本来就写着 9 ⇒ 不用改（交接卡那条说法已核不成立）。
+      //    ★ 章卡在**首页层**：本章放行的两个词一个都不写进 kw ——
+      //      写进去就变成"章外 1 处"的例外，跨章保护就得开口子（第 7 / 8 章就是这么守住的）。
+      { ch: 9, name: '如尘埃般漫天飞舞', hook: '微积分第一次遇上自己算不动的东西',
+        kw: '花粉的舞会 · 一个瞬间接着一个瞬间 · 处处是尖角', target: 'page-c9-1',
+        sections: C9_SECTIONS, go: 'goC9' }
     ]}
   ];
   function renderTree() {

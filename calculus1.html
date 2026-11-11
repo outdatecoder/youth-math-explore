@@ -481,6 +481,10 @@
   #cv9-2 { width: 100%; height: auto; }
   #cv9-3 { width: 100%; height: auto; }
   #cv9-4 { width: 100%; height: auto; }
+  #cv10-1 { width: 100%; height: auto; }
+  #cv10-2 { width: 100%; height: auto; }
+  #cv10-3 { width: 100%; height: auto; }
+  #cv10-4 { width: 100%; height: auto; }
 
 </style>
 </head>
@@ -5089,7 +5093,7 @@
     <span class="back" onclick="goHome()">← 返回首页</span>
     <span class="divider">|</span>
     <span class="title">9.4　处处都是尖角</span>
-    <span class="nav-next" onclick="goHome()">第 9 章完 · 返回首页 →</span>
+    <span class="nav-next" onclick="goC10(1)">进入第 10 章 · 绿头发女孩和超时空旋涡 →</span>
   </div>
   <div class="sec-tabs"></div>
   <div class="sub-container">
@@ -5217,6 +5221,553 @@
   </div>
 </div>
 
+<!-- ================= 第 10 章 绿头发女孩和超时空旋涡：用图形算导数（4 节 · 骨架期）================= -->
+<!-- 本章 4 节（计划 §四）：10.1 机器会把式子画出来 / 10.2 平方就是正方形 / 10.3 立方体有三个面 /
+    10.4 画不出的第四个维度（章收口）。
+    ★ 原书书页 97–107（**11 页，全站最长的一章正文**）；扉页 96 = 「第10个瞬间 / 数据可视化的危险」，
+      下一章扉页 108。
+    ★★ 本章是**第五次放行封存词**（前四次在第 6 / 7 / 8 / 9 章）：
+      这次只放行一个词 —— 原书 p102 逐字「无穷小中的无穷小」自己就用了它。
+      `RELEASED` 里本章登记这一个词 + `withoutChapter(html, 10)` 内 0 命中的脚本级断言。
+      ★ 注释里**不写前四次放行的那几个词**：写了就会把第 6/7/8/9 章的跨章保护撞红（一字都不提才干净）。
+    ★★ 本章讲的是**用图形求导** —— 与前面几章"用记号 / 用模型"不同：
+      x² 变正方形、x³ 变立方体，边长加一点点，多出来的那些块就是导数；
+      到了 x⁴ 要四维的东西，**画不出来**，于是收在「不是所有导数都能可视化」。
+      ★ 所以本章**不写**那个增量记号（红线，只第 4 章放行）、不写商的记号、不写第 8 章用过的那个符号；
+        书页 99 那块代数推导按定案 D3 **改写成图形版**，并在页面上明说"换了讲法"。
+    ⚠️ `precheck` 的 forbid 表里**本来就没有**这个词 ⇒ **不加 scoped**（第 6 章 K20 的假阳性教训）；
+        本章沿用既有的"按章 scoped"写法（`_SCRIPTS.md` 的命令里已有 `#page-c10-\d+` 这一组）。
+    ★ 继续封存的记号**一个都不写进本章**（清单见计划 §三.3）。★ 这不是洁癖：
+      把封存词列进注释，会被本章自己的术语扫描**当成命中**，所以这里只描述、不枚举。
+    ★ 数据来源：全章**无坐标刻度、无数据集**（原书亦然）⇒ 面积、占比、系数全部由页面**现算**；
+      ★ 四节都**不需要掷色子**（图形是确定的）⇒ 全章不调用浏览器那个掷色子函数；
+      ★ **不用乘方函数**（改用整数幂的循环版）—— 连函数名都不写进本章块。 -->
+
+<!-- ================= 10.1 机器会把式子画出来 ================= -->
+
+<div class="page" id="page-c10-1">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">10.1　机器会把式子画出来</span>
+    <span class="nav-next" onclick="goC10(2)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>1948 年的一篇短篇小说里，未来世界流行染<b>绿头发</b>，还要往头发里点珍珠粉。故事的主角叫<b>欧娜</b>，她嫁给了一个被称作"全太阳系最贴心的男人"的人 —— <b>吉克</b>。吉克的贴心有一个证据：他连结婚纪念日都记得。<br>可吉克有个毛病：他老想给欧娜<b>上数学课</b>。欧娜听得云里雾里 —— 她知道那些符号有用，可她<b>看不见</b>它们。<br>直到有一天，吉克带回来一件礼物：一台叫<b>维兹数学</b>的机器。用法只有一句话：<b>你在纸上随便写一个数学表达式，塞进机器，就能得到你感兴趣的可视化表达。</b></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="ps10-1-0" onclick="presetC10S1(0)">6 × 2.5（书里的例子）</button>
+          <button class="ctrl-btn" id="ps10-1-1" onclick="presetC10S1(1)">5 × 4（最老实的一个）</button>
+          <button class="ctrl-btn" id="ps10-1-2" onclick="presetC10S1(2)">2.5 × 2.5（角上冒出一小块）</button>
+        </div>
+        <div class="ctrl-row">
+          <button class="ctrl-btn primary" onclick="resetC10S1()">重置</button>
+        </div>
+
+        <div class="slider-row" id="row10-1-w">
+          <label>宽：<b id="lb10-1-w">6</b>　—— 拖一拖：<b>宽度只能走半格</b>（为了画得出来）</label>
+          <input type="range" id="s10-1-w" min="1" max="8" step="0.5" value="6" oninput="pickC10S1W(parseFloat(this.value))">
+        </div>
+        <div class="slider-row" id="row10-1-h">
+          <label>高：<b id="lb10-1-h">2.5</b>　—— 拖到底，下面那一行会变成<b>半格</b></label>
+          <input type="range" id="s10-1-h" min="1" max="6" step="0.5" value="2.5" oninput="pickC10S1H(parseFloat(this.value))">
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv10-1" width="620" height="380"></canvas>
+          <p class="canvas-caption">左边是<b>机器画出来的矩形</b>：<b>宽几格 × 高几格</b>，一格就是 1。<br>深色的是<b>整格</b>，边上淡色的条子是<b>半格</b>（宽半格、高一格），右下角那一小块是<b>四分之一格</b>。<br><span style="color:#94a3b8;">★ 滑块只能走<b>半格</b>，是为了让每一块都能<b>真的画出来</b>；真实的乘法可以是 2.37 —— 那台机器画得出，这支滑块画不出。</span></p>
+        </div>
+
+        <div class="step-line" id="sl10-1"></div>
+
+        <div class="status-bar" id="st10-1-bar"><span class="status-dot" id="st10-1-dot"></span><span id="st10-1"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv10-1a-cell">
+            <div class="k">宽</div>
+            <div class="v" id="kv10-1a-v">…</div>
+            <div class="k" id="kv10-1a-t">…</div>
+          </div>
+          <div class="kv" id="kv10-1b-cell">
+            <div class="k">高</div>
+            <div class="v" id="kv10-1b-v">…</div>
+            <div class="k" id="kv10-1b-t">…</div>
+          </div>
+          <div class="kv" id="kv10-1c-cell">
+            <div class="k">格子数</div>
+            <div class="v" id="kv10-1c-v">…</div>
+            <div class="k" id="kv10-1c-t">…</div>
+          </div>
+          <div class="kv" id="kv10-1d-cell">
+            <div class="k">整格 + 半格</div>
+            <div class="v" id="kv10-1d-v">…</div>
+            <div class="k" id="kv10-1d-t">…</div>
+          </div>
+          <div class="kv" id="kv10-1e-cell">
+            <div class="k">一句话</div>
+            <div class="v" id="kv10-1e-v">…</div>
+            <div class="k" id="kv10-1e-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只做一件事：把「乘法」变成看得见的面积。</b><br>
+          原书 p98 让机器算的是 <b>5 × 4 = 20</b>：<b>宽 5 格、高 4 格，一格一格数过去，正好 20 格</b>。
+          机器没有变魔术，它只是把"乘"这个动作摊开给你看。<br>
+          第二个例子更值钱：<b>6 × 2.5 = 15</b>。整格只有 <b>12</b> 个，剩下那一行是 <b>6 个半格</b> ——
+          半格不是"凑数"，它在图上就是<b>实实在在地窄一半</b>。12 + 6 × 0.5 = <b>15</b>。<br>
+          这也是<b>「平方」这个名字的来历</b>：一个数自己乘自己（<b>x × x</b>），画出来是一个<b>正方形</b>，
+          所以叫"平方"。下一节要在这张正方形上动一刀 —— 让它<b>长大一点点</b>，看多出来的部分长什么样。<br>
+          <span style="color:#94a3b8;">诚实说明：滑块只能走半格，是因为<b>每一块都得真的画出来</b>。
+          2.37 × 4.61 这种乘法当然也对，可它画出来的碎块没法数 —— 那台机器画得出，这支滑块画不出。
+          还有：画布上「一格」的<b>像素尺寸</b>与「一个单位」的<b>面积</b>是<b>两把尺子</b>，别混着用。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　6 × 2.5 画出来为什么是 12 个整格加 6 个半格，而不是 15 个整格？<br>A. 因为 2.5 不是一个整数，最后那一行只铺得下一半高<br>B. 因为机器算错了<br>C. 因为半格不算数，要四舍五入</p>
+          <button class="quiz-btn" id="q10-1a-btn" onclick="toggleAnswer('q10-1a-ans','q10-1a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q10-1a-ans">答案是 <b>A</b>。<br>高度是 <b>2.5</b>：底下两个整行铺满（2 × 6 = 12 个整格），剩下一行只有 <b>半格高</b> —— 它仍然是 6 列，可每列只有一半 ⇒ <b>6 个半格</b> = 3。<br>12 + 3 = <b>15</b>，与直接算 6 × 2.5 一模一样。<b>半格照样算数，只是它面积小一半。</b></div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　为什么说"平方"这个名字是从图形来的？<br>A. 因为它是从外国话翻译过来的<br>B. 因为 x × x 画出来正是一个正方形，边长就是 x<br>C. 因为它算得特别快</p>
+          <button class="quiz-btn" id="q10-1b-btn" onclick="toggleAnswer('q10-1b-ans','q10-1b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q10-1b-ans">答案是 <b>B</b>。<br><b>x × x</b>：宽 x 格、高 x 格 ⇒ 画出来就是<b>边长 x 的正方形</b>，格子数 = x²。英文把"自己乘自己"叫 <b>squaring</b>，字面意思就是"变成正方形"。<br>★ 记住这张图：<b>下一节要让它长大一点点</b>，多出来的那两条细边就是本章的主角。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>乘法已经被摊成面积了。现在把"长"和"宽"<b>绑成同一个数 x</b> —— 矩形变成<b>正方形</b>。<br>然后像原书 p100 那样做一件很小的事：<b>让边长增加一点点</b>。<br>多出来的那部分，<b>就是这一章要找的东西</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>维兹数学</b>：故事里的那台机器。你把一个表达式塞进去，它给你一张图 —— 函数不变，只是<b>换了一种看得见的样子</b>。</p>
+          <p><b>乘法就是面积</b>：宽 w 格、高 h 格的长方形，格子数正好是 <b>w × h</b>。整数如此，<b>带半格也一样</b>（半格面积是 0.5）。</p>
+          <p><b>平方</b>：<b>x × x</b> 画出来是边长为 x 的正方形 ⇒ 得名"平方"（squaring ＝ 变成正方形）。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　按 <b>5 × 4</b>：一眼就能数清 —— 20 个整格，一个不缺。</div>
+          <div class="rule-item"><b>第 2 步</b>　按 <b>6 × 2.5</b>：整格掉到 12，下面一行变成 <b>6 个半格</b>，合计仍是 <b>15</b>。</div>
+          <div class="rule-item"><b>第 3 步</b>　把宽高都拖到 <b>2.5</b>：右下角多出<b>四分之一格</b> —— 三块拼起来正好 6.25。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>「半格就先记半个，最后四舍五入」</b>—— 不用凑。半格<b>本身就是 0.5 格</b>，格子数 = 宽 × 高 一直成立。</p>
+          <p><b>「一格 = 30 像素，所以面积是 30」</b>—— 那是<b>屏幕上的尺子</b>；面积用的是<b>格</b>这把尺子。两把尺子不许混。</p>
+          <p><b>「机器只是把答案画漂亮了」</b>—— 它画的不是答案，是<b>算式本身的样子</b>。下一节你会看到：光看图就能算出答案。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= 10.2 平方就是正方形 ================= -->
+
+<div class="page" id="page-c10-2">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">10.2　平方就是正方形</span>
+    <span class="nav-next" onclick="goC10(3)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>「<b>在脱离图形的状态下学习数学，简直无异于犯罪，是非常荒谬的。</b>」说话的是<b>曼德博</b> —— 一位专门研究"粗糙形状"的数学家。书页边上还画了一个人对着满纸符号发愁，图注只有一句吐槽：<b>「你们这些运算符号，为什么要这样折磨我？」</b><br>二十世纪有一批数学家（<b>布尔巴基</b>学派）主张：数学该把图形彻底丢掉，只留下最严格的符号。他们喊过一句很响的话：<b>「让三角形见鬼去吧！」</b> —— 这股风气一直吹到今天，所以吉克那样的老师会先塞给你一串符号。<br>欧娜的机器不这么干。它从最简单的式子开始：<b>x × x</b>。画出来是一个<b>正方形</b>。现在让 x 长大<b>一点点</b> —— 就一点点，把这一点点叫做 <b>dx</b>。<b>多出来的部分是什么？</b></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="dk10-2-0" onclick="pickC10S2(0)">dx = 1/10</button>
+          <button class="ctrl-btn" id="dk10-2-1" onclick="pickC10S2(1)">dx = 1/100</button>
+          <button class="ctrl-btn" id="dk10-2-2" onclick="pickC10S2(2)">dx = 1/1000</button>
+        </div>
+        <div class="ctrl-row">
+          <button class="ctrl-btn" onclick="zoomC10S2()">放大看角落</button>
+          <button class="ctrl-btn primary" onclick="resetC10S2()">重置</button>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv10-2" width="620" height="380"></canvas>
+          <p class="canvas-caption">左边是<b>边长为 x 的正方形</b>（x 固定为 1，占 200 像素）。长大 dx 之后，多出来的是：<b>上边一条细条</b>、<b>右边一条细条</b>、<b>右上角一个小方块</b>。<br>★ <b>三档 dx 换着按</b>：细条越来越细，角上那一块<b>先变淡、再彻底消失</b>。<br><span style="color:#94a3b8;">★ 诚实标注：dx = 1/1000 时，角块在屏上只有 <b>0.2 像素</b> —— 你看到的那条红线是<b>加粗画出来的示意</b>，不是它的真实厚度。</span></p>
+        </div>
+
+        <div class="step-line" id="sl10-2"></div>
+
+        <div class="status-bar" id="st10-2-bar"><span class="status-dot" id="st10-2-dot"></span><span id="st10-2"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv10-2a-cell">
+            <div class="k">x（边长）</div>
+            <div class="v" id="kv10-2a-v">…</div>
+            <div class="k" id="kv10-2a-t">…</div>
+          </div>
+          <div class="kv" id="kv10-2b-cell">
+            <div class="k">dx（长大多少）</div>
+            <div class="v" id="kv10-2b-v">…</div>
+            <div class="k" id="kv10-2b-t">…</div>
+          </div>
+          <div class="kv" id="kv10-2c-cell">
+            <div class="k">一共多出多少面积</div>
+            <div class="v" id="kv10-2c-v">…</div>
+            <div class="k" id="kv10-2c-t">…</div>
+          </div>
+          <div class="kv" id="kv10-2d-cell">
+            <div class="k">两条细条</div>
+            <div class="v" id="kv10-2d-v">…</div>
+            <div class="k" id="kv10-2d-t">…</div>
+          </div>
+          <div class="kv" id="kv10-2e-cell">
+            <div class="k">角上那一块</div>
+            <div class="v" id="kv10-2e-v">…</div>
+            <div class="k" id="kv10-2e-t">…</div>
+          </div>
+          <div class="kv" id="kv10-2f-cell">
+            <div class="k">角块占增长的比例</div>
+            <div class="v" id="kv10-2f-v">…</div>
+            <div class="k" id="kv10-2f-t">…</div>
+          </div>
+          <div class="kv" id="kv10-2g-cell">
+            <div class="k">增长 ÷ dx</div>
+            <div class="v" id="kv10-2g-v">…</div>
+            <div class="k" id="kv10-2g-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只做一件事：把"多出来的那一小块"看清楚。</b><br>
+          正方形长大 dx，多出来的不是一团糊，而是<b>三块</b>：上边一条 <b>x·dx</b>、右边一条 <b>x·dx</b>、
+          右上角一个 <b>dx·dx</b>。合起来就是恒等式 <b>(x+dx)² − x² = 2x·dx + (dx)²</b>。<br>
+          书页 102 接着问：<b>dx 到底是什么？</b>答案是 <b>无穷小</b> —— 比任何已知的数都小，
+          十七世纪的<b>沃利斯</b>干脆把它写成 <b>1/∞</b>。它<b>不是 0</b>，只是小到没法和任何真实的长度相比。<br>
+          那么 <b>(dx)²</b> 呢？原书的说法是：<b>它是"无穷小中的无穷小"</b> —— 一个已经小到看不见的数，
+          再乘上一个同样小的数。<b>所以可以忽略它。</b>扔掉角块之后，增长只剩两条细条 <b>2x·dx</b> ——
+          这是"这一次（长了 dx 这么多）多出来的面积"。<br>
+          <b>那为什么还要再除以 dx？</b>因为我们问的不是"这次多出多少"，而是<b>每多 1 个单位，面积多出多少</b>。
+          <b>2x·dx</b> 里的 dx 就是"这次长了多少"；<b>除以它，等于把"这次"从答案里拿掉</b>，只留下 x 本身：
+          <b>2x·dx ÷ dx = 2x</b>。欧娜听到这里着了迷：<b>"平方的导数就是 2x。"</b><br>
+          <span style="color:#ef4444;"><b>★ 换了一种讲法：</b>原书这里是一段代数推导，我们换成了图形 —— 这正是本章想做的事。
+          图形不是用来替代证明的，它是用来让你先<b>看见</b>那个式子是怎么来的。</span><br>
+          <span style="color:#94a3b8;">★ 诚实标注：<b>「忽略」不等于「等于 0」</b>。角块一直都在，只是它占增长的比例
+          可以<b>任意小</b> —— dx = 1/10 时是 <b>4.76%</b>，1/100 时 <b>0.50%</b>，1/1000 时 <b>0.05%</b>。
+          数字就在读数格里，别把它当成一句修辞。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　凭什么可以把角上那块 (dx)² 扔掉？<br>A. 因为它正好等于 0<br>B. 因为它占增长的比例可以任意小（dx = 1/10 时 4.76%，1/1000 时只剩 0.05%）<br>C. 因为机器算不动它</p>
+          <button class="quiz-btn" id="q10-2a-btn" onclick="toggleAnswer('q10-2a-ans','q10-2a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q10-2a-ans">答案是 <b>B</b>。<br>它<b>不是 0</b>：dx = 1/10 时它是 0.01，实打实在图上。可你要的是"增长 ÷ dx"— 那一块只有 <b>dx</b> 那么多，而两条细条有 <b>2x</b> 那么多。<b>dx 越小，它越不值一提</b> —— 这才是"忽略"的意思。<br>★ 所以本页把<b>占比</b>印成读数，而不是把角块从图上擦掉。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　「增长 ÷ dx」随着 dx 变小，会靠近哪个数？<br>A. 0<br>B. 2x（本节 x = 1，所以是 2）<br>C. 无穷大</p>
+          <button class="quiz-btn" id="q10-2b-btn" onclick="toggleAnswer('q10-2b-ans','q10-2b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q10-2b-ans">答案是 <b>B</b>。<br>增长 = 2x·dx + (dx)²，除以 dx 得 <b>2x + dx</b>。dx 越小，多出来的那个 dx 越小 ⇒ 结果越靠近 <b>2x</b>。<br>三档读数可以自己核：<b>2.1 / 2.01 / 2.001</b> —— 与 2 的差<b>恰好就是 dx</b>。<br>★ 这就是"平方的导数 = 2x"的全部内容。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>欧娜没停在这里。她紧接着问了一句：<b>那 x³ 呢？x³ 的导数为什么是 3x²？</b><br>正方形得换成<b>立方体</b>。长大一点点，多出来的会是什么形状？<br>下一节把这张图<b>从平面抬起来</b> —— 你会发现多出来的东西，数量正好是 <b>3</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>无穷小</b>：dx 的名字。它<b>比任何已知的数都小</b>，却又<b>不是 0</b>；沃利斯把它写成 <b>1/∞</b>。它的用处只有一个：当成"一点点增长"。</p>
+          <p><b>三块</b>：正方形长大 dx，多出上边一条、右边一条（各 <b>x·dx</b>）和角上一块（<b>dx·dx</b>）。</p>
+          <p><b>为什么能扔掉角块</b>：它占增长的比例是 <b>dx ÷ (2x + dx)</b> —— dx 越小，这个比例越小，可以<b>任意小</b>。<b>不是等于 0，是可以不管。</b></p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　按 <b>dx = 1/10</b>：角块清晰可见，占增长的 <b>4.76%</b>。</div>
+          <div class="rule-item"><b>第 2 步</b>　换 <b>1/100</b>、再换 <b>1/1000</b>：细条越来越细，角块掉到 <b>0.05%</b>、在图上彻底消失。</div>
+          <div class="rule-item"><b>第 3 步</b>　按<b>放大看角落</b>：角块与细条的宽度<b>是同一个 dx</b> —— 它小，是因为它只有一条边那么长。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>「忽略 = 等于 0」</b>—— 不对。角块一直都在，只是<b>占比可以任意小</b>。读数格里就有这个比例。</p>
+          <p><b>「图上没有红线，所以角块不存在」</b>—— 也不对。dx = 1/1000 时它只有 <b>0.2 像素</b>，那条红线是<b>加粗示意</b>。</p>
+          <p><b>「增长 ÷ dx 就是 2x」</b>—— 严格说是 <b>2x + dx</b>；只是 dx 小到可以不管，才写成 2x。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= 10.3 立方体有三个面 ================= -->
+
+<div class="page" id="page-c10-3">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">10.3　立方体有三个面</span>
+    <span class="nav-next" onclick="goC10(4)">下一节 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>正方形那一关，欧娜已经过了。她盯着那两条细条看了很久，然后问出第二个问题：<b>「那 x³ 呢？为什么它的导数是 3x²？」</b><br>x³ 画出来不再是正方形，是<b>立方体</b>。书页 103 把它画成了三个并排的立方体（2×2×2、3×3×3、x×x×x），就像 10.2 开头那三个正方形一样。<br>现在让立方体的每条边都长大 <b>dx</b>。它的体积会多出什么？<b>不是一块，而是三批东西。</b></div>
+
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="dk10-3-0" onclick="pickC10S3(0)">dx = 1/10</button>
+          <button class="ctrl-btn" id="dk10-3-1" onclick="pickC10S3(1)">dx = 1/100</button>
+          <button class="ctrl-btn" id="dk10-3-2" onclick="pickC10S3(2)">dx = 1/1000</button>
+        </div>
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="ol10-3" onclick="onlyC10S3()">只看三个面片</button>
+          <button class="ctrl-btn primary" onclick="resetC10S3()">重置</button>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv10-3" width="620" height="380"></canvas>
+          <p class="canvas-caption">一个边长 x 的<b>立方体</b>（等轴测画法）。每条边长大 dx 之后，多出来的是：<br>① <b>三个面片</b>（每个 <b>x²·dx</b>，厚薄如纸）　② <b>三根细棒</b>（每根 <b>x·dx²</b>，又细又长）　③ <b>角上一个小立方</b>（<b>dx³</b>，最小）。<br><span style="color:#94a3b8;">★ 诚实标注：等轴测是<b>把三维压到二维的投影</b> —— 图上那三条 x 边看起来一样长，它们都是 x；<b>只有厚度方向才是 dx</b>。另：面片的厚度被<b>放大到 2 像素</b>才画得出来，真实厚度看读数格。</span></p>
+        </div>
+
+        <div class="step-line" id="sl10-3"></div>
+
+        <div class="status-bar" id="st10-3-bar"><span class="status-dot" id="st10-3-dot"></span><span id="st10-3"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv10-3a-cell">
+            <div class="k">x（边长）</div>
+            <div class="v" id="kv10-3a-v">…</div>
+            <div class="k" id="kv10-3a-t">…</div>
+          </div>
+          <div class="kv" id="kv10-3b-cell">
+            <div class="k">dx（长大多少）</div>
+            <div class="v" id="kv10-3b-v">…</div>
+            <div class="k" id="kv10-3b-t">…</div>
+          </div>
+          <div class="kv" id="kv10-3c-cell">
+            <div class="k">一共多出多少体积</div>
+            <div class="v" id="kv10-3c-v">…</div>
+            <div class="k" id="kv10-3c-t">…</div>
+          </div>
+          <div class="kv" id="kv10-3d-cell">
+            <div class="k">三个面片（3 块）</div>
+            <div class="v" id="kv10-3d-v">…</div>
+            <div class="k" id="kv10-3d-t">…</div>
+          </div>
+          <div class="kv" id="kv10-3e-cell">
+            <div class="k">三根棒（3 根）</div>
+            <div class="v" id="kv10-3e-v">…</div>
+            <div class="k" id="kv10-3e-t">…</div>
+          </div>
+          <div class="kv" id="kv10-3f-cell">
+            <div class="k">角上小立方（1 个）</div>
+            <div class="v" id="kv10-3f-v">…</div>
+            <div class="k" id="kv10-3f-t">…</div>
+          </div>
+          <div class="kv" id="kv10-3g-cell">
+            <div class="k">面片占增长的比例</div>
+            <div class="v" id="kv10-3g-v">…</div>
+            <div class="k" id="kv10-3g-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只做一件事：数清"多出来的东西"各有几个。</b><br>
+          书页 103–104 把增长拆成了三批：<b>三个面片</b>（每个 <b>x²·dx</b>）、<b>三根细棒</b>（每根 <b>x·dx²</b>）、
+          <b>角上一个小立方</b>（<b>dx³</b>）。合起来就是恒等式
+          <b>(x+dx)³ − x³ = 3x²·dx + 3x·dx² + dx³</b>。<br>
+          <b>为什么是三个面？</b>因为立方体有<b>三个方向</b> —— 左右、前后、上下。每长一点点，
+          <b>每个方向都会新长出一个 x² 大的正方形面</b>，所以第一项是 <b>3</b>x²·dx。
+          这个"3"不是凑出来的，是<b>数出来的</b>：<b>每个维度一个</b>。<br>
+          那三根棒和小立方呢？它们的体积各是 <b>x·dx²</b> 和 <b>dx³</b> —— <b>已经被 dx 乘了两次</b>。
+          原书的说法是：它们"比极小还小"，与面片相比<b>相当于零</b>。扔掉它们之后，增长 ≈ <b>3x²·dx</b>。<br>
+          同理，<b>还要除以 dx</b>：除掉的还是"这次长了多少"，留下的是<b>每长 1 个单位多出的量</b> ——
+          <b>3x²·dx ÷ dx = 3x²</b>。<b>所以立方体的导数就是 3x²。</b><br>
+          <span style="color:#94a3b8;">★ 诚实标注：三根棒和小立方<b>不是不存在</b>，它们按<b>真实厚度</b>画在图上 ——
+          dx = 1/10 时还看得见，1/100 时只剩 1 像素，1/1000 时彻底消失。读数格里的比例写着它们到底占多少。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　为什么增长里"面片"有 <b>3</b> 块，而不是 2 块或 6 块？<br>A. 因为立方体有 6 个面，取一半<br>B. 因为立方体有 3 个方向，每个方向长大一点都会新长出一个面<br>C. 因为公式里那个 3 是规定的</p>
+          <button class="quiz-btn" id="q10-3a-btn" onclick="toggleAnswer('q10-3a-ans','q10-3a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q10-3a-ans">答案是 <b>B</b>。<br>长大是<b>朝三个方向同时发生</b>的：左右方向多出一片（贴着右边的 x² 面）、前后方向多出一片、上下方向多出一片。<b>一个方向一片，所以 3 片。</b><br>★ 这也解释了为什么正方形只有 2 条细条（2 个方向），而线段只有 1 个端点（1 个方向）—— 第一个数<b>就是维度数</b>。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　三根棒（每根 x·dx²）凭什么可以扔掉？<br>A. 因为它们等于 0<br>B. 因为它们带着 dx²，比面片多乘了一次 dx —— 占比可以任意小<br>C. 因为画不出来</p>
+          <button class="quiz-btn" id="q10-3b-btn" onclick="toggleAnswer('q10-3b-ans','q10-3b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q10-3b-ans">答案是 <b>B</b>。<br>面片带一个 dx，棒带两个 dx，小立方带三个 dx。dx = 1/100 时：面片 0.03，棒 0.0003，小立方 0.000001 —— <b>差 100 倍、再差 100 倍</b>。<br>★ 所以"扔掉"不是说它们不存在，是说<b>它们的份额可以任意小</b>。这与 10.2 扔掉角块是同一件事。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>本节终点 → 下一节</h4>
+          <p>到这里，"数一数有几个"这条规律已经很清楚：<b>线段 1 个、正方形 2 条、立方体 3 片</b> ——
+          第一个数就是<b>维度数</b>。<br>那么 x⁴ 呢？按规律应该是 <b>4</b> 片。可它需要的是<b>四维</b>的东西。<br>下一节，欧娜决定<b>试一次</b>。</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>三批块</b>：三个面片 <b>3x²·dx</b>（带一个 dx）、三根棒 <b>3x·dx²</b>（带两个）、一个小立方 <b>dx³</b>（带三个）。</p>
+          <p><b>那个 3 是数出来的</b>：立方体有 3 个方向，每个方向长大一点都新长出一个 x² 大面。<b>一个维度一片。</b></p>
+          <p><b>所以 3x²</b>：扔掉带 dx² 与 dx³ 的那两批，增长 ≈ 3x²·dx，再除以 dx。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　按 <b>dx = 1/10</b>：三片、三棒、一个小方块全都看得见，面片只占 <b>90.63%</b>。</div>
+          <div class="rule-item"><b>第 2 步</b>　换 <b>1/100</b>、<b>1/1000</b>：<b>棒和角块先消失</b>，面片占到 <b>99.01%</b>、<b>99.90%</b>。</div>
+          <div class="rule-item"><b>第 3 步</b>　按<b>只看三个面片</b>：剩下的就是 <b>3x²·dx</b> —— 导数 3x² 的全部来源。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>「立方体有 6 个面，所以 6 片」</b>—— 不是。长大时只有<b>朝外的三个方向</b>各长一片；另外三个面是"贴着原来那半边"的，没有新增。</p>
+          <p><b>「3x² 里的 3 是公式规定」</b>—— 它是<b>数出来的维度数</b>：线段 1、正方形 2、立方体 3。</p>
+          <p><b>「图上三条边不一样长，所以不是立方体」</b>—— 那是<b>等轴测投影</b>，三条都是 x，只是被压到屏幕上。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= 10.4 画不出的第四个维度 ================= -->
+
+<div class="page" id="page-c10-4">
+  <div class="sub-nav">
+    <span class="back" onclick="goHome()">← 返回首页</span>
+    <span class="divider">|</span>
+    <span class="title">10.4　画不出的第四个维度</span>
+    <span class="nav-next" onclick="goHome()">第 10 章完 · 返回首页 →</span>
+  </div>
+  <div class="sec-tabs"></div>
+  <div class="sub-container">
+    <div class="layout">
+      <div class="graph-area">
+        <div class="story-card"><b>故事开场：</b>欧娜终于弄懂了机器在做什么 —— 它把<b>符号</b>变成<b>图形</b>，让她"看见"式子。<br>这篇小说的作者是<b>玛格丽特·圣克莱尔</b>（1911–1995），原题《<b>阿列夫一号</b>》。她说自己"喜欢写未来的普通人 —— 他们对机器如何工作的了解，并不比现在的司机对热力学定律的了解多"。<b>欧娜就是这样的人。</b><br>可机器也有边界。<b>阿蒂亚爵士</b>说过大意是：几何让你从概念上想问题，代数让你按规范一步步处理；<b>难的是在两者之间找到正确的平衡点</b>。这一节就要撞上那个边界。</div>
+
+        <div class="slider-row" id="row10-4-n">
+          <label>把指数 <b>n</b> 往上推：<b id="lb10-4-n">1</b>　—— 到 4，机器就画不出来了</label>
+          <input type="range" id="s10-4-n" min="1" max="4" step="1" value="1" oninput="pickC10S4N(parseFloat(this.value))">
+        </div>
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="rt10-4" onclick="retryC10S4()">再试一次</button>
+          <button class="ctrl-btn primary" onclick="resetC10S4()">重置</button>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="cv10-4" width="620" height="380"></canvas>
+          <p class="canvas-caption">n = 1 画一条<b>线段</b>、n = 2 画<b>正方形</b>、n = 3 画<b>立方体</b> —— 每一档多出来的第一块，都是 <b>n·x^(n−1)·dx</b>。<br>n = 4 需要的是<b>四个三维的块</b>：<b>数得出来，画不出来。</b><br><span style="color:#94a3b8;">★ 诚实标注：<b>"画不出来"不是"不存在"</b> —— 4x³ 照样算得出来（读数格给数）；画布上那团红线是"投影失败"的样子，<b>不是</b>第四个维度。</span></p>
+        </div>
+
+        <div class="step-line" id="sl10-4"></div>
+
+        <div class="status-bar" id="st10-4-bar"><span class="status-dot" id="st10-4-dot"></span><span id="st10-4"></span></div>
+
+        <div class="kv-grid">
+          <div class="kv" id="kv10-4a-cell">
+            <div class="k">n（指数）</div>
+            <div class="v" id="kv10-4a-v">…</div>
+            <div class="k" id="kv10-4a-t">…</div>
+          </div>
+          <div class="kv" id="kv10-4b-cell">
+            <div class="k">增长的第一项</div>
+            <div class="v" id="kv10-4b-v">…</div>
+            <div class="k" id="kv10-4b-t">…</div>
+          </div>
+          <div class="kv" id="kv10-4c-cell">
+            <div class="k">二项式系数</div>
+            <div class="v" id="kv10-4c-v">…</div>
+            <div class="k" id="kv10-4c-t">…</div>
+          </div>
+          <div class="kv" id="kv10-4d-cell">
+            <div class="k">几个三维的块</div>
+            <div class="v" id="kv10-4d-v">…</div>
+            <div class="k" id="kv10-4d-t">…</div>
+          </div>
+          <div class="kv" id="kv10-4e-cell">
+            <div class="k">能画吗</div>
+            <div class="v" id="kv10-4e-v">…</div>
+            <div class="k" id="kv10-4e-t">…</div>
+          </div>
+          <div class="kv" id="kv10-4f-cell">
+            <div class="k">最大能画到几</div>
+            <div class="v" id="kv10-4f-v">…</div>
+            <div class="k" id="kv10-4f-t">…</div>
+          </div>
+          <div class="kv" id="kv10-4g-cell">
+            <div class="k">一句话</div>
+            <div class="v" id="kv10-4g-v">…</div>
+            <div class="k" id="kv10-4g-t">…</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <b>这一节只做一件事：把"图形不够用"演出来。</b><br>
+          先是<b>能画的清单</b>：n = 1 是一条线段，长大 dx 多出一个端点；n = 2 是正方形，多出<b>两条</b>细条；
+          n = 3 是立方体，多出<b>三个</b>面片。第一个数 1 / 2 / 3 —— <b>就是维度数</b>。<br>
+          然后是 n = 4：(x+dx)⁴ − x⁴ = <b>4x³·dx + 6x²·dx² + 4x·dx³ + dx⁴</b>，
+          系数是 <b>1 / 4 / 6 / 4 / 1</b>。这四项目标各有身份：<b>4 个三维的块 + 6 个面片 + 4 根棒 + 1 个点</b>。
+          <b>数得出来</b>（读数格一排数字），<b>画不出来</b>（你没法在一张纸上摆下四个互相垂直的方向）。<br>
+          <b>★ 别忘了最后那道除法：</b><b>4x³·dx ÷ dx = 4x³</b> —— 扔掉后面三批、再除以 dx，
+          剩下的 <b>4x³</b> 才是导数。不除，你手里拿着的是"这次长了多少"，不是"这一点自己是多少"。<br>
+          所以欧娜做了一件危险的事：她在机器上写下<b>最复杂的表达式</b>（dx、n 次方、还有一堆以 e 为底的东西），
+          底下写了 <b>N = 5</b>。机器"噼噼啪啪"响了一阵，<b>屏幕一片空白</b>。<br>
+          <span style="color:#94a3b8;">★ 她回来时，整个家已经淹没在<b>一个不自然的红色模糊物体</b>里 —— 那就是<b>超时空旋涡</b>。
+          她赶紧补一张纸条：<b>「我写错了，对不起，N 不等于 5，应该等于 0。」</b>宇宙这才安定下来。</span>
+        </div>
+
+        <div class="explain-box" id="vb10-4">
+          <b>章尾判决：</b>「<b>或许，不是所有导数都能可视化。</b>」<br>
+          <span style="color:#94a3b8;">这句话不是"我学会了画图"的收尾 —— 它是<b>图形这条路自己的边界</b>：
+          它能带你走完 1、2、3 维，到第 4 维就松手了。可你已经知道怎么<b>数</b>了 —— 数得出来的，就算得出来。</span>
+        </div>
+
+        <div class="quiz-box">
+          <h4>自测</h4>
+          <p class="quiz-q"><b>第 1 题</b>　n = 4 时增长的第一项是 4x³·dx，那个 <b>4</b> 是什么？<br>A. 又一个规定的常数<br>B. 四个维度 —— 每个维度贡献一个三维的块<br>C. 因为 4 是最小的合数</p>
+          <button class="quiz-btn" id="q10-4a-btn" onclick="toggleAnswer('q10-4a-ans','q10-4a-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q10-4a-ans">答案是 <b>B</b>。<br>和 10.3 里那个 3 是同一件事：<b>线段 1、正方形 2、立方体 3、四维 4</b> —— 第一个数永远是<b>维度数</b>。<br>★ 区别在于：1、2、3 你能画出来；<b>4 你画不出来</b>，可 4x³ 照样算得出来。</div>
+
+          <p class="quiz-q"><br><b>第 2 题</b>　既然画不出第四个维度，为什么还能说"导数是 4x³"？<br>A. 因为画不出来就等于不存在，所以这句话是猜的<br>B. 因为导数靠的是<b>数</b>与<b>算</b>：4x³·dx ÷ dx = 4x³，一路都有账可对<br>C. 因为机器说了算</p>
+          <button class="quiz-btn" id="q10-4b-btn" onclick="toggleAnswer('q10-4b-ans','q10-4b-btn')">看解答 ↓</button>
+          <div class="quiz-answer" id="q10-4b-ans">答案是 <b>B</b>。<br>二项式账把增长拆成了 <b>4 + 6 + 4 + 1</b> 四批，每批都数得清；扔掉带 dx² 及以上的三批，剩 4x³·dx；<b>再除以 dx</b>，得 4x³。<br>★ 图形在这里退场了，<b>但算术没有</b>。这就是"不是所有导数都能可视化"的完整意思 —— 不是"算不出来"，是"画不出来"。</div>
+        </div>
+
+        <div class="hook-box">
+          <h4>第 10 章 · 完</h4>
+          <p>回头看你走过的四节：<b>乘法是面积</b> → <b>平方是正方形</b> → <b>立方体有三个面</b> → <b>第四个维度画不出来</b>。<br>
+          每一节都在做同一件事：<b>把式子翻译成图形</b>；最后一节告诉你<b>这门翻译有失效的时候</b>。<br>
+          <b>而"失效"本身，也是一种知识。</b></p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="concept-card">
+          <h4>概念卡</h4>
+          <p><b>能画的清单</b>：n = 1 线段（1 个端点）、n = 2 正方形（2 条细条）、n = 3 立方体（3 个面片）。第一项永远是 <b>n·x^(n−1)·dx</b>。</p>
+          <p><b>n = 4 的账</b>：<b>4x³dx + 6x²dx² + 4xdx³ + dx⁴</b>，系数 1 / 4 / 6 / 4 / 1 —— <b>4 块三维的 + 6 片 + 4 根 + 1 个点</b>。</p>
+          <p><b>画不出来 ≠ 不存在</b>：4x³ 是<b>算</b>出来的，不是<b>看</b>出来的。图形只是工具之一。</p>
+        </div>
+        <div class="panel-card">
+          <h4><span class="dot" style="background:#10b981;"></span>要点</h4>
+          <div class="rule-item"><b>第 1 步</b>　把 n 从 1 推到 3：每一档都能画，且第一块的数量 = <b>维度数</b>。</div>
+          <div class="rule-item"><b>第 2 步</b>　推到 <b>4</b>：机器画不出，"能画吗"变成<b>画不出来</b>，但读数格里 4 块三维的还在。</div>
+          <div class="rule-item"><b>第 3 步</b>　按<b>再试一次</b>：旋涡更乱，图形依旧不出现 —— <b>这不是机器坏了，是这条路到头了</b>。</div>
+        </div>
+        <div class="warn-card">
+          <h4>易错</h4>
+          <p><b>「画不出来 = 算不出来」</b>—— 不对。这正是本章最后要纠正的一件事。</p>
+          <p><b>「4x³ 就是导数」</b>—— 差一步：要 <b>÷ dx</b>。4x³·dx 是"增长"，4x³ 才是"导数"。</p>
+          <p><b>「第四个维度只是想象」</b>—— 它有<b>明确的账</b>：4 + 6 + 4 + 1 = 15 个零件，一个不多一个不少。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div id="toast"></div>
 
 <script>
@@ -5277,7 +5828,13 @@
     'page-c9-1': function () { stopC9S1(); },
     'page-c9-2': function () { stopC9S2(); },
     'page-c9-3': function () { stopC9S3(); },
-    'page-c9-4': function () { stopC9S4(); }
+    'page-c9-4': function () { stopC9S4(); },
+    // 第 10 章 4 节：★ 四节都是"拨一下就重绘"（无播放键）⇒ 停止钩子都是空实现；
+    // ★ 但**四节一律登记** —— 切走时要清干净运行态（与第 6 / 7 / 8 / 9 章同口径）。
+    'page-c10-1': function () { stopC10S1(); },
+    'page-c10-2': function () { stopC10S2(); },
+    'page-c10-3': function () { stopC10S3(); },
+    'page-c10-4': function () { stopC10S4(); }
   };
   function switchPage(id) {
     var i, key, el;
@@ -15845,6 +16402,717 @@
   updC9S4(); drawC9S4();
   // ================= 第 9 章 JS 区 · 终点 =================
 
+  // ================= 第 10 章 JS 区 · 起点（4 节的实现都插在这条线之后）=================
+  // 两条哨兵注释把「第 10 章新增的一切」框起来 —— 验证脚本与 _chapter_scope.js 据此做 scoped 扫描。
+  // ★ 本章放行的那一个词：见 `_chapter_scope.js` 的 RELEASED[10]（此处**不写它的字形**，避免自扫命中）。
+  // ★ 全章**不用乘方函数**（用整数幂的循环版）—— 封存的那几个函数名**连注释里也别写**。
+  // ★ 本章 4 节全部"拨一下就重绘" ⇒ **不设播放键**，四节的停止钩子都是空实现。
+  // ★ 全章**不需要掷色子**：图形是确定的，读数可复现。
+  var C10_SECTIONS = [
+    { n: 1, label: '机器会把式子画出来' },
+    { n: 2, label: '平方就是正方形' },
+    { n: 3, label: '立方体有三个面' },
+    { n: 4, label: '画不出的第四个维度' }
+  ];
+  function goC10(n) { switchPage('page-c10-' + n); }    // 第 10 章内部导航
+
+  // 10.1 机器会把式子画出来
+  // ★ 本节要送出的原语：**乘法就是面积**（原书 p98 的 5×4 方格矩形）。
+  //   6 × 2.5 = 整格 12 + 半格 6（每块 0.5）= 15 —— 半格在图上真的窄一半，不是"凑数"。
+  // ★ 本节的可算判据（计划 §八 #1）：
+  //     ① 格子数 = 宽 × 高（整数格 + 半格 × 0.5 + 角块 × 0.25，逐项对账）；
+  //     ② 宽 / 高各可带 0.5（滑块步长 0.5）⇒ 底边与右边各长出一条半格，两角相交处是 0.25；
+  //     ③ 诚实标注：滑块只能走半格是"为了画得出来"，真实乘法可以是 2.37。
+  // ★ 禁：乘方 / 掷色子 / 上一章放行的两个词 —— 连函数名与字形都不写（本章不变量含注释一起扫）。
+  // ★ 不设播放键：3 个预设 + 2 个滑块 + 重置，全是"拨一下就重绘"。
+  var PRESET_C10S1 = [[6, 2.5], [5, 4], [2.5, 2.5]];
+  var CELL_C10S1 = 30;                 // 一格 = 30 像素（★ 屏幕尺子，与"格"这把尺子分开说）
+  var GX_C10S1 = 70, GY_C10S1 = 92;    // 方格矩形左上角
+  var g10_1 = { w: 6, h: 2.5 };
+
+  function r1C10S1(v) { return Math.round(v * 10) / 10; }
+  // ★ 拆解：整格 / 半格 / 角块 —— 三者面积相加必须等于 宽 × 高
+  function cellsC10S1() {
+    var w = g10_1.w, h = g10_1.h;
+    var iw = Math.floor(w), ih = Math.floor(h);
+    var bw = (w !== iw) ? 1 : 0;            // 宽度带半格 ⇒ 右边一条
+    var bh = (h !== ih) ? 1 : 0;            // 高度带半格 ⇒ 底边一条
+    var halves = (bh ? iw : 0) + (bw ? ih : 0);   // 每条半格都是 0.5 × 1
+    var quarter = (bw && bh) ? 1 : 0;             // 两条相交的角上：0.5 × 0.5
+    var whole = iw * ih;
+    return { whole: whole, halves: halves, quarter: quarter,
+             area: whole + halves * 0.5 + quarter * 0.25 };
+  }
+  function areaC10S1() { return g10_1.w * g10_1.h; }
+  // ★ 显示用两位小数：2.5 不能印成 2.5，可 6.25 也不能被四舍五入成 6.3（面积是最要紧的那个数）
+  function r2C10S1(v) { return Math.round(v * 100) / 100; }
+  function fmtC10S1(v) { return String(r2C10S1(v)); }
+  function midC10S1() { return (g10_1.w === 6 && g10_1.h === 2.5); }
+  function msgC10S1() {
+    var c = cellsC10S1();
+    if (midC10S1()) {
+      return '书里的那个例子：<b>6 × 2.5</b> —— 整格 <b>12</b> 个，下面一行是 <b>6 个半格</b>，' +
+        '合计 <b>15</b>。半格不是凑数，它在图上真的窄一半。';
+    }
+    if (c.quarter) {
+      return '宽和高都带半格：<b>' + fmtC10S1(c.whole) + '</b> 个整格 + <b>' + c.halves +
+        '</b> 个半格 + 角上 <b>1</b> 个小方块（0.25）＝ <b>' + fmtC10S1(areaC10S1()) + '</b>。';
+    }
+    if (c.halves) {
+      return '宽 <b>' + fmtC10S1(g10_1.w) + '</b> × 高 <b>' + fmtC10S1(g10_1.h) + '</b>：整格 <b>' +
+        c.whole + '</b> 个 + 半格 <b>' + c.halves + '</b> 个 ＝ <b>' + fmtC10S1(areaC10S1()) + '</b>。';
+    }
+    return '整数格最好数：<b>' + fmtC10S1(g10_1.w) + ' × ' + fmtC10S1(g10_1.h) + '</b> —— ' +
+      '正好 <b>' + c.whole + '</b> 个格子，一个不缺。';
+  }
+  function stepTxtC10S1() {
+    return '机器没有变魔术：它把<b>「乘」这个动作摊开</b>给你看 —— ' +
+      '宽几格、高几格，<b>格子数就是乘积</b>。';
+  }
+  function drawC10S1() {
+    var cv = document.getElementById('cv10-1');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var w = g10_1.w, h = g10_1.h, iw = Math.floor(w), ih = Math.floor(h);
+    var bw = (w !== iw) ? 1 : 0, bh = (h !== ih) ? 1 : 0;
+    var C = CELL_C10S1, x0 = GX_C10S1, y0 = GY_C10S1, i, j, x, y;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 整格 ----
+    c.fillStyle = '#dbeafe'; c.strokeStyle = '#93c5fd'; c.lineWidth = 1.2;
+    for (i = 0; i < iw; i++) {
+      for (j = 0; j < ih; j++) {
+        x = x0 + i * C; y = y0 + j * C;
+        c.fillRect(x, y, C, C); c.strokeRect(x, y, C, C);
+      }
+    }
+    // ---- 底边半格（宽 0.5 × 高 1）----
+    c.fillStyle = '#fde68a'; c.strokeStyle = '#f59e0b';
+    if (bh) {
+      for (i = 0; i < iw; i++) {
+        x = x0 + i * C; y = y0 + ih * C;
+        c.fillRect(x, y, C / 2, C); c.strokeRect(x, y, C / 2, C);
+      }
+    }
+    // ---- 右边半格（宽 0.5 × 高 1）----
+    if (bw) {
+      for (j = 0; j < ih; j++) {
+        x = x0 + iw * C; y = y0 + j * C;
+        c.fillRect(x, y, C / 2, C); c.strokeRect(x, y, C / 2, C);
+      }
+    }
+    // ---- 角上那小块（0.5 × 0.5）----
+    if (bw && bh) {
+      c.fillStyle = '#fca5a5'; c.strokeStyle = '#ef4444';
+      x = x0 + iw * C; y = y0 + ih * C;
+      c.fillRect(x, y, C / 2, C / 2); c.strokeRect(x, y, C / 2, C / 2);
+    }
+    // ---- 外框 ----
+    c.strokeStyle = '#334155'; c.lineWidth = 2;
+    c.strokeRect(x0, y0, w * C, h * C);
+    // ---- 尺度标注（★ 屏幕尺子与面积尺子分开写）----
+    labelChip(c, '宽 ' + fmtC10S1(w), x0, y0 - 16, '#1d4ed8', 11, 'left', 3);
+    labelChip(c, '高 ' + fmtC10S1(h), x0 - 8, y0, '#1d4ed8', 11, 'right', 3);
+    label(c, '一格 = 1（屏幕上 30 像素）', x0, y0 + h * C + 20, '#94a3b8', 10, 'left');
+    // ---- 右侧：机器吐出的话 ----
+    var c2 = cellsC10S1();
+    label(c, '机器吐出的话', 380, 40, '#0f172a', 12, 'left');
+    labelChip(c, fmtC10S1(w) + ' × ' + fmtC10S1(h) + ' = ' + fmtC10S1(areaC10S1()),
+      380, 62, '#1d4ed8', 13, 'left', 4);
+    label(c, '整格 ' + c2.whole + ' 个' + (c2.halves ? '（每个 1）' : ''), 380, 104, '#64748b', 11, 'left');
+    if (c2.halves) {
+      label(c, '半格 ' + c2.halves + ' 个（每个 0.5）', 380, 126, '#b45309', 11, 'left');
+    }
+    if (c2.quarter) {
+      label(c, '角上 1 块（0.25）', 380, 148, '#dc2626', 11, 'left');
+    }
+    label(c, '加起来 = ' + fmtC10S1(c2.area) + ' 格', 380, 176, '#0f172a', 11.5, 'left');
+    label(c, '滑块只走半格 —— 为了画得出来', 380, 210, '#94a3b8', 10, 'left');
+    // ---- 刹车话（恒印）----
+    label(c, '图形不是装饰 —— 它把「乘法」变成了看得见的面积。', 24, 360, '#64748b', 11, 'left');
+  }
+  function updC10S1() {
+    var c = cellsC10S1();
+    var sw = document.getElementById('s10-1-w'), sh = document.getElementById('s10-1-h');
+    if (sw && parseFloat(sw.value) !== g10_1.w) { sw.value = String(g10_1.w); }
+    if (sh && parseFloat(sh.value) !== g10_1.h) { sh.value = String(g10_1.h); }
+    setTxtC10S1('lb10-1-w', fmtC10S1(g10_1.w));
+    setTxtC10S1('lb10-1-h', fmtC10S1(g10_1.h));
+    setTxtC10S1('kv10-1a-v', fmtC10S1(g10_1.w) + ' 格');
+    setTxtC10S1('kv10-1a-t', '滑块 1…8，步长 0.5');
+    setTxtC10S1('kv10-1b-v', fmtC10S1(g10_1.h) + ' 格');
+    setTxtC10S1('kv10-1b-t', '滑块 1…6，步长 0.5');
+    setTxtC10S1('kv10-1c-v', fmtC10S1(areaC10S1()) + ' 格');
+    setTxtC10S1('kv10-1c-t', '= 宽 × 高（半格算半格）');
+    setTxtC10S1('kv10-1d-v', c.whole + ' + ' + (c.halves * 0.5) + (c.quarter ? ' + 0.25' : ''));
+    setTxtC10S1('kv10-1d-t', '整格 ' + c.whole + ' 个 / 半格 ' + c.halves + ' 个' +
+      (c.quarter ? ' / 角块 1 个' : ''));
+    setTxtC10S1('kv10-1e-v', '乘法就是数格子');
+    setTxtC10S1('kv10-1e-t', '同一张图，两种说法');
+    setTxtC10S1('st10-1', msgC10S1());
+    setTxtC10S1('sl10-1', stepTxtC10S1());
+    var dt = document.getElementById('st10-1-dot');
+    if (dt) { dt.style.background = (c.quarter || c.halves) ? '#f59e0b' : '#3b82f6'; }
+    var ln = document.getElementById('sl10-1');
+    if (ln) { ln.className = 'step-line on'; }
+  }
+  function setTxtC10S1(id, h) { var e = document.getElementById(id); if (e) { e.innerHTML = h; } }
+  function pickC10S1W(v) {
+    var x = parseFloat(v);
+    if (!isFinite(x)) { x = 6; }
+    g10_1.w = Math.min(8, Math.max(1, r1C10S1(x)));
+    updC10S1(); drawC10S1();
+  }
+  function pickC10S1H(v) {
+    var x = parseFloat(v);
+    if (!isFinite(x)) { x = 1; }
+    g10_1.h = Math.min(6, Math.max(1, r1C10S1(x)));
+    updC10S1(); drawC10S1();
+  }
+  function presetC10S1(k) {
+    var i = parseInt(k, 10);
+    if (!isFinite(i) || i < 0 || i >= PRESET_C10S1.length) { i = 0; }
+    g10_1.w = PRESET_C10S1[i][0]; g10_1.h = PRESET_C10S1[i][1];
+    updC10S1(); drawC10S1();
+    toast(i === 0 ? '6 × 2.5：整格 12 个 + 半格 6 个 = 15'
+      : i === 1 ? '5 × 4：20 个整格，最老实的乘法'
+      : '2.5 × 2.5：角上多出四分之一格，合计 6.25');
+  }
+  function resetC10S1() {
+    g10_1.w = 6; g10_1.h = 2.5;
+    updC10S1(); drawC10S1();
+    toast('回到书里的那个例子：6 × 2.5 = 15');
+  }
+  // 停止钩子：本节没有运行态（拨一下就重绘，也不设播放键），但必须登记
+  function stopC10S1() { }
+
+  updC10S1(); drawC10S1();
+  // 10.2 平方就是正方形
+  // ★ 本节要送出的原语：**"忽略"不是"等于 0"，是占比可以任意小**（书页 101–102）。
+  //   (x+dx)² − x² = 2x·dx + (dx)²；扔掉角块 ⇒ 增长 ÷ dx = 2x + dx ⇒ 平方的导数是 2x。
+  // ★ 本节的可算判据（计划 §八 #2 / #3 / #5 / #8）：
+  //     ① 恒等式对三档 dx 全面核（x 固定 1）；
+  //     ② 角块占比 = dx ÷ (2x + dx)：1/21 = 4.76% · 1/201 = 0.50% · 1/2001 = 0.05%；
+  //     ③ 增长 ÷ dx = 2x + dx ⇒ dx = 1/1000 时与 2 的差**恰好是 dx**；
+  //     ④ dx = 1/1000 ⇒ 角块在屏上 0.2 像素 ⇒ 必须打"加粗示意"。
+  // ★ 本节**第一次**用章内放行的那个词（书页 102 原话）；第 8 章放行的两个词仍然不写。
+  // ★ 禁：乘方 / 掷色子 / 对数 —— 连函数名都不写（本章不变量含注释一起扫）。
+  // ★ 不设播放键：3 档 + 放大 + 重置，全是"按一下就重画"。
+  var DX_C10S2 = [0.1, 0.01, 0.001];
+  var DXT_C10S2 = ['1/10', '1/100', '1/1000'];
+  var X_C10S2 = 1;                    // 边长固定为 1
+  var XPX_C10S2 = 200;                // x = 1 占 200 像素（★ 屏幕尺子）
+  var X0_C10S2 = 70, Y0_C10S2 = 92;   // 正方形左上角
+  var g10_2 = { d: 0, zoom: 0 };      // d = dx 档位，zoom = 是否看角落放大图
+
+  function dxC10S2() { return DX_C10S2[g10_2.d]; }
+  function growthC10S2() { var d = dxC10S2(); return 2 * X_C10S2 * d + d * d; }
+  function stripC10S2() { return 2 * X_C10S2 * dxC10S2(); }
+  function cornerC10S2() { return dxC10S2() * dxC10S2(); }
+  function ratioC10S2() { return cornerC10S2() / growthC10S2(); }
+  function slopeC10S2() { return growthC10S2() / dxC10S2(); }
+  function pxC10S2() { return XPX_C10S2 * dxC10S2(); }     // 角块在屏上多少像素
+  function f6C10S2(v) {
+    var s = v.toFixed(6);
+    if (s.indexOf('.') >= 0) { s = s.replace(/0+$/, '').replace(/\.$/, ''); }
+    return s;
+  }
+  function pctC10S2() { return (ratioC10S2() * 100).toFixed(2) + '%'; }
+  function msgC10S2() {
+    var p = pxC10S2();
+    if (g10_2.d === 0) {
+      return 'dx = <b>1/10</b>：角上那一块清清楚楚，它占增长的 <b>4.76%</b> —— 现在还说不上"可以不管"。';
+    }
+    if (g10_2.d === 1) {
+      return 'dx = <b>1/100</b>：角块只剩增长的 <b>0.50%</b>，在屏上 <b>2 像素</b>宽 —— 快看不见了。';
+    }
+    return 'dx = <b>1/1000</b>：角块占 <b>0.05%</b>，在屏上只有 <b>' + f6C10S2(p) +
+      ' 像素</b> —— 图上那条红线是<b>加粗示意</b>，不是它的真实厚度。';
+  }
+  function stepTxtC10S2() {
+    return (g10_2.zoom
+      ? '放大之后看得更清楚：角块与两条细条<b>一样宽</b>，都是 dx —— 它小，是因为它<b>只有一条边那么长</b>。'
+      : '多出来的三块：上边 <b>x·dx</b>、右边 <b>x·dx</b>、角上 <b>dx·dx</b> —— 角块只占 <b>' +
+        pctC10S2() + '</b>。');
+  }
+  function drawC10S2() {
+    var cv = document.getElementById('cv10-2');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var d = dxC10S2(), dp = pxC10S2(), i;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    if (g10_2.zoom) { drawZoomC10S2(c, d); return; }
+    var x0 = X0_C10S2, y0 = Y0_C10S2, L = XPX_C10S2;
+    // ---- 原来的正方形 ----
+    c.fillStyle = '#dbeafe'; c.strokeStyle = '#93c5fd'; c.lineWidth = 1.2;
+    c.fillRect(x0, y0, L, L); c.strokeRect(x0, y0, L, L);
+    // ---- 两条细条（按**真实厚度**填，不做假）----
+    c.fillStyle = '#fca5a5'; c.strokeStyle = '#ef4444';
+    c.fillRect(x0, y0 - dp, L, dp);                 // 上边
+    c.fillRect(x0 + L, y0, dp, L);                  // 右边
+    // ---- 角上那一块（真实厚度 dp × dp）----
+    c.fillStyle = '#ef4444';
+    c.fillRect(x0 + L, y0 - dp, dp, dp);
+    // ---- 小于 1 像素时：加粗示意（★ 图上要说明这是示意，不是真实厚度）----
+    if (dp < 1) {
+      c.fillStyle = '#b91c1c';
+      c.fillRect(x0, y0 - 1.2, L, 1.2);
+      c.fillRect(x0 + L, y0, 1.2, L);
+      c.fillRect(x0 + L, y0 - 1.2, 1.2, 1.2);
+    }
+    // ---- 外框 ----
+    c.strokeStyle = '#334155'; c.lineWidth = 2;
+    c.strokeRect(x0, y0, L, L);
+    // ---- 尺度标注 ----
+    labelChip(c, 'x = 1', x0 + L / 2, y0 + L + 18, '#1d4ed8', 11, 'center', 3);
+    label(c, 'dx', x0 + L + Math.max(dp, 3) + 8, y0 + L / 2, '#ef4444', 11, 'left');
+    label(c, '上边这条也是 dx 宽', x0 + 10, y0 - Math.max(dp, 3) - 10, '#b91c1c', 10, 'left');
+    if (dp >= 8) {
+      label(c, '角块', x0 + L + dp / 2, y0 - dp / 2, '#fff', 9, 'center');
+    }
+    // ---- 右侧说明 ----
+    label(c, '长大 dx 之后多出来的三块', 330, 40, '#0f172a', 11.5, 'left');
+    labelChip(c, '(1 + dx)² − 1 = 2·dx + (dx)²', 330, 66, '#1d4ed8', 11.5, 'left', 4);
+    label(c, '两条细条  2·dx = ' + f6C10S2(stripC10S2()), 330, 104, '#b91c1c', 11, 'left');
+    label(c, '角上那一块  dx² = ' + f6C10S2(cornerC10S2()), 330, 126, '#dc2626', 11, 'left');
+    label(c, '角块占增长  ' + pctC10S2(), 330, 148, '#0f172a', 11, 'left');
+    label(c, '增长 ÷ dx   ' + f6C10S2(slopeC10S2()) + '（dx 越小越接近 2）', 330, 170, '#0f172a', 11, 'left');
+    if (dp < 1) {
+      label(c, '★ 角块真实厚度只有 ' + f6C10S2(dp) + ' 像素', 330, 200, '#94a3b8', 10, 'left');
+      label(c, '那条红线是加粗示意', 330, 216, '#94a3b8', 10, 'left');
+    } else {
+      label(c, '角块在屏上 ' + f6C10S2(dp) + ' 像素宽', 330, 200, '#94a3b8', 10, 'left');
+    }
+    label(c, '它不是 0 —— 只是占比可以任意小', 330, 244, '#94a3b8', 10, 'left');
+    // ---- 刹车话（恒印）----
+    label(c, '多出来的两条细条，就是导数；角落里那一小块，小到可以不管。', 24, 360, '#64748b', 11, 'left');
+  }
+  // 角落放大图：把"角块与两条细条**一样宽**"这件事摆出来（宽度都 = dx，只是长度差 1/dx 倍）
+  function drawZoomC10S2(c, d) {
+    var BW = 100;                       // 放大后 dx 的宽度（像素）
+    var cx = 240, cy = 150;             // 角块左上角
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // 上边那条细条（向左、向上延伸，长度画不下 ⇒ 截断并写明）
+    c.fillStyle = '#fca5a5'; c.strokeStyle = '#ef4444';
+    c.fillRect(40, cy - BW, 540, BW);
+    // 右边那条细条
+    c.fillRect(cx + BW, cy, BW, 180);
+    // 角块
+    c.fillStyle = '#ef4444';
+    c.fillRect(cx, cy - BW, BW, BW);
+    c.strokeStyle = '#334155'; c.lineWidth = 2;
+    c.strokeRect(cx, cy - BW, BW, BW);
+    label(c, 'dx', 52, cy - BW / 2, '#b91c1c', 12, 'left');
+    label(c, 'dx', cx + BW / 2 + 18, cy + 92, '#b91c1c', 12, 'left');
+    label(c, '角块 = dx × dx', cx + BW / 2, cy - BW / 2, '#fff', 10, 'center');
+    label(c, '这两条细条一直延伸出去（长度 = 1），画不下 —— 截断', 40, 344, '#94a3b8', 10, 'left');
+    label(c, '角块 : 一条细条 = dx : 1', 380, 40, '#0f172a', 12, 'left');
+    label(c, '现在 dx = ' + DXT_C10S2[g10_2.d] + ' ⇒ 角块只有细条的 ' + DXT_C10S2[g10_2.d], 380, 66, '#0f172a', 11, 'left');
+    label(c, '★ 它小，是因为它只有一条边那么长', 380, 96, '#94a3b8', 10.5, 'left');
+    label(c, '多出来的两条细条，就是导数；角落里那一小块，小到可以不管。', 24, 366, '#64748b', 11, 'left');
+  }
+  function setTxtC10S2(id, h) { var e = document.getElementById(id); if (e) { e.innerHTML = h; } }
+  function updC10S2() {
+    var dp = pxC10S2();
+    setTxtC10S2('kv10-2a-v', String(X_C10S2));
+    setTxtC10S2('kv10-2a-t', '本节固定为 1（占 200 像素）');
+    setTxtC10S2('kv10-2b-v', DXT_C10S2[g10_2.d]);
+    setTxtC10S2('kv10-2b-t', '= ' + f6C10S2(dxC10S2()) + '　屏上 ' + f6C10S2(dp) + ' 像素');
+    setTxtC10S2('kv10-2c-v', f6C10S2(growthC10S2()));
+    setTxtC10S2('kv10-2c-t', '2x·dx + dx²（x = 1）');
+    setTxtC10S2('kv10-2d-v', f6C10S2(stripC10S2()));
+    setTxtC10S2('kv10-2d-t', '两条，每条 x·dx');
+    setTxtC10S2('kv10-2e-v', f6C10S2(cornerC10S2()));
+    setTxtC10S2('kv10-2e-t', 'dx × dx　(' + f6C10S2(dp) + ' 像素宽)');
+    setTxtC10S2('kv10-2f-v', pctC10S2());
+    setTxtC10S2('kv10-2f-t', '= dx ÷ (2x + dx)，dx 越小它越小');
+    setTxtC10S2('kv10-2g-v', f6C10S2(slopeC10S2()));
+    setTxtC10S2('kv10-2g-t', '= 2x + dx　与 2x 的差恰好是 dx');
+    setTxtC10S2('st10-2', msgC10S2());
+    setTxtC10S2('sl10-2', stepTxtC10S2());
+    var dt = document.getElementById('st10-2-dot');
+    if (dt) { dt.style.background = (dp < 1) ? '#ef4444' : '#f59e0b'; }
+    var ln = document.getElementById('sl10-2');
+    if (ln) { ln.className = 'step-line on'; }
+  }
+  function pickC10S2(k) {
+    var i = parseInt(k, 10);
+    if (!isFinite(i)) { i = 0; }
+    g10_2.d = Math.min(DX_C10S2.length - 1, Math.max(0, i));
+    updC10S2(); drawC10S2();
+    toast('dx = ' + DXT_C10S2[g10_2.d] + '：角块占增长的 ' + pctC10S2());
+  }
+  function zoomC10S2() {
+    g10_2.zoom = g10_2.zoom ? 0 : 1;
+    updC10S2(); drawC10S2();
+    toast(g10_2.zoom ? '放大看角落：角块与细条一样宽，都是 dx' : '回到整张正方形');
+  }
+  function resetC10S2() {
+    g10_2.d = 0; g10_2.zoom = 0;
+    updC10S2(); drawC10S2();
+    toast('回到 dx = 1/10 —— 角块现在清清楚楚');
+  }
+  // 停止钩子：本节没有运行态（按一下就重画，也不设播放键），但必须登记
+  function stopC10S2() { }
+
+  updC10S2(); drawC10S2();
+  // 10.3 立方体有三个面
+  // ★ 本节要送出的原语：**那个"3"是数出来的维度数**（书页 103–104）。
+  //   (x+dx)³ − x³ = 3x²·dx + 3x·dx² + dx³ —— 三片 / 三棒 / 一小块。
+  // ★ 本节的可算判据（计划 §八 #4 / #5）：
+  //     ① 恒等式对三档 dx 全面核（x 固定 1）；
+  //     ② 三类块的个数 = 3 / 3 / 1；面片占比 90.63% → 99.01% → 99.90%（dx 越小越接近 1）；
+  //     ③ 增长 ÷ dx − 3x² **恰好 = 3x·dx + dx²**；
+  //     ④ 棒与小立方按**真实厚度**画（1/100 ⇒ 1 px，1/1000 ⇒ 0.1 px ⇒ 消失）。
+  // ★ 画法：等轴测投影 —— 三条 x 边看起来一样长，**厚度方向才是 dx**（计划 §七.5 要标）。
+  // ★ 面片给最小 2 像素的示意厚度（否则 0.1 px 什么都画不出来），屏上写明"已放大"。
+  // ★ 本节不再需要章内放行的那一个词；第 8 章放行的两个词仍然不写。
+  var DX_C10S3 = [0.1, 0.01, 0.001];
+  var DXT_C10S3 = ['1/10', '1/100', '1/1000'];
+  var X_C10S3 = 1;
+  var S_C10S3 = 100;                     // 一条 x 边在屏幕上的长度（等轴测单位长度）
+  var OX_C10S3 = 190, OY_C10S3 = 200;    // 原点 (0,0,0) 的屏幕位置
+  var MINT_C10S3 = 2 / 100;              // 面片最小示意厚度 = 2 像素（换算成"单位"）
+  var g10_3 = { d: 0, only: 0 };         // d = dx 档位，only = 只看面片
+
+  function dxC10S3() { return DX_C10S3[g10_3.d]; }
+  function slabC10S3() { return 3 * X_C10S3 * X_C10S3 * dxC10S3(); }
+  function rodC10S3() { return 3 * X_C10S3 * dxC10S3() * dxC10S3(); }
+  function cubeC10S3() { return dxC10S3() * dxC10S3() * dxC10S3(); }
+  function growthC10S3() { return slabC10S3() + rodC10S3() + cubeC10S3(); }
+  function ratioC10S3() { return slabC10S3() / growthC10S3(); }
+  function perDxC10S3() { return growthC10S3() / dxC10S3(); }
+  function f6C10S3(v) {
+    var s = v.toFixed(9);
+    if (s.indexOf('.') >= 0) { s = s.replace(/0+$/, '').replace(/\.$/, ''); }
+    return s;
+  }
+  function pctC10S3() { return (ratioC10S3() * 100).toFixed(2) + '%'; }
+  function msgC10S3() {
+    if (g10_3.d === 0) {
+      return 'dx = <b>1/10</b>：三片、三棒、一小块全都看得见 —— 面片只占增长的 <b>90.63%</b>，还扔不掉。';
+    }
+    if (g10_3.d === 1) {
+      return 'dx = <b>1/100</b>：棒只剩 <b>1 像素</b>粗，快看不见了；面片已经占到 <b>99.01%</b>。';
+    }
+    return 'dx = <b>1/1000</b>：棒和小立方在屏上只有 <b>0.1 像素</b> —— 彻底消失；面片占 <b>99.90%</b>。';
+  }
+  function stepTxtC10S3() {
+    return (g10_3.only
+      ? '只剩三个面片：<b>3x²·dx</b> —— 这就是"立方体的导数是 3x²"的全部来源。'
+      : '三批块按"带几个 dx"排队：面片带 <b>1</b> 个、棒带 <b>2</b> 个、小立方带 <b>3</b> 个 —— ' +
+        '带得越多，消失得越快。');
+  }
+  // 等轴测投影：x 向右下、y 向左下、z 向上
+  function p3C10S3(x, y, z) {
+    return [OX_C10S3 + (x - y) * 0.866 * S_C10S3, OY_C10S3 + (x + y) * 0.5 * S_C10S3 - z * S_C10S3];
+  }
+  function quadC10S3(c, a, b, d, e, fill, line) {
+    c.beginPath();
+    c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.lineTo(d[0], d[1]); c.lineTo(e[0], e[1]);
+    c.closePath();
+    c.fillStyle = fill; c.fill();
+    if (line) { c.strokeStyle = line; c.lineWidth = 1; c.stroke(); }
+  }
+  // 一个盒子只画**看得见的三个面**（z 顶 / x 右 / y 左）—— 每面一次 fill，便于断言逐个对账
+  function boxC10S3(c, x0, x1, y0, y1, z0, z1, fill, line) {
+    quadC10S3(c, p3C10S3(x0, y0, z1), p3C10S3(x1, y0, z1), p3C10S3(x1, y1, z1), p3C10S3(x0, y1, z1), fill, line);
+    quadC10S3(c, p3C10S3(x1, y0, z0), p3C10S3(x1, y1, z0), p3C10S3(x1, y1, z1), p3C10S3(x1, y0, z1), fill, line);
+    quadC10S3(c, p3C10S3(x0, y1, z0), p3C10S3(x1, y1, z0), p3C10S3(x1, y1, z1), p3C10S3(x0, y1, z1), fill, line);
+  }
+  function drawC10S3() {
+    var cv = document.getElementById('cv10-3');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    var d = dxC10S3(), X = X_C10S3, i;
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    // ---- 原来的立方体 ----
+    boxC10S3(c, 0, X, 0, X, 0, X, '#dbeafe', '#93c5fd');
+    // ---- 三个面片（★ 厚度给最小 2 像素，屏上写明已放大）----
+    var ts = Math.max(d, MINT_C10S3);
+    boxC10S3(c, 0, X, 0, X, X, X + ts, '#fca5a5', '#ef4444');      // 顶面
+    boxC10S3(c, X, X + ts, 0, X, 0, X, '#fca5a5', '#ef4444');      // 右面
+    boxC10S3(c, 0, X, X, X + ts, 0, X, '#fca5a5', '#ef4444');      // 左面
+    // ---- 三根棒 + 角上小立方（★ 按真实厚度，肉眼可见地越来越细）----
+    if (!g10_3.only) {
+      boxC10S3(c, X, X + d, X, X + d, 0, X, '#f59e0b', '#b45309');            // 沿 z 的棒
+      boxC10S3(c, X, X + d, 0, X, X, X + d, '#f59e0b', '#b45309');            // 沿 y 的棒
+      boxC10S3(c, 0, X, X, X + d, X, X + d, '#f59e0b', '#b45309');            // 沿 x 的棒
+      boxC10S3(c, X, X + d, X, X + d, X, X + d, '#ef4444', '#991b1b');        // 角上小立方
+    }
+    // ---- 比例尺：哪条是 x、哪条是 dx（计划 §七.5）----
+    var q1 = p3C10S3(X / 2, 0, 0), q2 = p3C10S3(0, X / 2, 0), q3 = p3C10S3(0, 0, X / 2);
+    label(c, 'x', q1[0], q1[1] + 15, '#1d4ed8', 11, 'center');
+    label(c, 'x', q2[0] - 4, q2[1] + 12, '#1d4ed8', 11, 'right');
+    label(c, 'x', q3[0] - 10, q3[1], '#1d4ed8', 11, 'right');
+    label(c, 'dx（厚度）', p3C10S3(X, X + ts, X)[0] + 6, p3C10S3(X, X + ts, X)[1], '#b91c1c', 10, 'left');
+    if (Math.abs(ts - d) > 1e-12) {
+      label(c, '★ 面片厚度已放大到 2 像素（真实 ' + f6C10S3(S_C10S3 * d) + ' 像素）',
+        24, 22, '#94a3b8', 10, 'left');
+    }
+    // ---- 右侧说明 ----
+    label(c, '多出来的三批块', 330, 40, '#0f172a', 11.5, 'left');
+    labelChip(c, '(x+dx)³ − x³ = 3x²dx + 3xdx² + dx³', 330, 66, '#1d4ed8', 11, 'left', 4);
+    label(c, '三个面片  3x²dx = ' + f6C10S3(slabC10S3()), 330, 104, '#dc2626', 11, 'left');
+    label(c, '三根棒    3xdx² = ' + f6C10S3(rodC10S3()), 330, 126, '#b45309', 11, 'left');
+    label(c, '小立方    dx³   = ' + f6C10S3(cubeC10S3()), 330, 148, '#991b1b', 11, 'left');
+    label(c, '面片占增长  ' + pctC10S3(), 330, 176, '#0f172a', 11, 'left');
+    label(c, '增长 ÷ dx   ' + f6C10S3(perDxC10S3()) + '（dx 越小越接近 3）', 330, 198, '#0f172a', 11, 'left');
+    label(c, '棒在屏上 ' + f6C10S3(S_C10S3 * d) + ' 像素粗', 330, 228, '#94a3b8', 10, 'left');
+    label(c, '★ 等轴测是投影：三条 x 边一样长，厚度才是 dx', 330, 250, '#94a3b8', 10, 'left');
+    // ---- 刹车话（恒印）----
+    label(c, '立方体长大一点点，多出来的是三个面 —— 每个维度一个。', 24, 360, '#64748b', 11, 'left');
+  }
+  function setTxtC10S3(id, h) { var e = document.getElementById(id); if (e) { e.innerHTML = h; } }
+  function updC10S3() {
+    setTxtC10S3('kv10-3a-v', String(X_C10S3));
+    setTxtC10S3('kv10-3a-t', '本节固定为 1');
+    setTxtC10S3('kv10-3b-v', DXT_C10S3[g10_3.d]);
+    setTxtC10S3('kv10-3b-t', '= ' + f6C10S3(dxC10S3()) + '　棒粗 ' + f6C10S3(S_C10S3 * dxC10S3()) + ' 像素');
+    setTxtC10S3('kv10-3c-v', f6C10S3(growthC10S3()));
+    setTxtC10S3('kv10-3c-t', '3x²dx + 3xdx² + dx³（x = 1）');
+    setTxtC10S3('kv10-3d-v', f6C10S3(slabC10S3()));
+    setTxtC10S3('kv10-3d-t', '每个 x²·dx，一个方向一片');
+    setTxtC10S3('kv10-3e-v', f6C10S3(rodC10S3()));
+    setTxtC10S3('kv10-3e-t', '每根 x·dx²，带两个 dx');
+    setTxtC10S3('kv10-3f-v', f6C10S3(cubeC10S3()));
+    setTxtC10S3('kv10-3f-t', 'dx³，带三个 dx');
+    setTxtC10S3('kv10-3g-v', pctC10S3());
+    setTxtC10S3('kv10-3g-t', '= 面片 ÷ 增长，dx 越小越接近 100%');
+    setTxtC10S3('st10-3', msgC10S3());
+    setTxtC10S3('sl10-3', stepTxtC10S3());
+    var dt = document.getElementById('st10-3-dot');
+    if (dt) { dt.style.background = (S_C10S3 * dxC10S3() < 1) ? '#ef4444' : '#f59e0b'; }
+    var ln = document.getElementById('sl10-3');
+    if (ln) { ln.className = 'step-line on'; }
+    var ob = document.getElementById('ol10-3');
+    if (ob) { ob.textContent = g10_3.only ? '看全部三批块' : '只看三个面片'; }
+  }
+  function pickC10S3(k) {
+    var i = parseInt(k, 10);
+    if (!isFinite(i)) { i = 0; }
+    g10_3.d = Math.min(DX_C10S3.length - 1, Math.max(0, i));
+    updC10S3(); drawC10S3();
+    toast('dx = ' + DXT_C10S3[g10_3.d] + '：面片占增长的 ' + pctC10S3());
+  }
+  function onlyC10S3() {
+    g10_3.only = g10_3.only ? 0 : 1;
+    updC10S3(); drawC10S3();
+    toast(g10_3.only ? '只看三个面片：3x²·dx' : '三批块都回来了');
+  }
+  function resetC10S3() {
+    g10_3.d = 0; g10_3.only = 0;
+    updC10S3(); drawC10S3();
+    toast('回到 dx = 1/10 —— 三片、三棒、一小块都看得见');
+  }
+  // 停止钩子：本节没有运行态（按一下就重画，也不设播放键），但必须登记
+  function stopC10S3() { }
+
+  updC10S3(); drawC10S3();
+  // 10.4 画不出的第四个维度（章收口）
+  // ★ 本节要送出的原语：**图形有边界 —— 画不出来不等于不存在**（书页 105–107）。
+  // ★ 本节的可算判据（计划 §八 #6 / #7）：
+  //     ① 二项式账：(x+dx)ⁿ − xⁿ = Σ_{k≥1} C(n,k)·x^(n−k)·dx^k（n = 1…4 逐条现算）；
+  //     ② 系数行用**帕斯卡递推**算（不查表、不用乘方）；
+  //     ③ n = 4 的四项各有身份：4 个三维的块 / 6 个面片 / 4 根棒 / 1 个点；
+  //     ④ 能画吗：n ≤ 3 能画，n = 4 画不出（画布进"投影失败"态，「再试一次」只让旋涡更乱）；
+  //     ⑤ ★ 最后那道除法不能省：4x³·dx ÷ dx = 4x³。
+  // ★ 本节不再用章内放行的那个词；第 8 章放行的两个词仍然不写（含注释）。
+  var X_C10S4 = 1, DXS_C10S4 = 0.1;      // x 固定 1，dx 固定 1/10（本节只看"指数往上推"）
+  var IMAX_C10S4 = 4, DRAWMAX_C10S4 = 3; // 能画到 3；4 就要四个维度
+  var g10_4 = { n: 1, tries: 0 };
+
+  function nC10S4() { return g10_4.n; }
+  // ★ 帕斯卡三角：返回第 n 行系数（不走乘方、不查表）
+  function coeffsC10S4(n) {
+    var row = [1], i, j, next;
+    for (i = 1; i <= n; i++) {
+      next = [1];
+      for (j = 1; j < row.length; j++) { next.push(row[j - 1] + row[j]); }
+      next.push(1);
+      row = next;
+    }
+    return row;
+  }
+  // x^(n−k) 用循环版（★ 不用乘方函数）
+  function xpC10S4(e) { var i, r = 1; for (i = 0; i < e; i++) { r = r * X_C10S4; } return r; }
+  function dkpC10S4(k) { var i, r = 1; for (i = 0; i < k; i++) { r = r * DXS_C10S4; } return r; }
+  // 增长 = Σ_{k≥1} C(n,k)·x^(n−k)·dx^k
+  function growthC10S4() {
+    var n = nC10S4(), c = coeffsC10S4(n), k, g = 0;
+    for (k = 1; k <= n; k++) { g = g + c[k] * xpC10S4(n - k) * dkpC10S4(k); }
+    return g;
+  }
+  function firstC10S4() { return nC10S4() * xpC10S4(nC10S4() - 1) * DXS_C10S4; }
+  function derivC10S4() { return firstC10S4() / DXS_C10S4; }
+  function canDrawC10S4() { return nC10S4() <= DRAWMAX_C10S4; }
+  function f6C10S4(v) {
+    var s = v.toFixed(9);
+    if (s.indexOf('.') >= 0) { s = s.replace(/0+$/, '').replace(/\.$/, ''); }
+    return s;
+  }
+  function rowTxtC10S4() { return coeffsC10S4(nC10S4()).join(' '); }
+  function msgC10S4() {
+    var n = nC10S4();
+    if (n === 1) { return 'n = <b>1</b>：一条线段长大一点，只多出<b>一个端点</b> —— 第一项 1·dx，除以 dx 得 <b>1</b>。'; }
+    if (n === 2) { return 'n = <b>2</b>：正方形长大一点，多出<b>两条</b>细条 —— 第一项 2x·dx，除以 dx 得 <b>2x</b>。'; }
+    if (n === 3) { return 'n = <b>3</b>：立方体长大一点，多出<b>三片</b>面 —— 第一项 3x²·dx，除以 dx 得 <b>3x²</b>。'; }
+    return 'n = <b>4</b>：需要<b>4 个三维的块</b> —— <b>数得出来，画不出来</b>。第一项 4x³·dx，除以 dx 得 <b>4x³</b>。';
+  }
+  function stepTxtC10S4() {
+    if (!canDrawC10S4()) {
+      return '第 <b>' + g10_4.tries + '</b> 次尝试：屏幕上只有一团红色 —— <b>画不出来不是机器坏了，是这条路到头了</b>。';
+    }
+    return '清单还在往下走：每一档的第一块都是 <b>n·x^(n−1)·dx</b> —— 那个 n 就是<b>维度数</b>。';
+  }
+  function drawC10S4() {
+    var cv = document.getElementById('cv10-4');
+    if (!cv || !cv.getContext) { return; }
+    var c = cv.getContext('2d');
+    c.setLineDash([]);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, 620, 380);
+    if (nC10S4() === 1) { drawSegC10S4(c); }
+    else if (nC10S4() === 2) { drawSqC10S4(c); }
+    else if (nC10S4() === 3) { drawCubeC10S4(c); }
+    else { drawFailC10S4(c); }
+    label(c, '图形有力量，也有边界 —— 到了第四个维度，它就不管用了。', 24, 360, '#64748b', 11, 'left');
+  }
+  function drawSegC10S4(c) {
+    c.fillStyle = '#dbeafe'; c.strokeStyle = '#93c5fd';
+    c.fillRect(110, 180, 300, 26);
+    c.strokeRect(110, 180, 300, 26);
+    c.fillStyle = '#fca5a5';
+    c.fillRect(410, 180, 30, 26);
+    label(c, 'x', 250, 172, '#1d4ed8', 12, 'center');
+    label(c, 'dx', 425, 172, '#ef4444', 11, 'center');
+    label(c, 'n = 1：一条线段', 330, 60, '#0f172a', 12, 'left');
+    label(c, '多出来的是 1 个端点', 330, 88, '#64748b', 11, 'left');
+    label(c, '第一项 1·dx ÷ dx = 1', 330, 116, '#0f172a', 11, 'left');
+  }
+  function drawSqC10S4(c) {
+    var S = 160, x0 = 130, y0 = 120;
+    c.fillStyle = '#dbeafe'; c.strokeStyle = '#93c5fd';
+    c.fillRect(x0, y0, S, S); c.strokeRect(x0, y0, S, S);
+    c.fillStyle = '#fca5a5';
+    c.fillRect(x0, y0 - 16, S, 16); c.fillRect(x0 + S, y0, 16, S);
+    c.fillRect(x0 + S, y0 - 16, 16, 16);
+    label(c, 'x', x0 + S / 2, y0 + S + 16, '#1d4ed8', 12, 'center');
+    label(c, 'dx', x0 + S + 40, y0 + S / 2, '#ef4444', 11, 'left');
+    label(c, 'n = 2：正方形', 350, 60, '#0f172a', 12, 'left');
+    label(c, '多出来的是 2 条细条', 350, 88, '#64748b', 11, 'left');
+    label(c, '第一项 2x·dx ÷ dx = 2x', 350, 116, '#0f172a', 11, 'left');
+  }
+  function drawCubeC10S4(c) {
+    var S = 100, ox = 190, oy = 200;
+    function P(x, y, z) { return [ox + (x - y) * 0.866 * S, oy + (x + y) * 0.5 * S - z * S]; }
+    function Q(a, b, d, e, fill) {
+      c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.lineTo(d[0], d[1]); c.lineTo(e[0], e[1]);
+      c.closePath(); c.fillStyle = fill; c.fill();
+    }
+    Q(P(0, 0, 1), P(1, 0, 1), P(1, 1, 1), P(0, 1, 1), '#dbeafe');
+    Q(P(1, 0, 0), P(1, 1, 0), P(1, 1, 1), P(1, 0, 1), '#bfdbfe');
+    Q(P(0, 1, 0), P(1, 1, 0), P(1, 1, 1), P(0, 1, 1), '#93c5fd');
+    // 三个面片（贴在三个朝外的面上，厚度放大到看得见）
+    var t = 0.14;
+    Q(P(0, 0, 1 + t), P(1, 0, 1 + t), P(1, 1, 1 + t), P(0, 1, 1 + t), '#fca5a5');
+    Q(P(1 + t, 0, 0), P(1 + t, 1, 0), P(1 + t, 1, 1), P(1 + t, 0, 1), '#fca5a5');
+    Q(P(0, 1 + t, 0), P(1, 1 + t, 0), P(1, 1 + t, 1), P(0, 1 + t, 1), '#fca5a5');
+    label(c, 'n = 3：立方体', 350, 60, '#0f172a', 12, 'left');
+    label(c, '多出来的是 3 个面片', 350, 88, '#64748b', 11, 'left');
+    label(c, '第一项 3x²·dx ÷ dx = 3x²', 350, 116, '#0f172a', 11, 'left');
+    label(c, '面片厚度放大到看得见', 350, 144, '#94a3b8', 10, 'left');
+  }
+  function drawFailC10S4(c) {
+    var i, th, r;
+    var cx = 200, cy = 168;
+    // ---- 投影尝试：两个立方体套在一起 + 8 条对应顶点的连线 ----
+    var S = 72, off = 34;
+    c.strokeStyle = '#cbd5e1'; c.lineWidth = 1.2;
+    c.strokeRect(cx - S / 2 - off / 2, cy - S / 2 - off / 2, S, S);
+    c.strokeRect(cx - S / 2 + off / 2, cy - S / 2 + off / 2, S, S);
+    c.strokeStyle = '#94a3b8';
+    for (i = 0; i < 8; i++) {
+      var vx = (i & 1) ? 1 : -1, vy = (i & 2) ? 1 : -1;
+      var px = cx + vx * S / 2, py = cy + vy * S / 2;
+      c.beginPath(); c.moveTo(px, py); c.lineTo(px + off, py + off); c.stroke();
+    }
+    // ---- 失败：一团红线（旋涡）----
+    for (i = 0; i < 7 + g10_4.tries * 2; i++) {
+      th = i * 0.9 + g10_4.tries * 0.4;
+      r = 24 + i * 13;
+      c.strokeStyle = (i % 2) ? '#ef4444' : '#b91c1c';
+      c.lineWidth = 2;
+      c.beginPath();
+      c.arc(cx, cy, r, th, th + 3.6);
+      c.stroke();
+    }
+    label(c, 'n = 4', 350, 60, '#0f172a', 12, 'left');
+    label(c, '需要 4 个三维的块 —— 画不出来', 350, 88, '#dc2626', 11, 'left');
+    label(c, '4x³·dx ÷ dx = 4x³（照样算得出来）', 350, 116, '#0f172a', 11, 'left');
+    label(c, '★ 这一团红线不是第四个维度', 350, 146, '#94a3b8', 10, 'left');
+    label(c, '第 ' + g10_4.tries + ' 次尝试：机器没能吐出图形', 350, 174, '#94a3b8', 10, 'left');
+  }
+  function setTxtC10S4(id, h) { var e = document.getElementById(id); if (e) { e.innerHTML = h; } }
+  function updC10S4() {
+    var n = nC10S4(), c = coeffsC10S4(n);
+    setTxtC10S4('lb10-4-n', String(n));
+    var sl = document.getElementById('s10-4-n');
+    if (sl && parseInt(sl.value, 10) !== n) { sl.value = String(n); }
+    setTxtC10S4('kv10-4a-v', String(n));
+    setTxtC10S4('kv10-4a-t', '滑块 1…4，步长 1');
+    setTxtC10S4('kv10-4b-v', f6C10S4(firstC10S4()));
+    setTxtC10S4('kv10-4b-t', (n === 1 ? '1' : n + 'x' + (n > 2 ? '^' + (n - 1) : '')) + '·dx　(x = 1, dx = 0.1)');
+    setTxtC10S4('kv10-4c-v', rowTxtC10S4());
+    setTxtC10S4('kv10-4c-t', '帕斯卡三角第 ' + n + ' 行');
+    if (n >= 4) {
+      setTxtC10S4('kv10-4d-v', c[1] + ' + ' + c[2] + ' + ' + c[3] + ' + ' + c[4]);
+      setTxtC10S4('kv10-4d-t', '三维的块 / 面片 / 棒 / 点 —— 数得出来');
+    } else {
+      setTxtC10S4('kv10-4d-v', '—');
+      setTxtC10S4('kv10-4d-t', '这一档只需要通常的图形');
+    }
+    setTxtC10S4('kv10-4e-v', canDrawC10S4() ? '可以' : '画不出来');
+    setTxtC10S4('kv10-4e-t', canDrawC10S4() ? '画布上有形状' : '画布上只有投影失败的痕迹');
+    setTxtC10S4('kv10-4f-v', String(DRAWMAX_C10S4) + ' 维');
+    setTxtC10S4('kv10-4f-t', '再往上就得靠算，不靠看');
+    setTxtC10S4('kv10-4g-v', n >= 4 ? '数得出来，画不出来' : '每升一维，多一块');
+    setTxtC10S4('kv10-4g-t', '本节的落点');
+    setTxtC10S4('st10-4', msgC10S4());
+    setTxtC10S4('sl10-4', stepTxtC10S4());
+    var dt = document.getElementById('st10-4-dot');
+    if (dt) { dt.style.background = canDrawC10S4() ? '#3b82f6' : '#ef4444'; }
+    var ln = document.getElementById('sl10-4');
+    if (ln) { ln.className = 'step-line on'; }
+  }
+  function pickC10S4N(v) {
+    var x = parseFloat(v);
+    if (!isFinite(x)) { x = 1; }
+    g10_4.n = Math.min(IMAX_C10S4, Math.max(1, Math.round(x)));
+    g10_4.tries = 0;
+    updC10S4(); drawC10S4();
+    toast('n = ' + g10_4.n + (canDrawC10S4() ? '：画得出来' : '：画不出来，但 4x³ 照样算得出来'));
+  }
+  function retryC10S4() {
+    g10_4.tries = g10_4.tries + 1;
+    updC10S4(); drawC10S4();
+    toast(canDrawC10S4()
+      ? '这一档本来就画得出来 —— 把 n 推到 4 再试'
+      : '第 ' + g10_4.tries + ' 次：屏幕还是那团红色 —— 这条路到头了');
+  }
+  function resetC10S4() {
+    g10_4.n = 1; g10_4.tries = 0;
+    updC10S4(); drawC10S4();
+    toast('回到 n = 1 —— 从一条线段重新数起');
+  }
+  // 停止钩子：本节没有运行态（拖一下就重画，也不设播放键），但必须登记
+  function stopC10S4() { }
+
+  updC10S4(); drawC10S4();
+  // ================= 第 10 章 JS 区 · 终点 =================
+
+
 
 
 
@@ -15870,7 +17138,14 @@
         // ★ kw 里**不写**本章放行的那个词：知识树卡在首页层，写进去就变成"章外 1 处"的例外，
         //   跨章保护的正断言就没法写成干净的 0（第 6 章的章卡留了这么一个例外，第 7 章不再留）。
         kw: '指数级增长 · 增速的顶点 · 饱和与上限', target: 'page-c7-1',
-        sections: C7_SECTIONS, go: 'goC7' }
+        sections: C7_SECTIONS, go: 'goC7' },
+      // ★★ 2026-11-06：L2 层第一次有**四**张章卡（第 2 / 6 / 7 / 10 章），EXPECT_LAYER.L2 3 → 4。
+      //    ★ L2 的 `sub` 文案本来就写着 10（`第 2、6、7、10、14 章`）⇒ **不用改文案**。
+      //    ★ 章卡在**首页层**：本章放行的那一个词**不写进 kw** ——
+      //      写进去就变成"章外 1 处"的例外，跨章保护就得开口子（第 7 / 8 / 9 章就是这么守住的）。
+      { ch: 10, name: '绿头发女孩和超时空旋涡', hook: '一台把式子画成图形的机器，撞上了第四个维度',
+        kw: '乘法就是面积 · 平方就是正方形 · 立方体有三个面', target: 'page-c10-1',
+        sections: C10_SECTIONS, go: 'goC10' }
     ]},
     { id: 'L1', name: 'L1 直觉与动机层', sub: '第 3、4、5、8、9、11、12、13 章', chapters: [
       { ch: 3, name: '黄油吐司', hook: '微积分俘获了一颗心',
